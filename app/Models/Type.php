@@ -4,7 +4,6 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
  * Type is added as a discrete model to allow for extension into additional
@@ -18,9 +17,4 @@ class Type extends Model
     protected $fillable = [
         'name'
     ];
-
-    public function flashcard(): BelongsTo
-    {
-        return $this->belongsTo(Flashcard::class);
-    }
 }

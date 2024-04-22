@@ -22,9 +22,9 @@ class Flashcard extends Model
         return $this->hasMany(Answer::class);
     }
 
-    public function type(): HasOne
+    public function type(): BelongsTo
     {
-        return $this->hasOne(Type::class);
+        return $this->belongsTo(Type::class);
     }
 
     public function tags(): BelongsToMany
