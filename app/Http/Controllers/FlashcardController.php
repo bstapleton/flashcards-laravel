@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Flashcard;
 use App\Models\Tag;
+use App\Transformers\FlashcardTransformer;
 use Illuminate\Foundation\Http\FormRequest;
 
 class FlashcardController extends Controller
@@ -82,7 +83,7 @@ class FlashcardController extends Controller
      */
     public function random()
     {
-        return response()->json(Flashcard::inRandomOrder()->first());
+        return fractal(Flashcard::inRandomOrder()->first(), new FlashcardTransformer())->respond();
     }
 
     /**
