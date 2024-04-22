@@ -29,6 +29,7 @@ class DatabaseSeeder extends Seeder
         Flashcard::factory()->count(3)->create([
             'user_id' => $user->id,
             'type_id' => Type::where('name', 'Question')->first()->id,
+            'difficulty' => 'easy',
         ])->map(function ($flashcard) {
             // Create 3 incorrect answers
             Answer::factory()->count(3)->create([
@@ -49,6 +50,7 @@ class DatabaseSeeder extends Seeder
         $multiChoiceFlashcard = Flashcard::factory()->create([
             'user_id' => $user->id,
             'type_id' => 3,
+            'difficulty' => 'medium',
         ]);
 
         // Create 2 incorrect answers
