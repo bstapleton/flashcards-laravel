@@ -67,7 +67,7 @@ class FlashcardController extends Controller
      */
     public function show(Flashcard $flashcard)
     {
-        //
+        return fractal($flashcard, new FlashcardTransformer())->respond();
     }
 
     /**
@@ -166,7 +166,7 @@ class FlashcardController extends Controller
     {
         $flashcard->tags()->attach($tag);
 
-        return response()->json($flashcard);
+        return fractal($flashcard, new FlashcardTransformer())->respond();
     }
 
     /**
@@ -193,6 +193,6 @@ class FlashcardController extends Controller
     {
         $flashcard->tags()->detach($tag);
 
-        return response()->json($flashcard);
+        return fractal($flashcard, new FlashcardTransformer())->respond();
     }
 }

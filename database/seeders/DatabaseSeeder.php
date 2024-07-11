@@ -23,7 +23,9 @@ class DatabaseSeeder extends Seeder
             TagSeeder::class,
         ]);
 
-        $user = User::factory()->create();
+        $user = User::factory()->create([
+            'email' => 'f2@test.com'
+        ]);
 
         // Generate some new flashcards that the user has never seen before
         Flashcard::factory()->count(3)->create([

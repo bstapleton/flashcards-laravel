@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Answer;
 use App\Models\Flashcard;
+use App\Transformers\AnswerTransformer;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\JsonResponse;
@@ -59,13 +60,7 @@ class AnswerController extends Controller
         $answer->flashcard()->associate($flashcard);
         $answer->save();
 
-        // TODO: transformers
-        return response()->json($answer->only([
-            'id',
-            'text',
-            'explanation',
-            'is_correct'
-        ]));
+        return fractal($answer, new AnswerTransformer())->respond();
     }
 
     /**
@@ -85,7 +80,7 @@ class AnswerController extends Controller
      */
     public function show(Answer $answer): JsonResponse
     {
-        return response()->json($answer);
+        return fractal($answer, new AnswerTransformer())->respond();
     }
 
     /**
@@ -125,7 +120,7 @@ class AnswerController extends Controller
     {
         $answer->update($request->all());
 
-        return response()->json($answer);
+        return fractal($answer, new AnswerTransformer())->respond();
     }
 
     /**

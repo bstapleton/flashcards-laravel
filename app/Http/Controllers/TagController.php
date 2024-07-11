@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Tag;
+use App\Transformers\BaseTransformer;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Foundation\Http\FormRequest;
 
@@ -19,7 +20,7 @@ class TagController extends Controller
      */
     public function index()
     {
-        return response()->json(Tag::all());
+        return response()->collection(Tag::all()->toArray(), new BaseTransformer());
     }
 
     /**
@@ -82,7 +83,7 @@ class TagController extends Controller
 
         $tag->update($request->all());
 
-        return redirect()->route('tags.index')->with('success', 'Tag created');
+        return redirect()->route('tags.index')->with('success', 'Tag updated');
     }
 
     /**
