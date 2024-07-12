@@ -8,48 +8,41 @@ use Illuminate\Auth\Access\Response;
 
 class AnswerPolicy
 {
-    /**
-     * Determine whether the user can view any models.
-     */
-    public function viewAny(User $user): bool
-    {
-        //
-    }
-
-    /**
-     * Determine whether the user can view the model.
-     */
-    public function view(User $user, Answer $answer): Response
-    {
-        return $user->id === $answer->user_id
-            ? Response::allow()
-            : Response::deny('Permission denied');
-    }
-
-    /**
-     * Determine whether the user can create models.
-     */
-    public function create(User $user): Response
+    public function viewAny(User $user): Response
     {
         return Response::allow();
     }
 
-    /**
-     * Determine whether the user can update the model.
-     */
+    public function show(User $user, Answer $answer): Response
+    {
+        return self::currentUser($user, $answer);
+    }
+
+    public function store(User $user): Response
+    {
+        return Response::allow();
+    }
+
     public function update(User $user, Answer $answer): Response
     {
-        return $user->id === $answer->user_id
-            ? Response::allow()
-            : Response::deny('Permission denied');
+        return self::currentUser($user, $answer);
+    }
+
+    public function delete(User $user, Answer $answer): Response
+    {
+        return self::currentUser($user, $answer);
     }
 
     /**
-     * Determine whether the user can delete the model.
+     * Check if the request user is the owner of the model
+     *
+     * @param User $user
+     * @param Answer $answer
+     * @return Response
      */
-    public function delete(User $user, Answer $answer): Response
+    private function currentUser(User $user, Answer $answer)
     {
-        return $user->id === $answer->user_id
+        return $user->id === $answer->flashcard->user_id
             ? Response::allow()
             : Response::deny('Permission denied');
     }

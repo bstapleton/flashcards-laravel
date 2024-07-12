@@ -2,10 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Helpers\ApiResponse;
 use App\Models\Flashcard;
 use App\Models\Tag;
 use App\Transformers\FlashcardTransformer;
-use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 
 class FlashcardController extends Controller
 {
@@ -18,8 +21,12 @@ class FlashcardController extends Controller
      *     security={{"bearerAuth":{}}}
      * )
      */
-    public function index()
+    public function index(Request $request)
     {
+        if ($request->user()->cannot('showAny')) {
+            return ApiResponse::error('Forbidden', 'You do not have permission to utilise this resource', 'forbidden', 403);
+        }
+
         return response()->json(Flashcard::all());
     }
 
@@ -43,8 +50,12 @@ class FlashcardController extends Controller
      *     security={{"bearerAuth":{}}}
      * )
      */
-    public function store(FormRequest $request)
+    public function store(Request $request)
     {
+        if ($request->user()->cannot('store')) {
+            return ApiResponse::error('Forbidden', 'You do not have permission to utilise this resource', 'forbidden', 403);
+        }
+
         $request->validate([
             'text' => 'required|max:1024'
         ]);
@@ -65,8 +76,12 @@ class FlashcardController extends Controller
      *     security={{"bearerAuth":{}}}
      * )
      */
-    public function show(Flashcard $flashcard)
+    public function show(Request $request, Flashcard $flashcard): JsonResponse
     {
+        if ($request->user()->cannot('show', $flashcard)) {
+            return ApiResponse::error('Not found', 'Flashcard not found', 'not_found', 404);
+        }
+
         return fractal($flashcard, new FlashcardTransformer())->respond();
     }
 
@@ -81,9 +96,11 @@ class FlashcardController extends Controller
      *     security={{"bearerAuth":{}}}
      * )
      */
-    public function random()
+    public function random(Request $request): JsonResponse
     {
-        return fractal(Flashcard::inRandomOrder()->first(), new FlashcardTransformer())->respond();
+        return fractal(Flashcard::where('user_id', $request->user()->id)
+            ->inRandomOrder()
+            ->first(), new FlashcardTransformer())->respond();
     }
 
     /**
@@ -112,11 +129,17 @@ class FlashcardController extends Controller
      *     security={{"bearerAuth":{}}}
      * )
      */
-    public function update(FormRequest $request, Flashcard $flashcard)
+    public function update(Request $request, Flashcard $flashcard): JsonResponse
     {
+        if ($request->user()->cannot('update', $flashcard)) {
+            return ApiResponse::error('Not found', 'Flashcard not found', 'not_found', 404);
+        }
+
         $request->validate([
-            'name' => 'required|max:1024'
+            'text' => 'required|max:1024'
         ]);
+
+        return fractal($flashcard, new FlashcardTransformer())->respond();
     }
 
     /**
@@ -133,8 +156,12 @@ class FlashcardController extends Controller
      *     security={{"bearerAuth":{}}}
      * )
      */
-    public function destroy(Flashcard $flashcard)
+    public function destroy(Request $request, Flashcard $flashcard): Response|JsonResponse
     {
+        if ($request->user()->cannot('delete', $flashcard)) {
+            return ApiResponse::error('Not found', 'Flashcard not found', 'not_found', 404);
+        }
+
         $flashcard->lessons()->detach();
         $flashcard->tags()->detach();
         $flashcard->delete();
@@ -162,8 +189,13 @@ class FlashcardController extends Controller
      *     security={{"bearerAuth":{}}}
      * )
      */
-    public function attachTag(Flashcard $flashcard, Tag $tag)
+    public function attachTag(Request $request, Flashcard $flashcard, Tag $tag)
     {
+        if ($request->user()->cannot('show', $flashcard)) {
+            // You can't see the flashcard, so you can't modify its relations
+            return ApiResponse::error('Not found', 'Flashcard not found', 'not_found', 404);
+        }
+
         $flashcard->tags()->attach($tag);
 
         return fractal($flashcard, new FlashcardTransformer())->respond();
@@ -189,8 +221,13 @@ class FlashcardController extends Controller
      *     security={{"bearerAuth":{}}}
      * )
      */
-    public function detachTag(Flashcard $flashcard, Tag $tag)
+    public function detachTag(Request $request, Flashcard $flashcard, Tag $tag)
     {
+        if ($request->user()->cannot('show', $flashcard)) {
+            // You can't see the flashcard, so you can't modify its relations
+            return ApiResponse::error('Not found', 'Flashcard not found', 'not_found', 404);
+        }
+
         $flashcard->tags()->detach($tag);
 
         return fractal($flashcard, new FlashcardTransformer())->respond();

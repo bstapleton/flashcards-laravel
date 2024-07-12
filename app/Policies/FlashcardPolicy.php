@@ -8,59 +8,42 @@ use Illuminate\Auth\Access\Response;
 
 class FlashcardPolicy
 {
-    /**
-     * Determine whether the user can view any models.
-     */
-    public function viewAny(User $user): bool
+    public function showAny(User $user): Response
     {
-        //
+        return Response::allow();
+    }
+
+    public function show(User $user, Flashcard $flashcard): Response
+    {
+        return self::currentUser($user, $flashcard);
+    }
+
+    public function store(User $user): Response
+    {
+        return Response::allow();
+    }
+
+    public function update(User $user, Flashcard $flashcard): Response
+    {
+        return self::currentUser($user, $flashcard);
+    }
+
+    public function delete(User $user, Flashcard $flashcard): Response
+    {
+        return self::currentUser($user, $flashcard);
     }
 
     /**
-     * Determine whether the user can view the model.
+     * Check if the request user is the owner of the model
+     *
+     * @param User $user
+     * @param Flashcard $flashcard
+     * @return Response
      */
-    public function view(User $user, Flashcard $flashcard): bool
+    private function currentUser(User $user, Flashcard $flashcard): Response
     {
-        //
-    }
-
-    /**
-     * Determine whether the user can create models.
-     */
-    public function create(User $user): bool
-    {
-        //
-    }
-
-    /**
-     * Determine whether the user can update the model.
-     */
-    public function update(User $user, Flashcard $flashcard): bool
-    {
-        //
-    }
-
-    /**
-     * Determine whether the user can delete the model.
-     */
-    public function delete(User $user, Flashcard $flashcard): bool
-    {
-        //
-    }
-
-    /**
-     * Determine whether the user can restore the model.
-     */
-    public function restore(User $user, Flashcard $flashcard): bool
-    {
-        //
-    }
-
-    /**
-     * Determine whether the user can permanently delete the model.
-     */
-    public function forceDelete(User $user, Flashcard $flashcard): bool
-    {
-        //
+        return $user->id === $flashcard->user_id
+            ? Response::allow()
+            : Response::deny();
     }
 }

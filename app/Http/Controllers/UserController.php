@@ -6,6 +6,11 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 
+/**
+ * @property int id
+ * @property string name
+ * @property string email
+ */
 class UserController extends Controller
 {
     /**
