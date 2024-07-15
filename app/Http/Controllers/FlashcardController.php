@@ -23,11 +23,11 @@ class FlashcardController extends Controller
      */
     public function index(Request $request)
     {
-        if ($request->user()->cannot('showAny')) {
+        if (!$request->user()) {
             return ApiResponse::error('Forbidden', 'You do not have permission to utilise this resource', 'forbidden', 403);
         }
 
-        return response()->json(Flashcard::all());
+        return fractal(Flashcard::all(), new FlashcardTransformer())->respond();
     }
 
     /**
@@ -52,7 +52,7 @@ class FlashcardController extends Controller
      */
     public function store(Request $request)
     {
-        if ($request->user()->cannot('store')) {
+        if (!$request->user()) {
             return ApiResponse::error('Forbidden', 'You do not have permission to utilise this resource', 'forbidden', 403);
         }
 

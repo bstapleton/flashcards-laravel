@@ -8,19 +8,9 @@ use Illuminate\Auth\Access\Response;
 
 class AnswerPolicy
 {
-    public function viewAny(User $user): Response
-    {
-        return Response::allow();
-    }
-
     public function show(User $user, Answer $answer): Response
     {
         return self::currentUser($user, $answer);
-    }
-
-    public function store(User $user): Response
-    {
-        return Response::allow();
     }
 
     public function update(User $user, Answer $answer): Response

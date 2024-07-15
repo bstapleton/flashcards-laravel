@@ -8,19 +8,9 @@ use Illuminate\Auth\Access\Response;
 
 class FlashcardPolicy
 {
-    public function showAny(User $user): Response
-    {
-        return Response::allow();
-    }
-
     public function show(User $user, Flashcard $flashcard): Response
     {
         return self::currentUser($user, $flashcard);
-    }
-
-    public function store(User $user): Response
-    {
-        return Response::allow();
     }
 
     public function update(User $user, Flashcard $flashcard): Response
