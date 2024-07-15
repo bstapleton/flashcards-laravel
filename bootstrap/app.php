@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Middleware\CheckAuthed;
 use App\Http\Middleware\ReturnJsonResponseMiddleware;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
@@ -14,6 +15,7 @@ return Application::configure(basePath: dirname(__DIR__))
     )
     ->withMiddleware(function (Middleware $middleware) {
         $middleware->append(ReturnJsonResponseMiddleware::class);
+        $middleware->append(CheckAuthed::class);
     })
     ->withExceptions(function (Exceptions $exceptions) {
         //

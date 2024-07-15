@@ -21,12 +21,8 @@ class FlashcardController extends Controller
      *     security={{"bearerAuth":{}}}
      * )
      */
-    public function index(Request $request)
+    public function index(): JsonResponse
     {
-        if (!$request->user()) {
-            return ApiResponse::error('Forbidden', 'You do not have permission to utilise this resource', 'forbidden', 403);
-        }
-
         return fractal(Flashcard::all(), new FlashcardTransformer())->respond();
     }
 
@@ -52,10 +48,6 @@ class FlashcardController extends Controller
      */
     public function store(Request $request)
     {
-        if (!$request->user()) {
-            return ApiResponse::error('Forbidden', 'You do not have permission to utilise this resource', 'forbidden', 403);
-        }
-
         $request->validate([
             'text' => 'required|max:1024'
         ]);
