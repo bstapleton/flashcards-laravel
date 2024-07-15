@@ -15,7 +15,6 @@ return Application::configure(basePath: dirname(__DIR__))
     )
     ->withMiddleware(function (Middleware $middleware) {
         $middleware->append(ReturnJsonResponseMiddleware::class);
-        $middleware->append(CheckAuthed::class);
     })
     ->withExceptions(function (Exceptions $exceptions) {
         //
