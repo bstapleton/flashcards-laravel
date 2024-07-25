@@ -5,11 +5,8 @@ namespace Database\Seeders;
 use App\Enums\Difficulty;
 use App\Models\Answer;
 use App\Models\Flashcard;
-use App\Models\Lesson;
-use App\Models\Tag;
 use App\Models\Type;
 use App\Models\User;
-// use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -81,22 +78,5 @@ class DatabaseSeeder extends Seeder
             'type_id' => Type::where('name', 'Statement')->first()->id,
             'last_seen' => NOW(),
         ]);
-
-        // A current, active lesson
-        $currentLesson = Lesson::factory()->create([
-            'user_id' => $user->id,
-        ]);
-
-        // A lesson that was started a long time ago and has been ended
-        $oldLesson = Lesson::factory()->old()->ended()->create([
-            'user_id' => $user->id,
-        ]);
-
-        // Get the lessons assigned to the user
-        $currentLesson->flashcards()->sync(Flashcard::all()->pluck('id')->toArray());
-        $oldLesson->flashcards()->sync([Flashcard::first()->id, $oldFlashcard->id]);
-//        $oldLesson->flashcards->first()->update([
-//            'score' => 100
-//        ]);
     }
 }

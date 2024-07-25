@@ -59,9 +59,4 @@ class User extends Authenticatable
     {
         return $this->hasMany(Flashcard::class);
     }
-
-    public function lessons(): HasMany
-    {
-        return $this->hasMany(Lesson::class);
-    }
 }

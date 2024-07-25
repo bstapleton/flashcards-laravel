@@ -53,12 +53,6 @@ class Flashcard extends Model
         return $this->belongsTo(User::class);
     }
 
-    public function lessons(): BelongsToMany
-    {
-        return $this->belongsToMany(Lesson::class, 'lesson_flashcard')
-            ->distinct();
-    }
-
     /**
      * All flashcards not in the graveyard are in the pool.
      *

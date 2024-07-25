@@ -1,8 +1,8 @@
 # Laravel flashcards
 
-Small API for managing spaced repetition for learning different subjects. I wanted to make something relatively simple, but complicated enough that it would provide a small challenge for myself when writing basically the same thing in different languages :)
+Small API for managing spaced repetition for learning different subjects.
 
-Disclaimer: Big ol' chunks of what's written below isn't written yet (including tests). It's provided under a Deal With It license.
+Disclaimer: Big ol' chunks of what's written below isn't complete yet (including tests). It's provided under a Deal With It license. There's a list of TODOs at the end of this readme.
 
 ## Flashcards
 
@@ -11,34 +11,22 @@ Create flashcards of different types:
 2. question - these have multiple answers and only one correct answer
 3. multiple-choice - these have multiple answers with two or more correct answers
 
-NOTE: probably going to replace statement as a true/false type question, so it can still be scored and difficulty updated accordingly.
-
 Flashcards have tags, which you can think of like subjects or topics.
-
-## Lessons (see note)
-
-A flashcard can show up in many lessons. When creating a lesson, you can define which tags you want to see in that lesson. Other than that, the flashcards that show up are based on 'difficulty'.
-
-NOTE: I'm probably going to abandon this concept to simplify the experience for the user.
 
 ### Difficulty
 
-When you view a statement card, or answer one of the question cards, you can choose a difficulty. The difficulty dictates how soon before it will be eligible for showing up again:
+The difficulty of a card is based on how long since you last answered it.
+If you answer correctly, then it will move to the next difficulty
+If you answer incorrectly, then it will be reset to 'easy'
 
-- Easy: if it's been more than 30 minutes
-- Medium: if it's been more than a week 
-- Hard: if it's been more than a month
-- Buried: it's been answered correctly on the hard difficulty - kudos!
+- Easy: You'll see it again in 30min+
+- Medium: You'll see it again after 1w+ 
+- Hard: You'll see it again after 1mo+
+- Buried: You'll only see it in the graveyard - but you can 'resurrect' it back to easy if you want a refresher
 
-But what if you want to start a lesson and there's no eligible flashcards left? It'll tell you, but you can always hit the random flashcard endpoint to grab a flashcard that won't get scored.
+### Scoring
 
-A lesson 'ends' when there's no more flashcards left in the 'pool' and you say you want to end the lesson. Otherwise, you can just come back later when there's more cards eligible; so if you don't care about the scoring, you can just run one indefinitely.
-
-You can also hit the random flashcard endpoint to ignore the difficulty and scoring entirely.
-
-### Wait, scoring?
-
-Yep, the 'correctness' (remember there's multiple-choice ones) will create an average score for a lesson against all the flashcards you answered. This allows you to track (to a certain extent) your progress over time.
+Each time you provide a correct answer, you'll get an increase in score. In the case of a multiple choice, you'll only get a score increase if you get ALL the correct answers and NONE of the incorrect ones, so think carefully...
 
 ## Running it
 
@@ -48,6 +36,12 @@ Yep, the 'correctness' (remember there's multiple-choice ones) will create an av
 4. `php artisan db:seed` if you can't be bothered making your own stuff and just want to have a poke around
 5. `php artisan serve` and you can check it out in Swagger
 
-## Anything else?
+## The TODO list
 
-Yes, this is still very in progress and is (at time of writing) only representative of a few evenings tinkering with stuff after my day job.
+- Endpoint to provide an answer
+- Scoring system
+  - Including segmentation by tag
+  - Handling of 'correctness' matrix for multiple choice
+- Updating the difficulty based on correct/incorrect answers
+- Tests. So many tests.
+- Replacement of statement cards to something akin to true/false

@@ -203,7 +203,6 @@ class FlashcardController extends Controller
             return ApiResponse::error('Not found', 'Flashcard not found', 'not_found', 404);
         }
 
-        $flashcard->lessons()->detach();
         $flashcard->tags()->detach();
         $flashcard->delete();
 

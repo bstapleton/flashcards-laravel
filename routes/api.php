@@ -2,7 +2,6 @@
 
 use App\Http\Controllers\AnswerController;
 use App\Http\Controllers\FlashcardController;
-use App\Http\Controllers\LessonController;
 use App\Http\Controllers\TagController;
 use App\Http\Middleware\CheckAuthed;
 use Illuminate\Support\Facades\Route;
@@ -26,15 +25,10 @@ Route::controller(FlashcardController::class)->prefix('flashcards')->middleware(
     Route::get('/{flashcard}', 'show')->name('flashcards.show');
     Route::patch('/{flashcard}', 'update')->name('flashcards.update');
     Route::delete('/{flashcard}', 'destroy')->name('flashcards.destroy');
+    // TODO: POST an answer attempt, update user score etc
     Route::post('/{flashcard}/tags/{tag}', 'attachTag')->name('flashcards.tags.attach');
     Route::delete('/{flashcard}/tags/{tag}', 'detachTag')->name('flashcards.tags.detach');
     Route::post('/{flashcard}/promote', 'promote')->name('flashcards.promote');
-});
-
-Route::controller(LessonController::class)->prefix('lessons')->middleware(['auth:sanctum', CheckAuthed::class])->group(function () {
-    Route::get('/', 'index')->name('lessons.index');
-    Route::post('/', 'store')->name('lessons.store');
-    Route::get('/{lesson}', 'show')->name('lessons.show');
 });
 
 Route::controller(TagController::class)->prefix('tags')->middleware(['auth:sanctum', CheckAuthed::class])->group(function () {
