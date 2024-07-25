@@ -22,6 +22,7 @@ Route::controller(FlashcardController::class)->prefix('flashcards')->middleware(
     Route::get('/', 'index')->name('flashcard.index');
     Route::post('/', 'store')->name('flashcards.store');
     Route::get('/random', 'random')->name('flashcards.random');
+    Route::get('/graveyard', 'graveyard')->name('flashcards.graveyard');
     Route::get('/{flashcard}', 'show')->name('flashcards.show');
     Route::patch('/{flashcard}', 'update')->name('flashcards.update');
     Route::delete('/{flashcard}', 'destroy')->name('flashcards.destroy');

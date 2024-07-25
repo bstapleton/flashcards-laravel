@@ -75,6 +75,13 @@ class DatabaseSeeder extends Seeder
             'last_seen' => NOW()->subMonths(2),
         ]);
 
+        // Put one flashcard into the graveyard
+        $buriedFlashcard = Flashcard::factory()->buriedDifficulty()->create([
+            'user_id' => $user->id,
+            'type_id' => Type::where('name', 'Statement')->first()->id,
+            'last_seen' => NOW(),
+        ]);
+
         // A current, active lesson
         $currentLesson = Lesson::factory()->create([
             'user_id' => $user->id,

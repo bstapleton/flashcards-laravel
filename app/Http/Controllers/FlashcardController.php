@@ -22,9 +22,10 @@ class FlashcardController extends Controller
      *     security={{"bearerAuth":{}}}
      * )
      */
-    public function index(): JsonResponse
+    public function index(Request $request): JsonResponse
     {
-        return fractal(Flashcard::all(), new FlashcardTransformer())->respond();
+        return fractal(Flashcard::where('user_id', $request->user()->id)
+            ->get(), new FlashcardTransformer())->respond();
     }
 
     /**
@@ -95,6 +96,23 @@ class FlashcardController extends Controller
             ->active()
             ->inRandomOrder()
             ->first(), new FlashcardTransformer())->respond();
+    }
+
+    /**
+     * @OA\Get(
+     *     path="/api/flashcards/graveyard",
+     *     description="Get all flashcards currently in the graveyard",
+     *     summary="'Buried' flashcards are those which have been anwered correctly on the Hard difficulty",
+     *     tags={"flashcard"},
+     *     @OA\Response(response="200", description="Success"),
+     *     security={{"bearerAuth":{}}}
+     * )
+     */
+    public function graveyard(Request $request): JsonResponse
+    {
+        return fractal(Flashcard::where('user_id', $request->user()->id)
+            ->inactive()
+            ->get(), new FlashcardTransformer())->respond();
     }
 
     /**
