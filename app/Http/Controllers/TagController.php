@@ -12,7 +12,7 @@ class TagController extends Controller
     /**
      * @OA\Get(
      *     path="/api/tags",
-     *     description="List tags",
+     *     summary="List tags",
      *     tags={"tag"},
      *     @OA\Response(response="200", description="Success"),
      *     security={{"bearerAuth":{}}}
@@ -26,7 +26,7 @@ class TagController extends Controller
     /**
      * @OA\Post(
      *     path="/api/tags",
-     *     description="Create a tag",
+     *     summary="Create a tag",
      *     tags={"tag"},
      *     @OA\Parameter(
      *         name="name",
@@ -53,7 +53,7 @@ class TagController extends Controller
     /**
      * @OA\Put(
      *     path="/api/tags/{id}",
-     *     description="Update a tag",
+     *     summary="Update a tag",
      *     tags={"tag"},
      *     @OA\Parameter(
      *         name="id",
@@ -89,7 +89,7 @@ class TagController extends Controller
     /**
      * @OA\Delete(
      *     path="/api/tags/{id}",
-     *     description="Delete a tag",
+     *     summary="Delete a tag",
      *     tags={"tag"},
      *     @OA\Parameter(
      *         name="id",

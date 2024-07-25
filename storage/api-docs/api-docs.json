@@ -10,7 +10,7 @@
                 "tags": [
                     "answer"
                 ],
-                "description": "Create an answer",
+                "summary": "Create an answer",
                 "operationId": "a1aa30cc6ce16b56a43129192929677d",
                 "parameters": [
                     {
@@ -62,7 +62,7 @@
                 "tags": [
                     "answer"
                 ],
-                "description": "Get an answer",
+                "summary": "Get an answer",
                 "operationId": "9fbab7e05c455ae2d2b0f94968eef7e3",
                 "parameters": [
                     {
@@ -91,7 +91,7 @@
                 "tags": [
                     "answer"
                 ],
-                "description": "Delete an answer",
+                "summary": "Delete an answer",
                 "operationId": "e173b1afc518f767162047993b50f321",
                 "parameters": [
                     {
@@ -117,7 +117,7 @@
                 "tags": [
                     "answer"
                 ],
-                "description": "Update an answer",
+                "summary": "Update an answer",
                 "operationId": "550bfb18c699b6a03daccdbfce7eed6b",
                 "parameters": [
                     {
@@ -165,7 +165,7 @@
                 "tags": [
                     "flashcard"
                 ],
-                "description": "List flashcards",
+                "summary": "List flashcards",
                 "operationId": "745e7a92242380cb67d3cd373765f022",
                 "responses": {
                     "200": {
@@ -182,7 +182,7 @@
                 "tags": [
                     "flashcard"
                 ],
-                "description": "Create flashcard",
+                "summary": "Create flashcard",
                 "operationId": "daad21d01dc5de91b535ea881fb18b52",
                 "requestBody": {
                     "content": {
@@ -215,7 +215,7 @@
                 "tags": [
                     "flashcard"
                 ],
-                "description": "Show a flashcard",
+                "summary": "Show a flashcard",
                 "operationId": "944c908dc91be311a8330cb6a9283565",
                 "parameters": [
                     {
@@ -244,7 +244,7 @@
                 "tags": [
                     "flashcard"
                 ],
-                "description": "Delete flashcard",
+                "summary": "Delete flashcard",
                 "operationId": "e13e394722776ff618e1248072e7033f",
                 "parameters": [
                     {
@@ -270,7 +270,7 @@
                 "tags": [
                     "flashcard"
                 ],
-                "description": "Update flashcard",
+                "summary": "Update flashcard",
                 "operationId": "349b62d95119992ef0b43e7ba8d286f4",
                 "parameters": [
                     {
@@ -315,9 +315,61 @@
                 "tags": [
                     "flashcard"
                 ],
-                "summary": "Gets a random flashcard, regardless of difficulty or tags",
-                "description": "Get a random flashcard",
+                "summary": "Get a random flashcard",
+                "description": "Gets a random flashcard, regardless of difficulty or tags",
                 "operationId": "17931be0302bf83341342dfd4e3ec61b",
+                "responses": {
+                    "200": {
+                        "description": "Success"
+                    },
+                    "404": {
+                        "description": "Flashcard not found"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/flashcards/graveyard": {
+            "get": {
+                "tags": [
+                    "flashcard"
+                ],
+                "summary": "Get all flashcards currently in the graveyard",
+                "description": "'Buried' flashcards are those which have been anwered correctly on the Hard difficulty",
+                "operationId": "deb8deeaf8821d7046d97611188a5caf",
+                "responses": {
+                    "200": {
+                        "description": "Success"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/flashcards/{id}/promote": {
+            "post": {
+                "tags": [
+                    "flashcard"
+                ],
+                "summary": "Resurrect a buried flashcard",
+                "description": "Promote a flashcard from the graveyard back to the easy difficulty",
+                "operationId": "def32b0dc42738f9a8a1ed1350796610",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "Success"
@@ -338,8 +390,8 @@
                 "tags": [
                     "flashcard"
                 ],
-                "summary": "Attach a tag",
-                "description": "Attach a tag to a flashcard",
+                "summary": "Attach a tag to a flashcard",
+                "description": "Attach a tag",
                 "operationId": "b35422b177c76da475b8065f2a1814d4",
                 "parameters": [
                     {
@@ -372,8 +424,8 @@
                 "tags": [
                     "flashcard"
                 ],
-                "summary": "Detach a tag from a flashcard",
-                "description": "Detach a tag",
+                "summary": "Detach a tag",
+                "description": "Detach a tag from a flashcard",
                 "operationId": "20406b1d5697b3e683cb29eeb9366084",
                 "parameters": [
                     {
@@ -408,7 +460,7 @@
                 "tags": [
                     "lesson"
                 ],
-                "description": "List lessons",
+                "summary": "List lessons",
                 "operationId": "db776a108da2bb0a2f97ede1e0443b1c",
                 "responses": {
                     "200": {
@@ -427,7 +479,7 @@
                 "tags": [
                     "lesson"
                 ],
-                "description": "Show a lesson",
+                "summary": "Show a lesson",
                 "operationId": "c3bffa9927837943c0aca604caab3aef",
                 "parameters": [
                     {
@@ -495,7 +547,7 @@
                 "tags": [
                     "tag"
                 ],
-                "description": "List tags",
+                "summary": "List tags",
                 "operationId": "4d0f4baf9e6fa992c0d85fbf140ebf17",
                 "responses": {
                     "200": {
@@ -512,7 +564,7 @@
                 "tags": [
                     "tag"
                 ],
-                "description": "Create a tag",
+                "summary": "Create a tag",
                 "operationId": "a0a246f29dcb119a2189fd230fc10028",
                 "parameters": [
                     {
@@ -541,7 +593,7 @@
                 "tags": [
                     "tag"
                 ],
-                "description": "Update a tag",
+                "summary": "Update a tag",
                 "operationId": "91c5f77096ddaaf2bed585f48d054044",
                 "parameters": [
                     {
@@ -578,7 +630,7 @@
                 "tags": [
                     "tag"
                 ],
-                "description": "Delete a tag",
+                "summary": "Delete a tag",
                 "operationId": "6f092682e8bbdea016bb928c862fc3e4",
                 "parameters": [
                     {
@@ -675,5 +727,27 @@
                 "scheme": "bearer"
             }
         }
-    }
+    },
+    "tags": [
+        {
+            "name": "answer",
+            "description": "answer"
+        },
+        {
+            "name": "flashcard",
+            "description": "flashcard"
+        },
+        {
+            "name": "lesson",
+            "description": "lesson"
+        },
+        {
+            "name": "auth",
+            "description": "auth"
+        },
+        {
+            "name": "tag",
+            "description": "tag"
+        }
+    ]
 }

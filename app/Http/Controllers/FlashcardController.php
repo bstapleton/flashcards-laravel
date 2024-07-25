@@ -16,7 +16,7 @@ class FlashcardController extends Controller
     /**
      * @OA\Get(
      *     path="/api/flashcards",
-     *     description="List flashcards",
+     *     summary="List flashcards",
      *     tags={"flashcard"},
      *     @OA\Response(response="200", description="Success"),
      *     security={{"bearerAuth":{}}}
@@ -31,7 +31,7 @@ class FlashcardController extends Controller
     /**
      * @OA\Post(
      *     path="/api/flashcards",
-     *     description="Create flashcard",
+     *     summary="Create flashcard",
      *     tags={"flashcard"},
      *     @OA\RequestBody(
      *         @OA\MediaType(
@@ -58,7 +58,7 @@ class FlashcardController extends Controller
     /**
      * @OA\Get(
      *     path="/api/flashcards/{id}",
-     *     description="Show a flashcard",
+     *     summary="Show a flashcard",
      *     tags={"flashcard"},
      *     @OA\Parameter(
      *         name="id",
@@ -82,8 +82,8 @@ class FlashcardController extends Controller
     /**
      * @OA\Get(
      *     path="/api/flashcards/random",
-     *     description="Get a random flashcard",
-     *     summary="Gets a random flashcard, regardless of difficulty or tags",
+     *     description="Gets a random flashcard, regardless of difficulty or tags",
+     *     summary="Get a random flashcard",
      *     tags={"flashcard"},
      *     @OA\Response(response="200", description="Success"),
      *     @OA\Response(response="404", description="Flashcard not found"),
@@ -101,8 +101,8 @@ class FlashcardController extends Controller
     /**
      * @OA\Get(
      *     path="/api/flashcards/graveyard",
-     *     description="Get all flashcards currently in the graveyard",
-     *     summary="'Buried' flashcards are those which have been anwered correctly on the Hard difficulty",
+     *     description="'Buried' flashcards are those which have been anwered correctly on the Hard difficulty",
+     *     summary="Get all flashcards currently in the graveyard",
      *     tags={"flashcard"},
      *     @OA\Response(response="200", description="Success"),
      *     security={{"bearerAuth":{}}}
@@ -119,6 +119,7 @@ class FlashcardController extends Controller
      * @OA\Post(
      *     path="/api/flashcards/{id}/promote",
      *     description="Promote a flashcard from the graveyard back to the easy difficulty",
+     *     summary="Resurrect a buried flashcard",
      *     tags={"flashcard"},
      *     @OA\Parameter(
      *         name="id",
@@ -146,7 +147,7 @@ class FlashcardController extends Controller
     /**
      * @OA\Patch(
      *     path="/api/flashcards/{id}",
-     *     description="Update flashcard",
+     *     summary="Update flashcard",
      *     tags={"flashcard"},
      *     @OA\Parameter(
      *         name="id",
@@ -185,7 +186,7 @@ class FlashcardController extends Controller
     /**
      * @OA\Delete(
      *     path="/api/flashcards/{id}",
-     *     description="Delete flashcard",
+     *     summary="Delete flashcard",
      *     tags={"flashcard"},
      *     @OA\Parameter(
      *         name="id",
@@ -212,8 +213,8 @@ class FlashcardController extends Controller
     /**
      * @OA\Post(
      *     path="/api/flashcards/{id}/tags/{tag}",
-     *     summary="Attach a tag",
-     *     description="Attach a tag to a flashcard",
+     *     summary="Attach a tag to a flashcard",
+     *     description="Attach a tag",
      *     tags={"flashcard"},
      *     @OA\Parameter(
      *         name="id",
@@ -244,8 +245,8 @@ class FlashcardController extends Controller
     /**
      * @OA\Delete(
      *     path="/api/flashcards/{id}/tags/{tag}",
-     *     description="Detach a tag",
-     *     summary="Detach a tag from a flashcard",
+     *     description="Detach a tag from a flashcard",
+     *     summary="Detach a tag",
      *     tags={"flashcard"},
      *     @OA\Parameter(
      *         name="id",

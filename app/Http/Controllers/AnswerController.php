@@ -15,7 +15,7 @@ class AnswerController extends Controller
     /**
      * @OA\Post(
      *     path="/api/answers",
-     *     description="Create an answer",
+     *     summary="Create an answer",
      *     tags={"answer"},
      *     @OA\Parameter(
      *         name="flashcardId",
@@ -67,7 +67,7 @@ class AnswerController extends Controller
     /**
      * @OA\Get(
      *     path="/api/answers/{id}",
-     *     description="Get an answer",
+     *     summary="Get an answer",
      *     tags={"answer"},
      *     @OA\Parameter(
      *         name="id",
@@ -87,7 +87,7 @@ class AnswerController extends Controller
     /**
      * @OA\Patch(
      *     path="/api/answers/{id}",
-     *     description="Update an answer",
+     *     summary="Update an answer",
      *     tags={"answer"},
      *     @OA\Parameter(
      *         name="id",
@@ -127,7 +127,7 @@ class AnswerController extends Controller
     /**
      * @OA\Delete(
      *     path="/api/answers/{id}",
-     *     description="Delete an answer",
+     *     summary="Delete an answer",
      *     tags={"answer"},
      *     @OA\Parameter(
      *         name="id",

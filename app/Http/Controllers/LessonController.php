@@ -10,7 +10,7 @@ class LessonController extends Controller
     /**
      * @OA\Get(
      *     path="/api/lessons",
-     *     description="List lessons",
+     *     summary="List lessons",
      *     tags={"lesson"},
      *     @OA\Response(response="200", description="Success"),
      *     security={{"bearerAuth":{}}}
@@ -26,7 +26,7 @@ class LessonController extends Controller
     /**
      * @OA\Get(
      *     path="/api/lessons/{id}",
-     *     description="Show a lesson",
+     *     summary="Show a lesson",
      *     tags={"lesson"},
      *     @OA\Parameter(
      *         name="id",
