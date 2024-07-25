@@ -3,9 +3,9 @@
 namespace Database\Seeders;
 
 use App\Enums\Difficulty;
+use App\Enums\QuestionType;
 use App\Models\Answer;
 use App\Models\Flashcard;
-use App\Models\Type;
 use App\Models\User;
 use Illuminate\Database\Seeder;
 
@@ -17,7 +17,6 @@ class DatabaseSeeder extends Seeder
     public function run(): void
     {
         $this->call([
-            TypeSeeder::class,
             TagSeeder::class,
         ]);
 
@@ -28,7 +27,7 @@ class DatabaseSeeder extends Seeder
         // Generate some new flashcards that the user has never seen before
         Flashcard::factory()->count(3)->create([
             'user_id' => $user->id,
-            'type_id' => Type::where('name', 'Question')->first()->id,
+            'type' => QuestionType::SINGLE,
             'difficulty' => Difficulty::EASY,
         ])->map(function ($flashcard) {
             // Create 3 incorrect answers
@@ -49,7 +48,7 @@ class DatabaseSeeder extends Seeder
         // Now do the same but for a multiple choice
         $multiChoiceFlashcard = Flashcard::factory()->create([
             'user_id' => $user->id,
-            'type_id' => 3,
+            'type' => QuestionType::MULTIPLE,
             'difficulty' => Difficulty::MEDIUM,
         ]);
 
@@ -68,14 +67,14 @@ class DatabaseSeeder extends Seeder
         // statement, so no answers are needed.
         $oldFlashcard = Flashcard::factory()->hardDifficulty()->create([
             'user_id' => $user->id,
-            'type_id' => Type::where('name', 'Statement')->first()->id,
+            'type' => QuestionType::STATEMENT,
             'last_seen' => NOW()->subMonths(2),
         ]);
 
         // Put one flashcard into the graveyard
         $buriedFlashcard = Flashcard::factory()->buriedDifficulty()->create([
             'user_id' => $user->id,
-            'type_id' => Type::where('name', 'Statement')->first()->id,
+            'type' => QuestionType::STATEMENT,
             'last_seen' => NOW(),
         ]);
     }

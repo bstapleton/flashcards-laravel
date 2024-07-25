@@ -455,56 +455,6 @@
                 ]
             }
         },
-        "/api/lessons": {
-            "get": {
-                "tags": [
-                    "lesson"
-                ],
-                "summary": "List lessons",
-                "operationId": "db776a108da2bb0a2f97ede1e0443b1c",
-                "responses": {
-                    "200": {
-                        "description": "Success"
-                    }
-                },
-                "security": [
-                    {
-                        "bearerAuth": []
-                    }
-                ]
-            }
-        },
-        "/api/lessons/{id}": {
-            "get": {
-                "tags": [
-                    "lesson"
-                ],
-                "summary": "Show a lesson",
-                "operationId": "c3bffa9927837943c0aca604caab3aef",
-                "parameters": [
-                    {
-                        "name": "id",
-                        "in": "path",
-                        "schema": {
-                            "type": "integer"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "Success"
-                    },
-                    "404": {
-                        "description": "Lesson not found"
-                    }
-                },
-                "security": [
-                    {
-                        "bearerAuth": []
-                    }
-                ]
-            }
-        },
         "/api/login": {
             "post": {
                 "tags": [
@@ -736,10 +686,6 @@
         {
             "name": "flashcard",
             "description": "flashcard"
-        },
-        {
-            "name": "lesson",
-            "description": "lesson"
         },
         {
             "name": "auth",

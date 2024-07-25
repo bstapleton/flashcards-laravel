@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Enums\Difficulty;
+use App\Enums\QuestionType;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -11,11 +12,12 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 /**
+ * @property integer id
  * @property integer user_id
  * @property string text
  * @property Difficulty difficulty
  * @property string last_seen
- * @property Type type
+ * @property QuestionType type
  */
 class Flashcard extends Model
 {
@@ -24,23 +26,20 @@ class Flashcard extends Model
     protected $fillable = [
         'text',
         'difficulty',
+        'type',
     ];
 
     protected function casts(): array
     {
         return [
             'difficulty' => Difficulty::class,
+            'type' => QuestionType::class,
         ];
     }
 
     public function answers(): HasMany
     {
         return $this->hasMany(Answer::class);
-    }
-
-    public function type(): BelongsTo
-    {
-        return $this->belongsTo(Type::class);
     }
 
     public function tags(): BelongsToMany
@@ -65,7 +64,7 @@ class Flashcard extends Model
     }
 
     /**
-     * Get al the flashcards buried in the graveyard.
+     * Get all the flashcards buried in the graveyard.
      *
      * @param $query
      * @return mixed

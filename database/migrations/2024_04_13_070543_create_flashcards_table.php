@@ -1,6 +1,7 @@
 <?php
 
 use App\Enums\Difficulty;
+use App\Enums\QuestionType;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -12,10 +13,11 @@ return new class extends Migration
         Schema::create('flashcards', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained();
-            $table->foreignId('type_id')->constrained();
             $table->text('text');
             $table->dateTime('last_seen'); // TODO: might be redundant if we force an update on the difficulty each time
             $table->tinyText('difficulty')->default(Difficulty::EASY);
+            $table->tinyText('type')->default(QuestionType::STATEMENT);
+            $table->boolean('is_true')->nullable();
             $table->timestamps();
         });
     }
