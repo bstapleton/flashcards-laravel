@@ -63,19 +63,20 @@ class DatabaseSeeder extends Seeder
             'text' => 'correct'
         ]);
 
-        // Generate an old flashcard that the user has seen before. It's a
-        // statement, so no answers are needed.
-        $oldFlashcard = Flashcard::factory()->hardDifficulty()->create([
+        // Generate some old flashcards that the user has seen before
+        Flashcard::factory()->count(2)->hardDifficulty()->create([
             'user_id' => $user->id,
             'type' => QuestionType::STATEMENT,
             'last_seen' => NOW()->subMonths(2),
+            'is_true' => true,
         ]);
 
         // Put one flashcard into the graveyard
-        $buriedFlashcard = Flashcard::factory()->buriedDifficulty()->create([
+        Flashcard::factory()->buriedDifficulty()->create([
             'user_id' => $user->id,
             'type' => QuestionType::STATEMENT,
             'last_seen' => NOW(),
+            'is_true' => false,
         ]);
     }
 }

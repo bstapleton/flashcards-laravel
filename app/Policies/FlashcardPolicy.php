@@ -18,7 +18,12 @@ class FlashcardPolicy
         return self::currentUser($user, $flashcard);
     }
 
-    public function promote(User $user, Flashcard $flashcard): Response
+    public function revive(User $user, Flashcard $flashcard): Response
+    {
+        return self::currentUser($user, $flashcard);
+    }
+
+    public function answer(User $user, Flashcard $flashcard): Response
     {
         return self::currentUser($user, $flashcard);
     }

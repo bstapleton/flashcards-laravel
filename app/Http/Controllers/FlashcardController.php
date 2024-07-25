@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Enums\Difficulty;
+use App\Enums\QuestionType;
 use App\Helpers\ApiResponse;
 use App\Models\Flashcard;
 use App\Models\Tag;
@@ -117,8 +118,8 @@ class FlashcardController extends Controller
 
     /**
      * @OA\Post(
-     *     path="/api/flashcards/{id}/promote",
-     *     description="Promote a flashcard from the graveyard back to the easy difficulty",
+     *     path="/api/flashcards/{id}/revive",
+     *     description="Revive a flashcard from the graveyard back to the easy difficulty",
      *     summary="Resurrect a buried flashcard",
      *     tags={"flashcard"},
      *     @OA\Parameter(
@@ -131,9 +132,9 @@ class FlashcardController extends Controller
      *     security={{"bearerAuth":{}}}
      * )
      */
-    public function promote(Request $request, Flashcard $flashcard): JsonResponse
+    public function revive(Request $request, Flashcard $flashcard): JsonResponse
     {
-        if ($request->user()->cannot('promote', $flashcard)) {
+        if ($request->user()->cannot('revive', $flashcard)) {
             return ApiResponse::error('Not found', 'Flashcard not found', 'not_found', 404);
         }
 
@@ -142,6 +143,24 @@ class FlashcardController extends Controller
         ]);
 
         return fractal($flashcard, new FlashcardTransformer())->respond();
+    }
+
+    public function answer(Request $request, Flashcard $flashcard): JsonResponse
+    {
+        if ($request->user()->cannot('answer', $flashcard)) {
+            return ApiResponse::error('Not found', 'Flashcard not found', 'not_found', 404);
+        }
+
+        switch ($flashcard->type) {
+            case QuestionType::STATEMENT:
+                $score = $flashcard->is_true === $request->input('is_true') ? 3 : 0; // TODO: turn into a service to handle the scoring multipliers for easy = 1, medium = 3, hard = 5 points
+            case QuestionType::SINGLE:
+                // TODO: check given answer is correct
+            case QuestionType::MULTIPLE:
+                // TODO: handle scoring for multiple choice
+        }
+
+        return fractal($flashcard, new FlashcardTransformer())->respond(); // TODO: update response
     }
 
     /**

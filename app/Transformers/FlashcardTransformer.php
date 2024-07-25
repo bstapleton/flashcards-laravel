@@ -2,6 +2,7 @@
 
 namespace App\Transformers;
 
+use App\Enums\QuestionType;
 use App\Models\Answer;
 use App\Models\Flashcard;
 use Carbon\Carbon;
@@ -9,9 +10,9 @@ use League\Fractal\TransformerAbstract;
 
 class FlashcardTransformer extends TransformerAbstract
 {
-    public function transform(Flashcard $flashcard)
+    public function transform(Flashcard $flashcard): array
     {
-        return [
+        $data =  [
             'id' => $flashcard->id,
             'type' => $flashcard->type->name,
             'text' => $flashcard->text,
@@ -27,5 +28,11 @@ class FlashcardTransformer extends TransformerAbstract
                 ];
             })
         ];
+
+        if ($flashcard->type === QuestionType::STATEMENT) {
+            $data['is_true'] = $flashcard->is_true;
+        }
+
+        return $data;
     }
 }

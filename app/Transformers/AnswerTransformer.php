@@ -7,7 +7,7 @@ use League\Fractal\TransformerAbstract;
 
 class AnswerTransformer extends TransformerAbstract
 {
-    public function transform(Answer $answer)
+    public function transform(Answer $answer): array
     {
         return [
             'flashcard' => [

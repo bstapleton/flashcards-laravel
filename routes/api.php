@@ -22,13 +22,18 @@ Route::controller(FlashcardController::class)->prefix('flashcards')->middleware(
     Route::post('/', 'store')->name('flashcards.store');
     Route::get('/random', 'random')->name('flashcards.random');
     Route::get('/graveyard', 'graveyard')->name('flashcards.graveyard');
-    Route::get('/{flashcard}', 'show')->name('flashcards.show');
-    Route::patch('/{flashcard}', 'update')->name('flashcards.update');
-    Route::delete('/{flashcard}', 'destroy')->name('flashcards.destroy');
-    // TODO: POST an answer attempt, update user score etc
-    Route::post('/{flashcard}/tags/{tag}', 'attachTag')->name('flashcards.tags.attach');
-    Route::delete('/{flashcard}/tags/{tag}', 'detachTag')->name('flashcards.tags.detach');
-    Route::post('/{flashcard}/promote', 'promote')->name('flashcards.promote');
+    Route::prefix('{flashcard}')->group(function () {
+        Route::get('/', 'show')->name('flashcards.show');
+        Route::post('/', 'answer')->name('flashcards.answer');
+        Route::patch('/', 'update')->name('flashcards.update');
+        Route::delete('/', 'destroy')->name('flashcards.destroy');
+        Route::post('/revive', 'promote')->name('flashcards.revive');
+
+        Route::prefix('tags')->group(function () {
+            Route::post('/{flashcard}/tags/{tag}', 'attachTag')->name('flashcards.tags.attach');
+            Route::delete('/{flashcard}/tags/{tag}', 'detachTag')->name('flashcards.tags.detach');
+        });
+    });
 });
 
 Route::controller(TagController::class)->prefix('tags')->middleware(['auth:sanctum', CheckAuthed::class])->group(function () {

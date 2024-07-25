@@ -18,6 +18,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property Difficulty difficulty
  * @property string last_seen
  * @property QuestionType type
+ * @property boolean is_true
  */
 class Flashcard extends Model
 {
@@ -34,6 +35,7 @@ class Flashcard extends Model
         return [
             'difficulty' => Difficulty::class,
             'type' => QuestionType::class,
+            'is_true' => 'boolean',
         ];
     }
 
