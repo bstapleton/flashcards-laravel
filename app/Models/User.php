@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
+use RedExplosion\Sqids\Concerns\HasSqids;
 
 /**
  * @property int id
@@ -15,10 +16,13 @@ use Laravel\Sanctum\HasApiTokens;
  * @property string email
  * @property string password
  * @property int points
+ * @property string created_at
  */
 class User extends Authenticatable
 {
-    use HasFactory, Notifiable, HasApiTokens;
+    use HasFactory, Notifiable, HasApiTokens, HasSqids;
+
+    protected string $sqidPrefix = 'u';
 
     /**
      * The attributes that are mass assignable.

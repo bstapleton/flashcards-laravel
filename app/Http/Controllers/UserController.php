@@ -2,7 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Helpers\ApiResponse;
 use App\Models\User;
+use App\Transformers\UserTransformer;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 
@@ -43,7 +46,7 @@ class UserController extends Controller
      *     @OA\Response(response="422", description="Validation errors")
      * )
      */
-    public function register(Request $request)
+    public function register(Request $request): JsonResponse
     {
         $validatedData = $request->validate([
             'name' => 'required|string|max:255',
@@ -51,7 +54,7 @@ class UserController extends Controller
             'password' => 'required|string|min:8',
         ]);
 
-        $user = User::create([
+        User::create([
             'name' => $validatedData['name'],
             'email' => $validatedData['email'],
             'password' => Hash::make($validatedData['password']),
@@ -69,10 +72,14 @@ class UserController extends Controller
      *     security={{"bearerAuth":{}}}
      * )
      */
-    public function show(Request $request)
+    public function show(Request $request): JsonResponse
     {
         $user = $request->user();
 
-        return response()->json(['user' => $user], 200);
+        if (!$user) {
+            return ApiResponse::error('Not found', 'Flashcard not found', 'not_found', 404);
+        }
+
+        return fractal($user, new UserTransformer())->respond();
     }
 }

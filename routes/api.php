@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::post('/register', 'App\Http\Controllers\UserController@register')->name('auth.register');
 Route::post('/login', 'App\Http\Controllers\LoginController@login')->name('auth.login');
-Route::get('/user', 'App\Http\Controllers\UserController@getUserDetails')->middleware('auth:sanctum')->name('auth.user');
+Route::get('/user', 'App\Http\Controllers\UserController@show')->middleware('auth:sanctum')->name('auth.user');
 
 Route::controller(AnswerController::class)->prefix('answers')->middleware(['auth:sanctum', CheckAuthed::class])->group(function () {
     Route::post('/', 'store')->name('answers.store');
