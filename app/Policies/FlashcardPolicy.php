@@ -18,6 +18,11 @@ class FlashcardPolicy
         return self::currentUser($user, $flashcard);
     }
 
+    public function promote(User $user, Flashcard $flashcard): Response
+    {
+        return self::currentUser($user, $flashcard);
+    }
+
     public function delete(User $user, Flashcard $flashcard): Response
     {
         return self::currentUser($user, $flashcard);

@@ -27,6 +27,7 @@ Route::controller(FlashcardController::class)->prefix('flashcards')->middleware(
     Route::delete('/{flashcard}', 'destroy')->name('flashcards.destroy');
     Route::post('/{flashcard}/tags/{tag}', 'attachTag')->name('flashcards.tags.attach');
     Route::delete('/{flashcard}/tags/{tag}', 'detachTag')->name('flashcards.tags.detach');
+    Route::post('/{flashcard}/promote', 'promote')->name('flashcards.promote');
 });
 
 Route::controller(LessonController::class)->prefix('lessons')->middleware(['auth:sanctum', CheckAuthed::class])->group(function () {

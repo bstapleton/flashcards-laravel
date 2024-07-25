@@ -96,6 +96,34 @@ class FlashcardController extends Controller
     }
 
     /**
+     * @OA\Post(
+     *     path="/api/flashcards/{id}/promote",
+     *     description="Promote a flashcard from the graveyard back to the easy difficulty",
+     *     tags={"flashcard"},
+     *     @OA\Parameter(
+     *         name="id",
+     *         in="path",
+     *         @OA\Schema(type="integer")
+     *     ),
+     *     @OA\Response(response="200", description="Success"),
+     *     @OA\Response(response="404", description="Flashcard not found"),
+     *     security={{"bearerAuth":{}}}
+     * )
+     */
+    public function promote(Request $request, Flashcard $flashcard): JsonResponse
+    {
+        if ($request->user()->cannot('promote', $flashcard)) {
+            return ApiResponse::error('Not found', 'Flashcard not found', 'not_found', 404);
+        }
+
+        $flashcard->update([
+            'difficulty' => 'easy',
+        ]);
+
+        return fractal($flashcard, new FlashcardTransformer())->respond();
+    }
+
+    /**
      * @OA\Patch(
      *     path="/api/flashcards/{id}",
      *     description="Update flashcard",
