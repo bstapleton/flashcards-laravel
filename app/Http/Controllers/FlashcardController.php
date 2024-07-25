@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\Difficulty;
 use App\Helpers\ApiResponse;
 use App\Models\Flashcard;
 use App\Models\Tag;
@@ -91,6 +92,7 @@ class FlashcardController extends Controller
     public function random(Request $request): JsonResponse
     {
         return fractal(Flashcard::where('user_id', $request->user()->id)
+            ->active()
             ->inRandomOrder()
             ->first(), new FlashcardTransformer())->respond();
     }
@@ -117,7 +119,7 @@ class FlashcardController extends Controller
         }
 
         $flashcard->update([
-            'difficulty' => 'easy',
+            'difficulty' => Difficulty::EASY,
         ]);
 
         return fractal($flashcard, new FlashcardTransformer())->respond();

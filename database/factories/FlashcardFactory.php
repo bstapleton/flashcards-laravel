@@ -2,10 +2,12 @@
 
 namespace Database\Factories;
 
+use App\Enums\Difficulty;
+use App\Models\Flashcard;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Flashcard>
+ * @extends Factory<Flashcard>
  */
 class FlashcardFactory extends Factory
 {
@@ -26,7 +28,7 @@ class FlashcardFactory extends Factory
     {
         return $this->state(function (array $attributes) {
             return [
-                'difficulty' => 'easy'
+                'difficulty' => Difficulty::EASY
             ];
         });
     }
@@ -35,7 +37,7 @@ class FlashcardFactory extends Factory
     {
         return $this->state(function (array $attributes) {
             return [
-                'difficulty' => 'medium'
+                'difficulty' => Difficulty::MEDIUM
             ];
         });
     }
@@ -44,7 +46,16 @@ class FlashcardFactory extends Factory
     {
         return $this->state(function (array $attributes) {
             return [
-                'difficulty' => 'hard'
+                'difficulty' => Difficulty::HARD
+            ];
+        });
+    }
+
+    public function buriedDifficulty(): Factory
+    {
+        return $this->state(function (array $attributes) {
+            return [
+                'difficulty' => Difficulty::BURIED
             ];
         });
     }

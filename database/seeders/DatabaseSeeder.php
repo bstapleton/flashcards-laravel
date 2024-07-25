@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Enums\Difficulty;
 use App\Models\Answer;
 use App\Models\Flashcard;
 use App\Models\Lesson;
@@ -31,7 +32,7 @@ class DatabaseSeeder extends Seeder
         Flashcard::factory()->count(3)->create([
             'user_id' => $user->id,
             'type_id' => Type::where('name', 'Question')->first()->id,
-            'difficulty' => 'easy',
+            'difficulty' => Difficulty::EASY,
         ])->map(function ($flashcard) {
             // Create 3 incorrect answers
             Answer::factory()->count(3)->create([
@@ -52,7 +53,7 @@ class DatabaseSeeder extends Seeder
         $multiChoiceFlashcard = Flashcard::factory()->create([
             'user_id' => $user->id,
             'type_id' => 3,
-            'difficulty' => 'medium',
+            'difficulty' => Difficulty::MEDIUM,
         ]);
 
         // Create 2 incorrect answers

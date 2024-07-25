@@ -23,9 +23,12 @@ class Answer extends Model
         'is_correct',
     ];
 
-    protected $casts = [
-        'is_correct' => 'boolean'
-    ];
+    protected function casts(): array
+    {
+        return [
+            'is_correct' => 'boolean',
+        ];
+    }
 
     public function flashcard(): BelongsTo
     {
