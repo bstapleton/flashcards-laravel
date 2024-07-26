@@ -63,4 +63,17 @@ class User extends Authenticatable
     {
         return $this->hasMany(Flashcard::class);
     }
+
+    public function adjustPoints(int $score, $operation = 'add'): static
+    {
+        if ('add' === $operation) {
+            $this->points += $score;
+        } else {
+            $this->points = $this->points - $score;
+        }
+
+        $this->save();
+
+        return $this;
+    }
 }

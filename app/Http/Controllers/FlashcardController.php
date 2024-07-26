@@ -7,6 +7,7 @@ use App\Enums\QuestionType;
 use App\Helpers\ApiResponse;
 use App\Models\Flashcard;
 use App\Models\Tag;
+use App\Services\FlashcardService;
 use App\Transformers\FlashcardTransformer;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -14,6 +15,13 @@ use Illuminate\Http\Response;
 
 class FlashcardController extends Controller
 {
+    protected FlashcardService $service;
+
+    public function __construct(FlashcardService $service)
+    {
+        $this->service = $service;
+    }
+
     /**
      * @OA\Get(
      *     path="/api/flashcards",
@@ -151,13 +159,17 @@ class FlashcardController extends Controller
             return ApiResponse::error('Not found', 'Flashcard not found', 'not_found', 404);
         }
 
-        switch ($flashcard->type) {
-            case QuestionType::STATEMENT:
-                $score = $flashcard->is_true === $request->input('is_true') ? 3 : 0; // TODO: turn into a service to handle the scoring multipliers for easy = 1, medium = 3, hard = 5 points
-            case QuestionType::SINGLE:
-                // TODO: check given answer is correct
-            case QuestionType::MULTIPLE:
-                // TODO: handle scoring for multiple choice
+        $score = match ($flashcard->type) {
+            QuestionType::SINGLE => $this->service->calculateSingleScore($flashcard, $request->input('answer')),
+            QuestionType::MULTIPLE => $this->service->calculateMultipleChoiceScore($flashcard, $request->input('answers')),
+            default => $this->service->calculateStatementScore($flashcard, (bool)$request->input('answer')),
+        };
+
+        if ($score === 0) {
+            $this->service->forceFail($flashcard);
+        } else {
+            $request->user()->adjustPoints($score);
+            $this->service->increaseDifficulty($flashcard);
         }
 
         return fractal($flashcard, new FlashcardTransformer())->respond(); // TODO: update response

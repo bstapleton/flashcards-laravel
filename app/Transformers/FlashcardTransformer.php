@@ -18,7 +18,7 @@ class FlashcardTransformer extends TransformerAbstract
             'text' => $flashcard->text,
             'difficulty' => $flashcard->difficulty,
             'last_seen_at' => Carbon::parse($flashcard->last_seen)->toIso8601String(),
-            'eligible_at' => $flashcard->getEligibleDateTime(),
+            'eligible_at' => $flashcard->eligible_at,
             'tags' => $flashcard->tags->pluck('name')->toArray(),
             'answers' => $flashcard->answers->map(function (Answer $answer) {
                 return [

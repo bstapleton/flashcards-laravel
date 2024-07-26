@@ -5,6 +5,8 @@ namespace App\Models;
 use App\Enums\Difficulty;
 use App\Enums\QuestionType;
 use Carbon\Carbon;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -19,6 +21,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property string last_seen
  * @property QuestionType type
  * @property boolean is_true
+ * @property Carbon eligible_at
  */
 class Flashcard extends Model
 {
@@ -60,7 +63,7 @@ class Flashcard extends Model
      * @param $query
      * @return mixed
      */
-    public function scopeActive($query)
+    public function scopeActive($query): Builder
     {
         return $query->whereNotIn('difficulty', [Difficulty::BURIED]);
     }
@@ -69,14 +72,32 @@ class Flashcard extends Model
      * Get all the flashcards buried in the graveyard.
      *
      * @param $query
-     * @return mixed
+     * @return Builder
      */
-    public function scopeInactive($query)
+    public function scopeInactive($query): Builder
     {
         return $query->where('difficulty', Difficulty::BURIED);
     }
 
-    public function getEligibleDateTime(): string
+    public function getCorrectAnswerAttribute(): ?Answer
+    {
+        if ($this->type !== QuestionType::SINGLE) {
+            return null;
+        }
+
+        return $this->answers->where('is_correct')->first();
+    }
+
+    public function getCorrectAnswersAttribute(): Collection
+    {
+        if ($this->type !== QuestionType::MULTIPLE) {
+            return new Collection();
+        }
+
+        return $this->answers->where('is_correct');
+    }
+
+    public function getEligibleAtAttribute(): string
     {
         // Never been seen before? Immediately eligible. This is so newly added flashcards will always be available in
         // the pool right after being added.
