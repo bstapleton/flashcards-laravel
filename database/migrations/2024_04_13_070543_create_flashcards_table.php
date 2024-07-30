@@ -18,6 +18,7 @@ return new class extends Migration
             $table->tinyText('difficulty')->default(Difficulty::EASY);
             $table->tinyText('type')->default(QuestionType::STATEMENT);
             $table->boolean('is_true')->nullable();
+            $table->longText('explanation')->nullable();
             $table->timestamps();
         });
     }
