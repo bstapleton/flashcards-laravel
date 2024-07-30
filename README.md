@@ -38,6 +38,8 @@ Each time you provide a correct answer, you'll get an increase in score. In the 
    2. `php artisan seed --class=FlashcardSeeder` will make some flashcards of different types for you to try out
 5. `php artisan serve` and you can check it out in Swagger
 
+To use the endpoints, you'll need to hit the login one first. The seeded user's email is `f2@test.com` and their password is very secure: `password`. I assume you know what you're doing with bearer tokens, or you're going to have Bad Time(tm).
+
 ### Importing data
 
 If you want to import your own questions to try it out - something I recommend if you want to give this a proper test - there's a command you can run to do this.
