@@ -31,7 +31,19 @@ class Flashcard extends Model
         'text',
         'difficulty',
         'type',
+        'is_true',
+        'explanation',
     ];
+
+    public static function boot()
+    {
+        static::creating(function ($model) {
+            // Make it 'last seen' an hour ago, so it's immediately available
+            $model->last_seen = NOW()->subHour();
+        });
+
+        parent::boot();
+    }
 
     protected function casts(): array
     {
@@ -99,12 +111,6 @@ class Flashcard extends Model
 
     public function getEligibleAtAttribute(): string
     {
-        // Never been seen before? Immediately eligible. This is so newly added flashcards will always be available in
-        // the pool right after being added.
-        if (!$this->last_seen) {
-            return Carbon::now()->toIso8601String();
-        }
-
         return match ($this->difficulty) {
             Difficulty::EASY => Carbon::parse($this->last_seen)->addMinutes(30)->toIso8601String(),
             Difficulty::MEDIUM => Carbon::parse($this->last_seen)->addWeek()->toIso8601String(),

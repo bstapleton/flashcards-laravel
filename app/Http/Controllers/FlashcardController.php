@@ -153,8 +153,25 @@ class FlashcardController extends Controller
         return fractal($flashcard, new FlashcardTransformer())->respond();
     }
 
+    /**
+     * @OA\Post(
+     *     path="/api/flashcards/{id}/answer",
+     *     description="Pass an answer or set of answers to the question",
+     *     summary="Attempt to answer the question and be judged accordingly",
+     *     tags={"flashcard"},
+     *     @OA\Parameter(
+     *         name="id",
+     *         in="path",
+     *         @OA\Schema(type="integer")
+     *     ),
+     *     @OA\Response(response="200", description="Success"),
+     *     @OA\Response(response="404", description="Flashcard not found"),
+     *     security={{"bearerAuth":{}}}
+     * )
+     */
     public function answer(Request $request, Flashcard $flashcard): JsonResponse
     {
+        // TODO: finish this off
         if ($request->user()->cannot('answer', $flashcard)) {
             return ApiResponse::error('Not found', 'Flashcard not found', 'not_found', 404);
         }

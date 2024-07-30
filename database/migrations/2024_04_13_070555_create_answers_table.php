@@ -13,7 +13,7 @@ return new class extends Migration
             $table->foreignId('flashcard_id')->constrained();
             $table->text('text');
             $table->longText('explanation')->nullable();
-            $table->boolean('is_correct')->nullable();
+            $table->boolean('is_correct')->default(false);
             $table->timestamps();
         });
     }
