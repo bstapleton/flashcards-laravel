@@ -156,13 +156,25 @@ class FlashcardController extends Controller
     /**
      * @OA\Post(
      *     path="/api/flashcards/{id}/answer",
-     *     description="Pass an answer or set of answers to the question",
-     *     summary="Attempt to answer the question and be judged accordingly",
+     *     description="Attempt to answer the question and be judged accordingly",
+     *     summary="Pass an answer or set of answers to the question",
      *     tags={"flashcard"},
      *     @OA\Parameter(
      *         name="id",
      *         in="path",
      *         @OA\Schema(type="integer")
+     *     ),
+     *     @OA\RequestBody(
+     *         @OA\MediaType(
+     *             mediaType="Application/json",
+     *             @OA\Schema(
+     *                 @OA\Property(
+     *                     schema="ArrayOfIntegers",
+     *                     type="array",
+     *                     @OA\Items(type="integer")
+     *                 )
+     *             )
+     *         )
      *     ),
      *     @OA\Response(response="200", description="Success"),
      *     @OA\Response(response="404", description="Flashcard not found"),
