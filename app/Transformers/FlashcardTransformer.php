@@ -14,7 +14,7 @@ class FlashcardTransformer extends TransformerAbstract
     {
         $data =  [
             'id' => $flashcard->id,
-            'type' => $flashcard->type->name,
+            'type' => $flashcard->type->value,
             'text' => $flashcard->text,
             'difficulty' => $flashcard->difficulty,
             'last_seen_at' => Carbon::parse($flashcard->last_seen)->toIso8601String(),
