@@ -31,7 +31,8 @@ class FlashcardService
 
     /**
      * For a multiple choice, you have to get ALL the answers correct, so we apply an additional score modifier on top
-     * of the difficulty modifier.
+     * of the difficulty modifier. This is static, meaning that 2/2 correct answers and 3/3 correct answers of the same
+     * difficulty will score the same: they'll only score more than a 1/1 (i.e. single type question) or statement.
      * If the number of answers they provide does not match the number of correct answers, they get a 0
      * If the answers submitted do not match the correct answers, they get a 0
      *
@@ -51,16 +52,6 @@ class FlashcardService
         }
 
         return isset($score) ? (int)$score : 0;
-    }
-
-    private function handleMultiplier(Difficulty $difficulty): int
-    {
-        return match ($difficulty) {
-            Difficulty::EASY => 1,
-            Difficulty::MEDIUM => 3,
-            Difficulty::HARD => 8,
-            default => 0,
-        };
     }
 
     /**
@@ -100,5 +91,15 @@ class FlashcardService
         $flashcard->difficulty = Difficulty::EASY;
         $flashcard->last_seen = NOW()->toIso8601String();
         $flashcard->save();
+    }
+
+    private function handleMultiplier(Difficulty $difficulty): int
+    {
+        return match ($difficulty) {
+            Difficulty::EASY => 1,
+            Difficulty::MEDIUM => 3,
+            Difficulty::HARD => 8,
+            default => 0,
+        };
     }
 }
