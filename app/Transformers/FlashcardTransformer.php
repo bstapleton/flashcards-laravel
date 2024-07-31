@@ -24,7 +24,6 @@ class FlashcardTransformer extends TransformerAbstract
                 return [
                     'id' => $answer->id,
                     'text' => $answer->text,
-                    'explanation' => $answer->explanation,
                 ];
             })
         ];
