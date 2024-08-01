@@ -215,10 +215,10 @@ class FlashcardController extends Controller
             $scorecard->setCorrectness($this->service->calculateCorrectness(null, $providedAnswer));
         }
 
-        $score = Score::getScore($flashcard->type, $scorecard->getCorrectness(), $flashcard->difficulty);
+        $score = (new Score())->getScore($flashcard->type, $scorecard->getCorrectness(), $flashcard->difficulty);
 
         if ($score === 0) {
-            $this->service->resetDifficulty();
+            $scorecard->setNewDifficulty($this->service->resetDifficulty());
         } else {
             $request->user()->adjustPoints($score);
             $scorecard->setNewDifficulty($this->service->increaseDifficulty());

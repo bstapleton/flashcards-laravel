@@ -13,7 +13,6 @@ class Scorecard
 {
     use HasFactory;
 
-
     private string $question;
     private array $answersGiven;
     private Correctness $correctness;

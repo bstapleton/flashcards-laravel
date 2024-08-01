@@ -8,8 +8,14 @@ use App\Enums\QuestionType;
 
 class Score
 {
-    const int BASE_SCORE = 1;
-    const int MULTIPLE_CHOICE_MODIFIER = 2;
+    protected int $baseScore;
+    protected int $multiplier;
+
+    public function __construct()
+    {
+        $this->baseScore = config('flashcard.scoring.base_score');
+        $this->multiplier = config('flashcard.scoring.multiple_correct_multiplier');
+    }
 
     /**
      * @param QuestionType $type
@@ -17,17 +23,17 @@ class Score
      * @param Difficulty $currentDifficulty
      * @return int
      */
-    public static function getScore(QuestionType $type, Correctness $correctness, Difficulty $currentDifficulty): int
+    public function getScore(QuestionType $type, Correctness $correctness, Difficulty $currentDifficulty): int
     {
         if (
             in_array($type, [QuestionType::STATEMENT, QuestionType::SINGLE])
             && Correctness::COMPLETE === $correctness
         ) {
-            return self::BASE_SCORE * self::getMultiplier($currentDifficulty);
+            return $this->baseScore * self::getMultiplier($currentDifficulty);
         }
 
         if (QuestionType::MULTIPLE === $type && Correctness::COMPLETE === $correctness) {
-            return (self::BASE_SCORE * self::getMultiplier($currentDifficulty)) * self::MULTIPLE_CHOICE_MODIFIER;
+            return ($this->baseScore * self::getMultiplier($currentDifficulty)) * $this->multiplier;
         }
 
         return 0;

@@ -105,12 +105,14 @@ class FlashcardService
     /**
      * They got it wrong, push it back to easy difficulty
      *
-     * @return void
+     * @return Difficulty
      */
-    public function resetDifficulty(): void
+    public function resetDifficulty(): Difficulty
     {
         $this->flashcard->difficulty = Difficulty::EASY;
         $this->flashcard->last_seen = NOW()->toIso8601String();
         $this->flashcard->save();
+
+        return $this->flashcard->difficulty;
     }
 }
