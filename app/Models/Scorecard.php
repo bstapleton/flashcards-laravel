@@ -19,18 +19,19 @@ class Scorecard
     private Correctness $correctness;
     private int $score;
     private int $totalScore;
-    private Difficulty $difficulty;
+    private Difficulty $oldDifficulty;
+    private Difficulty $newDifficulty;
     private QuestionType $type;
     private Carbon $eligible_at;
-    private Collection $answers;
+    private Collection $flashcardAnswers;
 
     public function __construct(Flashcard $flashcard)
     {
         $this->setQuestion($flashcard->text);
-        $this->setDifficulty($flashcard->difficulty);
+        $this->setOldDifficulty($flashcard->difficulty);
         $this->setType($flashcard->type);
         $this->setEligibleAt($flashcard->eligible_at);
-        $this->setAnswers($flashcard->answers);
+        $this->setFlashcardAnswers($flashcard->answers);
     }
 
     public function getQuestion(): string
@@ -83,14 +84,24 @@ class Scorecard
         $this->totalScore = $totalScore;
     }
 
-    public function getDifficulty(): Difficulty
+    public function getOldDifficulty(): Difficulty
     {
-        return $this->difficulty;
+        return $this->oldDifficulty;
     }
 
-    public function setDifficulty(Difficulty $difficulty): void
+    public function setOldDifficulty(Difficulty $oldDifficulty): void
     {
-        $this->difficulty = $difficulty;
+        $this->oldDifficulty = $oldDifficulty;
+    }
+
+    public function getNewDifficulty(): Difficulty
+    {
+        return $this->newDifficulty;
+    }
+
+    public function setNewDifficulty(Difficulty $newDifficulty): void
+    {
+        $this->newDifficulty = $newDifficulty;
     }
 
     public function getType(): QuestionType
@@ -113,13 +124,13 @@ class Scorecard
         $this->eligible_at = $eligible_at;
     }
 
-    public function getAnswers(): Collection
+    public function getFlashcardAnswers(): Collection
     {
-        return $this->answers;
+        return $this->flashcardAnswers;
     }
 
-    public function setAnswers(Collection $answers): void
+    public function setFlashcardAnswers(Collection $answers): void
     {
-        $this->answers = $answers;
+        $this->flashcardAnswers = $answers;
     }
 }

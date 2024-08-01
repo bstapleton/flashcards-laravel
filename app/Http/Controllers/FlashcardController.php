@@ -6,6 +6,7 @@ use App\Enums\Difficulty;
 use App\Enums\QuestionType;
 use App\Exceptions\AnswerMismatchException;
 use App\Helpers\ApiResponse;
+use App\Helpers\Score;
 use App\Models\Flashcard;
 use App\Models\Scorecard;
 use App\Models\Tag;
@@ -192,9 +193,10 @@ class FlashcardController extends Controller
         }
 
         $scorecard = new Scorecard($flashcard);
+        $this->service->setFlashcard($flashcard);
 
         if (in_array($flashcard->type, [QuestionType::SINGLE, QuestionType::MULTIPLE])) {
-            $filteredAnswers = $this->service->filterValidAnswers($flashcard, $request->input('answers'));
+            $filteredAnswers = $this->service->filterValidAnswers($request->input('answers'));
             try {
                 $scorecard->setAnswerGiven(
                     $this->service->validateAnswers($filteredAnswers)
@@ -206,31 +208,24 @@ class FlashcardController extends Controller
                     'code' => 'answer_mismatch'
                 ]);
             }
-            $scorecard->setCorrectness($this->service->calculateCorrectness($flashcard, $filteredAnswers));
+            $scorecard->setCorrectness($this->service->calculateCorrectness($filteredAnswers));
         } elseif ($flashcard->type === QuestionType::STATEMENT) {
             $providedAnswer = last($request->input('answers'));
             $scorecard->setAnswerGiven([$providedAnswer]);
-            $scorecard->setCorrectness($this->service->calculateCorrectness($flashcard, null, $providedAnswer));
+            $scorecard->setCorrectness($this->service->calculateCorrectness(null, $providedAnswer));
         }
 
-        $score = match ($flashcard->type) {
-            QuestionType::SINGLE => $this->service->calculateSingleScore($flashcard, $request->input('answers')),
-            QuestionType::MULTIPLE => $this->service->calculateMultipleChoiceScore($flashcard, $request->input('answers')),
-            default => $this->service->calculateStatementScore($flashcard, (bool)$request->input('answers')),
-        };
+        $score = Score::getScore($flashcard->type, $scorecard->getCorrectness(), $flashcard->difficulty);
 
         if ($score === 0) {
-            $this->service->forceFail($flashcard);
+            $this->service->resetDifficulty();
         } else {
             $request->user()->adjustPoints($score);
-            $this->service->increaseDifficulty($flashcard);
+            $scorecard->setNewDifficulty($this->service->increaseDifficulty());
         }
 
         $scorecard->setScore($score);
         $scorecard->setTotalScore($request->user()->points);
-        $scorecard->setDifficulty($flashcard->difficulty);
-
-        // TODO build scorecard model
 
         return fractal($scorecard, new ScorecardTransformer())->respond();
     }
