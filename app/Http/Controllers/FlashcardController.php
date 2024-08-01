@@ -224,6 +224,7 @@ class FlashcardController extends Controller
             $scorecard->setNewDifficulty($this->service->increaseDifficulty());
         }
 
+        $scorecard->setEligibleAt($flashcard->eligible_at);
         $scorecard->setScore($score);
         $scorecard->setTotalScore($request->user()->points);
 

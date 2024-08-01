@@ -29,7 +29,6 @@ class Scorecard
         $this->setQuestion($flashcard->text);
         $this->setOldDifficulty($flashcard->difficulty);
         $this->setType($flashcard->type);
-        $this->setEligibleAt($flashcard->eligible_at);
         $this->setFlashcardAnswers($flashcard->answers);
     }
 
