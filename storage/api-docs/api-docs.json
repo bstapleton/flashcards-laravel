@@ -240,6 +240,53 @@
                     }
                 ]
             },
+            "post": {
+                "tags": [
+                    "flashcard"
+                ],
+                "summary": "Pass an answer or set of answers to the question",
+                "description": "Attempt to answer the question and be judged accordingly",
+                "operationId": "74aa428e2d23c8f550297d3f8f8868ba",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "Application/json": {
+                            "schema": {
+                                "properties": {
+                                    "answers": {
+                                        "type": "array",
+                                        "items": {
+                                            "type": "integer"
+                                        }
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Success"
+                    },
+                    "404": {
+                        "description": "Flashcard not found"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
             "delete": {
                 "tags": [
                     "flashcard"
@@ -353,14 +400,14 @@
                 ]
             }
         },
-        "/api/flashcards/{id}/promote": {
+        "/api/flashcards/{id}/revive": {
             "post": {
                 "tags": [
                     "flashcard"
                 ],
                 "summary": "Resurrect a buried flashcard",
-                "description": "Promote a flashcard from the graveyard back to the easy difficulty",
-                "operationId": "def32b0dc42738f9a8a1ed1350796610",
+                "description": "Revive a flashcard from the graveyard back to the easy difficulty",
+                "operationId": "760978efb44e282898b2b4663ab71aaa",
                 "parameters": [
                     {
                         "name": "id",

@@ -109,13 +109,13 @@ class Flashcard extends Model
         return $this->answers->where('is_correct');
     }
 
-    public function getEligibleAtAttribute(): string
+    public function getEligibleAtAttribute(): Carbon
     {
         return match ($this->difficulty) {
-            Difficulty::EASY => Carbon::parse($this->last_seen)->addMinutes(30)->toIso8601String(),
-            Difficulty::MEDIUM => Carbon::parse($this->last_seen)->addWeek()->toIso8601String(),
-            Difficulty::HARD => Carbon::parse($this->last_seen)->addMonth()->toIso8601String(),
-            default => Carbon::now()->toIso8601String(),
+            Difficulty::EASY => Carbon::parse($this->last_seen)->addMinutes(30),
+            Difficulty::MEDIUM => Carbon::parse($this->last_seen)->addWeek(),
+            Difficulty::HARD => Carbon::parse($this->last_seen)->addMonth(),
+            default => Carbon::now(),
         };
     }
 }

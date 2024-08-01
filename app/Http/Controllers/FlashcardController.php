@@ -4,11 +4,14 @@ namespace App\Http\Controllers;
 
 use App\Enums\Difficulty;
 use App\Enums\QuestionType;
+use App\Exceptions\AnswerMismatchException;
 use App\Helpers\ApiResponse;
 use App\Models\Flashcard;
+use App\Models\Scorecard;
 use App\Models\Tag;
 use App\Services\FlashcardService;
 use App\Transformers\FlashcardTransformer;
+use App\Transformers\ScorecardTransformer;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -155,7 +158,7 @@ class FlashcardController extends Controller
 
     /**
      * @OA\Post(
-     *     path="/api/flashcards/{id}/answer",
+     *     path="/api/flashcards/{id}",
      *     description="Attempt to answer the question and be judged accordingly",
      *     summary="Pass an answer or set of answers to the question",
      *     tags={"flashcard"},
@@ -169,7 +172,7 @@ class FlashcardController extends Controller
      *             mediaType="Application/json",
      *             @OA\Schema(
      *                 @OA\Property(
-     *                     schema="ArrayOfIntegers",
+     *                     property="answers",
      *                     type="array",
      *                     @OA\Items(type="integer")
      *                 )
@@ -188,10 +191,32 @@ class FlashcardController extends Controller
             return ApiResponse::error('Not found', 'Flashcard not found', 'not_found', 404);
         }
 
+        $scorecard = new Scorecard($flashcard);
+
+        if (in_array($flashcard->type, [QuestionType::SINGLE, QuestionType::MULTIPLE])) {
+            $filteredAnswers = $this->service->filterValidAnswers($flashcard, $request->input('answers'));
+            try {
+                $scorecard->setAnswerGiven(
+                    $this->service->validateAnswers($filteredAnswers)
+                );
+            } catch (AnswerMismatchException $e) {
+                return response()->json([
+                    'title' => 'Answer mismatch',
+                    'message' => $e->getMessage(),
+                    'code' => 'answer_mismatch'
+                ]);
+            }
+            $scorecard->setCorrectness($this->service->calculateCorrectness($flashcard, $filteredAnswers));
+        } elseif ($flashcard->type === QuestionType::STATEMENT) {
+            $providedAnswer = last($request->input('answers'));
+            $scorecard->setAnswerGiven([$providedAnswer]);
+            $scorecard->setCorrectness($this->service->calculateCorrectness($flashcard, null, $providedAnswer));
+        }
+
         $score = match ($flashcard->type) {
-            QuestionType::SINGLE => $this->service->calculateSingleScore($flashcard, $request->input('answer')),
+            QuestionType::SINGLE => $this->service->calculateSingleScore($flashcard, $request->input('answers')),
             QuestionType::MULTIPLE => $this->service->calculateMultipleChoiceScore($flashcard, $request->input('answers')),
-            default => $this->service->calculateStatementScore($flashcard, (bool)$request->input('answer')),
+            default => $this->service->calculateStatementScore($flashcard, (bool)$request->input('answers')),
         };
 
         if ($score === 0) {
@@ -201,7 +226,13 @@ class FlashcardController extends Controller
             $this->service->increaseDifficulty($flashcard);
         }
 
-        return fractal($flashcard, new FlashcardTransformer())->respond(); // TODO: update response
+        $scorecard->setScore($score);
+        $scorecard->setTotalScore($request->user()->points);
+        $scorecard->setDifficulty($flashcard->difficulty);
+
+        // TODO build scorecard model
+
+        return fractal($scorecard, new ScorecardTransformer())->respond();
     }
 
     /**
