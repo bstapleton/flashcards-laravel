@@ -18,6 +18,9 @@ class Score
     }
 
     /**
+     * If the question is in the graveyard, don't score it. Otherwise, work out the score based on its correctness and
+     * difficulty.
+     *
      * @param QuestionType $type
      * @param Correctness $correctness
      * @param Difficulty $currentDifficulty
@@ -25,6 +28,10 @@ class Score
      */
     public function getScore(QuestionType $type, Correctness $correctness, Difficulty $currentDifficulty): int
     {
+        if (Difficulty::BURIED === $currentDifficulty) {
+            return 0;
+        }
+
         if (
             in_array($type, [QuestionType::STATEMENT, QuestionType::SINGLE])
             && Correctness::COMPLETE === $correctness

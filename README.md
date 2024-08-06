@@ -99,6 +99,7 @@ You can set the type to `multiple` if you intend to have multiple answers in the
 - Scoring system
   - Including segmentation by tag
   - Handling of 'correctness' matrix for multiple choice
+- Allow for image-type answers: e.g. select the correct x from the images below
 - Updating the difficulty based on correct/incorrect answers
 - Tests. So many tests.
 - Error checking and handling for

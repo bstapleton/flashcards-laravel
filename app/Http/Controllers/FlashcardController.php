@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\Correctness;
 use App\Enums\Difficulty;
 use App\Enums\QuestionType;
 use App\Exceptions\AnswerMismatchException;
@@ -197,6 +198,7 @@ class FlashcardController extends Controller
 
         if (in_array($flashcard->type, [QuestionType::SINGLE, QuestionType::MULTIPLE])) {
             $filteredAnswers = $this->service->filterValidAnswers($request->input('answers'));
+
             try {
                 $scorecard->setAnswerGiven(
                     $this->service->validateAnswers($filteredAnswers)
@@ -208,6 +210,7 @@ class FlashcardController extends Controller
                     'code' => 'answer_mismatch'
                 ]);
             }
+
             $scorecard->setCorrectness($this->service->calculateCorrectness($filteredAnswers));
         } elseif ($flashcard->type === QuestionType::STATEMENT) {
             $providedAnswer = last($request->input('answers'));
@@ -217,7 +220,7 @@ class FlashcardController extends Controller
 
         $score = (new Score())->getScore($flashcard->type, $scorecard->getCorrectness(), $flashcard->difficulty);
 
-        if ($score === 0) {
+        if ($scorecard->getCorrectness() !== Correctness::COMPLETE) {
             $scorecard->setNewDifficulty($this->service->resetDifficulty());
         } else {
             $request->user()->adjustPoints($score);
