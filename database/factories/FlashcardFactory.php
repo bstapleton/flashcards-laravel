@@ -59,4 +59,13 @@ class FlashcardFactory extends Factory
             ];
         });
     }
+
+    public function old(): Factory
+    {
+        return $this->state(function (array $attributes) {
+            return [
+                'last_seen' => now()->subYear()->toIso8601String()
+            ];
+        });
+    }
 }

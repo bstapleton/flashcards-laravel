@@ -19,6 +19,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property string text
  * @property Difficulty difficulty
  * @property string last_seen
+ * @property string explanation
  * @property QuestionType type
  * @property boolean is_true
  * @property Carbon eligible_at

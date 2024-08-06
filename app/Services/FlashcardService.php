@@ -97,7 +97,6 @@ class FlashcardService
         }
 
         $this->flashcard->last_seen = NOW()->toIso8601String();
-        $this->flashcard->save();
 
         return $this->flashcard->difficulty;
     }
@@ -111,8 +110,17 @@ class FlashcardService
     {
         $this->flashcard->difficulty = Difficulty::EASY;
         $this->flashcard->last_seen = NOW()->toIso8601String();
-        $this->flashcard->save();
 
         return $this->flashcard->difficulty;
+    }
+
+    public function resetLastSeen(): void
+    {
+        $this->flashcard->last_seen = NOW()->toIso8601String();
+    }
+
+    public function save(): void
+    {
+        $this->flashcard->save();
     }
 }
