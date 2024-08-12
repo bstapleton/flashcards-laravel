@@ -11,6 +11,9 @@ use App\Models\Flashcard;
 
 class FlashcardTest extends TestCase
 {
+    const int EASY_MINUTES = 30;
+    const int MEDIUM_MINUTES = 10080;
+    const int HARD_MINUTES = 40320;
     protected Flashcard  $flashcard;
     protected FlashcardService $service;
 
@@ -52,21 +55,60 @@ class FlashcardTest extends TestCase
         $this->assertEquals('test explanation', $this->flashcard->explanation);
     }
 
-    public function testIncreasingDifficulty()
+    /**
+     * Scenario: Increasing the difficulty of a question
+     * GIVEN a flashcard
+     * AND its difficulty is hard
+     * WHEN I trigger an increase in difficulty for it
+     * THEN it should increase to the next hardest setting
+     * AND the eligibility datetime should be next week
+     *
+     * @return void
+     */
+    public function testIncreasingDifficultyForEasy()
     {
         $this->flashcard->difficulty = Difficulty::EASY;
         $this->service->increaseDifficulty();
         $this->assertTrue($this->flashcard->difficulty === Difficulty::MEDIUM);
+        $this->assertTrue(
+            Carbon::parse($this->flashcard->eligible_at)
+                ->equalTo(Carbon::parse($this->flashcard->last_seen)->addMinutes(10080))
+        );
+    }
 
+    public function testIncreasingDifficultyForMedium()
+    {
         $this->flashcard->difficulty = Difficulty::MEDIUM;
         $this->service->increaseDifficulty();
         $this->assertTrue($this->flashcard->difficulty === Difficulty::HARD);
+    }
 
+    /**
+     * Scenario: Increasing the difficulty of a question
+     * GIVEN a flashcard
+     * AND its difficulty is hard
+     * WHEN I trigger an increase in difficulty for it
+     * THEN it should increase to the next hardest setting
+     *
+     * @return void
+     */
+    public function testIncreasingDifficultyForHard()
+    {
         $this->flashcard->difficulty = Difficulty::HARD;
         $this->service->increaseDifficulty();
         $this->assertTrue($this->flashcard->difficulty === Difficulty::BURIED);
     }
 
+    // TODO: Test eligibility timers
+
+    /**
+     * Scenario: Increasing the difficulty of a question when it's already in the graveyard
+     * GIVEN a flashcard that is already in the graveyard
+     * WHEN I trigger an increase in difficulty for it
+     * THEN the difficulty should remain unchanged
+     *
+     * @return void
+     */
     public function testBuriedIdempotency()
     {
         $this->flashcard->difficulty = Difficulty::BURIED;

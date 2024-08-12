@@ -26,6 +26,10 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  */
 class Flashcard extends Model
 {
+    const int EASY_MINUTES = 30;
+    const int MEDIUM_MINUTES = 10080;
+    const int HARD_MINUTES = 40320;
+
     use HasFactory;
 
     protected $fillable = [
@@ -113,9 +117,9 @@ class Flashcard extends Model
     public function getEligibleAtAttribute(): Carbon
     {
         return match ($this->difficulty) {
-            Difficulty::EASY => Carbon::parse($this->last_seen)->addMinutes(30),
-            Difficulty::MEDIUM => Carbon::parse($this->last_seen)->addWeek(),
-            Difficulty::HARD => Carbon::parse($this->last_seen)->addMonth(),
+            Difficulty::EASY => Carbon::parse($this->last_seen)->addMinutes(self::EASY_MINUTES),
+            Difficulty::MEDIUM => Carbon::parse($this->last_seen)->addMinutes(self::MEDIUM_MINUTES),
+            Difficulty::HARD => Carbon::parse($this->last_seen)->addMinutes(self::HARD_MINUTES),
             default => Carbon::now(),
         };
     }

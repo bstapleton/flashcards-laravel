@@ -42,7 +42,7 @@ return [
         'test' => [
             'driver' => 'sqlite',
             'url' => env('DB_URL'),
-            'database' => env('DB_DATABASE', database_path('database.test')),
+            'database' => env('DB_DATABASE', database_path('database.test.sqlite')),
             'prefix' => '',
             'foreign_key_constraints' => env('DB_FOREIGN_KEYS', true),
         ],
