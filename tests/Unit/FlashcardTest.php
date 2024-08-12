@@ -6,14 +6,11 @@ use App\Enums\Difficulty;
 use App\Enums\QuestionType;
 use App\Services\FlashcardService;
 use Carbon\Carbon;
-use PHPUnit\Framework\TestCase;
 use App\Models\Flashcard;
+use Tests\TestCase;
 
 class FlashcardTest extends TestCase
 {
-    const int EASY_MINUTES = 30;
-    const int MEDIUM_MINUTES = 10080;
-    const int HARD_MINUTES = 40320;
     protected Flashcard  $flashcard;
     protected FlashcardService $service;
 
@@ -56,12 +53,12 @@ class FlashcardTest extends TestCase
     }
 
     /**
-     * Scenario: Increasing the difficulty of a question
+     * Scenario: Increasing the difficulty of a question from easy to medium
      * GIVEN a flashcard
-     * AND its difficulty is hard
+     * AND its difficulty is easy
      * WHEN I trigger an increase in difficulty for it
-     * THEN it should increase to the next hardest setting
-     * AND the eligibility datetime should be next week
+     * THEN it should increase to medium difficulty
+     * AND the eligibility datetime should match what is configured for the medium difficulty
      *
      * @return void
      */
@@ -72,23 +69,37 @@ class FlashcardTest extends TestCase
         $this->assertTrue($this->flashcard->difficulty === Difficulty::MEDIUM);
         $this->assertTrue(
             Carbon::parse($this->flashcard->eligible_at)
-                ->equalTo(Carbon::parse($this->flashcard->last_seen)->addMinutes(10080))
+                ->equalTo(Carbon::parse($this->flashcard->last_seen)->addMinutes(config('flashcard.difficulty_minutes.medium')))
         );
     }
 
+    /**
+     * Scenario: Increasing the difficulty of a question from medium to hard
+     * GIVEN a flashcard
+     * AND its difficulty is medium
+     * WHEN I trigger an increase in difficulty for it
+     * THEN it should increase to hard difficulty
+     * AND the eligibility datetime should match what is configured for the hard difficulty
+     *
+     * @return void
+     */
     public function testIncreasingDifficultyForMedium()
     {
         $this->flashcard->difficulty = Difficulty::MEDIUM;
         $this->service->increaseDifficulty();
         $this->assertTrue($this->flashcard->difficulty === Difficulty::HARD);
+        $this->assertTrue(
+            Carbon::parse($this->flashcard->eligible_at)
+                ->equalTo(Carbon::parse($this->flashcard->last_seen)->addMinutes(config('flashcard.difficulty_minutes.hard')))
+        );
     }
 
     /**
-     * Scenario: Increasing the difficulty of a question
+     * Scenario: Sending a question to the graveyard by answering correctly when on hard difficulty
      * GIVEN a flashcard
      * AND its difficulty is hard
      * WHEN I trigger an increase in difficulty for it
-     * THEN it should increase to the next hardest setting
+     * THEN it should go to the graveyard by setting the difficulty to buried
      *
      * @return void
      */
@@ -116,23 +127,98 @@ class FlashcardTest extends TestCase
         $this->assertTrue($this->flashcard->difficulty === Difficulty::BURIED);
     }
 
-    public function testResetDifficulty()
+    /**
+     * Scenario: Resetting the difficulty to easy from medium
+     * GIVEN a flashcard that is answered incorrectly
+     * WHEN the difficulty is reset
+     * THEN it should always be returned to the easiest difficulty
+     * AND the eligibility datetime should match what is configured for the easy difficulty
+     *
+     * @return void
+     */
+    public function testResetMediumDifficulty()
     {
         $this->flashcard->difficulty = Difficulty::MEDIUM;
-        $this->service->resetDifficulty();
-        $this->assertTrue($this->flashcard->difficulty === Difficulty::EASY);
+        $this->assertFalse($this->flashcard->difficulty === Difficulty::EASY);
+        $this->assertFalse(
+            Carbon::parse($this->flashcard->eligible_at)
+                ->equalTo(Carbon::parse($this->flashcard->last_seen)->addMinutes(config('flashcard.difficulty_minutes.easy')))
+        );
 
-        $this->flashcard->difficulty = Difficulty::HARD;
         $this->service->resetDifficulty();
-        $this->assertTrue($this->flashcard->difficulty === Difficulty::EASY);
 
-        $this->flashcard->difficulty = Difficulty::BURIED;
-        $this->service->resetDifficulty();
         $this->assertTrue($this->flashcard->difficulty === Difficulty::EASY);
+        $this->assertTrue(
+            Carbon::parse($this->flashcard->eligible_at)
+                ->equalTo(Carbon::parse($this->flashcard->last_seen)->addMinutes(config('flashcard.difficulty_minutes.easy')))
+        );
     }
 
+    /**
+     * Scenario: Resetting the difficulty to easy from hard
+     * GIVEN a flashcard that is answered incorrectly
+     * WHEN the difficulty is reset
+     * THEN it should always be returned to the easiest difficulty
+     * AND the eligibility datetime should match what is configured for the easy difficulty
+     *
+     * @return void
+     */
+    public function testResetHardDifficulty()
+    {
+        $this->flashcard->difficulty = Difficulty::HARD;
+        $this->assertFalse($this->flashcard->difficulty === Difficulty::EASY);
+        $this->assertFalse(
+            Carbon::parse($this->flashcard->eligible_at)
+                ->equalTo(Carbon::parse($this->flashcard->last_seen)->addMinutes(config('flashcard.difficulty_minutes.easy')))
+        );
+
+        $this->service->resetDifficulty();
+
+        $this->assertTrue($this->flashcard->difficulty === Difficulty::EASY);
+        $this->assertTrue(
+            Carbon::parse($this->flashcard->eligible_at)
+                ->equalTo(Carbon::parse($this->flashcard->last_seen)->addMinutes(config('flashcard.difficulty_minutes.easy')))
+        );
+    }
+
+    /**
+     * Scenario: Resetting the difficulty to easy from buried
+     * GIVEN a flashcard that is answered incorrectly
+     * WHEN the difficulty is reset
+     * THEN it should always be returned to the easiest difficulty
+     * AND the eligibility datetime should match what is configured for the easy difficulty
+     *
+     * @return void
+     */
+    public function testResetBuriedDifficulty()
+    {
+        $this->flashcard->difficulty = Difficulty::BURIED;
+        $this->assertFalse($this->flashcard->difficulty === Difficulty::EASY);
+        $this->assertFalse(
+            Carbon::parse($this->flashcard->eligible_at)
+                ->equalTo(Carbon::parse($this->flashcard->last_seen)->addMinutes(config('flashcard.difficulty_minutes.easy')))
+        );
+
+        $this->service->resetDifficulty();
+
+        $this->assertTrue($this->flashcard->difficulty === Difficulty::EASY);
+        $this->assertTrue(
+            Carbon::parse($this->flashcard->eligible_at)
+                ->equalTo(Carbon::parse($this->flashcard->last_seen)->addMinutes(config('flashcard.difficulty_minutes.easy')))
+        );
+    }
+
+    /**
+     * Scenario: Resetting the last_seen datetime
+     * GIVEN a flashcard
+     * WHEN its last-seen datetime is reset
+     * THEN it should be the same as 'now'
+     *
+     * @return void
+     */
     public function testResetLastSeen()
     {
+        $this->assertFalse(Carbon::parse($this->flashcard->last_seen)->isCurrentYear());
         $this->service->resetLastSeen();
         $this->assertTrue(Carbon::parse($this->flashcard->last_seen)->isCurrentYear());
     }
