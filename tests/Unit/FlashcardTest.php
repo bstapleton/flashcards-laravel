@@ -4,6 +4,9 @@ namespace Tests\Unit;
 
 use App\Enums\Difficulty;
 use App\Enums\QuestionType;
+use App\Exceptions\AnswerMismatchException;
+use App\Models\Answer;
+use App\Models\User;
 use App\Services\FlashcardService;
 use Carbon\Carbon;
 use App\Models\Flashcard;
@@ -11,14 +14,25 @@ use Tests\TestCase;
 
 class FlashcardTest extends TestCase
 {
+    const int ANSWER_COUNT = 3;
     protected Flashcard  $flashcard;
+    protected User $user;
     protected FlashcardService $service;
 
     public function setUp(): void
     {
         parent::setUp();
 
-        $this->flashcard = Flashcard::factory()->old()->make();
+        $this->user = User::factory()->create();
+        $this->flashcard = Flashcard::factory()->create([
+            'user_id' => $this->user->id,
+        ]);
+        $answers = Answer::factory()->count(self::ANSWER_COUNT)->create([
+            'flashcard_id' => $this->flashcard->id,
+        ]);
+        foreach ($answers as $answer) {
+            $answer->flashcard()->associate($this->flashcard);
+        }
         $this->service = new FlashcardService();
         $this->service->setFlashcard($this->flashcard);
 
@@ -30,9 +44,18 @@ class FlashcardTest extends TestCase
 
     public function tearDown(): void
     {
+        $this->flashcard->answers->each(function ($answer) {
+            $answer->delete();
+        });
         $this->flashcard->delete();
+        $this->user->delete();
 
         parent::tearDown();
+    }
+
+    public function testBoot()
+    {
+        $this->assertTrue(Carbon::parse($this->flashcard->last_seen)->isLastYear());
     }
 
     public function testFlashcardHasAttributes(): void
@@ -218,9 +241,40 @@ class FlashcardTest extends TestCase
      */
     public function testResetLastSeen()
     {
-        $this->assertFalse(Carbon::parse($this->flashcard->last_seen)->isCurrentYear());
         $this->service->resetLastSeen();
         $this->assertTrue(Carbon::parse($this->flashcard->last_seen)->isCurrentYear());
+    }
+
+    public function testFlashcardHasAnswers()
+    {
+        $this->assertCount(self::ANSWER_COUNT, $this->flashcard->answers);
+    }
+
+    public function testFilterValidAnswers()
+    {
+        $this->markTestIncomplete();
+    }
+
+    /**
+     *
+     *
+     * @return void
+     * @throws AnswerMismatchException
+     */
+    public function testValidAnswers()
+    {
+        $this->assertNotEmpty($this->service->validateAnswers([1, 2]));
+    }
+
+
+    /**
+     * @return void
+     * @throws AnswerMismatchException
+     */
+    public function testInvalidAnswers()
+    {
+        $this->expectException(AnswerMismatchException::class);
+        $this->service->validateAnswers([]);
     }
 
     // TODO: validateAnswers

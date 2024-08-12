@@ -18,7 +18,7 @@ class FlashcardService
     }
 
     /**
-     * Handles if none of the answer IDs passed by teh consumer are valid for the flashcard
+     * Handles if none of the answer IDs passed by the consumer are valid for the flashcard
      *
      * @throws AnswerMismatchException
      */

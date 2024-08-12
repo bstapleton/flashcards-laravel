@@ -39,8 +39,8 @@ class Flashcard extends Model
     public static function boot()
     {
         static::creating(function ($model) {
-            // Make it 'last seen' an hour ago, so it's immediately available
-            $model->last_seen = NOW()->subHour();
+            // Make it 'last seen' a year ago, so it's immediately available
+            $model->last_seen = NOW()->subYear();
         });
 
         parent::boot();
