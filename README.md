@@ -33,12 +33,16 @@ Each time you provide a correct answer, you'll get an increase in score. In the 
 1. Usual php stuff `composer install`
 2. `php artisan l5-swagger:generate` to generate the API contract
 3. `php artisan migrate:fresh` to set up the DB
-4. `php artisan db:seed` will create a user for you and nothing else. If you want to use the importer command to generate some more realistic questions, this is probably enough seeding for you, otherwise:
+4. `php artisan db:seed` will create a user for you and nothing else. If you want to use the importer command (see below) to generate some more realistic questions, this is probably enough seeding for you, otherwise:
    1. `php artisan seed --class=TagSeeder` will make up some tags for your flashcards to use
    2. `php artisan seed --class=FlashcardSeeder` will make some flashcards of different types for you to try out
 5. `php artisan serve` and you can check it out in Swagger
 
 To use the endpoints, you'll need to hit the login one first. The seeded user's email is `f2@test.com` and their password is very secure: `password`. I assume you know what you're doing with bearer tokens, or you're going to have Bad Time(tm).
+
+### Known issues
+
+- Write operations will fail when using Swagger UI, giving a CSRF error. You can get around this by importing the generated file (`api-docs.json`) into an API testing/documentation app like Postman.
 
 ### Importing data
 
