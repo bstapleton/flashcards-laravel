@@ -5,7 +5,6 @@ namespace App\Models;
 use App\Enums\Difficulty;
 use App\Enums\QuestionType;
 use Carbon\Carbon;
-use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -68,28 +67,6 @@ class Flashcard extends Model
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
-    }
-
-    /**
-     * All flashcards not in the graveyard are in the pool.
-     *
-     * @param $query
-     * @return mixed
-     */
-    public function scopeActive($query): Builder
-    {
-        return $query->whereNotIn('difficulty', [Difficulty::BURIED]);
-    }
-
-    /**
-     * Get all the flashcards buried in the graveyard.
-     *
-     * @param $query
-     * @return Builder
-     */
-    public function scopeInactive($query): Builder
-    {
-        return $query->where('difficulty', Difficulty::BURIED);
     }
 
     public function getCorrectAnswerAttribute(): ?Answer

@@ -1,7 +1,7 @@
 {
     "openapi": "3.0.0",
     "info": {
-        "title": "Swagger with Laravel",
+        "title": "Flashcards API",
         "version": "1.0.0"
     },
     "paths": {
@@ -165,7 +165,8 @@
                 "tags": [
                     "flashcard"
                 ],
-                "summary": "List flashcards",
+                "summary": "List all active flashcards",
+                "description": "Return all flashcards that are not in the graveyard, for the current user, paginated",
                 "operationId": "745e7a92242380cb67d3cd373765f022",
                 "responses": {
                     "200": {
@@ -198,6 +199,46 @@
                         }
                     }
                 },
+                "responses": {
+                    "200": {
+                        "description": "Success"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/flashcards/all": {
+            "get": {
+                "tags": [
+                    "flashcard"
+                ],
+                "summary": "List all flashcards",
+                "description": "Return all flashcards - alive or buried - for the current user, paginated",
+                "operationId": "75ec5dcd413c0c5b3ec8308246e6092b",
+                "responses": {
+                    "200": {
+                        "description": "Success"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/flashcards/graveyard": {
+            "get": {
+                "tags": [
+                    "flashcard"
+                ],
+                "summary": "Get all flashcards currently in the graveyard",
+                "description": "'Buried' flashcards are those which have been anwered correctly on the Hard difficulty",
+                "operationId": "deb8deeaf8821d7046d97611188a5caf",
                 "responses": {
                     "200": {
                         "description": "Success"
@@ -371,26 +412,6 @@
                     },
                     "404": {
                         "description": "Flashcard not found"
-                    }
-                },
-                "security": [
-                    {
-                        "bearerAuth": []
-                    }
-                ]
-            }
-        },
-        "/api/flashcards/graveyard": {
-            "get": {
-                "tags": [
-                    "flashcard"
-                ],
-                "summary": "Get all flashcards currently in the graveyard",
-                "description": "'Buried' flashcards are those which have been anwered correctly on the Hard difficulty",
-                "operationId": "deb8deeaf8821d7046d97611188a5caf",
-                "responses": {
-                    "200": {
-                        "description": "Success"
                     }
                 },
                 "security": [

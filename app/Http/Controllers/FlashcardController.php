@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Enums\Correctness;
-use App\Enums\Difficulty;
 use App\Enums\QuestionType;
 use App\Exceptions\AnswerMismatchException;
 use App\Helpers\ApiResponse;
@@ -11,26 +10,32 @@ use App\Helpers\Score;
 use App\Models\Flashcard;
 use App\Models\Scorecard;
 use App\Models\Tag;
+use App\Repositories\FlashcardRepository;
 use App\Services\FlashcardService;
 use App\Transformers\FlashcardTransformer;
 use App\Transformers\ScorecardTransformer;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Validation\UnauthorizedException;
 
 class FlashcardController extends Controller
 {
+    protected FlashcardRepository $repository;
     protected FlashcardService $service;
 
-    public function __construct(FlashcardService $service)
+    public function __construct(FlashcardRepository $repository, FlashcardService $service)
     {
+        $this->repository = $repository;
         $this->service = $service;
     }
 
     /**
      * @OA\Get(
      *     path="/api/flashcards",
-     *     summary="List flashcards",
+     *     summary="List all active flashcards",
+     *     description="Return all flashcards that are not in the graveyard, for the current user, paginated",
      *     tags={"flashcard"},
      *     @OA\Response(response="200", description="Success"),
      *     security={{"bearerAuth":{}}}
@@ -38,8 +43,55 @@ class FlashcardController extends Controller
      */
     public function index(Request $request): JsonResponse
     {
-        return fractal(Flashcard::where('user_id', $request->user()->id)
-            ->get(), new FlashcardTransformer())->respond();
+        try {
+            $flashcards = $this->repository->alive($request->user());
+        } catch (UnauthorizedException) {
+            return $this->handleForbidden();
+        }
+
+        return fractal($flashcards, new FlashcardTransformer())->respond();
+    }
+
+    /**
+     * @OA\Get(
+     *     path="/api/flashcards/all",
+     *     summary="List all flashcards",
+     *     description="Return all flashcards - alive or buried - for the current user, paginated",
+     *     tags={"flashcard"},
+     *     @OA\Response(response="200", description="Success"),
+     *     security={{"bearerAuth":{}}}
+     * )
+     */
+    public function all(Request $request): JsonResponse
+    {
+        try {
+            $flashcards = $this->repository->allFlashcards($request->user());
+        } catch (UnauthorizedException) {
+            return $this->handleForbidden();
+        }
+
+        return fractal($flashcards, new FlashcardTransformer())->respond();
+    }
+
+    /**
+     * @OA\Get(
+     *     path="/api/flashcards/graveyard",
+     *     summary="Get all flashcards currently in the graveyard",
+     *     description="'Buried' flashcards are those which have been anwered correctly on the Hard difficulty",
+     *     tags={"flashcard"},
+     *     @OA\Response(response="200", description="Success"),
+     *     security={{"bearerAuth":{}}}
+     * )
+     */
+    public function graveyard(Request $request): JsonResponse
+    {
+        try {
+            $flashcards = $this->repository->buried($request->user());
+        } catch (UnauthorizedException) {
+            return $this->handleForbidden();
+        }
+
+        return fractal($flashcards, new FlashcardTransformer())->respond();
     }
 
     /**
@@ -67,6 +119,8 @@ class FlashcardController extends Controller
         $request->validate([
             'text' => 'required|max:1024'
         ]);
+
+        // TODO: validation and storage
     }
 
     /**
@@ -86,11 +140,13 @@ class FlashcardController extends Controller
      */
     public function show(Request $request, Flashcard $flashcard): JsonResponse
     {
-        if ($request->user()->cannot('show', $flashcard)) {
-            return ApiResponse::error('Not found', 'Flashcard not found', 'not_found', 404);
+        try {
+            $flashcardResponse = $this->repository->findFlashcard($flashcard, $request->user());
+        } catch (ModelNotFoundException) {
+            return $this->handleNotFound();
         }
 
-        return fractal($flashcard, new FlashcardTransformer())->respond();
+        return fractal($flashcardResponse, new FlashcardTransformer())->respond();
     }
 
     /**
@@ -106,27 +162,15 @@ class FlashcardController extends Controller
      */
     public function random(Request $request): JsonResponse
     {
-        return fractal(Flashcard::where('user_id', $request->user()->id)
-            ->active()
-            ->inRandomOrder()
-            ->first(), new FlashcardTransformer())->respond();
-    }
+        try {
+            $flashcardResponse = $this->repository->randomFlashcard($request->user());
+        } catch (ModelNotFoundException) {
+            return $this->handleNotFound();
+        } catch (UnauthorizedException) {
+            return $this->handleForbidden();
+        }
 
-    /**
-     * @OA\Get(
-     *     path="/api/flashcards/graveyard",
-     *     description="'Buried' flashcards are those which have been anwered correctly on the Hard difficulty",
-     *     summary="Get all flashcards currently in the graveyard",
-     *     tags={"flashcard"},
-     *     @OA\Response(response="200", description="Success"),
-     *     security={{"bearerAuth":{}}}
-     * )
-     */
-    public function graveyard(Request $request): JsonResponse
-    {
-        return fractal(Flashcard::where('user_id', $request->user()->id)
-            ->inactive()
-            ->get(), new FlashcardTransformer())->respond();
+        return fractal($flashcardResponse, new FlashcardTransformer())->respond();
     }
 
     /**
@@ -147,15 +191,15 @@ class FlashcardController extends Controller
      */
     public function revive(Request $request, Flashcard $flashcard): JsonResponse
     {
-        if ($request->user()->cannot('revive', $flashcard)) {
-            return ApiResponse::error('Not found', 'Flashcard not found', 'not_found', 404);
+        try {
+            $flashcardResponse = $this->repository->reviveFlashcard($flashcard, $request->user());
+        } catch (ModelNotFoundException) {
+            return $this->handleNotFound();
+        } catch (UnauthorizedException) {
+            return $this->handleForbidden();
         }
 
-        $flashcard->update([
-            'difficulty' => Difficulty::EASY,
-        ]);
-
-        return fractal($flashcard, new FlashcardTransformer())->respond();
+        return fractal($flashcardResponse, new FlashcardTransformer())->respond();
     }
 
     /**
@@ -188,7 +232,7 @@ class FlashcardController extends Controller
      */
     public function answer(Request $request, Flashcard $flashcard): JsonResponse
     {
-        // TODO: finish this off
+        // TODO: rework this chunky boy
         if ($request->user()->cannot('answer', $flashcard)) {
             return ApiResponse::error('Not found', 'Flashcard not found', 'not_found', 404);
         }
@@ -266,15 +310,20 @@ class FlashcardController extends Controller
      */
     public function update(Request $request, Flashcard $flashcard): JsonResponse
     {
-        if ($request->user()->cannot('update', $flashcard)) {
-            return ApiResponse::error('Not found', 'Flashcard not found', 'not_found', 404);
-        }
-
         $request->validate([
             'text' => 'required|max:1024'
         ]);
+        // TODO validation
 
-        return fractal($flashcard, new FlashcardTransformer())->respond();
+        try {
+            $flashcardResponse = $this->repository->updateFlashcard($request->all(), $flashcard, $request->user());
+        } catch (ModelNotFoundException) {
+            return $this->handleNotFound();
+        } catch (UnauthorizedException) {
+            return $this->handleForbidden();
+        }
+
+        return fractal($flashcardResponse, new FlashcardTransformer())->respond();
     }
 
     /**
@@ -293,12 +342,13 @@ class FlashcardController extends Controller
      */
     public function destroy(Request $request, Flashcard $flashcard): Response|JsonResponse
     {
-        if ($request->user()->cannot('delete', $flashcard)) {
-            return ApiResponse::error('Not found', 'Flashcard not found', 'not_found', 404);
+        try {
+            $this->repository->destroyFlashcard($flashcard, $request->user());
+        } catch (ModelNotFoundException) {
+            return $this->handleNotFound();
+        } catch (UnauthorizedException) {
+            return $this->handleForbidden();
         }
-
-        $flashcard->tags()->detach();
-        $flashcard->delete();
 
         return response()->noContent();
     }
@@ -323,16 +373,17 @@ class FlashcardController extends Controller
      *     security={{"bearerAuth":{}}}
      * )
      */
-    public function attachTag(Request $request, Flashcard $flashcard, Tag $tag)
+    public function attachTag(Request $request, Flashcard $flashcard, Tag $tag): JsonResponse
     {
-        if ($request->user()->cannot('show', $flashcard)) {
-            // You can't see the flashcard, so you can't modify its relations
-            return ApiResponse::error('Not found', 'Flashcard not found', 'not_found', 404);
+        try {
+            $flashcardResponse = $this->repository->attachTag($flashcard, $request->user(), $tag);
+        } catch (ModelNotFoundException) {
+            return $this->handleNotFound();
+        } catch (UnauthorizedException) {
+            return $this->handleForbidden();
         }
 
-        $flashcard->tags()->attach($tag);
-
-        return fractal($flashcard, new FlashcardTransformer())->respond();
+        return fractal($flashcardResponse, new FlashcardTransformer())->respond();
     }
 
     /**
@@ -357,13 +408,14 @@ class FlashcardController extends Controller
      */
     public function detachTag(Request $request, Flashcard $flashcard, Tag $tag)
     {
-        if ($request->user()->cannot('show', $flashcard)) {
-            // You can't see the flashcard, so you can't modify its relations
-            return ApiResponse::error('Not found', 'Flashcard not found', 'not_found', 404);
+        try {
+            $flashcardResponse = $this->repository->detachTag($flashcard, $request->user(), $tag);
+        } catch (ModelNotFoundException) {
+            return $this->handleNotFound();
+        } catch (UnauthorizedException) {
+            return $this->handleForbidden();
         }
 
-        $flashcard->tags()->detach($tag);
-
-        return fractal($flashcard, new FlashcardTransformer())->respond();
+        return fractal($flashcardResponse, new FlashcardTransformer())->respond();
     }
 }

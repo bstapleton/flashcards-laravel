@@ -8,9 +8,19 @@ use Illuminate\Auth\Access\Response;
 
 class FlashcardPolicy
 {
+    public function list(User $user): Response
+    {
+        return Response::allow();
+    }
+
     public function show(User $user, Flashcard $flashcard): Response
     {
         return self::currentUser($user, $flashcard);
+    }
+
+    public function store(User $user): Response
+    {
+        return Response::allow();
     }
 
     public function update(User $user, Flashcard $flashcard): Response
@@ -33,6 +43,16 @@ class FlashcardPolicy
         return self::currentUser($user, $flashcard);
     }
 
+    public function attachTag(User $user, Flashcard $flashcard): Response
+    {
+        return Response::allow();
+    }
+
+    public function detachTag(User $user, Flashcard $flashcard): Response
+    {
+        return Response::allow();
+    }
+
     /**
      * Check if the request user is the owner of the model
      *
@@ -44,6 +64,6 @@ class FlashcardPolicy
     {
         return $user->id === $flashcard->user_id
             ? Response::allow()
-            : Response::deny();
+            : Response::denyAsNotFound();
     }
 }
