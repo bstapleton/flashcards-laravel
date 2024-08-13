@@ -15,7 +15,8 @@ use Tests\TestCase;
 class FlashcardTest extends TestCase
 {
     const int ANSWER_COUNT = 3;
-    protected Flashcard  $flashcard;
+    protected Flashcard $flashcard;
+    protected Flashcard $otherFlashcard;
     protected User $user;
     protected FlashcardService $service;
 
@@ -33,6 +34,20 @@ class FlashcardTest extends TestCase
         foreach ($answers as $answer) {
             $answer->flashcard()->associate($this->flashcard);
         }
+        $this->flashcard->answers->first()->update([
+            'is_correct' => true,
+        ]);
+
+        $this->otherFlashcard = Flashcard::factory()->create([
+            'user_id' => $this->user->id,
+        ]);
+        $moreAnswers = Answer::factory()->count(self::ANSWER_COUNT)->create([
+            'flashcard_id' => $this->otherFlashcard->id,
+        ]);
+        foreach ($moreAnswers as $answer) {
+            $answer->flashcard()->associate($this->otherFlashcard);
+        }
+
         $this->service = new FlashcardService();
         $this->service->setFlashcard($this->flashcard);
 
@@ -48,6 +63,10 @@ class FlashcardTest extends TestCase
             $answer->delete();
         });
         $this->flashcard->delete();
+        $this->otherFlashcard->answers->each(function ($answer) {
+            $answer->delete();
+        });
+        $this->otherFlashcard->delete();
         $this->user->delete();
 
         parent::tearDown();
@@ -250,13 +269,29 @@ class FlashcardTest extends TestCase
         $this->assertCount(self::ANSWER_COUNT, $this->flashcard->answers);
     }
 
+    /**
+     * Scenario: User passes answers to a different question
+     * GIVEN a consumer passing answers to a question
+     * WHEN some of those answers do not belong to the question being answered
+     * THEN they should be filtered out
+     *
+     * @return void
+     */
     public function testFilterValidAnswers()
     {
-        $this->markTestIncomplete();
+        $actualAnswers = $this->flashcard->answers->pluck('id')->toArray();
+        $answers = array_merge(
+            $actualAnswers,
+            $this->otherFlashcard->answers->pluck('id')->toArray()
+        );
+        $this->assertCount((self::ANSWER_COUNT * 2), $answers);
+        $filtered = $this->service->filterValidAnswers($answers);
+        $this->assertCount(self::ANSWER_COUNT, $filtered);
+        $this->assertTrue($actualAnswers === $filtered);
     }
 
     /**
-     *
+     * Test to ensure that some answers have actually been passed
      *
      * @return void
      * @throws AnswerMismatchException
@@ -266,8 +301,9 @@ class FlashcardTest extends TestCase
         $this->assertNotEmpty($this->service->validateAnswers([1, 2]));
     }
 
-
     /**
+     * Test to ensure that an exception is thrown if no answers are passed
+     *
      * @return void
      * @throws AnswerMismatchException
      */
@@ -277,7 +313,5 @@ class FlashcardTest extends TestCase
         $this->service->validateAnswers([]);
     }
 
-    // TODO: validateAnswers
-    // TODO: filterValidAnswers
     // TODO: calculateCorrectness
 }
