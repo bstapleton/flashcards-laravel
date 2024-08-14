@@ -21,7 +21,7 @@ abstract class Controller
 {
     protected function handleNotFound(): JsonResponse
     {
-        return ApiResponse::error('Not found', 'Flashcard not found', 'not_found', 404);
+        return ApiResponse::error('Not found', 'Model not found', 'not_found', 404);
     }
 
     protected function handleForbidden(): JsonResponse

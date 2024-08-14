@@ -7,45 +7,30 @@ use App\Models\Flashcard;
 use App\Models\Tag;
 use App\Models\User;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\UnauthorizedException;
 
-class FlashcardRepository
+class FlashcardRepository implements FlashcardRepositoryInterface
 {
-    public function allFlashcards(User $user)
+    public function all()
     {
-        if ($user->cannot('list')) {
-            throw new UnauthorizedException();
-        }
-
-        return Flashcard::where('user_id', $user->id)->paginate(25);
+        return Flashcard::where('user_id', Auth::id())->paginate(25);
     }
 
-    // Get all the flashcards that have been commited to the graveyard
-    public function buried(User $user)
+    public function show(int $id): Flashcard
     {
-        if ($user->cannot('list')) {
-            throw new UnauthorizedException();
+        $flashcard = Flashcard::where(['id' => $id, 'user_id' => Auth::id()])->first();
+
+        if (!$flashcard) {
+            throw new ModelNotFoundException();
         }
 
-        return Flashcard::where(['user_id' => $user->id, 'difficulty' => Difficulty::BURIED])->paginate(25);
+        return $flashcard;
     }
 
-    // Get all the flashcards that are NOT in the graveyard
-    public function alive(User $user)
+    public function store(array $data)
     {
-        if ($user->cannot('list')) {
-            throw new UnauthorizedException();
-        }
-
-        return Flashcard::where('user_id', $user->id)->whereNotIn('difficulty', Difficulty::BURIED)->paginate(25);
-    }
-
-    public function storeFlashcard($data, User $user)
-    {
-        if ($user->cannot('store')) {
-            throw new UnauthorizedException();
-        }
-
         return Flashcard::create([
             'text' => $data['text'],
             'type' => $data['type'],
@@ -54,22 +39,26 @@ class FlashcardRepository
         ]);
     }
 
-    public function findFlashcard(Flashcard $flashcard, User $user): Flashcard
+    public function update(array $data, int $id): Flashcard
     {
-        if ($user->cannot('show', $flashcard)) {
-            throw new ModelNotFoundException();
-        }
+        $this->show($id)->update([
+            'text' => $data['text'],
+            'type' => $data['type'],
+            'is_true' => $data['is_true'],
+            'explanation' => $data['explanation'],
+        ]);
 
-        return $flashcard;
+        return $this->show($id);
     }
 
-    public function randomFlashcard(User $user): Flashcard
+    public function destroy(int $id): void
     {
-        if ($user->cannot('list')) {
-            throw new UnauthorizedException();
-        }
+        $this->show($id)->delete();
+    }
 
-        $flashcard = Flashcard::where('user_id', $user->id)->whereNotIn('difficulty', Difficulty::BURIED)->inRandomOrder()->first();
+    public function random(): Flashcard
+    {
+        $flashcard = Flashcard::where('user_id', Auth::id())->whereNotIn('difficulty', Difficulty::BURIED)->inRandomOrder()->first();
 
         if (!$flashcard) {
             // Consumer has no flashcards that are alive
@@ -79,53 +68,21 @@ class FlashcardRepository
         return $flashcard;
     }
 
-    public function updateFlashcard($data, Flashcard $flashcard, User $user): Flashcard
+    // Get all the flashcards that have been commited to the graveyard
+    public function buried(): Collection
     {
-        if ($user->cannot('show', $flashcard)) {
-            throw new ModelNotFoundException();
-        }
-
-        if ($user->cannot('update', $flashcard)) {
-            throw new UnauthorizedException();
-        }
-
-        $flashcard->update([
-            'text' => $data['text'],
-            'type' => $data['type'],
-            'is_true' => $data['is_true'],
-            'explanation' => $data['explanation'],
-        ]);
-
-        return $flashcard;
+        return Flashcard::where(['user_id' => Auth::id(), 'difficulty' => Difficulty::BURIED])->paginate(25);
     }
 
-    public function destroyFlashcard(Flashcard $flashcard, User $user): void
+    // Get all the flashcards that are NOT in the graveyard
+    public function alive(): Collection
     {
-        if ($user->cannot('show', $flashcard)) {
-            throw new ModelNotFoundException();
-        }
-
-        if ($user->cannot('update', $flashcard)) {
-            throw new UnauthorizedException();
-        }
-
-        $flashcard->answers->each(function ($answer) {
-            $answer->delete();
-        });
-        $flashcard->tags()->detach();
-
-        $flashcard->delete();
+        return Flashcard::where('user_id', Auth::user())->whereNotIn('difficulty', Difficulty::BURIED)->paginate(25);
     }
 
-    public function reviveFlashcard(Flashcard $flashcard, User $user): Flashcard
+    public function revive(int $id): Flashcard
     {
-        if ($user->cannot('show', $flashcard)) {
-            throw new ModelNotFoundException();
-        }
-
-        if ($user->cannot('revive', $flashcard)) {
-            throw new UnauthorizedException();
-        }
+        $flashcard = $this->show($id);
 
         $flashcard->update([
             'difficulty' => Difficulty::EASY,
@@ -134,14 +91,13 @@ class FlashcardRepository
         return $flashcard;
     }
 
-    public function attachTag(Flashcard $flashcard, User $user, Tag $tag)
+    public function attachTag(int $id, int $tagId): Flashcard
     {
-        if ($user->cannot('show', $flashcard)) {
-            throw new ModelNotFoundException();
-        }
+        $flashcard = $this->show($id);
+        $tag = Tag::find($tagId);
 
-        if ($user->cannot('attachTag', $flashcard)) {
-            throw new UnauthorizedException();
+        if (!$tag) {
+            throw new ModelNotFoundException();
         }
 
         $flashcard->tags()->attach($tag);
@@ -149,14 +105,13 @@ class FlashcardRepository
         return $flashcard;
     }
 
-    public function detachTag(Flashcard $flashcard, User $user, Tag $tag)
+    public function detachTag(int $id, int $tagId): Flashcard
     {
-        if ($user->cannot('show', $flashcard)) {
-            throw new ModelNotFoundException();
-        }
+        $flashcard = $this->show($id);
+        $tag = Tag::find($tagId);
 
-        if ($user->cannot('detachTag', $flashcard)) {
-            throw new UnauthorizedException();
+        if (!$tag) {
+            throw new ModelNotFoundException();
         }
 
         $flashcard->tags()->detach($tag);

@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Enums\Difficulty;
 use App\Enums\QuestionType;
+use App\Events\FlashcardDeleting;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -53,6 +54,10 @@ class Flashcard extends Model
             'is_true' => 'boolean',
         ];
     }
+
+    protected $dispatchesEvents = [
+        'deleting' => FlashcardDeleting::class,
+    ];
 
     public function answers(): HasMany
     {

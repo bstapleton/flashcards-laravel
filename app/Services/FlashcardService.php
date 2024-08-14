@@ -7,10 +7,117 @@ use App\Enums\Difficulty;
 use App\Enums\QuestionType;
 use App\Exceptions\AnswerMismatchException;
 use App\Models\Flashcard;
+use App\Repositories\FlashcardRepositoryInterface;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Validation\UnauthorizedException;
 
 class FlashcardService
 {
     protected Flashcard $flashcard;
+
+    public function __construct(protected FlashcardRepositoryInterface $repository)
+    {
+    }
+
+    public function all()
+    {
+        if (Auth::user()->cannot('list')) {
+            throw new UnauthorizedException();
+        }
+
+        return $this->repository->all();
+    }
+
+    public function show(int $id)
+    {
+        $flashcard = $this->repository->show($id);
+        if (Auth::user()->cannot('show', $flashcard)) {
+            throw new UnauthorizedException();
+        }
+
+        return $flashcard;
+    }
+
+    public function store(array $data)
+    {
+        if (Auth::user()->cannot('store')) {
+            throw new UnauthorizedException();
+        }
+
+        return $this->repository->store($data);
+    }
+
+    public function update(array $data, int $id)
+    {
+        $flashcard = $this->repository->show($id);
+
+        if (Auth::user()->cannot('updateFlashcard', $flashcard)) {
+            throw new UnauthorizedException();
+        }
+
+        return $this->repository->update($data, $id);
+    }
+
+    public function destroy(int $id)
+    {
+        $flashcard = $this->repository->show($id);
+
+        if (Auth::user()->cannot('deleteFlashcard', $flashcard)) {
+            throw new UnauthorizedException();
+        }
+
+        return $this->repository->destroy($id);
+    }
+
+    public function buried()
+    {
+        if (Auth::user()->cannot('listFlashcard')) {
+            throw new UnauthorizedException();
+        }
+
+        return $this->repository->buried();
+    }
+
+    public function alive()
+    {
+        if (Auth::user()->cannot('listFlashcard')) {
+            throw new UnauthorizedException();
+        }
+
+        return $this->repository->alive();
+    }
+
+    public function random()
+    {
+        if (Auth::user()->cannot('listFlashcard')) {
+            throw new UnauthorizedException();
+        }
+
+        return $this->repository->random();
+    }
+
+    public function revive(int $id)
+    {
+        if (Auth::user()->cannot('reviveFlashcard')) {
+            throw new UnauthorizedException();
+        }
+
+        return $this->repository->revive();
+    }
+
+    public function attachTag(int $id, int $tagId)
+    {
+        if (Auth::user()->cannot('attachFlashcardTag')) {
+            throw new UnauthorizedException();
+        }
+    }
+
+    public function detachTag(int $id, int $tagId)
+    {
+        if (Auth::user()->cannot('detachFlashcardTag')) {
+            throw new UnauthorizedException();
+        }
+    }
 
     public function setFlashcard(Flashcard $flashcard): void
     {

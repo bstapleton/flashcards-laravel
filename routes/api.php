@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AnswerController;
 use App\Http\Controllers\FlashcardController;
+use App\Http\Controllers\FlashcardTagController;
 use App\Http\Controllers\TagController;
 use App\Http\Middleware\CheckAuthed;
 use Illuminate\Support\Facades\Route;
@@ -30,7 +31,7 @@ Route::controller(FlashcardController::class)->prefix('flashcards')->middleware(
         Route::delete('/', 'destroy')->name('flashcards.destroy');
         Route::post('/revive', 'promote')->name('flashcards.revive');
 
-        Route::prefix('tags')->group(function () {
+        Route::controller(FlashcardTagController::class)->prefix('tags')->group(function () {
             Route::post('/{tag}', 'attachTag')->name('flashcards.tags.attach');
             Route::delete('/{tag}', 'detachTag')->name('flashcards.tags.detach');
         });

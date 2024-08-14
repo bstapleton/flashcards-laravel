@@ -171,6 +171,9 @@
                 "responses": {
                     "200": {
                         "description": "Success"
+                    },
+                    "403": {
+                        "description": "Not permitted"
                     }
                 },
                 "security": [
@@ -202,6 +205,9 @@
                 "responses": {
                     "200": {
                         "description": "Success"
+                    },
+                    "403": {
+                        "description": "Not permitted"
                     }
                 },
                 "security": [
@@ -222,26 +228,9 @@
                 "responses": {
                     "200": {
                         "description": "Success"
-                    }
-                },
-                "security": [
-                    {
-                        "bearerAuth": []
-                    }
-                ]
-            }
-        },
-        "/api/flashcards/graveyard": {
-            "get": {
-                "tags": [
-                    "flashcard"
-                ],
-                "summary": "Get all flashcards currently in the graveyard",
-                "description": "'Buried' flashcards are those which have been anwered correctly on the Hard difficulty",
-                "operationId": "deb8deeaf8821d7046d97611188a5caf",
-                "responses": {
-                    "200": {
-                        "description": "Success"
+                    },
+                    "403": {
+                        "description": "Not permitted"
                     }
                 },
                 "security": [
@@ -272,7 +261,10 @@
                         "description": "Success"
                     },
                     "404": {
-                        "description": "Flashcard not found"
+                        "description": "Model not found"
+                    },
+                    "403": {
+                        "description": "Not permitted"
                     }
                 },
                 "security": [
@@ -319,7 +311,10 @@
                         "description": "Success"
                     },
                     "404": {
-                        "description": "Flashcard not found"
+                        "description": "Model not found"
+                    },
+                    "403": {
+                        "description": "Not permitted"
                     }
                 },
                 "security": [
@@ -346,6 +341,12 @@
                 "responses": {
                     "204": {
                         "description": "No content"
+                    },
+                    "404": {
+                        "description": "Model not found"
+                    },
+                    "403": {
+                        "description": "Not permitted"
                     }
                 },
                 "security": [
@@ -388,7 +389,33 @@
                         "description": "Success"
                     },
                     "404": {
-                        "description": "Flashcard not found"
+                        "description": "Model not found"
+                    },
+                    "403": {
+                        "description": "Not permitted"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/flashcards/graveyard": {
+            "get": {
+                "tags": [
+                    "flashcard"
+                ],
+                "summary": "Get all flashcards currently in the graveyard",
+                "description": "'Buried' flashcards are those which have been anwered correctly on the Hard difficulty",
+                "operationId": "deb8deeaf8821d7046d97611188a5caf",
+                "responses": {
+                    "200": {
+                        "description": "Success"
+                    },
+                    "403": {
+                        "description": "Not permitted"
                     }
                 },
                 "security": [
@@ -411,7 +438,10 @@
                         "description": "Success"
                     },
                     "404": {
-                        "description": "Flashcard not found"
+                        "description": "Model not found"
+                    },
+                    "403": {
+                        "description": "Not permitted"
                     }
                 },
                 "security": [
@@ -443,7 +473,10 @@
                         "description": "Success"
                     },
                     "404": {
-                        "description": "Flashcard not found"
+                        "description": "Model not found"
+                    },
+                    "403": {
+                        "description": "Not permitted"
                     }
                 },
                 "security": [
@@ -460,7 +493,7 @@
                 ],
                 "summary": "Attach a tag to a flashcard",
                 "description": "Attach a tag",
-                "operationId": "b35422b177c76da475b8065f2a1814d4",
+                "operationId": "92f1983c8329c1ff6286830f2501b61d",
                 "parameters": [
                     {
                         "name": "id",
@@ -480,6 +513,12 @@
                 "responses": {
                     "200": {
                         "description": "Success"
+                    },
+                    "404": {
+                        "description": "Model not found"
+                    },
+                    "403": {
+                        "description": "Not permitted"
                     }
                 },
                 "security": [
@@ -494,7 +533,7 @@
                 ],
                 "summary": "Detach a tag",
                 "description": "Detach a tag from a flashcard",
-                "operationId": "20406b1d5697b3e683cb29eeb9366084",
+                "operationId": "213beaa1dbf5c7f6577134d0ee87ac1d",
                 "parameters": [
                     {
                         "name": "id",
@@ -514,6 +553,12 @@
                 "responses": {
                     "200": {
                         "description": "Success"
+                    },
+                    "404": {
+                        "description": "Model not found"
+                    },
+                    "403": {
+                        "description": "Not permitted"
                     }
                 },
                 "security": [
