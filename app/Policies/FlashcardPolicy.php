@@ -8,47 +8,47 @@ use Illuminate\Auth\Access\Response;
 
 class FlashcardPolicy
 {
-    public function listFlashcard(User $user): Response
+    public function list(User $user): Response
     {
         return Response::allow();
     }
 
-    public function showFlashcard(User $user, Flashcard $flashcard): Response
+    public function show(User $user, Flashcard $flashcard): Response
     {
         return self::currentUser($user, $flashcard);
     }
 
-    public function storeFlashcard(User $user): Response
+    public function store(User $user): Response
     {
         return Response::allow();
     }
 
-    public function updateFlashcard(User $user, Flashcard $flashcard): Response
+    public function update(User $user, Flashcard $flashcard): Response
     {
         return self::currentUser($user, $flashcard);
     }
 
-    public function reviveFlashcard(User $user, Flashcard $flashcard): Response
+    public function revive(User $user, Flashcard $flashcard): Response
     {
         return self::currentUser($user, $flashcard);
     }
 
-    public function answerFlashcard(User $user, Flashcard $flashcard): Response
+    public function answer(User $user, Flashcard $flashcard): Response
     {
         return self::currentUser($user, $flashcard);
     }
 
-    public function deleteFlashcard(User $user, Flashcard $flashcard): Response
+    public function delete(User $user, Flashcard $flashcard): Response
     {
         return self::currentUser($user, $flashcard);
     }
 
-    public function attachFlashcardTag(User $user, Flashcard $flashcard): Response
+    public function attachTag(User $user, Flashcard $flashcard): Response
     {
         return Response::allow();
     }
 
-    public function detachFlashcardTag(User $user, Flashcard $flashcard): Response
+    public function detachTag(User $user, Flashcard $flashcard): Response
     {
         return Response::allow();
     }

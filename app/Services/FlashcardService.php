@@ -8,7 +8,7 @@ use App\Enums\QuestionType;
 use App\Exceptions\AnswerMismatchException;
 use App\Models\Flashcard;
 use App\Repositories\FlashcardRepositoryInterface;
-use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Validation\UnauthorizedException;
 
 class FlashcardService
@@ -21,7 +21,7 @@ class FlashcardService
 
     public function all()
     {
-        if (Auth::user()->cannot('list')) {
+        if (!Gate::authorize('listFlashcard', Flashcard::class)) {
             throw new UnauthorizedException();
         }
 
@@ -31,7 +31,8 @@ class FlashcardService
     public function show(int $id)
     {
         $flashcard = $this->repository->show($id);
-        if (Auth::user()->cannot('show', $flashcard)) {
+
+        if (!Gate::authorize('show', $flashcard)) {
             throw new UnauthorizedException();
         }
 
@@ -40,7 +41,7 @@ class FlashcardService
 
     public function store(array $data)
     {
-        if (Auth::user()->cannot('store')) {
+        if (!Gate::authorize('store', Flashcard::class)) {
             throw new UnauthorizedException();
         }
 
@@ -51,7 +52,7 @@ class FlashcardService
     {
         $flashcard = $this->repository->show($id);
 
-        if (Auth::user()->cannot('updateFlashcard', $flashcard)) {
+        if (!Gate::authorize('update', $flashcard)) {
             throw new UnauthorizedException();
         }
 
@@ -62,7 +63,7 @@ class FlashcardService
     {
         $flashcard = $this->repository->show($id);
 
-        if (Auth::user()->cannot('deleteFlashcard', $flashcard)) {
+        if (!Gate::authorize('delete', $flashcard)) {
             throw new UnauthorizedException();
         }
 
@@ -71,7 +72,7 @@ class FlashcardService
 
     public function buried()
     {
-        if (Auth::user()->cannot('listFlashcard')) {
+        if (!Gate::authorize('list', Flashcard::class)) {
             throw new UnauthorizedException();
         }
 
@@ -80,7 +81,7 @@ class FlashcardService
 
     public function alive()
     {
-        if (Auth::user()->cannot('listFlashcard')) {
+        if (!Gate::authorize('list', Flashcard::class)) {
             throw new UnauthorizedException();
         }
 
@@ -89,7 +90,7 @@ class FlashcardService
 
     public function random()
     {
-        if (Auth::user()->cannot('listFlashcard')) {
+        if (!Gate::authorize('show', Flashcard::class)) {
             throw new UnauthorizedException();
         }
 
@@ -98,25 +99,31 @@ class FlashcardService
 
     public function revive(int $id)
     {
-        if (Auth::user()->cannot('reviveFlashcard')) {
+        $flashcard = $this->repository->show($id);
+
+        if (!Gate::authorize('revive', $flashcard)) {
             throw new UnauthorizedException();
         }
 
-        return $this->repository->revive();
+        return $this->repository->revive($flashcard);
     }
 
     public function attachTag(int $id, int $tagId)
     {
-        if (Auth::user()->cannot('attachFlashcardTag')) {
+        if (!Gate::authorize('attachTag', Flashcard::class)) {
             throw new UnauthorizedException();
         }
+
+        return $this->repository->attachTag($id, $tagId);
     }
 
     public function detachTag(int $id, int $tagId)
     {
-        if (Auth::user()->cannot('detachFlashcardTag')) {
+        if (!Gate::authorize('detachTag', Flashcard::class)) {
             throw new UnauthorizedException();
         }
+
+        return $this->repository->detachTag($id, $tagId);
     }
 
     public function setFlashcard(Flashcard $flashcard): void

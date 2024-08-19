@@ -55,7 +55,6 @@ class FlashcardTest extends TestCase
         $this->service->setFlashcard($this->flashcard);
 
         $this->flashcard->difficulty = Difficulty::HARD->value;
-        $this->flashcard->type = QuestionType::STATEMENT;
         $this->flashcard->is_true = true;
         $this->flashcard->explanation = 'test explanation';
     }
@@ -90,7 +89,7 @@ class FlashcardTest extends TestCase
         $this->assertTrue($this->flashcard->hasAttribute('difficulty'));
         $this->assertEquals(Difficulty::HARD, $this->flashcard->difficulty);
         $this->assertTrue($this->flashcard->hasAttribute('type'));
-        $this->assertEquals(QuestionType::STATEMENT, $this->flashcard->type);
+        $this->assertEquals(QuestionType::SINGLE, $this->flashcard->type);
         $this->assertTrue($this->flashcard->hasAttribute('is_true'));
         $this->assertTrue($this->flashcard->is_true);
         $this->assertTrue($this->flashcard->hasAttribute('explanation'));

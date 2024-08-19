@@ -20,7 +20,7 @@ class AnswerFactory extends Factory
     {
         return [
             'text' => Str::random(10),
-            'is_correct' => rand(0, 1)
+            'is_correct' => false
         ];
     }
 
