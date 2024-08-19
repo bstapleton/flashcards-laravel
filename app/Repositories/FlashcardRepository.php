@@ -5,15 +5,13 @@ namespace App\Repositories;
 use App\Enums\Difficulty;
 use App\Models\Flashcard;
 use App\Models\Tag;
-use App\Models\User;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
-use Illuminate\Support\Collection;
+use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Validation\UnauthorizedException;
 
 class FlashcardRepository implements FlashcardRepositoryInterface
 {
-    public function all()
+    public function all(): LengthAwarePaginator
     {
         return Flashcard::where('user_id', Auth::id())->paginate(25);
     }
@@ -69,15 +67,15 @@ class FlashcardRepository implements FlashcardRepositoryInterface
     }
 
     // Get all the flashcards that have been commited to the graveyard
-    public function buried(): Collection
+    public function buried(): LengthAwarePaginator
     {
         return Flashcard::where(['user_id' => Auth::id(), 'difficulty' => Difficulty::BURIED])->paginate(25);
     }
 
     // Get all the flashcards that are NOT in the graveyard
-    public function alive(): Collection
+    public function alive(): LengthAwarePaginator
     {
-        return Flashcard::where('user_id', Auth::user())->whereNotIn('difficulty', Difficulty::BURIED)->paginate(25);
+        return Flashcard::where('user_id', Auth::id())->whereNot('difficulty', Difficulty::BURIED)->paginate(25);
     }
 
     public function revive(int $id): Flashcard
