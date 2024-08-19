@@ -108,5 +108,3 @@ You can set the type to `multiple` if you intend to have multiple answers in the
 - Error checking and handling for
   - Single answer multiple-choice questions where more than one answer has been flagged as correct
   - Any multiple choice question where no correct answer has been added
-- Minor rework of the importer - there's _technically_ no reason to need to specify the type: if the answers have more than one `is_correct` then it's multi-correct, if it only has one then it's single-correct, and if the question itself has an `is_true` then it's a statement.
-  - Likewise, the flashcard model itself could have the type defined as a calculated property instead of explicitly stored in the DB layer

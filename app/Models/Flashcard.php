@@ -31,7 +31,6 @@ class Flashcard extends Model
     protected $fillable = [
         'text',
         'difficulty',
-        'type',
         'is_true',
         'explanation',
     ];
@@ -90,6 +89,21 @@ class Flashcard extends Model
         }
 
         return $this->answers->where('is_correct');
+    }
+
+    public function getTypeAttribute(): QuestionType
+    {
+        $answers = $this->answers;
+
+        if ($answers->isEmpty()) {
+            return QuestionType::STATEMENT;
+        }
+
+        if ($answers->where('is_correct')->count() > 1) {
+            return QuestionType::MULTIPLE;
+        }
+
+        return QuestionType::SINGLE;
     }
 
     public function getEligibleAtAttribute(): Carbon

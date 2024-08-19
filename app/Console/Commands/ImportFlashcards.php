@@ -73,8 +73,6 @@ class ImportFlashcards extends Command
     {
         $flashcard = $user->flashcards()->firstOrCreate([
             'text' => $question->text,
-        ], [
-            'type' => $question->type,
         ]);
 
         foreach ($question->answers as $a) {
