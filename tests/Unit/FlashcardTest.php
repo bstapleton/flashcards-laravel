@@ -7,13 +7,16 @@ use App\Enums\QuestionType;
 use App\Exceptions\AnswerMismatchException;
 use App\Models\Answer;
 use App\Models\User;
+use App\Repositories\FlashcardRepository;
 use App\Services\FlashcardService;
 use Carbon\Carbon;
 use App\Models\Flashcard;
 use Tests\TestCase;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class FlashcardTest extends TestCase
 {
+    use RefreshDatabase;
     const int ANSWER_COUNT = 3;
     protected Flashcard $flashcard;
     protected Flashcard $otherFlashcard;
@@ -48,7 +51,7 @@ class FlashcardTest extends TestCase
             $answer->flashcard()->associate($this->otherFlashcard);
         }
 
-        $this->service = new FlashcardService();
+        $this->service = new FlashcardService(new FlashcardRepository());
         $this->service->setFlashcard($this->flashcard);
 
         $this->flashcard->difficulty = Difficulty::HARD->value;
