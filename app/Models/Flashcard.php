@@ -60,7 +60,7 @@ class Flashcard extends Model
 
     public function answers(): HasMany
     {
-        return $this->hasMany(Answer::class)->inRandomOrder();
+        return $this->hasMany(Answer::class);
     }
 
     public function tags(): BelongsToMany
