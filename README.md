@@ -99,10 +99,8 @@ You can set the type to `multiple` if you intend to have multiple answers in the
 
 ## The TODO list
 
-- Rework the answering mechanics to offload all the stuff in the controller method to the service where it should actually be
 - Scoring system
   - Including segmentation by tag
-  - Handling of 'correctness' matrix for multiple choice
 - Allow for image-type answers: e.g. select the correct x from the images below
 - Tests. So many tests.
 - Error checking and handling for
