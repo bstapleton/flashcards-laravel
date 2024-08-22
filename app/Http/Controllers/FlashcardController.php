@@ -318,55 +318,18 @@ class FlashcardController extends Controller
      *     security={{"bearerAuth":{}}}
      * )
      */
-    public function answer(Request $request, Flashcard $flashcard): JsonResponse
+    public function answer(Request $request, int $id): JsonResponse
     {
-        // TODO: rework this chunky boy
-        if ($request->user()->cannot('answer', $flashcard)) {
-            return ApiResponse::error('Not found', 'Flashcard not found', 'not_found', 404);
+        try {
+            $scorecardResponse = $this->service->answer($id, $request->input('answers'), $request->user());
+        } catch (AnswerMismatchException $e) {
+            return response()->json([
+                'title' => 'Answer mismatch',
+                'message' => $e->getMessage(),
+                'code' => 'answer_mismatch'
+            ]);
         }
 
-        $scorecard = new Scorecard($flashcard);
-        $this->service->setFlashcard($flashcard);
-
-        if (in_array($flashcard->type, [QuestionType::SINGLE, QuestionType::MULTIPLE])) {
-            $filteredAnswers = $this->service->filterValidAnswers($request->input('answers'));
-
-            try {
-                $scorecard->setAnswerGiven(
-                    $this->service->validateAnswers($filteredAnswers)
-                );
-            } catch (AnswerMismatchException $e) {
-                return response()->json([
-                    'title' => 'Answer mismatch',
-                    'message' => $e->getMessage(),
-                    'code' => 'answer_mismatch'
-                ]);
-            }
-
-            $scorecard->setCorrectness($this->service->calculateCorrectness($filteredAnswers));
-        } elseif ($flashcard->type === QuestionType::STATEMENT) {
-            $providedAnswer = last($request->input('answers'));
-            $scorecard->setAnswerGiven([$providedAnswer]);
-            $scorecard->setCorrectness($this->service->calculateCorrectness(null, $providedAnswer));
-        }
-
-        $score = (new Score())->getScore($flashcard->type, $scorecard->getCorrectness(), $flashcard->difficulty);
-
-        if ($scorecard->getCorrectness() !== Correctness::COMPLETE) {
-            $this->service->resetDifficulty();
-        } else {
-            $request->user()->adjustPoints($score);
-            $this->service->increaseDifficulty();
-        }
-
-        $this->service->resetLastSeen();
-        $this->service->save();
-        $scorecard->setNewDifficulty($flashcard->difficulty);
-
-        $scorecard->setEligibleAt($flashcard->eligible_at);
-        $scorecard->setScore($score);
-        $scorecard->setTotalScore($request->user()->points);
-
-        return fractal($scorecard, new ScorecardTransformer())->respond();
+        return fractal($scorecardResponse, new ScorecardTransformer())->respond();
     }
 }

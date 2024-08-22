@@ -6,8 +6,11 @@ use App\Enums\Correctness;
 use App\Enums\Difficulty;
 use App\Enums\QuestionType;
 use App\Exceptions\AnswerMismatchException;
+use App\Helpers\Score;
 use App\Models\Flashcard;
-use App\Repositories\FlashcardRepositoryInterface;
+use App\Models\Scorecard;
+use App\Models\User;
+use App\Repositories\FlashcardRepository;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Validation\UnauthorizedException;
 
@@ -15,7 +18,7 @@ class FlashcardService
 {
     protected Flashcard $flashcard;
 
-    public function __construct(protected FlashcardRepositoryInterface $repository)
+    public function __construct(protected FlashcardRepository $repository)
     {
     }
 
@@ -105,7 +108,52 @@ class FlashcardService
             throw new UnauthorizedException();
         }
 
-        return $this->repository->revive($flashcard);
+        return $this->repository->revive($id);
+    }
+
+    /**
+     * @throws AnswerMismatchException
+     */
+    public function answer(int $id, array $answers, User $user)
+    {
+        $this->flashcard = $this->repository->show($id);
+
+        if (!Gate::authorize('revive', $this->flashcard)) {
+            throw new UnauthorizedException();
+        }
+
+        $scorecard = new Scorecard($this->flashcard);
+
+        if (in_array($this->flashcard->type, [QuestionType::SINGLE, QuestionType::MULTIPLE])) {
+            $filteredAnswers = $this->filterValidAnswers($answers);
+
+            $scorecard->setAnswerGiven(
+                $this->validateAnswers($filteredAnswers)
+            );
+
+            $scorecard->setCorrectness($this->calculateCorrectness($filteredAnswers));
+        } elseif ($this->flashcard->type === QuestionType::STATEMENT) {
+            $providedAnswer = last($answers);
+            $scorecard->setAnswerGiven([$providedAnswer]);
+            $scorecard->setCorrectness($this->calculateCorrectness(null, $providedAnswer));
+        }
+
+        if ($scorecard->getCorrectness() !== Correctness::COMPLETE) {
+            $this->resetDifficulty();
+        } else {
+            $user->adjustPoints($score ?? 0);
+            $this->increaseDifficulty();
+        }
+
+        $this->resetLastSeen();
+        $this->save();
+        $scorecard->setNewDifficulty($this->flashcard->difficulty);
+
+        $scorecard->setEligibleAt($this->flashcard->eligible_at);
+        $scorecard->setScore($score ?? 0);
+        $scorecard->setTotalScore($user->points);
+
+        return $scorecard;
     }
 
     public function attachTag(int $id, int $tagId)
@@ -178,12 +226,17 @@ class FlashcardService
             case QuestionType::MULTIPLE:
                 $correctAnswers = $this->flashcard->correct_answers;
                 $correctSuppliedAnswers = array_intersect($correctAnswers->pluck('id')->toArray(), $answers);
+//                dd($correctSuppliedAnswers);
 
-                return match ($correctAnswers->count() - count($correctSuppliedAnswers)) {
-                    0 => Correctness::COMPLETE,
-                    $correctAnswers->count() => Correctness::NONE,
-                    default => Correctness::PARTIAL,
-                };
+                if ($correctAnswers->count() - count($correctSuppliedAnswers) && $correctAnswers->count() === count($answers)) {
+                    return Correctness::COMPLETE;
+                }
+
+                if ($correctAnswers->count() === 0) {
+                    return Correctness::NONE;
+                }
+
+                return Correctness::PARTIAL;
             default:
                 return $isTrue === $this->flashcard->is_true ? Correctness::COMPLETE : Correctness::NONE;
         }
@@ -230,7 +283,7 @@ class FlashcardService
 
     public function resetLastSeen(): void
     {
-        $this->flashcard->last_seen = NOW()->toIso8601String();
+        $this->flashcard->last_seen = NOW();
     }
 
     public function save(): void
