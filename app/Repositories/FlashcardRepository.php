@@ -31,7 +31,6 @@ class FlashcardRepository implements FlashcardRepositoryInterface
     {
         return Flashcard::create([
             'text' => $data['text'],
-            'type' => $data['type'],
             'is_true' => $data['is_true'],
             'explanation' => $data['explanation'],
         ]);
@@ -41,7 +40,6 @@ class FlashcardRepository implements FlashcardRepositoryInterface
     {
         $this->show($id)->update([
             'text' => $data['text'],
-            'type' => $data['type'],
             'is_true' => $data['is_true'],
             'explanation' => $data['explanation'],
         ]);
