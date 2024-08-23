@@ -2,13 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Enums\Correctness;
-use App\Enums\QuestionType;
 use App\Exceptions\AnswerMismatchException;
-use App\Helpers\ApiResponse;
-use App\Helpers\Score;
-use App\Models\Flashcard;
-use App\Models\Scorecard;
 use App\Services\FlashcardService;
 use App\Transformers\FlashcardTransformer;
 use App\Transformers\ScorecardTransformer;
@@ -41,7 +35,7 @@ class FlashcardController extends Controller
     public function index(Request $request): JsonResponse
     {
         try {
-            $flashcards = $this->service->alive();
+            $flashcards = $this->service->alive()->paginate(25);
         } catch (UnauthorizedException) {
             return $this->handleForbidden();
         }
@@ -63,7 +57,7 @@ class FlashcardController extends Controller
     public function all(Request $request): JsonResponse
     {
         try {
-            $flashcards = $this->service->all();
+            $flashcards = $this->service->all()->paginate(25);
         } catch (UnauthorizedException) {
             return $this->handleForbidden();
         }
@@ -226,7 +220,7 @@ class FlashcardController extends Controller
     public function graveyard(Request $request): JsonResponse
     {
         try {
-            $flashcards = $this->service->buried($request->user());
+            $flashcards = $this->service->buried()->paginate(25);
         } catch (UnauthorizedException) {
             return $this->handleForbidden();
         }

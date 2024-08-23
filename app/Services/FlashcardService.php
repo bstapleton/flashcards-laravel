@@ -6,7 +6,6 @@ use App\Enums\Correctness;
 use App\Enums\Difficulty;
 use App\Enums\QuestionType;
 use App\Exceptions\AnswerMismatchException;
-use App\Helpers\Score;
 use App\Models\Flashcard;
 use App\Models\Scorecard;
 use App\Models\User;
@@ -24,7 +23,7 @@ class FlashcardService
 
     public function all()
     {
-        if (!Gate::authorize('listFlashcard', Flashcard::class)) {
+        if (!Gate::authorize('list', Flashcard::class)) {
             throw new UnauthorizedException();
         }
 
@@ -93,7 +92,7 @@ class FlashcardService
 
     public function random()
     {
-        if (!Gate::authorize('show', Flashcard::class)) {
+        if (!Gate::authorize('list', Flashcard::class)) {
             throw new UnauthorizedException();
         }
 

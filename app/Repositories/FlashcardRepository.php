@@ -5,20 +5,24 @@ namespace App\Repositories;
 use App\Enums\Difficulty;
 use App\Models\Flashcard;
 use App\Models\Tag;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
-use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Cache;
 
 class FlashcardRepository implements FlashcardRepositoryInterface
 {
-    public function all(): LengthAwarePaginator
+    public function all(): Builder
     {
-        return Flashcard::where('user_id', Auth::id())->paginate(25);
+        return Flashcard::where('user_id', Auth::id())
+            ->orderBy('last_seen');
     }
 
     public function show(int $id): Flashcard
     {
-        $flashcard = Flashcard::where(['id' => $id, 'user_id' => Auth::id()])->first();
+        $flashcard = Cache::rememberForever('flashcard:'.$id, function () use ($id) {
+            return Flashcard::where(['id' => $id, 'user_id' => Auth::id()])->first();
+        });
 
         if (!$flashcard) {
             throw new ModelNotFoundException();
@@ -31,49 +35,54 @@ class FlashcardRepository implements FlashcardRepositoryInterface
     {
         return Flashcard::create([
             'text' => $data['text'],
-            'is_true' => $data['is_true'],
-            'explanation' => $data['explanation'],
+            'is_true' => $data['is_true'] ?? null,
+            'explanation' => $data['explanation'] ?? null,
         ]);
     }
 
     public function update(array $data, int $id): Flashcard
     {
-        $this->show($id)->update([
-            'text' => $data['text'],
-            'is_true' => $data['is_true'],
-            'explanation' => $data['explanation'],
-        ]);
+        $this->show($id)->update($data);
+        Cache::forget('flashcard:'.$id);
 
         return $this->show($id);
     }
 
     public function destroy(int $id): void
     {
+        Cache::forget('flashcard:'.$id);
         $this->show($id)->delete();
     }
 
     public function random(): Flashcard
     {
-        $flashcard = Flashcard::where('user_id', Auth::id())->whereNotIn('difficulty', Difficulty::BURIED)->inRandomOrder()->first();
+        $ids = Flashcard::where('user_id', Auth::id())->pluck('id')->toArray();
 
-        if (!$flashcard) {
+        if (0 === count($ids)) {
             // Consumer has no flashcards that are alive
             throw new ModelNotFoundException();
         }
 
-        return $flashcard;
+        $id = array_rand(Flashcard::where('user_id', Auth::id())->pluck('id')->toArray());
+
+        return Cache::rememberForever('flashcard:'.$id, function () use ($id) {
+            return Flashcard::find($id);
+        });
     }
 
     // Get all the flashcards that have been commited to the graveyard
-    public function buried(): LengthAwarePaginator
+    public function buried(): Builder
     {
-        return Flashcard::where(['user_id' => Auth::id(), 'difficulty' => Difficulty::BURIED])->paginate(25);
+        return Flashcard::where(['user_id' => Auth::id(), 'difficulty' => Difficulty::BURIED])
+            ->orderBy('last_seen');
     }
 
     // Get all the flashcards that are NOT in the graveyard
-    public function alive(): LengthAwarePaginator
+    public function alive(): Builder
     {
-        return Flashcard::where('user_id', Auth::id())->whereNot('difficulty', Difficulty::BURIED)->paginate(25);
+        return Flashcard::where('user_id', Auth::id())
+            ->whereNot('difficulty', Difficulty::BURIED)
+            ->orderBy('last_seen');
     }
 
     public function revive(int $id): Flashcard
