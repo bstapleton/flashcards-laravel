@@ -11,6 +11,7 @@ use App\Models\Flashcard;
 use App\Models\Scorecard;
 use App\Models\User;
 use App\Repositories\FlashcardRepository;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Validation\UnauthorizedException;
 
@@ -62,7 +63,7 @@ class FlashcardService
         return $this->repository->update($data, $id);
     }
 
-    public function destroy(int $id)
+    public function destroy(int $id): void
     {
         $flashcard = $this->repository->show($id);
 
@@ -70,7 +71,7 @@ class FlashcardService
             throw new UnauthorizedException();
         }
 
-        return $this->repository->destroy($id);
+        $this->repository->destroy($id);
     }
 
     public function buried()
@@ -116,6 +117,7 @@ class FlashcardService
      */
     public function answer(int $id, array $answers, User $user)
     {
+        Cache::forget('flashcard:'.$id);
         $this->flashcard = $this->repository->show($id);
 
         if (!Gate::authorize('revive', $this->flashcard)) {
@@ -253,21 +255,27 @@ class FlashcardService
     {
         switch ($this->flashcard->difficulty) {
             case Difficulty::EASY:
-                $this->flashcard->difficulty = Difficulty::MEDIUM;
+                $this->setDifficulty(Difficulty::MEDIUM);
                 break;
             case Difficulty::MEDIUM:
-                $this->flashcard->difficulty = Difficulty::HARD;
+                $this->setDifficulty(Difficulty::HARD);
                 break;
             case Difficulty::HARD:
-                $this->flashcard->difficulty = Difficulty::BURIED;
+                $this->setDifficulty(Difficulty::BURIED);
                 break;
             case Difficulty::BURIED:
                 break;
         }
 
-        $this->flashcard->last_seen = NOW()->toIso8601String();
+        $this->resetLastSeen();
 
         return $this->flashcard->difficulty;
+    }
+
+    public function setDifficulty(Difficulty $difficulty): void
+    {
+        $this->flashcard->difficulty = $difficulty;
+        $this->flashcard->save();
     }
 
     /**
@@ -278,7 +286,8 @@ class FlashcardService
     public function resetDifficulty(): Difficulty
     {
         $this->flashcard->difficulty = Difficulty::EASY;
-        $this->flashcard->last_seen = NOW()->toIso8601String();
+        $this->resetLastSeen();
+        $this->flashcard->save();
 
         return $this->flashcard->difficulty;
     }
