@@ -6,6 +6,7 @@ use App\Enums\Correctness;
 use App\Enums\Difficulty;
 use App\Enums\QuestionType;
 use App\Exceptions\AnswerMismatchException;
+use App\Helpers\Score;
 use App\Models\Flashcard;
 use App\Models\Scorecard;
 use App\Models\User;
@@ -137,10 +138,13 @@ class FlashcardService
             $scorecard->setCorrectness($this->calculateCorrectness(null, $providedAnswer));
         }
 
+        $score = new Score();
+        $points = $score->getScore($this->flashcard->type, $scorecard->getCorrectness(), $scorecard->getOldDifficulty());
+
         if ($scorecard->getCorrectness() !== Correctness::COMPLETE) {
             $this->resetDifficulty();
         } else {
-            $user->adjustPoints($score ?? 0);
+            $user->adjustPoints($points);
             $this->increaseDifficulty();
         }
 
@@ -149,7 +153,7 @@ class FlashcardService
         $scorecard->setNewDifficulty($this->flashcard->difficulty);
 
         $scorecard->setEligibleAt($this->flashcard->eligible_at);
-        $scorecard->setScore($score ?? 0);
+        $scorecard->setScore($points);
         $scorecard->setTotalScore($user->points);
 
         return $scorecard;
@@ -225,7 +229,6 @@ class FlashcardService
             case QuestionType::MULTIPLE:
                 $correctAnswers = $this->flashcard->correct_answers;
                 $correctSuppliedAnswers = array_intersect($correctAnswers->pluck('id')->toArray(), $answers);
-//                dd($correctSuppliedAnswers);
 
                 if ($correctAnswers->count() - count($correctSuppliedAnswers) && $correctAnswers->count() === count($answers)) {
                     return Correctness::COMPLETE;
