@@ -7,6 +7,7 @@ use App\Enums\Difficulty;
 use App\Enums\QuestionType;
 use App\Exceptions\AnswerMismatchException;
 use App\Helpers\Score;
+use App\Models\Attempt;
 use App\Models\Flashcard;
 use App\Models\Scorecard;
 use App\Models\User;
@@ -150,6 +151,11 @@ class FlashcardService
             $this->increaseDifficulty();
         }
 
+        if ($this->flashcard->difficulty !== Difficulty::BURIED) {
+            // Don't create an attempt if it's already buried
+            $this->createAttempt($scorecard->getCorrectness());
+        }
+
         $this->resetLastSeen();
         $this->save();
         $scorecard->setNewDifficulty($this->flashcard->difficulty);
@@ -275,7 +281,7 @@ class FlashcardService
     public function setDifficulty(Difficulty $difficulty): void
     {
         $this->flashcard->difficulty = $difficulty;
-        $this->flashcard->save();
+        $this->save();
     }
 
     /**
@@ -287,7 +293,7 @@ class FlashcardService
     {
         $this->flashcard->difficulty = Difficulty::EASY;
         $this->resetLastSeen();
-        $this->flashcard->save();
+        $this->save();
 
         return $this->flashcard->difficulty;
     }
@@ -300,5 +306,14 @@ class FlashcardService
     public function save(): void
     {
         $this->flashcard->save();
+    }
+
+    public function createAttempt(Correctness $correctness)
+    {
+        Attempt::create([
+            'flashcard_id' => $this->flashcard->id,
+            'answered_at' => now(),
+            'correctness' => $correctness,
+        ]);
     }
 }

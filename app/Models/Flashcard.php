@@ -73,6 +73,16 @@ class Flashcard extends Model
         return $this->belongsTo(User::class);
     }
 
+    public function attempts(): HasMany
+    {
+        return $this->hasMany(Attempt::class);
+    }
+
+    public function lastAttempt(): Attempt
+    {
+        return $this->attempts()->orderBy('answered_at', 'desc')->first();
+    }
+
     public function getCorrectAnswerAttribute(): ?Answer
     {
         if ($this->type !== QuestionType::SINGLE) {

@@ -23,6 +23,7 @@ class Scorecard
     private QuestionType $type;
     private Carbon $eligible_at;
     private Collection $flashcardAnswers;
+    private Attempt $lastAttempt;
 
     public function __construct(Flashcard $flashcard)
     {
@@ -30,6 +31,7 @@ class Scorecard
         $this->setOldDifficulty($flashcard->difficulty);
         $this->setType($flashcard->type);
         $this->setFlashcardAnswers($flashcard->answers);
+        $this->setLastAttempt($flashcard->lastAttempt());
     }
 
     public function getQuestion(): string
@@ -130,5 +132,15 @@ class Scorecard
     public function setFlashcardAnswers(Collection $answers): void
     {
         $this->flashcardAnswers = $answers;
+    }
+
+    public function getLastAttempt(): Attempt
+    {
+        return $this->lastAttempt;
+    }
+
+    public function setLastAttempt(Attempt $lastAttempt): void
+    {
+        $this->lastAttempt = $lastAttempt;
     }
 }

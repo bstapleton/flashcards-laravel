@@ -4,6 +4,7 @@ namespace App\Transformers;
 
 use App\Models\Answer;
 use App\Models\Scorecard;
+use Illuminate\Support\Carbon;
 use League\Fractal\TransformerAbstract;
 
 class ScorecardTransformer extends TransformerAbstract
@@ -14,6 +15,10 @@ class ScorecardTransformer extends TransformerAbstract
             'question' => $scorecard->getQuestion(),
             'type' => $scorecard->getType()->value,
             'correctness' => $scorecard->getCorrectness()->value,
+            'previous_attempt' => [
+                'attempted_at' => Carbon::parse($scorecard->getLastAttempt()->answered_at)->toIso8601String(),
+                'correctness' => $scorecard->getLastAttempt()->correctness->value,
+            ],
             'score' => $scorecard->getScore(),
             'user_current_score' => $scorecard->getTotalScore(),
             'old_difficulty' => $scorecard->getOldDifficulty()->value,

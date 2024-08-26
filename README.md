@@ -101,6 +101,7 @@ You can set the type to `multiple` if you intend to have multiple answers in the
 
 - Scoring system
   - Including segmentation by tag
+  - Historical score/attempt data for each question
 - Allow for image-type answers: e.g. select the correct x from the images below
 - Tests. So many tests.
 - Error checking and handling for
