@@ -2,12 +2,14 @@
 
 namespace App\Models;
 
+use App\Enums\TagColour;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 /**
  * @property string name
+ * @property TagColour colour
  */
 class Tag extends Model
 {
@@ -15,7 +17,12 @@ class Tag extends Model
     public $timestamps = false;
 
     protected $fillable = [
-        'name'
+        'name',
+        'colour',
+    ];
+
+    protected $casts = [
+        'colour' => TagColour::class,
     ];
 
     public function flashcards(): BelongsToMany

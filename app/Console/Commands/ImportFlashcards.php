@@ -3,6 +3,7 @@
 namespace App\Console\Commands;
 
 use App\Enums\QuestionType;
+use App\Enums\TagColour;
 use App\Models\Answer;
 use App\Models\Flashcard;
 use App\Models\Tag;
@@ -97,8 +98,11 @@ class ImportFlashcards extends Command
     private function handleTags(array $tags, Flashcard $flashcard): void
     {
         foreach ($tags as $topic) {
+            $colour = array_rand(TagColour::cases());
             $tag = Tag::firstOrCreate([
-                'name' => $topic
+                'name' => $topic,
+            ], [
+                'colour' => TagColour::from($colour),
             ]);
 
             $tag->flashcards()->syncWithoutDetaching($flashcard);
