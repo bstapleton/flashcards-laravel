@@ -78,9 +78,9 @@ class Flashcard extends Model
         return $this->hasMany(Attempt::class);
     }
 
-    public function lastAttempt(): Attempt
+    public function lastAttempt(): ?Attempt
     {
-        return $this->attempts()->orderBy('answered_at', 'desc')->first();
+        return $this->attempts()->orderBy('answered_at', 'desc')->first() ?? null;
     }
 
     public function getCorrectAnswerAttribute(): ?Answer

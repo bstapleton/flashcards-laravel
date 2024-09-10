@@ -23,7 +23,7 @@ class Scorecard
     private QuestionType $type;
     private Carbon $eligible_at;
     private Collection $flashcardAnswers;
-    private Attempt $lastAttempt;
+    private ?Attempt $lastAttempt;
 
     public function __construct(Flashcard $flashcard)
     {
@@ -134,12 +134,12 @@ class Scorecard
         $this->flashcardAnswers = $answers;
     }
 
-    public function getLastAttempt(): Attempt
+    public function getLastAttempt(): ?Attempt
     {
-        return $this->lastAttempt;
+        return $this->lastAttempt ?? null;
     }
 
-    public function setLastAttempt(Attempt $lastAttempt): void
+    public function setLastAttempt(?Attempt $lastAttempt = null): void
     {
         $this->lastAttempt = $lastAttempt;
     }
