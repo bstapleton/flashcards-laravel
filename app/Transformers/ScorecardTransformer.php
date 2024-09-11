@@ -16,8 +16,12 @@ class ScorecardTransformer extends TransformerAbstract
             'type' => $scorecard->getType()->value,
             'correctness' => $scorecard->getCorrectness()->value,
             'previous_attempt' => [
-                'attempted_at' => Carbon::parse($scorecard->getLastAttempt()->answered_at)->toIso8601String(),
-                'correctness' => $scorecard->getLastAttempt()->correctness->value,
+                'attempted_at' => !is_null($scorecard->getLastAttempt())
+                    ? Carbon::parse($scorecard->getLastAttempt()->answered_at)->toIso8601String()
+                    : null,
+                'correctness' => !is_null($scorecard->getLastAttempt())
+                    ? $scorecard->getLastAttempt()->correctness->value
+                    : null,
             ],
             'score' => $scorecard->getScore(),
             'user_current_score' => $scorecard->getTotalScore(),
