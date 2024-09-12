@@ -15,7 +15,7 @@ class FlashcardRepository implements FlashcardRepositoryInterface
     public function all(): Builder
     {
         return Flashcard::where('user_id', Auth::id())
-            ->orderBy('last_seen');
+            ->orderBy('created_at');
     }
 
     public function show(int $id): Flashcard
@@ -74,7 +74,7 @@ class FlashcardRepository implements FlashcardRepositoryInterface
     public function buried(): Builder
     {
         return Flashcard::where(['user_id' => Auth::id(), 'difficulty' => Difficulty::BURIED])
-            ->orderBy('last_seen');
+            ->orderBy('created_at');
     }
 
     // Get all the flashcards that are NOT in the graveyard
@@ -82,7 +82,7 @@ class FlashcardRepository implements FlashcardRepositoryInterface
     {
         return Flashcard::where('user_id', Auth::id())
             ->whereNot('difficulty', Difficulty::BURIED)
-            ->orderBy('last_seen');
+            ->orderBy('created_at');
     }
 
     public function revive(int $id): Flashcard

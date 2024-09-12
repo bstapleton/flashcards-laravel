@@ -13,7 +13,6 @@ return new class extends Migration
             $table->id();
             $table->foreignId('user_id')->constrained();
             $table->text('text');
-            $table->dateTime('last_seen'); // TODO: might be redundant if we force an update on the difficulty each time
             $table->tinyText('difficulty')->default(Difficulty::EASY);
             $table->boolean('is_true')->nullable();
             $table->longText('explanation')->nullable();

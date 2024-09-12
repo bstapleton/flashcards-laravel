@@ -18,7 +18,6 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property integer user_id
  * @property string text
  * @property Difficulty difficulty
- * @property string last_seen
  * @property string explanation
  * @property QuestionType type
  * @property boolean is_true
@@ -34,16 +33,6 @@ class Flashcard extends Model
         'is_true',
         'explanation',
     ];
-
-    public static function boot()
-    {
-        static::creating(function ($model) {
-            // Make it 'last seen' a year ago, so it's immediately available
-            $model->last_seen = NOW()->subYear();
-        });
-
-        parent::boot();
-    }
 
     protected function casts(): array
     {
@@ -118,10 +107,16 @@ class Flashcard extends Model
 
     public function getEligibleAtAttribute(): Carbon
     {
+        $attempt = $this->lastAttempt();
+
+        if (!$attempt) {
+            return Carbon::now();
+        }
+
         return match ($this->difficulty) {
-            Difficulty::EASY => Carbon::parse($this->last_seen)->addMinutes(config('flashcard.difficulty_minutes.easy')),
-            Difficulty::MEDIUM => Carbon::parse($this->last_seen)->addMinutes(config('flashcard.difficulty_minutes.medium')),
-            Difficulty::HARD => Carbon::parse($this->last_seen)->addMinutes(config('flashcard.difficulty_minutes.hard')),
+            Difficulty::EASY => Carbon::parse($attempt->answered_at)->addMinutes(config('flashcard.difficulty_minutes.easy')),
+            Difficulty::MEDIUM => Carbon::parse($attempt->answered_at)->addMinutes(config('flashcard.difficulty_minutes.medium')),
+            Difficulty::HARD => Carbon::parse($attempt->answered_at)->addMinutes(config('flashcard.difficulty_minutes.hard')),
             default => Carbon::now(),
         };
     }

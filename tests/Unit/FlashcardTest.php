@@ -252,20 +252,6 @@ class FlashcardTest extends TestCase
         );
     }
 
-    /**
-     * Scenario: Resetting the last_seen datetime
-     * GIVEN a flashcard
-     * WHEN its last-seen datetime is reset
-     * THEN it should be the same as 'now'
-     *
-     * @return void
-     */
-    public function testResetLastSeen()
-    {
-        $this->service->resetLastSeen();
-        $this->assertTrue(Carbon::parse($this->flashcard->last_seen)->isCurrentYear());
-    }
-
     public function testFlashcardHasAnswers()
     {
         $this->assertCount(self::ANSWER_COUNT, $this->flashcard->answers);

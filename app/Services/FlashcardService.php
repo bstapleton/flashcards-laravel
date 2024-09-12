@@ -156,7 +156,6 @@ class FlashcardService
             $this->createAttempt($scorecard->getCorrectness());
         }
 
-        $this->resetLastSeen();
         $this->save();
         $scorecard->setNewDifficulty($this->flashcard->difficulty);
 
@@ -273,8 +272,6 @@ class FlashcardService
                 break;
         }
 
-        $this->resetLastSeen();
-
         return $this->flashcard->difficulty;
     }
 
@@ -292,7 +289,6 @@ class FlashcardService
     public function resetDifficulty(): Difficulty
     {
         $this->flashcard->difficulty = Difficulty::EASY;
-        $this->resetLastSeen();
         $this->save();
 
         return $this->flashcard->difficulty;
