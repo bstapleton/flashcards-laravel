@@ -20,7 +20,6 @@ class FlashcardFactory extends Factory
     {
         return [
             'text' => fake()->text(),
-            'last_seen' => fake()->dateTime(),
         ];
     }
 
@@ -56,15 +55,6 @@ class FlashcardFactory extends Factory
         return $this->state(function (array $attributes) {
             return [
                 'difficulty' => Difficulty::BURIED
-            ];
-        });
-    }
-
-    public function old(): Factory
-    {
-        return $this->state(function (array $attributes) {
-            return [
-                'last_seen' => now()->subYear()->toIso8601String()
             ];
         });
     }

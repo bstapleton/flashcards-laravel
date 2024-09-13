@@ -9,8 +9,8 @@ use App\Models\Answer;
 use App\Models\User;
 use App\Repositories\FlashcardRepository;
 use App\Services\FlashcardService;
-use Carbon\Carbon;
 use App\Models\Flashcard;
+use Carbon\Carbon;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
@@ -74,18 +74,10 @@ class FlashcardTest extends TestCase
         parent::tearDown();
     }
 
-    public function testBoot()
-    {
-        $this->assertTrue(Carbon::parse($this->flashcard->last_seen)->isLastYear());
-    }
-
     public function testFlashcardHasAttributes(): void
     {
         $this->assertTrue($this->flashcard->hasAttribute('text'));
         $this->assertIsString($this->flashcard->text);
-        $this->assertTrue($this->flashcard->hasAttribute('last_seen'));
-        $this->assertTrue(Carbon::parse($this->flashcard->last_seen)->isLastYear());
-        $this->assertIsString(Carbon::parse($this->flashcard->last_seen)->toIso8601String());
         $this->assertTrue($this->flashcard->hasAttribute('difficulty'));
         $this->assertEquals(Difficulty::HARD, $this->flashcard->difficulty);
         $this->assertTrue($this->flashcard->hasAttribute('type'));
@@ -94,6 +86,8 @@ class FlashcardTest extends TestCase
         $this->assertTrue($this->flashcard->is_true);
         $this->assertTrue($this->flashcard->hasAttribute('explanation'));
         $this->assertEquals('test explanation', $this->flashcard->explanation);
+        $this->assertTrue($this->flashcard->hasAttribute('eligible_at'));
+        $this->assertIsString(Carbon::parse($this->flashcard->eligible_at)->toIso8601String());
     }
 
     /**
@@ -111,10 +105,6 @@ class FlashcardTest extends TestCase
         $this->flashcard->difficulty = Difficulty::EASY;
         $this->service->increaseDifficulty();
         $this->assertTrue($this->flashcard->difficulty === Difficulty::MEDIUM);
-        $this->assertTrue(
-            Carbon::parse($this->flashcard->eligible_at)
-                ->equalTo(Carbon::parse($this->flashcard->last_seen)->addMinutes(config('flashcard.difficulty_minutes.medium')))
-        );
     }
 
     /**
@@ -132,10 +122,6 @@ class FlashcardTest extends TestCase
         $this->flashcard->difficulty = Difficulty::MEDIUM;
         $this->service->increaseDifficulty();
         $this->assertTrue($this->flashcard->difficulty === Difficulty::HARD);
-        $this->assertTrue(
-            Carbon::parse($this->flashcard->eligible_at)
-                ->equalTo(Carbon::parse($this->flashcard->last_seen)->addMinutes(config('flashcard.difficulty_minutes.hard')))
-        );
     }
 
     /**
@@ -184,18 +170,10 @@ class FlashcardTest extends TestCase
     {
         $this->flashcard->difficulty = Difficulty::MEDIUM;
         $this->assertFalse($this->flashcard->difficulty === Difficulty::EASY);
-        $this->assertFalse(
-            Carbon::parse($this->flashcard->eligible_at)
-                ->equalTo(Carbon::parse($this->flashcard->last_seen)->addMinutes(config('flashcard.difficulty_minutes.easy')))
-        );
 
         $this->service->resetDifficulty();
 
         $this->assertTrue($this->flashcard->difficulty === Difficulty::EASY);
-        $this->assertTrue(
-            Carbon::parse($this->flashcard->eligible_at)
-                ->equalTo(Carbon::parse($this->flashcard->last_seen)->addMinutes(config('flashcard.difficulty_minutes.easy')))
-        );
     }
 
     /**
@@ -211,18 +189,10 @@ class FlashcardTest extends TestCase
     {
         $this->flashcard->difficulty = Difficulty::HARD;
         $this->assertFalse($this->flashcard->difficulty === Difficulty::EASY);
-        $this->assertFalse(
-            Carbon::parse($this->flashcard->eligible_at)
-                ->equalTo(Carbon::parse($this->flashcard->last_seen)->addMinutes(config('flashcard.difficulty_minutes.easy')))
-        );
 
         $this->service->resetDifficulty();
 
         $this->assertTrue($this->flashcard->difficulty === Difficulty::EASY);
-        $this->assertTrue(
-            Carbon::parse($this->flashcard->eligible_at)
-                ->equalTo(Carbon::parse($this->flashcard->last_seen)->addMinutes(config('flashcard.difficulty_minutes.easy')))
-        );
     }
 
     /**
@@ -238,18 +208,10 @@ class FlashcardTest extends TestCase
     {
         $this->flashcard->difficulty = Difficulty::BURIED;
         $this->assertFalse($this->flashcard->difficulty === Difficulty::EASY);
-        $this->assertFalse(
-            Carbon::parse($this->flashcard->eligible_at)
-                ->equalTo(Carbon::parse($this->flashcard->last_seen)->addMinutes(config('flashcard.difficulty_minutes.easy')))
-        );
 
         $this->service->resetDifficulty();
 
         $this->assertTrue($this->flashcard->difficulty === Difficulty::EASY);
-        $this->assertTrue(
-            Carbon::parse($this->flashcard->eligible_at)
-                ->equalTo(Carbon::parse($this->flashcard->last_seen)->addMinutes(config('flashcard.difficulty_minutes.easy')))
-        );
     }
 
     public function testFlashcardHasAnswers()

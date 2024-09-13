@@ -294,11 +294,6 @@ class FlashcardService
         return $this->flashcard->difficulty;
     }
 
-    public function resetLastSeen(): void
-    {
-        $this->flashcard->last_seen = NOW();
-    }
-
     public function save(): void
     {
         $this->flashcard->save();
