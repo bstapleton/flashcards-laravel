@@ -33,10 +33,6 @@ class FlashcardTransformer extends TransformerAbstract
             })
         ];
 
-        if ($flashcard->type === QuestionType::STATEMENT) {
-            $data['is_true'] = $flashcard->is_true;
-        }
-
         return $data;
     }
 }
