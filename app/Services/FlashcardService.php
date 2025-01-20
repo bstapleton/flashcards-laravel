@@ -220,7 +220,8 @@ class FlashcardService
      * For statements, you can either be completely correct or not at all
      * For multiple-choice, single-correct, you can either be completely correct or not at all
      * For multiple-choice, multiple-correct, you can be completely correct (e.g. 3/3), partially correct (e.g 2/3), or
-     * not at all (e.g. 0/3)
+     * not at all (e.g. 0/3). As long as AT LEAST ONE answer is correct, you're partially correct, even if all the
+     * others you selected are incorrect.
      *
      * @param array|null $answers
      * @param bool|null $isTrue
