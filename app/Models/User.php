@@ -17,6 +17,9 @@ use RedExplosion\Sqids\Concerns\HasSqids;
  * @property string password
  * @property int points
  * @property string created_at
+ * @property int easy_time
+ * @property int medium_time
+ * @property int hard_time
  */
 class User extends Authenticatable
 {
@@ -34,6 +37,9 @@ class User extends Authenticatable
         'email',
         'password',
         'points',
+        'easy_time',
+        'medium_time',
+        'hard_time',
     ];
 
     /**

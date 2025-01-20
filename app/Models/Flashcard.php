@@ -105,8 +105,12 @@ class Flashcard extends Model
         return QuestionType::SINGLE;
     }
 
-    public function getEligibleAtAttribute(): Carbon
+    public function getEligibleAtAttribute(User $user = null): Carbon
     {
+        if (!$user) {
+            $user = auth()->user();
+        }
+
         $attempt = $this->lastAttempt();
 
         if (!$attempt) {
@@ -114,9 +118,9 @@ class Flashcard extends Model
         }
 
         return match ($this->difficulty) {
-            Difficulty::EASY => Carbon::parse($attempt->answered_at)->addMinutes(config('flashcard.difficulty_minutes.easy')),
-            Difficulty::MEDIUM => Carbon::parse($attempt->answered_at)->addMinutes(config('flashcard.difficulty_minutes.medium')),
-            Difficulty::HARD => Carbon::parse($attempt->answered_at)->addMinutes(config('flashcard.difficulty_minutes.hard')),
+            Difficulty::EASY => Carbon::parse($attempt->answered_at)->addMinutes($user->easy_time),
+            Difficulty::MEDIUM => Carbon::parse($attempt->answered_at)->addMinutes($user->medium_time),
+            Difficulty::HARD => Carbon::parse($attempt->answered_at)->addMinutes($user->hard_time),
             default => Carbon::now(),
         };
     }

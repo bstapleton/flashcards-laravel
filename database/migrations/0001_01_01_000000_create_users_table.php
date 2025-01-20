@@ -17,6 +17,9 @@ return new class extends Migration
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
+            $table->unsignedInteger('easy_time')->default(config('flashcard.difficulty_minutes.easy'));
+            $table->unsignedInteger('medium_time')->default(config('flashcard.difficulty_minutes.medium')); // 7d
+            $table->unsignedInteger('hard_time')->default(config('flashcard.difficulty_minutes.hard')); // 28d
             $table->unsignedInteger('points')->default(0);
             $table->rememberToken();
             $table->timestamps();
