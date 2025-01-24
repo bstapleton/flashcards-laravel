@@ -12,6 +12,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Support\Facades\Auth;
 
 /**
  * @property integer id
@@ -108,7 +109,7 @@ class Flashcard extends Model
     public function getEligibleAtAttribute(User $user = null): Carbon
     {
         if (!$user) {
-            $user = auth()->user();
+            $user = Auth::user();
         }
 
         $attempt = $this->lastAttempt();

@@ -3,6 +3,7 @@
 namespace App\Repositories;
 
 use App\Enums\Difficulty;
+use App\Exceptions\NoEligibleQuestionsException;
 use App\Models\Flashcard;
 use App\Models\Tag;
 use Illuminate\Database\Eloquent\Builder;
@@ -49,13 +50,31 @@ class FlashcardRepository implements FlashcardRepositoryInterface
         $this->show($id)->delete();
     }
 
+    /**
+     * @throws NoEligibleQuestionsException
+     */
     public function random(): Flashcard
     {
-        $ids = Flashcard::where('user_id', Auth::id())->pluck('id')->toArray();
+        $flashcards = Flashcard::where('user_id', Auth::id())->get();
+
+        if (!$flashcards->count()) {
+            // Consumer has no flashcards
+            throw new ModelNotFoundException();
+        }
+
+        $flashcards = $flashcards->filter(function ($flashcard) {
+            if ($flashcard->eligible_at < NOW()) {
+                return true;
+            }
+
+            return false;
+        });
+
+        $ids = $flashcards->pluck('id')->toArray();
 
         if (0 === count($ids)) {
-            // Consumer has no flashcards that are alive
-            throw new ModelNotFoundException();
+            // Consumer has no eligible flashcards
+            throw new NoEligibleQuestionsException();
         } else if (1 === count($ids)) {
             $id = $ids[0];
         } else {

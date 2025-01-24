@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Exceptions\AnswerMismatchException;
+use App\Exceptions\NoEligibleQuestionsException;
+use App\Helpers\ApiResponse;
 use App\Services\FlashcardService;
 use App\Transformers\FlashcardTransformer;
 use App\Transformers\ScorecardTransformer;
@@ -235,7 +237,7 @@ class FlashcardController extends Controller
      *     summary="Get a random flashcard",
      *     tags={"flashcard"},
      *     @OA\Response(response="200", description="Success"),
-     *     @OA\Response(response="404", description="Model not found"),
+     *     @OA\Response(response="404", description="Model not found, OR no eligible questions"),
      *     @OA\Response(response="403", description="Not permitted"),
      *     security={{"bearerAuth":{}}}
      * )
@@ -246,6 +248,12 @@ class FlashcardController extends Controller
             $flashcardResponse = $this->service->random();
         } catch (ModelNotFoundException) {
             return $this->handleNotFound();
+        } catch (NoEligibleQuestionsException $e) {
+            return response()->json([
+                'title' => 'No eligible questions',
+                'message' => $e->getMessage(),
+                'code' => 'nothing_eligible'
+            ]);
         } catch (UnauthorizedException) {
             return $this->handleForbidden();
         }

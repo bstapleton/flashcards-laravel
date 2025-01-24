@@ -438,7 +438,7 @@
                         "description": "Success"
                     },
                     "404": {
-                        "description": "Model not found"
+                        "description": "Model not found, OR no eligible questions"
                     },
                     "403": {
                         "description": "Not permitted"
