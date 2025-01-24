@@ -10,7 +10,7 @@ class ResetDemo extends Command
 {
     protected $signature = 'app:reset-demo';
 
-    protected $description = 'Resets the demo user attempts and scoring, as well as password etc.';
+    protected $description = 'Reset demo user data';
 
     /**
      * @throws \Throwable
