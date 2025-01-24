@@ -126,6 +126,7 @@ class FlashcardService
         }
 
         $scorecard = new Scorecard($this->flashcard);
+        $scorecard->setOldDifficulty($this->flashcard->difficulty);
 
         if (in_array($this->flashcard->type, [QuestionType::SINGLE, QuestionType::MULTIPLE])) {
             $filteredAnswers = $this->filterValidAnswers($answers);
