@@ -8,7 +8,6 @@ use App\Models\Tag;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Cache;
 
 class FlashcardRepository implements FlashcardRepositoryInterface
 {
@@ -20,9 +19,7 @@ class FlashcardRepository implements FlashcardRepositoryInterface
 
     public function show(int $id): Flashcard
     {
-        $flashcard = Cache::rememberForever('flashcard:'.$id, function () use ($id) {
-            return Flashcard::where(['id' => $id, 'user_id' => Auth::id()])->first();
-        });
+        $flashcard = Flashcard::where(['id' => $id, 'user_id' => Auth::id()])->first();
 
         if (!$flashcard) {
             throw new ModelNotFoundException();
@@ -43,14 +40,12 @@ class FlashcardRepository implements FlashcardRepositoryInterface
     public function update(array $data, int $id): Flashcard
     {
         $this->show($id)->update($data);
-        Cache::forget('flashcard:'.$id);
 
         return $this->show($id);
     }
 
     public function destroy(int $id): void
     {
-        Cache::forget('flashcard:'.$id);
         $this->show($id)->delete();
     }
 
@@ -67,9 +62,7 @@ class FlashcardRepository implements FlashcardRepositoryInterface
             $id = array_rand($ids);
         }
 
-        return Cache::rememberForever('flashcard:'.$id, function () use ($id) {
-            return Flashcard::find($id);
-        });
+        return Flashcard::find($id);
     }
 
     // Get all the flashcards that have been commited to the graveyard

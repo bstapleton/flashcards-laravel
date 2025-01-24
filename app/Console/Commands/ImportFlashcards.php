@@ -9,7 +9,6 @@ use App\Models\Flashcard;
 use App\Models\Tag;
 use App\Models\User;
 use Illuminate\Console\Command;
-use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Storage;
 
 class ImportFlashcards extends Command
@@ -68,7 +67,6 @@ class ImportFlashcards extends Command
             'explanation' => property_exists($question, 'explanation') ? $question->explanation : null
         ]);
 
-        Cache::forget('flashcard:'.$flashcard->id);
         $this->handleTags($question->tags, $flashcard);
     }
 
@@ -82,7 +80,6 @@ class ImportFlashcards extends Command
             $this->createAnswer($flashcard, $a);
         }
 
-        Cache::forget('flashcard:'.$flashcard->id);
         $this->handleTags($question->tags, $flashcard);
     }
 

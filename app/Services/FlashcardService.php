@@ -12,7 +12,6 @@ use App\Models\Flashcard;
 use App\Models\Scorecard;
 use App\Models\User;
 use App\Repositories\FlashcardRepository;
-use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Validation\UnauthorizedException;
 
@@ -118,7 +117,6 @@ class FlashcardService
      */
     public function answer(int $id, array $answers, User $user)
     {
-        Cache::forget('flashcard:'.$id);
         $this->flashcard = $this->repository->show($id);
 
         if (!Gate::authorize('revive', $this->flashcard)) {
