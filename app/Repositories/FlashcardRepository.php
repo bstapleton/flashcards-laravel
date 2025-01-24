@@ -61,9 +61,11 @@ class FlashcardRepository implements FlashcardRepositoryInterface
         if (0 === count($ids)) {
             // Consumer has no flashcards that are alive
             throw new ModelNotFoundException();
+        } else if (1 === count($ids)) {
+            $id = $ids[0];
+        } else {
+            $id = array_rand($ids);
         }
-
-        $id = array_rand(Flashcard::where('user_id', Auth::id())->pluck('id')->toArray());
 
         return Cache::rememberForever('flashcard:'.$id, function () use ($id) {
             return Flashcard::find($id);
