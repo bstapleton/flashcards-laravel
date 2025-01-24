@@ -8,7 +8,7 @@ class NoEligibleQuestionsException extends BaseException
 {
     public function __construct()
     {
-        $this->message = 'You have no eligible questions!';
+        $this->message = 'You have no eligible questions at this time. Please come back later.';
 
         parent::__construct();
     }
