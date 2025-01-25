@@ -9,7 +9,7 @@ Disclaimer: Big ol' chunks of what's written below isn't complete yet (including
 Create flashcards of different types:
 1. statement - these have no answers to select, and just give you a fact/statement/whatever to digest
 2. question - these have multiple answers and only one correct answer
-3. multiple-choice - these have multiple answers with two or more correct answers
+3. multiple-choice - these have multiple answers with one or more correct answers
 
 Flashcards have tags, which you can think of like subjects or topics.
 
@@ -31,12 +31,14 @@ Each time you provide a correct answer, you'll get an increase in score. In the 
 ## Running it
 
 1. Usual php stuff `composer install`
-2. `php artisan l5-swagger:generate` to generate the API contract
-3. `php artisan migrate:fresh` to set up the DB
-4. `php artisan db:seed` will create a user for you and nothing else. If you want to use the importer command (see below) to generate some more realistic questions, this is probably enough seeding for you, otherwise:
+2. Usual Laravel stuff `cp .env.example .env`, `php artisan key:generate`
+3. Add an API_KEY to `.env` - can be whatever you want, but you won't be able to use the API without it
+4. `php artisan l5-swagger:generate` to generate the API contract
+5. `php artisan migrate:fresh` to set up the DB
+6. `php artisan db:seed` will create a user for you and nothing else. If you want to use the importer command (see below) to generate some more realistic questions, this is probably enough seeding for you, otherwise:
    1. `php artisan seed --class=TagSeeder` will make up some tags for your flashcards to use
    2. `php artisan seed --class=FlashcardSeeder` will make some flashcards of different types for you to try out
-5. `php artisan serve` and you can check it out in Swagger
+7. `php artisan serve` and you can check it out in Swagger
 
 To use the endpoints, you'll need to hit the login one first. The seeded user's email is `f2@test.com` and their password is very secure: `password`. I assume you know what you're doing with bearer tokens, or you're going to have Bad Time(tm).
 
@@ -105,5 +107,8 @@ You can set the type to `multiple` if you intend to have multiple answers in the
 - Allow for image-type answers: e.g. select the correct x from the images below
 - Tests. So many tests.
 - Error checking and handling for
-  - Single answer multiple-choice questions where more than one answer has been flagged as correct
   - Any multiple choice question where no correct answer has been added
+- Hosting it somewhere for demo purposes
+- Configurable difficulty timers for each user - this data exists, but only in default settings for now
+- Configurable tags per user, including colour selections
+- Multiplayer mode - compete with user users on preconfigured tags/categories

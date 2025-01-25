@@ -11,7 +11,19 @@ class CheckAuthed extends EnsureFrontendRequestsAreStateful
     {
         $response = parent::handle($request, $next);
 
-        if ($response->getStatusCode() === 401) {
+        $apiKey = $request->header('X-API-KEY');
+
+        if (!$apiKey || $apiKey !== env('API_KEY')) {
+            return response()->json([
+                'data' => [
+                    'title' => 'Unauthorized',
+                    'message' => 'Missing or invalid API key',
+                    'code' => 'invalid_key'
+                ]
+            ], 401);
+        }
+
+        if (!$request->bearerToken()) {
             return response()->json([
                 'data' => [
                     'title' => 'Unauthenticated',
