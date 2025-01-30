@@ -12,34 +12,35 @@ class LoginController extends Controller
      *     path="/api/login",
      *     summary="Authenticate user and generate JWT token",
      *     tags={"auth"},
-     *     @OA\Parameter(
-     *         name="email",
-     *         in="query",
-     *         description="User's email",
-     *         required=true,
-     *         @OA\Schema(type="string")
-     *     ),
-     *     @OA\Parameter(
-     *         name="password",
-     *         in="query",
-     *         description="User's password",
-     *         required=true,
-     *         @OA\Schema(type="string")
-     *     ),
+     *     security={{"basicAuth":{}}},
      *     @OA\Response(response="200", description="Login successful"),
      *     @OA\Response(response="401", description="Invalid credentials")
      * )
      */
     public function login(Request $request)
     {
-        $credentials = $request->only('email', 'password');
+        $authHeader = $request->header('Authorization');
 
-        if (Auth::attempt($credentials)) {
-            $token = Auth::user()->createToken('api_token')->plainTextToken;
+        if ($authHeader) {
+            $authString = explode(' ', $authHeader);
+            $credentials = base64_decode($authString[1]);
+            list($email, $password) = explode(':', $credentials);
+            $credentials = [
+                'email' => $email,
+                'password' => $password,
+            ];
 
-            return response()->json(['token' => $token], 200);
+            if (Auth::attempt($credentials)) {
+                $token = Auth::user()->createToken('api_token')->plainTextToken;
+
+                return response()->json(['token' => $token]);
+            }
         }
 
-        return response()->json(['error' => 'Invalid credentials'], 401);
+        return response()->json([
+            'title' => 'Invalid credentials',
+            'message' => 'Username and/or password incorrect',
+            'code' => 'invalid_credentials'
+        ]);
     }
 }
