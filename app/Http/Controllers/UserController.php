@@ -49,7 +49,7 @@ class UserController extends Controller
     public function register(Request $request): JsonResponse
     {
         $validatedData = $request->validate([
-            'username' => 'required|string|email|unique:users|max:255',
+            'username' => 'required|string|unique:users|max:255',
             'password' => 'required|string|min:8',
             'display_name' => 'required|string|max:255',
         ]);
