@@ -26,7 +26,7 @@ class LoginController extends Controller
             $credentials = base64_decode($authString[1]);
             list($email, $password) = explode(':', $credentials);
             $credentials = [
-                'email' => $email,
+                'username' => $email,
                 'password' => $password,
             ];
 

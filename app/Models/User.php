@@ -13,8 +13,8 @@ use RedExplosion\Sqids\Concerns\HasSqids;
 
 /**
  * @property int id
- * @property string name
- * @property string email
+ * @property string username
+ * @property string display_name
  * @property string password
  * @property int points
  * @property string created_at
@@ -34,8 +34,8 @@ class User extends Authenticatable
      * @var array<int, string>
      */
     protected $fillable = [
-        'name',
-        'email',
+        'username',
+        'display_name',
         'password',
         'points',
         'easy_time',

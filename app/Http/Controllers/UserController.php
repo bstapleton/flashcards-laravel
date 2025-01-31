@@ -11,8 +11,8 @@ use Illuminate\Support\Facades\Hash;
 
 /**
  * @property int id
- * @property string name
- * @property string email
+ * @property string username
+ * @property string display_name
  */
 class UserController extends Controller
 {
@@ -22,16 +22,9 @@ class UserController extends Controller
      *     summary="Register a new user",
      *     tags={"auth"},
      *     @OA\Parameter(
-     *         name="name",
+     *         name="username",
      *         in="query",
-     *         description="User's name",
-     *         required=true,
-     *         @OA\Schema(type="string")
-     *     ),
-     *     @OA\Parameter(
-     *         name="email",
-     *         in="query",
-     *         description="User's email",
+     *         description="User's login",
      *         required=true,
      *         @OA\Schema(type="string")
      *     ),
@@ -42,6 +35,13 @@ class UserController extends Controller
      *         required=true,
      *         @OA\Schema(type="string")
      *     ),
+     *     @OA\Parameter(
+     *         name="display_name",
+     *         in="query",
+     *         description="User's display name",
+     *         required=true,
+     *         @OA\Schema(type="string")
+     *     ),
      *     @OA\Response(response="201", description="User registered successfully"),
      *     @OA\Response(response="422", description="Validation errors")
      * )
@@ -49,15 +49,15 @@ class UserController extends Controller
     public function register(Request $request): JsonResponse
     {
         $validatedData = $request->validate([
-            'name' => 'required|string|max:255',
-            'email' => 'required|string|email|unique:users|max:255',
+            'username' => 'required|string|email|unique:users|max:255',
             'password' => 'required|string|min:8',
+            'display_name' => 'required|string|max:255',
         ]);
 
         User::create([
-            'name' => $validatedData['name'],
-            'email' => $validatedData['email'],
+            'username' => $validatedData['username'],
             'password' => Hash::make($validatedData['password']),
+            'display_name' => $validatedData['display_name'],
         ]);
 
         return response()->json(['message' => 'User registered successfully'], 201);
