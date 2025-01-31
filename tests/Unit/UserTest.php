@@ -20,8 +20,8 @@ class UserTest extends TestCase
         $user = UserFactory::new()->create();
 
         $this->assertInstanceOf(User::class, $user);
-        $this->assertNotNull($user->name);
-        $this->assertNotNull($user->email);
+        $this->assertNotNull($user->username);
+        $this->assertNotNull($user->display_name);
         $this->assertNotNull($user->email_verified_at);
         $this->assertNotNull($user->password);
         $this->assertNotNull($user->remember_token);
