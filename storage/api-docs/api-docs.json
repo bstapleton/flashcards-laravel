@@ -575,26 +575,6 @@
                 ],
                 "summary": "Authenticate user and generate JWT token",
                 "operationId": "c5e838284c7f343f0e5e5fd589161c96",
-                "parameters": [
-                    {
-                        "name": "email",
-                        "in": "query",
-                        "description": "User's email",
-                        "required": true,
-                        "schema": {
-                            "type": "string"
-                        }
-                    },
-                    {
-                        "name": "password",
-                        "in": "query",
-                        "description": "User's password",
-                        "required": true,
-                        "schema": {
-                            "type": "string"
-                        }
-                    }
-                ],
                 "responses": {
                     "200": {
                         "description": "Login successful"
@@ -602,7 +582,12 @@
                     "401": {
                         "description": "Invalid credentials"
                     }
-                }
+                },
+                "security": [
+                    {
+                        "basicAuth": []
+                    }
+                ]
             }
         },
         "/api/tags": {
