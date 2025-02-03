@@ -4,6 +4,7 @@ namespace App\Transformers;
 
 use App\Enums\QuestionType;
 use App\Models\Attempt;
+use App\Models\Tag;
 use Carbon\Carbon;
 use League\Fractal\TransformerAbstract;
 
@@ -19,7 +20,7 @@ class AttemptTransformer extends TransformerAbstract
 
             $answersGiven = $answers;
         }
-        
+
         return [
             'question' => $attempt->flashcard->text,
             'correctness' => $attempt->correctness->value,
@@ -28,6 +29,9 @@ class AttemptTransformer extends TransformerAbstract
             'points_earned' => $attempt->points_earned,
             'answered_at' => Carbon::parse($attempt->answered_at)->toIso8601String(),
             'answers_given' => $answersGiven ?? [],
+            'tags' => $attempt->flashcard->tags->map(function (Tag $tag) {
+                return (new TagTransformer())->transform($tag);
+            }),
         ];
     }
 }

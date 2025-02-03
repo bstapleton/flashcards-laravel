@@ -96,6 +96,7 @@ class AttemptControllerTest extends TestCase
                     'points_earned' => $this->firstAttempt->points_earned,
                     'answered_at' => Carbon::parse($this->firstAttempt->answered_at)->toIso8601String(),
                     'answers_given' => $answersGiven ?? [],
+                    'tags' => [],
                 ],
                 [
                     'question' => $this->secondAttempt->flashcard->text,
@@ -105,6 +106,7 @@ class AttemptControllerTest extends TestCase
                     'points_earned' => $this->secondAttempt->points_earned,
                     'answered_at' => Carbon::parse($this->secondAttempt->answered_at)->toIso8601String(),
                     'answers_given' => [],
+                    'tags' => [],
                 ],
             ],
         ]);
