@@ -71,9 +71,9 @@ class User extends Authenticatable
         return $this->hasMany(Flashcard::class);
     }
 
-    public function attempts(): HasManyThrough
+    public function attempts(): HasMany
     {
-        return $this->hasManyThrough(Attempt::class, Flashcard::class);
+        return $this->hasMany(Attempt::class);
     }
 
     public function adjustPoints(int $score, $operation = 'add'): static

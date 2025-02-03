@@ -3,8 +3,10 @@
 namespace App\Providers;
 
 use App\Models\Answer;
+use App\Models\Attempt;
 use App\Models\Flashcard;
 use App\Policies\AnswerPolicy;
+use App\Policies\AttemptPolicy;
 use App\Policies\FlashcardPolicy;
 use App\Repositories\FlashcardRepository;
 use App\Repositories\FlashcardRepositoryInterface;
@@ -28,5 +30,6 @@ class AppServiceProvider extends ServiceProvider
     {
         Gate::policy(Flashcard::class, FlashcardPolicy::class);
         Gate::policy(Answer::class, AnswerPolicy::class);
+        Gate::policy(Attempt::class, AttemptPolicy::class);
     }
 }

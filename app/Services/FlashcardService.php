@@ -303,6 +303,7 @@ class FlashcardService
     {
         Attempt::create([
             'flashcard_id' => $this->flashcard->id,
+            'user_id' => $this->flashcard->user_id,
             'answered_at' => now(),
             'correctness' => $correctness,
         ]);

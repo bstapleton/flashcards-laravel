@@ -19,6 +19,7 @@ class Attempt extends Model
 
     protected $fillable = [
         'flashcard_id',
+        'user_id',
         'answered_at',
         'correctness'
     ];
@@ -33,5 +34,10 @@ class Attempt extends Model
     public function flashcard(): BelongsTo
     {
         return $this->belongsTo(Flashcard::class);
+    }
+
+    public function user(): BelongsTo
+    {
+        return $this->belongsTo(User::class);
     }
 }

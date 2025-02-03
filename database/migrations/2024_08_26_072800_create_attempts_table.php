@@ -2,6 +2,7 @@
 
 use App\Enums\Correctness;
 use App\Models\Flashcard;
+use App\Models\User;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -12,6 +13,7 @@ return new class extends Migration
     {
         Schema::create('attempts', function (Blueprint $table) {
             $table->foreignIdFor(Flashcard::class);
+            $table->foreignIdFor(User::class);
             $table->timestamp('answered_at');
             $table->tinyText('correctness')->default(Correctness::NONE);
         });

@@ -44,3 +44,7 @@ Route::controller(TagController::class)->prefix('tags')->middleware(['auth:sanct
     Route::put('/{tag}', 'update')->name('tags.update');
     Route::delete('/{tag}', 'destroy')->name('tags.destroy');
 });
+
+Route::controller(\App\Http\Controllers\AttemptController::class)->prefix('attempts')->middleware(['auth:sanctum', CheckAuthed::class])->group(function () {
+    Route::get('/', 'index')->name('attempts.index');
+});

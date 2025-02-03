@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Exceptions\AnswerMismatchException;
 use App\Exceptions\NoEligibleQuestionsException;
-use App\Helpers\ApiResponse;
 use App\Services\FlashcardService;
 use App\Transformers\FlashcardTransformer;
 use App\Transformers\ScorecardTransformer;

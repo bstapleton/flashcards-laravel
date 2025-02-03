@@ -160,6 +160,29 @@
                 ]
             }
         },
+        "/api/attempt": {
+            "get": {
+                "tags": [
+                    "attempt"
+                ],
+                "summary": "List attempts",
+                "description": "Return all attempts for the current user, paginated",
+                "operationId": "17be1018f13f02dc5c6e77cafd33d828",
+                "responses": {
+                    "200": {
+                        "description": "Success"
+                    },
+                    "403": {
+                        "description": "Not permitted"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
         "/api/flashcards": {
             "get": {
                 "tags": [
@@ -710,18 +733,9 @@
                 "operationId": "2f25885f3b6f61ca11724ec302d2e439",
                 "parameters": [
                     {
-                        "name": "name",
+                        "name": "username",
                         "in": "query",
-                        "description": "User's name",
-                        "required": true,
-                        "schema": {
-                            "type": "string"
-                        }
-                    },
-                    {
-                        "name": "email",
-                        "in": "query",
-                        "description": "User's email",
+                        "description": "User's login",
                         "required": true,
                         "schema": {
                             "type": "string"
@@ -731,6 +745,15 @@
                         "name": "password",
                         "in": "query",
                         "description": "User's password",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "display_name",
+                        "in": "query",
+                        "description": "User's display name",
                         "required": true,
                         "schema": {
                             "type": "string"
@@ -780,6 +803,10 @@
         {
             "name": "answer",
             "description": "answer"
+        },
+        {
+            "name": "attempt",
+            "description": "attempt"
         },
         {
             "name": "flashcard",
