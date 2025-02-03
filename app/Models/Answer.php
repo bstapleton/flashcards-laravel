@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 /**
  * @property integer id
@@ -33,5 +34,10 @@ class Answer extends Model
     public function flashcard(): BelongsTo
     {
         return $this->belongsTo(Flashcard::class);
+    }
+
+    public function attempts(): BelongsToMany
+    {
+        return $this->belongsToMany(Attempt::class);
     }
 }

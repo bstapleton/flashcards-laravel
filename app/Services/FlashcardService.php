@@ -152,7 +152,7 @@ class FlashcardService
 
         if ($this->flashcard->difficulty !== Difficulty::BURIED) {
             // Don't create an attempt if it's already buried
-            $this->createAttempt($scorecard->getCorrectness());
+            $this->createAttempt($scorecard->getCorrectness(), $points, $scorecard->getAnswerGiven());
         }
 
         $this->save();
@@ -299,13 +299,18 @@ class FlashcardService
         $this->flashcard->save();
     }
 
-    public function createAttempt(Correctness $correctness)
+    public function createAttempt(Correctness $correctness, int $points, array $answers = []): void
     {
-        Attempt::create([
+        $attempt = Attempt::create([
             'flashcard_id' => $this->flashcard->id,
             'user_id' => $this->flashcard->user_id,
             'answered_at' => now(),
+            'points_earned' => $points,
             'correctness' => $correctness,
         ]);
+
+        foreach ($answers as $answer) {
+            $attempt->answers()->attach($answer);
+        }
     }
 }

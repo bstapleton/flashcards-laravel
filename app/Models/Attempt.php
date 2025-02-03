@@ -3,14 +3,17 @@
 namespace App\Models;
 
 use App\Enums\Correctness;
-use Carbon\Carbon;
+use App\Enums\Difficulty;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 /**
  * @property string answered_at
+ * @property Difficulty difficulty
  * @property Correctness correctness
+ * @property int points_earned
  */
 class Attempt extends Model
 {
@@ -21,13 +24,16 @@ class Attempt extends Model
         'flashcard_id',
         'user_id',
         'answered_at',
-        'correctness'
+        'difficulty',
+        'correctness',
+        'points_earned',
     ];
 
     protected function casts(): array
     {
         return [
             'correctness' => Correctness::class,
+            'difficulty' => Difficulty::class,
         ];
     }
 
@@ -39,5 +45,10 @@ class Attempt extends Model
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
+    }
+
+    public function answers(): BelongsToMany
+    {
+        return $this->belongsToMany(Answer::class);
     }
 }
