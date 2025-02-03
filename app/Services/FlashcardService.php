@@ -237,7 +237,7 @@ class FlashcardService
                 $correctAnswers = $this->flashcard->correct_answers;
                 $correctSuppliedAnswers = array_intersect($correctAnswers->pluck('id')->toArray(), $answers);
 
-                if (count($correctSuppliedAnswers) && $correctAnswers->count() === count($correctSuppliedAnswers)) {
+                if (count($correctSuppliedAnswers) && $correctAnswers->count() === count($correctSuppliedAnswers) && count($answers) === $correctAnswers->count()) {
                     return Correctness::COMPLETE;
                 }
 
