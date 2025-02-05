@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Services\AttemptService;
 use App\Transformers\AttemptTransformer;
+use Illuminate\Http\Request;
 use Illuminate\Validation\UnauthorizedException;
 
 class AttemptController extends Controller
@@ -37,9 +38,15 @@ class AttemptController extends Controller
         return fractal($attempts, new AttemptTransformer())->respond();
     }
 
-    public function show()
+    public function show(Request $request, int $id)
     {
-        // TODO: This should show a history of all attempts _for that question_
+        try {
+            $attempt = $this->service->show($id);
+        } catch (UnauthorizedException) {
+            return $this->handleForbidden();
+        }
+
+        return fractal($attempt, new AttemptTransformer())->respond();
     }
 
 }

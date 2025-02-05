@@ -2,11 +2,10 @@
 
 namespace App\Transformers;
 
-use App\Enums\QuestionType;
 use App\Models\Answer;
 use App\Models\Flashcard;
 use App\Models\Tag;
-use Carbon\Carbon;
+use Illuminate\Support\Carbon;
 use League\Fractal\TransformerAbstract;
 
 class FlashcardTransformer extends TransformerAbstract
@@ -18,10 +17,7 @@ class FlashcardTransformer extends TransformerAbstract
             'type' => $flashcard->type->value,
             'text' => $flashcard->text,
             'difficulty' => $flashcard->difficulty,
-            'last_seen_at' => $flashcard->lastAttempt()
-                ? Carbon::parse($flashcard->lastAttempt()->answered_at)->toIso8601String()
-                : null,
-            'eligible_at' => $flashcard->eligible_at->toIso8601String(),
+            'eligible_at' => Carbon::parse($flashcard->eligible_at)->toIso8601String(),
             'tags' => $flashcard->tags->map(function (Tag $tag) {
                 return (new TagTransformer())->transform($tag);
             }),

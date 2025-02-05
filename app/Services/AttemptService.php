@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Models\Attempt;
 use App\Repositories\AttemptRepository;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Validation\UnauthorizedException;
 
@@ -24,7 +25,7 @@ class AttemptService
         return $this->repository->all();
     }
 
-    public function show(int $id)
+    public function show(int $id): Attempt
     {
         $attempt = $this->repository->show($id);
 
@@ -32,7 +33,19 @@ class AttemptService
             throw new UnauthorizedException();
         }
 
+        $attempt->other_attempts = $this->related($id)->get();
+
         return $attempt;
+    }
+
+    public function related(int $id): Builder
+    {
+        return $this->repository->related($id);
+    }
+
+    public function store(array $data): Attempt
+    {
+        return $this->repository->store($data);
     }
 
     public function destroy(int $id): void

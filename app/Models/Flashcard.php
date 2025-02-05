@@ -63,16 +63,6 @@ class Flashcard extends Model
         return $this->belongsTo(User::class);
     }
 
-    public function attempts(): HasMany
-    {
-        return $this->hasMany(Attempt::class);
-    }
-
-    public function lastAttempt(): ?Attempt
-    {
-        return $this->attempts()->orderBy('answered_at', 'desc')->first() ?? null;
-    }
-
     public function getCorrectAnswerAttribute(): ?Answer
     {
         if ($this->type !== QuestionType::SINGLE) {
@@ -106,23 +96,19 @@ class Flashcard extends Model
         return QuestionType::SINGLE;
     }
 
-    public function getEligibleAtAttribute(User $user = null): Carbon
+    public function setEligibleAt(User $user = null): static
     {
         if (!$user) {
             $user = Auth::user();
         }
 
-        $attempt = $this->lastAttempt();
-
-        if (!$attempt) {
-            return Carbon::now();
-        }
-
-        return match ($this->difficulty) {
-            Difficulty::EASY => Carbon::parse($attempt->answered_at)->addMinutes($user->easy_time),
-            Difficulty::MEDIUM => Carbon::parse($attempt->answered_at)->addMinutes($user->medium_time),
-            Difficulty::HARD => Carbon::parse($attempt->answered_at)->addMinutes($user->hard_time),
+        $this->eligible_at = match ($this->difficulty) {
+            Difficulty::EASY => now()->addMinutes($user->easy_time),
+            Difficulty::MEDIUM => now()->addMinutes($user->medium_time),
+            Difficulty::HARD => now()->addMinutes($user->hard_time),
             default => Carbon::now(),
         };
+
+        return $this;
     }
 }

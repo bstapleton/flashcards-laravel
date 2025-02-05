@@ -9,18 +9,24 @@ use App\Exceptions\AnswerMismatchException;
 use App\Helpers\Score;
 use App\Models\Attempt;
 use App\Models\Flashcard;
+use App\Models\GivenAnswer;
 use App\Models\Scorecard;
+use App\Models\Tag;
 use App\Models\User;
+use App\Repositories\AttemptRepository;
 use App\Repositories\FlashcardRepository;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Validation\UnauthorizedException;
 
 class FlashcardService
 {
     protected Flashcard $flashcard;
+    protected AttemptService $attemptService;
 
     public function __construct(protected FlashcardRepository $repository)
     {
+        $this->attemptService = new AttemptService(new AttemptRepository());
     }
 
     public function all()
@@ -123,43 +129,62 @@ class FlashcardService
             throw new UnauthorizedException();
         }
 
-        $scorecard = new Scorecard($this->flashcard);
-        $scorecard->setOldDifficulty($this->flashcard->difficulty);
-
         if (in_array($this->flashcard->type, [QuestionType::SINGLE, QuestionType::MULTIPLE])) {
-            $filteredAnswers = $this->filterValidAnswers($answers);
-
-            $scorecard->setAnswerGiven(
-                $this->validateAnswers($filteredAnswers)
-            );
-
-            $scorecard->setCorrectness($this->calculateCorrectness($filteredAnswers));
+            $correctness = $this->calculateCorrectness($answers);
         } elseif ($this->flashcard->type === QuestionType::STATEMENT) {
             $providedAnswer = last($answers);
-            $scorecard->setAnswerGiven([$providedAnswer]);
-            $scorecard->setCorrectness($this->calculateCorrectness(null, $providedAnswer));
+            $correctness = $this->calculateCorrectness(null, $providedAnswer);
         }
 
         $score = new Score();
-        $points = $score->getScore($this->flashcard->type, $scorecard->getCorrectness(), $scorecard->getOldDifficulty());
+        $pointsEarned = $score->getScore($this->flashcard->type, $correctness, $this->flashcard->difficulty);
 
-        if ($scorecard->getCorrectness() !== Correctness::COMPLETE) {
+        $attempt = $this->attemptService->store([
+            'question' => $this->flashcard->text,
+            'question_type' => $this->flashcard->type,
+            'answers' => collect($this->flashcard->answers->map(function ($answer) use ($answers) {
+                $givenAnswer = new GivenAnswer();
+                $givenAnswer->setId($answer->id);
+                $givenAnswer->setIsCorrect($answer->is_correct);
+                $givenAnswer->setWasSelected(in_array($answer->id, $answers));
+                $givenAnswer->setText($answer->text);
+                $givenAnswer->setExplanation($answer->explanation);
+
+                return $givenAnswer;
+            })),
+            'tags' => implode(',', $this->flashcard->tags->map(function (Tag $tag) {
+                return $tag->name;
+            })->toArray()),
+            'difficulty' => $this->flashcard->difficulty,
+            'answered_at' => now(),
+            'correctness' => $correctness,
+            'points_earned' => $pointsEarned
+        ]);
+
+        if ($correctness !== Correctness::COMPLETE) {
             $this->resetDifficulty();
         } else {
-            $user->adjustPoints($points);
-            $this->increaseDifficulty();
+            $user->adjustPoints($pointsEarned);
+            $this->increaseDifficulty($user);
         }
 
+        $scorecard = new Scorecard($attempt->toArray());
         if ($this->flashcard->difficulty !== Difficulty::BURIED) {
             // Don't create an attempt if it's already buried
-            $this->createAttempt($scorecard->getCorrectness(), $points, $scorecard->getAnswerGiven());
+            $attempt->answers = $attempt->answers->map(function ($answer) {
+                return [
+                    'text' => $answer->getText(),
+                    'is_correct' => $answer->getIsCorrect(),
+                    'was_selected' => $answer->getWasSelected(),
+                ];
+            });
+            $attempt->save();
         }
 
         $this->save();
         $scorecard->setNewDifficulty($this->flashcard->difficulty);
 
-        $scorecard->setEligibleAt($this->flashcard->eligible_at);
-        $scorecard->setScore($points);
+        $scorecard->setEligibleAt(Carbon::parse($this->flashcard->eligible_at));
         $scorecard->setTotalScore($user->points);
 
         return $scorecard;
@@ -254,16 +279,19 @@ class FlashcardService
     /**
      * Push the flashcard from the current difficulty to the next hardest until it's buried
      *
+     * @param User $user
      * @return Difficulty
      */
-    public function increaseDifficulty(): Difficulty
+    public function increaseDifficulty(User $user): Difficulty
     {
         switch ($this->flashcard->difficulty) {
             case Difficulty::EASY:
                 $this->setDifficulty(Difficulty::MEDIUM);
+                $this->setEligibleAt(Carbon::now()->addMinutes($user->medium_time));
                 break;
             case Difficulty::MEDIUM:
                 $this->setDifficulty(Difficulty::HARD);
+                $this->setEligibleAt(Carbon::now()->addMinutes($user->hard_time));
                 break;
             case Difficulty::HARD:
                 $this->setDifficulty(Difficulty::BURIED);
@@ -278,6 +306,12 @@ class FlashcardService
     public function setDifficulty(Difficulty $difficulty): void
     {
         $this->flashcard->difficulty = $difficulty;
+        $this->save();
+    }
+
+    public function setEligibleAt(Carbon $carbon): void
+    {
+        $this->flashcard->eligible_at = $carbon;
         $this->save();
     }
 
@@ -299,18 +333,18 @@ class FlashcardService
         $this->flashcard->save();
     }
 
-    public function createAttempt(Correctness $correctness, int $points, array $answers = []): void
+    public function createAttempt(Correctness $correctness, Difficulty $difficulty, int $points, array $answers = []): void
     {
-        $attempt = Attempt::create([
-            'flashcard_id' => $this->flashcard->id,
+        Attempt::create([
             'user_id' => $this->flashcard->user_id,
-            'answered_at' => now(),
-            'points_earned' => $points,
+            'question' => $this->flashcard->text,
+            'question_type' => $this->flashcard->type->value,
+            'answers_given' => $answers,
+            'tags' => $this->flashcard->tags->pluck('name')->toArray(),
             'correctness' => $correctness,
+            'difficulty' => $difficulty,
+            'points_earned' => $points,
+            'answered_at' => now(),
         ]);
-
-        foreach ($answers as $answer) {
-            $attempt->answers()->attach($answer);
-        }
     }
 }

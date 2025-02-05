@@ -103,7 +103,7 @@ class FlashcardTest extends TestCase
     public function testIncreasingDifficultyForEasy()
     {
         $this->flashcard->difficulty = Difficulty::EASY;
-        $this->service->increaseDifficulty();
+        $this->service->increaseDifficulty($this->user);
         $this->assertTrue($this->flashcard->difficulty === Difficulty::MEDIUM);
     }
 
@@ -120,7 +120,7 @@ class FlashcardTest extends TestCase
     public function testIncreasingDifficultyForMedium()
     {
         $this->flashcard->difficulty = Difficulty::MEDIUM;
-        $this->service->increaseDifficulty();
+        $this->service->increaseDifficulty($this->user);
         $this->assertTrue($this->flashcard->difficulty === Difficulty::HARD);
     }
 
@@ -136,7 +136,7 @@ class FlashcardTest extends TestCase
     public function testIncreasingDifficultyForHard()
     {
         $this->flashcard->difficulty = Difficulty::HARD;
-        $this->service->increaseDifficulty();
+        $this->service->increaseDifficulty($this->user);
         $this->assertTrue($this->flashcard->difficulty === Difficulty::BURIED);
     }
 
@@ -153,7 +153,7 @@ class FlashcardTest extends TestCase
     public function testBuriedIdempotency()
     {
         $this->flashcard->difficulty = Difficulty::BURIED;
-        $this->service->increaseDifficulty();
+        $this->service->increaseDifficulty($this->user);
         $this->assertTrue($this->flashcard->difficulty === Difficulty::BURIED);
     }
 

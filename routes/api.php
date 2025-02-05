@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AnswerController;
+use App\Http\Controllers\AttemptController;
 use App\Http\Controllers\FlashcardController;
 use App\Http\Controllers\FlashcardTagController;
 use App\Http\Controllers\TagController;
@@ -45,6 +46,7 @@ Route::controller(TagController::class)->prefix('tags')->middleware(['auth:sanct
     Route::delete('/{tag}', 'destroy')->name('tags.destroy');
 });
 
-Route::controller(\App\Http\Controllers\AttemptController::class)->prefix('attempts')->middleware(['auth:sanctum', CheckAuthed::class])->group(function () {
+Route::controller(AttemptController::class)->prefix('attempts')->middleware(['auth:sanctum', CheckAuthed::class])->group(function () {
     Route::get('/', 'index')->name('attempts.index');
+    Route::get('/{attempt}', 'show')->name('attempts.show');
 });

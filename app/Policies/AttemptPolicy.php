@@ -11,4 +11,9 @@ class AttemptPolicy
     {
         return Response::allow();
     }
+
+    public function show(User $user): Response
+    {
+        return Response::allow();
+    }
 }

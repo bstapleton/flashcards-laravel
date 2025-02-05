@@ -26,8 +26,26 @@ class AttemptRepository implements EloquentRepositoryInterface
         return $attempt;
     }
 
-    public function store(array $data): void
+    public function related(int $id): Builder
     {
+        return Attempt::where('question', Attempt::find($id)->question)
+            ->where('id', '<>', $id)
+            ->orderBy('answered_at', 'desc');
+    }
+
+    public function store(array $data)
+    {
+        return Attempt::create([
+            'user_id' => Auth::id(),
+            'question' => $data['question'],
+            'correctness' => $data['correctness'],
+            'question_type' => $data['question_type'],
+            'difficulty' => $data['difficulty'],
+            'points_earned' => $data['points_earned'],
+            'answered_at' => $data['answered_at'],
+            'answers' => $data['answers'],
+            'tags' => $data['tags'],
+        ]);
     }
 
     public function update(array $data, int $id): Attempt

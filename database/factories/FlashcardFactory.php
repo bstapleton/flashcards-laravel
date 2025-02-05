@@ -20,6 +20,7 @@ class FlashcardFactory extends Factory
     {
         return [
             'text' => fake()->text(),
+            'eligible_at' => now(),
         ];
     }
 

@@ -2,7 +2,7 @@
 
 use App\Enums\Correctness;
 use App\Enums\Difficulty;
-use App\Models\Flashcard;
+use App\Enums\QuestionType;
 use App\Models\User;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
@@ -14,12 +14,15 @@ return new class extends Migration
     {
         Schema::create('attempts', function (Blueprint $table) {
             $table->id();
-            $table->foreignIdFor(Flashcard::class);
             $table->foreignIdFor(User::class);
-            $table->timestamp('answered_at');
+            $table->string('question');
+            $table->enum('question_type', QuestionType::toArray());
+            $table->json('answers');
+            $table->string('tags');
+            $table->enum('correctness', Correctness::toArray())->default(Correctness::NONE);
+            $table->enum('difficulty', Difficulty::toArray())->default(Difficulty::EASY);
             $table->unsignedInteger('points_earned')->default(0);
-            $table->tinyText('difficulty')->default(Difficulty::EASY);
-            $table->tinyText('correctness')->default(Correctness::NONE);
+            $table->timestamp('answered_at');
         });
     }
 
