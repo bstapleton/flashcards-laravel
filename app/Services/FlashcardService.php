@@ -125,7 +125,7 @@ class FlashcardService
     {
         $this->flashcard = $this->repository->show($id);
 
-        if (!Gate::authorize('revive', $this->flashcard)) {
+        if (!Gate::authorize('answer', $this->flashcard)) {
             throw new UnauthorizedException();
         }
 
