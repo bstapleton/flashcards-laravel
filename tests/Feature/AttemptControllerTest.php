@@ -44,6 +44,7 @@ class AttemptControllerTest extends TestCase
         $response->assertJsonFragment([
             'data' => [
                 [
+                    'id' => $this->firstAttempt->id,
                     'question' => $this->firstAttempt->question,
                     'correctness' => $this->firstAttempt->correctness->value,
                     'question_type' => $this->firstAttempt->question_type->value,
@@ -55,6 +56,7 @@ class AttemptControllerTest extends TestCase
                     'tags' => explode(',', $this->firstAttempt->tags),
                 ],
                 [
+                    'id' => $this->secondAttempt->id,
                     'question' => $this->secondAttempt->question,
                     'correctness' => $this->secondAttempt->correctness->value,
                     'question_type' => $this->secondAttempt->question_type->value,
