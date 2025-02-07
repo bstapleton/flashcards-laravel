@@ -12,6 +12,7 @@ class AttemptTransformer extends TransformerAbstract
     public function transform(Attempt $attempt): array
     {
         return [
+            'id' => $attempt->id,
             'question' => $attempt->question,
             'correctness' => $attempt->correctness->value,
             'question_type' => $attempt->question_type,

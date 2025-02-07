@@ -134,6 +134,18 @@ class FlashcardService
         } elseif ($this->flashcard->type === QuestionType::STATEMENT) {
             $providedAnswer = last($answers);
             $correctness = $this->calculateCorrectness(null, $providedAnswer);
+
+            $trueAnswer = new GivenAnswer();
+            $trueAnswer->setText('True');
+            $trueAnswer->setIsCorrect($this->flashcard->is_true);
+            $trueAnswer->setWasSelected((bool)$providedAnswer === true);
+
+            $falseAnswer = new GivenAnswer();
+            $falseAnswer->setText('False');
+            $falseAnswer->setIsCorrect(!$this->flashcard->is_true);
+            $falseAnswer->setWasSelected((bool)$providedAnswer === false);
+
+            $givenAnswers = collect([$trueAnswer, $falseAnswer]);
         }
 
         $score = new Score();
@@ -142,7 +154,7 @@ class FlashcardService
         $attempt = $this->attemptService->store([
             'question' => $this->flashcard->text,
             'question_type' => $this->flashcard->type,
-            'answers' => collect($this->flashcard->answers->map(function ($answer) use ($answers) {
+            'answers' => $givenAnswers ?? collect($this->flashcard->answers->map(function ($answer) use ($answers) {
                 $givenAnswer = new GivenAnswer();
                 $givenAnswer->setId($answer->id);
                 $givenAnswer->setIsCorrect($answer->is_correct);
@@ -161,16 +173,10 @@ class FlashcardService
             'points_earned' => $pointsEarned
         ]);
 
-        if ($correctness !== Correctness::COMPLETE) {
-            $this->resetDifficulty();
-        } else {
-            $user->adjustPoints($pointsEarned);
-            $this->increaseDifficulty($user);
-        }
-
         $scorecard = new Scorecard($attempt->toArray());
+
+        // Don't create an attempt if it's already buried
         if ($this->flashcard->difficulty !== Difficulty::BURIED) {
-            // Don't create an attempt if it's already buried
             $attempt->answers = $attempt->answers->map(function ($answer) {
                 return [
                     'text' => $answer->getText(),
@@ -178,7 +184,15 @@ class FlashcardService
                     'was_selected' => $answer->getWasSelected(),
                 ];
             });
+
             $attempt->save();
+        }
+
+        if ($correctness !== Correctness::COMPLETE) {
+            $this->resetDifficulty();
+        } else {
+            $user->adjustPoints($pointsEarned);
+            $this->increaseDifficulty($user);
         }
 
         $this->save();

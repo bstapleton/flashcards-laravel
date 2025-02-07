@@ -2,6 +2,7 @@
 
 namespace App\Transformers;
 
+use App\Enums\QuestionType;
 use App\Models\GivenAnswer;
 use App\Models\Scorecard;
 use League\Fractal\TransformerAbstract;
@@ -19,9 +20,9 @@ class ScorecardTransformer extends TransformerAbstract
             'old_difficulty' => $scorecard->difficulty->value,
             'new_difficulty' => $scorecard->getNewDifficulty()->value,
             'next_eligible_at' => $scorecard->getEligibleAt()->toIso8601String(),
-            'flashcard_answers' => $scorecard->answers->map(function (GivenAnswer $answer) {
+            'flashcard_answers' => $scorecard->answers->map(function (GivenAnswer $answer) use ($scorecard) {
                 return [
-                    'id' => $answer->getId(),
+                    'id' => $scorecard->question_type === QuestionType::STATEMENT ? null : $answer->getId(),
                     'text' => $answer->getText(),
                     'is_correct' => $answer->getIsCorrect(),
                     'was_selected' => $answer->getWasSelected(),
