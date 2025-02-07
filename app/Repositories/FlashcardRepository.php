@@ -6,6 +6,7 @@ use App\Enums\Difficulty;
 use App\Exceptions\NoEligibleQuestionsException;
 use App\Models\Flashcard;
 use App\Models\Tag;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Support\Facades\Auth;
@@ -55,33 +56,20 @@ class FlashcardRepository implements FlashcardRepositoryInterface
      */
     public function random(): Flashcard
     {
-        $flashcards = Flashcard::where('user_id', Auth::id())->get();
-
-        if (!$flashcards->count()) {
-            // Consumer has no flashcards
-            throw new ModelNotFoundException();
-        }
-
-        $flashcards = $flashcards->filter(function ($flashcard) {
-            if ($flashcard->eligible_at < NOW()) {
+        $flashcards = Flashcard::inRandomOrder()->where('user_id', Auth::id())->get()->filter(function ($flashcard) {
+            if ($flashcard->eligible_at->lessThan(now()) || !$flashcard->last_seen_at) {
                 return true;
             }
 
             return false;
         });
 
-        $ids = $flashcards->pluck('id')->toArray();
-
-        if (0 === count($ids)) {
+        if (!$flashcards->count()) {
             // Consumer has no eligible flashcards
             throw new NoEligibleQuestionsException();
-        } else if (1 === count($ids)) {
-            $id = $ids[0];
-        } else {
-            $id = array_rand($ids);
         }
 
-        return Flashcard::find($id);
+        return $flashcards->first();
     }
 
     // Get all the flashcards that have been commited to the graveyard

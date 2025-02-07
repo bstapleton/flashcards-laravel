@@ -22,6 +22,7 @@ use Illuminate\Support\Facades\Auth;
  * @property string explanation
  * @property QuestionType type
  * @property boolean is_true
+ * @property Carbon last_seen_at
  * @property Carbon eligible_at
  */
 class Flashcard extends Model
@@ -96,19 +97,21 @@ class Flashcard extends Model
         return QuestionType::SINGLE;
     }
 
-    public function setEligibleAt(User $user = null): static
+    public function getEligibleAtAttribute(User $user = null): Carbon
     {
         if (!$user) {
             $user = Auth::user();
         }
 
-        $this->eligible_at = match ($this->difficulty) {
-            Difficulty::EASY => now()->addMinutes($user->easy_time),
-            Difficulty::MEDIUM => now()->addMinutes($user->medium_time),
-            Difficulty::HARD => now()->addMinutes($user->hard_time),
+        if (!$this->last_seen_at) {
+            return Carbon::now();
+        }
+
+        return match ($this->difficulty) {
+            Difficulty::EASY => Carbon::parse($this->last_seen_at)->addMinutes($user->easy_time),
+            Difficulty::MEDIUM => Carbon::parse($this->last_seen_at)->addMinutes($user->medium_time),
+            Difficulty::HARD => Carbon::parse($this->last_seen_at)->addMinutes($user->hard_time),
             default => Carbon::now(),
         };
-
-        return $this;
     }
 }

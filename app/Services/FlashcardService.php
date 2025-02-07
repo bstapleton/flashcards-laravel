@@ -192,7 +192,7 @@ class FlashcardService
             $this->resetDifficulty();
         } else {
             $user->adjustPoints($pointsEarned);
-            $this->increaseDifficulty($user);
+            $this->increaseDifficulty();
         }
 
         $this->save();
@@ -293,19 +293,16 @@ class FlashcardService
     /**
      * Push the flashcard from the current difficulty to the next hardest until it's buried
      *
-     * @param User $user
      * @return Difficulty
      */
-    public function increaseDifficulty(User $user): Difficulty
+    public function increaseDifficulty(): Difficulty
     {
         switch ($this->flashcard->difficulty) {
             case Difficulty::EASY:
                 $this->setDifficulty(Difficulty::MEDIUM);
-                $this->setEligibleAt(Carbon::now()->addMinutes($user->medium_time));
                 break;
             case Difficulty::MEDIUM:
                 $this->setDifficulty(Difficulty::HARD);
-                $this->setEligibleAt(Carbon::now()->addMinutes($user->hard_time));
                 break;
             case Difficulty::HARD:
                 $this->setDifficulty(Difficulty::BURIED);
@@ -313,6 +310,8 @@ class FlashcardService
             case Difficulty::BURIED:
                 break;
         }
+
+        $this->flashcard->last_seen_at = Carbon::now();
 
         return $this->flashcard->difficulty;
     }

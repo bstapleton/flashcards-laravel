@@ -86,8 +86,6 @@ class FlashcardTest extends TestCase
         $this->assertTrue($this->flashcard->is_true);
         $this->assertTrue($this->flashcard->hasAttribute('explanation'));
         $this->assertEquals('test explanation', $this->flashcard->explanation);
-        $this->assertTrue($this->flashcard->hasAttribute('eligible_at'));
-        $this->assertIsString(Carbon::parse($this->flashcard->eligible_at)->toIso8601String());
     }
 
     /**
@@ -103,7 +101,7 @@ class FlashcardTest extends TestCase
     public function testIncreasingDifficultyForEasy()
     {
         $this->flashcard->difficulty = Difficulty::EASY;
-        $this->service->increaseDifficulty($this->user);
+        $this->service->increaseDifficulty();
         $this->assertTrue($this->flashcard->difficulty === Difficulty::MEDIUM);
     }
 
@@ -120,7 +118,7 @@ class FlashcardTest extends TestCase
     public function testIncreasingDifficultyForMedium()
     {
         $this->flashcard->difficulty = Difficulty::MEDIUM;
-        $this->service->increaseDifficulty($this->user);
+        $this->service->increaseDifficulty();
         $this->assertTrue($this->flashcard->difficulty === Difficulty::HARD);
     }
 
@@ -136,7 +134,7 @@ class FlashcardTest extends TestCase
     public function testIncreasingDifficultyForHard()
     {
         $this->flashcard->difficulty = Difficulty::HARD;
-        $this->service->increaseDifficulty($this->user);
+        $this->service->increaseDifficulty();
         $this->assertTrue($this->flashcard->difficulty === Difficulty::BURIED);
     }
 
@@ -153,7 +151,7 @@ class FlashcardTest extends TestCase
     public function testBuriedIdempotency()
     {
         $this->flashcard->difficulty = Difficulty::BURIED;
-        $this->service->increaseDifficulty($this->user);
+        $this->service->increaseDifficulty();
         $this->assertTrue($this->flashcard->difficulty === Difficulty::BURIED);
     }
 

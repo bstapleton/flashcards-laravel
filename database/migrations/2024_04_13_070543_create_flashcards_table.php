@@ -16,7 +16,7 @@ return new class extends Migration
             $table->tinyText('difficulty')->default(Difficulty::EASY);
             $table->boolean('is_true')->nullable();
             $table->longText('explanation')->nullable();
-            $table->dateTime('eligible_at')->default(now());
+            $table->dateTime('last_seen_at')->nullable();
             $table->timestamps();
         });
     }
