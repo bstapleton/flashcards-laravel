@@ -19,7 +19,7 @@ class ScorecardTransformer extends TransformerAbstract
             'user_current_score' => $scorecard->getTotalScore(),
             'old_difficulty' => $scorecard->difficulty->value,
             'new_difficulty' => $scorecard->getNewDifficulty()->value,
-            'next_eligible_at' => $scorecard->getEligibleAt()->toIso8601String(),
+            'next_eligible_at' => $scorecard->getEligibleAt(),
             'flashcard_answers' => $scorecard->answers->map(function (GivenAnswer $answer) use ($scorecard) {
                 return [
                     'id' => $scorecard->question_type === QuestionType::STATEMENT ? null : $answer->getId(),

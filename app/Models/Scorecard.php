@@ -38,9 +38,9 @@ class Scorecard extends Attempt
         $this->newDifficulty = $newDifficulty;
     }
 
-    public function getEligibleAt(): Carbon
+    public function getEligibleAt(): string
     {
-        return $this->eligible_at;
+        return $this->eligible_at->diffForHumans();
     }
 
     public function setEligibleAt(Carbon $eligible_at): void
