@@ -111,7 +111,7 @@ class Flashcard extends Model
             Difficulty::EASY => Carbon::parse($this->last_seen_at)->addMinutes($user->easy_time),
             Difficulty::MEDIUM => Carbon::parse($this->last_seen_at)->addMinutes($user->medium_time),
             Difficulty::HARD => Carbon::parse($this->last_seen_at)->addMinutes($user->hard_time),
-            default => Carbon::now(),
+            Difficulty::BURIED => Carbon::parse($this->last_seen_at)->addCenturies($user->easy_time),
         };
     }
 }
