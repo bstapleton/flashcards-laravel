@@ -45,6 +45,6 @@ class Scorecard extends Attempt
 
     public function setEligibleAt(Carbon $eligible_at): void
     {
-        $this->eligible_at = $eligible_at;
+        $this->eligible_at = $eligible_at->addSecond();
     }
 }
