@@ -16,6 +16,7 @@ class ScorecardTransformer extends TransformerAbstract
             'type' => $scorecard->question_type->value,
             'correctness' => $scorecard->correctness->value,
             'score' => $scorecard->points_earned,
+            'explanation' => $scorecard->explanation,
             'user_current_score' => $scorecard->getTotalScore(),
             'old_difficulty' => $scorecard->difficulty->value,
             'new_difficulty' => $scorecard->getNewDifficulty()->value,

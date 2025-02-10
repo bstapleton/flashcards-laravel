@@ -6,6 +6,9 @@ use App\Enums\Difficulty;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
+/**
+ * @property string explanation
+ */
 class Scorecard extends Attempt
 {
     use HasFactory;
@@ -46,5 +49,15 @@ class Scorecard extends Attempt
     public function setEligibleAt(Carbon $eligible_at): void
     {
         $this->eligible_at = $eligible_at->addSecond();
+    }
+
+    public function getExplanation(): ?string
+    {
+        return $this->explanation ?? null;
+    }
+
+    public function setExplanation(?string $explanation = null): void
+    {
+        $this->explanation = $explanation ?? null;
     }
 }

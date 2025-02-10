@@ -202,6 +202,7 @@ class FlashcardService
 
         $scorecard->setEligibleAt(Carbon::parse($this->flashcard->eligible_at));
         $scorecard->setTotalScore($user->points);
+        $scorecard->setExplanation($this->flashcard->explanation);
 
         return $scorecard;
     }
