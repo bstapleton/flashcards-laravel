@@ -148,6 +148,8 @@ class FlashcardService
             $givenAnswers = collect([$trueAnswer, $falseAnswer]);
         }
 
+        $this->flashcard->last_seen_at = Carbon::now();
+
         $score = new Score();
         $pointsEarned = $score->getScore($this->flashcard->type, $correctness, $this->flashcard->difficulty);
 
@@ -310,8 +312,6 @@ class FlashcardService
             case Difficulty::BURIED:
                 break;
         }
-
-        $this->flashcard->last_seen_at = Carbon::now();
 
         return $this->flashcard->difficulty;
     }

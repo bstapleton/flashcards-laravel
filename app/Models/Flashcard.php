@@ -34,6 +34,7 @@ class Flashcard extends Model
         'difficulty',
         'is_true',
         'explanation',
+        'last_seen_at',
     ];
 
     protected function casts(): array
