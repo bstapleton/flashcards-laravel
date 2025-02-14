@@ -25,12 +25,12 @@ class AttemptController extends Controller
      *     @OA\Response(response="200", description="Success"),
      *     @OA\Response(response="403", description="Not permitted"),
      *     security={{"bearerAuth":{}}}
-     )
+     * )
      */
     public function index()
     {
         try {
-            $attempts = $this->service->all()->paginate(25);
+            $attempts = $this->service->all();
         } catch (UnauthorizedException) {
             return $this->handleForbidden();
         }
@@ -38,6 +38,23 @@ class AttemptController extends Controller
         return fractal($attempts, new AttemptTransformer())->respond();
     }
 
+    /**
+     * @OA\Get (
+     *     path="/api/attempt/{id}",
+     *     summary="Show an attempt",
+     *     description="Return an attempt",
+     *     tags={"attempt"},
+     *     @OA\Parameter(
+     *         name="id",
+     *         in="path",
+     *         @OA\Schema(type="integer")
+     *     ),
+     *     @OA\Response(response="200", description="Success"),
+     *     @OA\Response(response="404", description="Model not found"),
+     *     @OA\Response(response="403", description="Not permitted"),
+     *     security={{"bearerAuth":{}}}
+     * )
+     */
     public function show(Request $request, int $id)
     {
         try {

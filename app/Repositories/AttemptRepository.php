@@ -5,14 +5,34 @@ namespace App\Repositories;
 use App\Models\Attempt;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\Auth;
 
 class AttemptRepository implements EloquentRepositoryInterface
 {
-    public function all(): Builder
+    public function all()
     {
-        return Attempt::where('user_id', Auth::id())
-            ->orderBy('answered_at', 'desc');
+        $chunks = Attempt::where('user_id', Auth::id())
+            ->orderBy('answered_at', 'desc')
+            ->get()
+            ->groupBy('question')
+            ->map(function ($group) {
+                $latest = $group->first();
+                $previousAttempts = $group->filter(function ($attempt) use ($latest) {
+                    return $attempt->id !== $latest->id;
+                });
+
+                $latest->previous_attempts = $previousAttempts;
+                return $latest;
+            });
+
+        $paginator = new LengthAwarePaginator(
+            $chunks,
+            count($chunks),
+            25,
+        );
+
+        return $paginator;
     }
 
     public function show(int $id): Attempt

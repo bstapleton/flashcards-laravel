@@ -14,9 +14,9 @@ class AttemptTransformer extends TransformerAbstract
         return [
             'id' => $attempt->id,
             'question' => $attempt->question,
-            'correctness' => $attempt->correctness->value,
+            'correctness' => $attempt->correctness,
             'question_type' => $attempt->question_type,
-            'difficulty' => $attempt->difficulty->value,
+            'difficulty' => $attempt->difficulty,
             'points_earned' => $attempt->points_earned,
             'answered_at' => Carbon::parse($attempt->answered_at)->toIso8601String(),
             'answers_given' => $attempt->formatted_answers->map(function (AttemptAnswer $answer) {
@@ -27,14 +27,12 @@ class AttemptTransformer extends TransformerAbstract
                 ];
             }),
             'tags' => explode(',', $attempt->tags),
-            'others' => $attempt->other_attempts ? $attempt->other_attempts->map(function (Attempt $otherAttempt) {
-                return [
-                    'correctness' => $otherAttempt->correctness->value,
-                    'difficulty' => $otherAttempt->difficulty,
-                    'points_earned' => $otherAttempt->points_earned,
-                    'answered_at' => Carbon::parse($otherAttempt->answered_at)->toIso8601String()
-                ];
-            }) : [], // TODO: make this an include or something so it doesn't need to be there on the list response
+            'older_attempts' => $attempt->older_attempts ? $attempt->older_attempts->map(function (Attempt $olderAttempt) {
+                return (new HistoricAttemptTransformer())->transform($olderAttempt);
+            }) : [],
+            'newer_attempts' => $attempt->newer_attempts ? $attempt->newer_attempts->map(function (Attempt $newerAttempt) {
+                return (new HistoricAttemptTransformer())->transform($newerAttempt);
+            }) : [],
         ];
     }
 }

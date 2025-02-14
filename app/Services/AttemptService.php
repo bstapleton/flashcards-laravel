@@ -33,8 +33,6 @@ class AttemptService
             throw new UnauthorizedException();
         }
 
-        $attempt->other_attempts = $this->related($id)->get();
-
         return $attempt;
     }
 

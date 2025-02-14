@@ -22,7 +22,8 @@ use Illuminate\Support\Collection;
  * @property Difficulty difficulty
  * @property int points_earned
  * @property string answered_at
- * @property array other_attempts
+ * @property Collection older_attempts
+ * @property Collection newer_attempts
  */
 class Attempt extends Model
 {
@@ -84,5 +85,23 @@ class Attempt extends Model
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
+    }
+
+    public function getOlderAttemptsAttribute(): Collection
+    {
+        return Attempt::where('user_id', $this->user_id)
+            ->where('question', $this->question)
+            ->where('id', '<', $this->id)
+            ->orderBy('answered_at', 'desc')
+            ->get();
+    }
+
+    public function getNewerAttemptsAttribute(): Collection
+    {
+        return Attempt::where('user_id', $this->user_id)
+            ->where('question', $this->question)
+            ->where('id', '>', $this->id)
+            ->orderBy('answered_at', 'asc')
+            ->get();
     }
 }
