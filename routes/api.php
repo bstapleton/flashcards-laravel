@@ -30,7 +30,7 @@ Route::controller(FlashcardController::class)->prefix('flashcards')->middleware(
         Route::post('/', 'answer')->name('flashcards.answer');
         Route::patch('/', 'update')->name('flashcards.update');
         Route::delete('/', 'destroy')->name('flashcards.destroy');
-        Route::post('/revive', 'promote')->name('flashcards.revive');
+        Route::post('/revive', 'revive')->name('flashcards.revive');
 
         Route::controller(FlashcardTagController::class)->prefix('tags')->group(function () {
             Route::post('/{tag}', 'attachTag')->name('flashcards.tags.attach');

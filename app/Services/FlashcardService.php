@@ -6,27 +6,24 @@ use App\Enums\Correctness;
 use App\Enums\Difficulty;
 use App\Enums\QuestionType;
 use App\Exceptions\AnswerMismatchException;
+use App\Exceptions\NoEligibleQuestionsException;
 use App\Helpers\Score;
-use App\Models\Attempt;
 use App\Models\Flashcard;
-use App\Models\GivenAnswer;
 use App\Models\Scorecard;
 use App\Models\Tag;
 use App\Models\User;
-use App\Repositories\AttemptRepository;
-use App\Repositories\FlashcardRepository;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Validation\UnauthorizedException;
 
 class FlashcardService
 {
-    protected Flashcard $flashcard;
     protected AttemptService $attemptService;
 
-    public function __construct(protected FlashcardRepository $repository)
+    public function __construct()
     {
-        $this->attemptService = new AttemptService(new AttemptRepository());
+        $this->attemptService = new AttemptService();
     }
 
     public function all()
@@ -35,13 +32,12 @@ class FlashcardService
             throw new UnauthorizedException();
         }
 
-        return $this->repository->all();
+        return Flashcard::where('user_id', Auth::id())
+            ->orderBy('created_at');
     }
 
-    public function show(int $id)
+    public function show(Flashcard $flashcard)
     {
-        $flashcard = $this->repository->show($id);
-
         if (!Gate::authorize('show', $flashcard)) {
             throw new UnauthorizedException();
         }
@@ -55,29 +51,31 @@ class FlashcardService
             throw new UnauthorizedException();
         }
 
-        return $this->repository->store($data);
+        return Flashcard::create([
+            'text' => $data['text'],
+            'is_true' => $data['is_true'] ?? null,
+            'explanation' => $data['explanation'] ?? null,
+        ]);
     }
 
-    public function update(array $data, int $id)
+    public function update(array $data, Flashcard $flashcard)
     {
-        $flashcard = $this->repository->show($id);
-
         if (!Gate::authorize('update', $flashcard)) {
             throw new UnauthorizedException();
         }
 
-        return $this->repository->update($data, $id);
+        $flashcard->update($data);
+
+        return $flashcard;
     }
 
-    public function destroy(int $id): void
+    public function destroy(Flashcard $flashcard): void
     {
-        $flashcard = $this->repository->show($id);
-
         if (!Gate::authorize('delete', $flashcard)) {
             throw new UnauthorizedException();
         }
 
-        $this->repository->destroy($id);
+        $flashcard->delete();
     }
 
     public function buried()
@@ -86,7 +84,7 @@ class FlashcardService
             throw new UnauthorizedException();
         }
 
-        return $this->repository->buried();
+        return Flashcard::buried();
     }
 
     public function alive()
@@ -95,7 +93,7 @@ class FlashcardService
             throw new UnauthorizedException();
         }
 
-        return $this->repository->alive();
+        return Flashcard::alive();
     }
 
     public function random()
@@ -104,72 +102,88 @@ class FlashcardService
             throw new UnauthorizedException();
         }
 
-        return $this->repository->random();
+        $flashcards = Flashcard::inRandomOrder()->where('user_id', Auth::id())->get()->filter(function ($flashcard) {
+            if ($flashcard->eligible_at->lessThan(now()) || !$flashcard->last_seen_at) {
+                return true;
+            }
+
+            return false;
+        });
+
+        if (!$flashcards->count()) {
+            // Consumer has no eligible flashcards
+            throw new NoEligibleQuestionsException();
+        }
+
+        return $flashcards->first();
     }
 
-    public function revive(int $id)
+    public function revive(Flashcard $flashcard): Flashcard
     {
-        $flashcard = $this->repository->show($id);
-
         if (!Gate::authorize('revive', $flashcard)) {
             throw new UnauthorizedException();
         }
 
-        return $this->repository->revive($id);
+        $flashcard->update([
+            'difficulty' => Difficulty::EASY,
+        ]);
+
+        return $flashcard;
     }
 
     /**
-     * @throws AnswerMismatchException
+     * @param Flashcard $flashcard
+     * @param array $answers
+     * @param User $user
+     * @return Scorecard
      */
-    public function answer(int $id, array $answers, User $user)
+    public function answer(Flashcard $flashcard, array $answers, User $user): Scorecard
     {
-        $this->flashcard = $this->repository->show($id);
-
-        if (!Gate::authorize('answer', $this->flashcard)) {
+        if (!Gate::authorize('answer', $flashcard)) {
             throw new UnauthorizedException();
         }
 
-        if (in_array($this->flashcard->type, [QuestionType::SINGLE, QuestionType::MULTIPLE])) {
-            $correctness = $this->calculateCorrectness($answers);
-        } elseif ($this->flashcard->type === QuestionType::STATEMENT) {
+        if ($flashcard->type === QuestionType::STATEMENT) {
             $providedAnswer = last($answers);
-            $correctness = $this->calculateCorrectness(null, $providedAnswer);
+            $correctness = $this->calculateCorrectness($flashcard, null, $providedAnswer);
 
-            $trueAnswer = new GivenAnswer();
-            $trueAnswer->setText('True');
-            $trueAnswer->setIsCorrect($this->flashcard->is_true);
-            $trueAnswer->setWasSelected((bool)$providedAnswer === true);
-
-            $falseAnswer = new GivenAnswer();
-            $falseAnswer->setText('False');
-            $falseAnswer->setIsCorrect(!$this->flashcard->is_true);
-            $falseAnswer->setWasSelected((bool)$providedAnswer === false);
+            $trueAnswer = $this->attemptService->createGivenAnswer(
+                'True',
+                $flashcard->is_true,
+                (bool)$providedAnswer === true
+            );
+            $falseAnswer = $this->attemptService->createGivenAnswer(
+                'False',
+                !$flashcard->is_true,
+                (bool)$providedAnswer === false
+            );
 
             $givenAnswers = collect([$trueAnswer, $falseAnswer]);
+        } else {
+            $correctness = $this->calculateCorrectness($flashcard, $answers);
         }
 
-        $this->flashcard->last_seen_at = Carbon::now();
+        $flashcard->last_seen_at = Carbon::now();
 
         $score = new Score();
-        $pointsEarned = $score->getScore($this->flashcard->type, $correctness, $this->flashcard->difficulty);
+        $pointsEarned = $score->getScore($flashcard->type, $correctness, $flashcard->difficulty);
 
         $attempt = $this->attemptService->store([
-            'question' => $this->flashcard->text,
-            'question_type' => $this->flashcard->type,
-            'answers' => $givenAnswers ?? collect($this->flashcard->answers->map(function ($answer) use ($answers) {
-                $givenAnswer = new GivenAnswer();
-                $givenAnswer->setId($answer->id);
-                $givenAnswer->setIsCorrect($answer->is_correct);
-                $givenAnswer->setWasSelected(in_array($answer->id, $answers));
-                $givenAnswer->setText($answer->text);
-                $givenAnswer->setExplanation($answer->explanation);
-
-                return $givenAnswer;
+            'question' => $flashcard->text,
+            'question_type' => $flashcard->type,
+            'answers' => $givenAnswers ?? collect($flashcard->answers->map(function ($answer) use ($answers) {
+                return $this->attemptService->createGivenAnswer(
+                    $answer->text,
+                    $answer->is_correct,
+                    in_array($answer->id, $answers),
+                    $answer->id,
+                    $answer->explanation
+                );
             })),
-            'tags' => implode(',', $this->flashcard->tags->map(function (Tag $tag) {
+            'tags' => implode(',', $flashcard->tags->map(function (Tag $tag) {
                 return $tag->name;
             })->toArray()),
-            'difficulty' => $this->flashcard->difficulty,
+            'difficulty' => $flashcard->difficulty,
             'answered_at' => now(),
             'correctness' => $correctness,
             'points_earned' => $pointsEarned
@@ -178,7 +192,7 @@ class FlashcardService
         $scorecard = new Scorecard($attempt->toArray());
 
         // Don't create an attempt if it's already buried
-        if ($this->flashcard->difficulty !== Difficulty::BURIED) {
+        if ($flashcard->difficulty !== Difficulty::BURIED) {
             $attempt->answers = $attempt->answers->map(function ($answer) {
                 return [
                     'text' => $answer->getText(),
@@ -191,43 +205,42 @@ class FlashcardService
         }
 
         if ($correctness !== Correctness::COMPLETE) {
-            $this->resetDifficulty();
+            $this->resetDifficulty($flashcard);
         } else {
             $user->adjustPoints($pointsEarned);
-            $this->increaseDifficulty();
+            $this->increaseDifficulty($flashcard);
         }
 
-        $this->save();
-        $scorecard->setNewDifficulty($this->flashcard->difficulty);
+        $flashcard->save();
+        $scorecard->setNewDifficulty($flashcard->difficulty);
 
-        $scorecard->setEligibleAt(Carbon::parse($this->flashcard->eligible_at));
+        $scorecard->setEligibleAt(Carbon::parse($flashcard->eligible_at));
         $scorecard->setTotalScore($user->points);
-        $scorecard->setExplanation($this->flashcard->explanation);
+        $scorecard->setExplanation($flashcard->explanation);
 
         return $scorecard;
     }
 
-    public function attachTag(int $id, int $tagId)
+    public function attachTag(Flashcard $flashcard, Tag $tag)
     {
         if (!Gate::authorize('attachTag', Flashcard::class)) {
             throw new UnauthorizedException();
         }
 
-        return $this->repository->attachTag($id, $tagId);
+        $flashcard->tags()->attach($tag);
+
+        return $flashcard;
     }
 
-    public function detachTag(int $id, int $tagId)
+    public function detachTag(Flashcard $flashcard, Tag $tag)
     {
         if (!Gate::authorize('detachTag', Flashcard::class)) {
             throw new UnauthorizedException();
         }
 
-        return $this->repository->detachTag($id, $tagId);
-    }
+        $flashcard->tags()->detach($tag);
 
-    public function setFlashcard(Flashcard $flashcard): void
-    {
-        $this->flashcard = $flashcard;
+        return $flashcard;
     }
 
     /**
@@ -247,12 +260,13 @@ class FlashcardService
     /**
      * Filters out any answer IDs that are not valid for the flashcard
      *
+     * @param Flashcard $flashcard
      * @param array $answers
      * @return array
      */
-    public function filterValidAnswers(array $answers): array
+    public function filterValidAnswers(Flashcard $flashcard, array $answers): array
     {
-        $possibleAnswers = $this->flashcard->answers->pluck('id')->toArray();
+        $possibleAnswers = $flashcard->answers->pluck('id')->toArray();
 
         return array_values(array_intersect($answers, $possibleAnswers));
     }
@@ -264,19 +278,20 @@ class FlashcardService
      * not at all (e.g. 0/3). As long as AT LEAST ONE answer is correct, you're partially correct, even if all the
      * others you selected are incorrect.
      *
+     * @param Flashcard $flashcard
      * @param array|null $answers
      * @param bool|null $isTrue
      * @return Correctness
      */
-    public function calculateCorrectness(?array $answers = null, ?bool $isTrue = null): Correctness
+    public function calculateCorrectness(Flashcard $flashcard, ?array $answers = null, ?bool $isTrue = null): Correctness
     {
-        switch ($this->flashcard->type) {
+        switch ($flashcard->type) {
             case QuestionType::SINGLE:
-                return $this->flashcard->correct_answer->id === last($answers) && count($answers) === 1
+                return $flashcard->correct_answer->id === last($answers) && count($answers) === 1
                     ? Correctness::COMPLETE
                     : Correctness::NONE;
             case QuestionType::MULTIPLE:
-                $correctAnswers = $this->flashcard->correct_answers;
+                $correctAnswers = $flashcard->correct_answers;
                 $correctSuppliedAnswers = array_intersect($correctAnswers->pluck('id')->toArray(), $answers);
 
                 if (count($correctSuppliedAnswers) && $correctAnswers->count() === count($correctSuppliedAnswers) && count($answers) === $correctAnswers->count()) {
@@ -289,76 +304,68 @@ class FlashcardService
 
                 return Correctness::PARTIAL;
             default:
-                return $isTrue === $this->flashcard->is_true ? Correctness::COMPLETE : Correctness::NONE;
+                return $isTrue === $flashcard->is_true ? Correctness::COMPLETE : Correctness::NONE;
         }
     }
 
     /**
      * Push the flashcard from the current difficulty to the next hardest until it's buried
      *
+     * @param Flashcard $flashcard
      * @return Difficulty
      */
-    public function increaseDifficulty(): Difficulty
+    public function increaseDifficulty(Flashcard $flashcard): Difficulty
     {
-        switch ($this->flashcard->difficulty) {
+        switch ($flashcard->difficulty) {
             case Difficulty::EASY:
-                $this->setDifficulty(Difficulty::MEDIUM);
+                $this->setDifficulty($flashcard, Difficulty::MEDIUM);
                 break;
             case Difficulty::MEDIUM:
-                $this->setDifficulty(Difficulty::HARD);
+                $this->setDifficulty($flashcard, Difficulty::HARD);
                 break;
             case Difficulty::HARD:
-                $this->setDifficulty(Difficulty::BURIED);
+                $this->setDifficulty($flashcard, Difficulty::BURIED);
                 break;
             case Difficulty::BURIED:
                 break;
         }
 
-        return $this->flashcard->difficulty;
+        return $flashcard->difficulty;
     }
 
-    public function setDifficulty(Difficulty $difficulty): void
+    /**
+     * @param Flashcard $flashcard
+     * @param Difficulty $difficulty
+     * @return void
+     */
+    public function setDifficulty(Flashcard $flashcard, Difficulty $difficulty): void
     {
-        $this->flashcard->difficulty = $difficulty;
-        $this->save();
+        $flashcard->difficulty = $difficulty;
+        $flashcard->save();
     }
 
-    public function setEligibleAt(Carbon $carbon): void
+    /**
+     * @param Flashcard $flashcard
+     * @param Carbon $carbon
+     * @return void
+     */
+    public function setEligibleAt(Flashcard $flashcard, Carbon $carbon): void
     {
-        $this->flashcard->eligible_at = $carbon;
-        $this->save();
+        $flashcard->eligible_at = $carbon;
+        $flashcard->save();
     }
 
     /**
      * They got it wrong, push it back to easy difficulty
      *
+     * @param Flashcard $flashcard
      * @return Difficulty
      */
-    public function resetDifficulty(): Difficulty
+    public function resetDifficulty(Flashcard $flashcard): Difficulty
     {
-        $this->flashcard->difficulty = Difficulty::EASY;
-        $this->save();
+        $flashcard->difficulty = Difficulty::EASY;
+        $flashcard->save();
 
-        return $this->flashcard->difficulty;
-    }
-
-    public function save(): void
-    {
-        $this->flashcard->save();
-    }
-
-    public function createAttempt(Correctness $correctness, Difficulty $difficulty, int $points, array $answers = []): void
-    {
-        Attempt::create([
-            'user_id' => $this->flashcard->user_id,
-            'question' => $this->flashcard->text,
-            'question_type' => $this->flashcard->type->value,
-            'answers_given' => $answers,
-            'tags' => $this->flashcard->tags->pluck('name')->toArray(),
-            'correctness' => $correctness,
-            'difficulty' => $difficulty,
-            'points_earned' => $points,
-            'answered_at' => now(),
-        ]);
+        return $flashcard->difficulty;
     }
 }

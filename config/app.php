@@ -123,4 +123,6 @@ return [
         'store' => env('APP_MAINTENANCE_STORE', 'database'),
     ],
 
+    'default_page_limit' => env('DEFAULT_PAGE_LIMIT', 25),
+
 ];

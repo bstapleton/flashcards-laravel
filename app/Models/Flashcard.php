@@ -6,6 +6,7 @@ use App\Enums\Difficulty;
 use App\Enums\QuestionType;
 use App\Events\FlashcardDeleting;
 use Carbon\Carbon;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -114,5 +115,18 @@ class Flashcard extends Model
             Difficulty::HARD => Carbon::parse($this->last_seen_at)->addMinutes($user->hard_time),
             Difficulty::BURIED => Carbon::parse($this->last_seen_at)->addCenturies($user->easy_time),
         };
+    }
+
+    public function scopeBuried(Builder $query)
+    {
+        return $query->where(['user_id' => Auth::id(), 'difficulty' => Difficulty::BURIED])
+            ->orderBy('last_seen_at', 'desc');
+    }
+
+    public function scopeAlive(Builder $query)
+    {
+        return $query->where('user_id', Auth::id())
+            ->whereNot('difficulty', Difficulty::BURIED)
+            ->orderBy('last_seen_at', 'desc');
     }
 }

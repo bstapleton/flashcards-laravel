@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Attempt;
 use App\Services\AttemptService;
 use App\Transformers\AttemptTransformer;
 use Illuminate\Http\Request;
@@ -40,12 +41,12 @@ class AttemptController extends Controller
 
     /**
      * @OA\Get (
-     *     path="/api/attempt/{id}",
+     *     path="/api/attempt/{attempt}",
      *     summary="Show an attempt",
      *     description="Return an attempt",
      *     tags={"attempt"},
      *     @OA\Parameter(
-     *         name="id",
+     *         name="attempt",
      *         in="path",
      *         @OA\Schema(type="integer")
      *     ),
@@ -55,10 +56,10 @@ class AttemptController extends Controller
      *     security={{"bearerAuth":{}}}
      * )
      */
-    public function show(Request $request, int $id)
+    public function show(Request $request, Attempt $attempt)
     {
         try {
-            $attempt = $this->service->show($id);
+            $attempt = $this->service->show($attempt);
         } catch (UnauthorizedException) {
             return $this->handleForbidden();
         }

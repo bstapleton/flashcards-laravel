@@ -21,6 +21,7 @@ use RedExplosion\Sqids\Concerns\HasSqids;
  * @property int easy_time
  * @property int medium_time
  * @property int hard_time
+ * @property int page_limit
  */
 class User extends Authenticatable
 {
@@ -41,6 +42,7 @@ class User extends Authenticatable
         'easy_time',
         'medium_time',
         'hard_time',
+        'page_limit',
     ];
 
     /**
