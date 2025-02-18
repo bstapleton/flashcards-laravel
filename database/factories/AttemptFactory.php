@@ -37,7 +37,6 @@ class AttemptFactory extends Factory
             'points_earned' => rand(1, 8),
             'answered_at' => now()->subMinutes(rand(30,6000)),
             'answers' => json_encode($answers),
-            'tags' => implode(',', fake()->words(rand(1, 4)))
         ];
     }
 }

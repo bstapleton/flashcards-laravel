@@ -8,6 +8,7 @@ use App\Enums\QuestionType;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Collection;
 
 /**
@@ -24,6 +25,7 @@ use Illuminate\Support\Collection;
  * @property string answered_at
  * @property Collection older_attempts
  * @property Collection newer_attempts
+ * @property Collection keywords
  */
 class Attempt extends Model
 {
@@ -85,6 +87,11 @@ class Attempt extends Model
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
+    }
+
+    public function keywords(): HasMany
+    {
+        return $this->hasMany(Keyword::class);
     }
 
     public function getOlderAttemptsAttribute(): Collection

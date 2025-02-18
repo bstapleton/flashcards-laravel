@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Models\Attempt;
 use App\Models\GivenAnswer;
+use App\Models\Keyword;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\Auth;
@@ -12,25 +13,17 @@ use Illuminate\Validation\UnauthorizedException;
 
 class AttemptService
 {
-    public function all()
+    public function all(array $keywords = null)
     {
         if (!Gate::authorize('list', Attempt::class)) {
             throw new UnauthorizedException();
         }
 
-        $chunks = Attempt::where('user_id', Auth::id())
-            ->orderBy('answered_at', 'desc')
-            ->get()
-            ->groupBy('question')
-            ->map(function ($group) {
-                $latest = $group->first();
-                $previousAttempts = $group->filter(function ($attempt) use ($latest) {
-                    return $attempt->id !== $latest->id;
-                });
-
-                $latest->previous_attempts = $previousAttempts;
-                return $latest;
-            });
+        if ($keywords) {
+            $chunks = $this->getForSpecifiedTags($keywords);
+        } else {
+            $chunks = $this->getForAllTags();
+        }
 
         return new LengthAwarePaginator(
             $chunks,
@@ -63,7 +56,7 @@ class AttemptService
 
     public function store(array $data): Attempt
     {
-        return Attempt::create([
+        $attempt = Attempt::create([
             'user_id' => Auth::id(),
             'question' => $data['question'],
             'correctness' => $data['correctness'],
@@ -72,8 +65,17 @@ class AttemptService
             'points_earned' => $data['points_earned'],
             'answered_at' => $data['answered_at'],
             'answers' => $data['answers'],
-            'tags' => $data['tags'],
         ]);
+
+        if ($data['tags']) {
+            $keywords = explode(',', $data['tags']);
+
+            foreach($keywords as $keyword) {
+                $attempt->keywords()->save(new Keyword(['name' => $keyword]));
+            }
+        }
+
+        return $attempt;
     }
 
     public function destroy(Attempt $attempt): void
@@ -101,5 +103,42 @@ class AttemptService
         }
 
         return $givenAnswer;
+    }
+
+    private function getForAllTags()
+    {
+        return Attempt::where('user_id', Auth::id())
+            ->orderBy('answered_at', 'desc')
+            ->get()
+            ->groupBy('question')
+            ->map(function ($group) {
+                $latest = $group->first();
+                $previousAttempts = $group->filter(function ($attempt) use ($latest) {
+                    return $attempt->id !== $latest->id;
+                });
+
+                $latest->previous_attempts = $previousAttempts;
+                return $latest;
+            });
+    }
+
+    private function getForSpecifiedTags(array $keywords)
+    {
+        return Attempt::where('user_id', Auth::id())
+            ->whereHas('keywords', function ($query) use ($keywords) {
+                $query->whereIn('name', $keywords);
+            })
+            ->orderBy('answered_at', 'desc')
+            ->get()
+            ->groupBy('question')
+            ->map(function ($group) {
+                $latest = $group->first();
+                $previousAttempts = $group->filter(function ($attempt) use ($latest) {
+                    return $attempt->id !== $latest->id;
+                });
+
+                $latest->previous_attempts = $previousAttempts;
+                return $latest;
+            });
     }
 }

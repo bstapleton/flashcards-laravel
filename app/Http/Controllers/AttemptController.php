@@ -23,15 +23,24 @@ class AttemptController extends Controller
      *     summary="List attempts",
      *     description="Return all attempts for the current user, paginated",
      *     tags={"attempt"},
+     *     @OA\Parameter(
+     *         name="tags",
+     *         in="query",
+     *         @OA\Schema(type="string")
+     *     )
      *     @OA\Response(response="200", description="Success"),
      *     @OA\Response(response="403", description="Not permitted"),
      *     security={{"bearerAuth":{}}}
      * )
      */
-    public function index()
+    public function index(Request $request)
     {
+        if ($request->input('tags')) {
+            $tags = explode(',', $request->input('tags'));
+        }
+
         try {
-            $attempts = $this->service->all();
+            $attempts = $this->service->all($tags ?? null);
         } catch (UnauthorizedException) {
             return $this->handleForbidden();
         }

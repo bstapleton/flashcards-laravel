@@ -18,7 +18,6 @@ return new class extends Migration
             $table->string('question');
             $table->enum('question_type', QuestionType::toArray());
             $table->json('answers');
-            $table->string('tags');
             $table->enum('correctness', Correctness::toArray())->default(Correctness::NONE);
             $table->enum('difficulty', Difficulty::toArray())->default(Difficulty::EASY);
             $table->unsignedInteger('points_earned')->default(0);

@@ -4,6 +4,7 @@ namespace App\Transformers;
 
 use App\Models\Attempt;
 use App\Models\AttemptAnswer;
+use App\Models\Keyword;
 use Carbon\Carbon;
 use League\Fractal\TransformerAbstract;
 
@@ -26,7 +27,9 @@ class AttemptTransformer extends TransformerAbstract
                     'is_correct' => $answer->getIsCorrect(),
                 ];
             }),
-            'tags' => explode(',', $attempt->tags),
+            'keywords' => $attempt->keywords->map(function (Keyword $keyword) {
+                return $keyword->name;
+            }),
             'older_attempts' => $attempt->older_attempts ? $attempt->older_attempts->map(function (Attempt $olderAttempt) {
                 return (new HistoricAttemptTransformer())->transform($olderAttempt);
             }) : [],
