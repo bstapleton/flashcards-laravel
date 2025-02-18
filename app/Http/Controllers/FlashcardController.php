@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Exceptions\AnswerMismatchException;
 use App\Exceptions\NoEligibleQuestionsException;
+use App\Models\Flashcard;
 use App\Services\FlashcardService;
 use App\Transformers\FlashcardTransformer;
 use App\Transformers\ScorecardTransformer;
@@ -11,6 +11,7 @@ use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\UnauthorizedException;
 
 class FlashcardController extends Controller
@@ -36,7 +37,7 @@ class FlashcardController extends Controller
     public function index(Request $request): JsonResponse
     {
         try {
-            $flashcards = $this->service->alive()->paginate(25);
+            $flashcards = $this->service->alive()->paginate(Auth::user()->page_limit);
         } catch (UnauthorizedException) {
             return $this->handleForbidden();
         }
@@ -58,7 +59,7 @@ class FlashcardController extends Controller
     public function all(Request $request): JsonResponse
     {
         try {
-            $flashcards = $this->service->all()->paginate(25);
+            $flashcards = $this->service->all()->paginate(Auth::user()->page_limit);
         } catch (UnauthorizedException) {
             return $this->handleForbidden();
         }
@@ -68,11 +69,11 @@ class FlashcardController extends Controller
 
     /**
      * @OA\Get(
-     *     path="/api/flashcards/{id}",
+     *     path="/api/flashcards/{flashcard}",
      *     summary="Show a flashcard",
      *     tags={"flashcard"},
      *     @OA\Parameter(
-     *         name="id",
+     *         name="flashcard",
      *         in="path",
      *         @OA\Schema(type="integer")
      *     ),
@@ -82,10 +83,10 @@ class FlashcardController extends Controller
      *     security={{"bearerAuth":{}}}
      * )
      */
-    public function show(Request $request, int $id): JsonResponse
+    public function show(Request $request, Flashcard $flashcard): JsonResponse
     {
         try {
-            $flashcardResponse = $this->service->show($id);
+            $flashcardResponse = $this->service->show($flashcard);
         } catch (ModelNotFoundException) {
             return $this->handleNotFound();
         } catch (UnauthorizedException) {
@@ -135,11 +136,11 @@ class FlashcardController extends Controller
 
     /**
      * @OA\Patch(
-     *     path="/api/flashcards/{id}",
+     *     path="/api/flashcards/{flashcard}",
      *     summary="Update flashcard",
      *     tags={"flashcard"},
      *     @OA\Parameter(
-     *         name="id",
+     *         name="flashcard",
      *         in="path",
      *         @OA\Schema(type="integer")
      *     ),
@@ -160,7 +161,7 @@ class FlashcardController extends Controller
      *     security={{"bearerAuth":{}}}
      * )
      */
-    public function update(Request $request, int $id): JsonResponse
+    public function update(Request $request, Flashcard $flashcard): JsonResponse
     {
         $request->validate([
             'text' => 'required|max:1024'
@@ -168,7 +169,7 @@ class FlashcardController extends Controller
         // TODO validation
 
         try {
-            $flashcardResponse = $this->service->update($request->all(), $id);
+            $flashcardResponse = $this->service->update($request->all(), $flashcard);
         } catch (ModelNotFoundException) {
             return $this->handleNotFound();
         } catch (UnauthorizedException) {
@@ -180,11 +181,11 @@ class FlashcardController extends Controller
 
     /**
      * @OA\Delete(
-     *     path="/api/flashcards/{id}",
+     *     path="/api/flashcards/{flashcard}",
      *     summary="Delete flashcard",
      *     tags={"flashcard"},
      *     @OA\Parameter(
-     *         name="id",
+     *         name="flashcard",
      *         in="path",
      *         @OA\Schema(type="integer")
      *     ),
@@ -194,10 +195,10 @@ class FlashcardController extends Controller
      *     security={{"bearerAuth":{}}}
      * )
      */
-    public function destroy(Request $request, int $id): Response|JsonResponse
+    public function destroy(Request $request, Flashcard $flashcard): Response|JsonResponse
     {
         try {
-            $this->service->destroy($id);
+            $this->service->destroy($flashcard);
         } catch (ModelNotFoundException) {
             return $this->handleNotFound();
         } catch (UnauthorizedException) {
@@ -221,7 +222,7 @@ class FlashcardController extends Controller
     public function graveyard(Request $request): JsonResponse
     {
         try {
-            $flashcards = $this->service->buried()->paginate(25);
+            $flashcards = $this->service->buried()->paginate(Auth::user()->page_limit);
         } catch (UnauthorizedException) {
             return $this->handleForbidden();
         }
@@ -262,12 +263,12 @@ class FlashcardController extends Controller
 
     /**
      * @OA\Post(
-     *     path="/api/flashcards/{id}/revive",
+     *     path="/api/flashcards/{flashcard}/revive",
      *     description="Revive a flashcard from the graveyard back to the easy difficulty",
      *     summary="Resurrect a buried flashcard",
      *     tags={"flashcard"},
      *     @OA\Parameter(
-     *         name="id",
+     *         name="flashcard",
      *         in="path",
      *         @OA\Schema(type="integer")
      *     ),
@@ -277,10 +278,10 @@ class FlashcardController extends Controller
      *     security={{"bearerAuth":{}}}
      * )
      */
-    public function revive(Request $request, int $id): JsonResponse
+    public function revive(Request $request, Flashcard $flashcard): JsonResponse
     {
         try {
-            $flashcardResponse = $this->service->revive($id);
+            $flashcardResponse = $this->service->revive($flashcard);
         } catch (ModelNotFoundException) {
             return $this->handleNotFound();
         } catch (UnauthorizedException) {
@@ -292,12 +293,12 @@ class FlashcardController extends Controller
 
     /**
      * @OA\Post(
-     *     path="/api/flashcards/{id}",
+     *     path="/api/flashcards/{flashcard}",
      *     description="Attempt to answer the question and be judged accordingly",
      *     summary="Pass an answer or set of answers to the question",
      *     tags={"flashcard"},
      *     @OA\Parameter(
-     *         name="id",
+     *         name="flashcard",
      *         in="path",
      *         @OA\Schema(type="integer")
      *     ),
@@ -319,17 +320,9 @@ class FlashcardController extends Controller
      *     security={{"bearerAuth":{}}}
      * )
      */
-    public function answer(Request $request, int $id): JsonResponse
+    public function answer(Request $request, Flashcard $flashcard): JsonResponse
     {
-        try {
-            $scorecardResponse = $this->service->answer($id, $request->input('answers'), $request->user());
-        } catch (AnswerMismatchException $e) {
-            return response()->json([
-                'title' => 'Answer mismatch',
-                'message' => $e->getMessage(),
-                'code' => 'answer_mismatch'
-            ]);
-        }
+        $scorecardResponse = $this->service->answer($flashcard, $request->input('answers'), $request->user());
 
         return fractal($scorecardResponse, new ScorecardTransformer())->respond();
     }

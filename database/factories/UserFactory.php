@@ -29,6 +29,7 @@ class UserFactory extends Factory
             'email_verified_at' => now(),
             'password' => static::$password ??= Hash::make('password'),
             'remember_token' => Str::random(10),
+            'page_limit' => rand(2, 20),
         ];
     }
 
@@ -51,6 +52,13 @@ class UserFactory extends Factory
             'easy_time' => config('flashcard.difficulty_minutes.easy') + rand(10, 120),
             'medium_time' => config('flashcard.difficulty_minutes.medium') + rand(12000, 20000),
             'hard_time' => config('flashcard.difficulty_minutes.hard') + rand(42000, 70000),
+        ]);
+    }
+
+    public function losePoints(): static
+    {
+        return $this->state(fn (array $attributes) => [
+            'lose_points' => true
         ]);
     }
 }

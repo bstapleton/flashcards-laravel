@@ -20,7 +20,9 @@ return new class extends Migration
             $table->unsignedInteger('easy_time')->default(config('flashcard.difficulty_minutes.easy'));
             $table->unsignedInteger('medium_time')->default(config('flashcard.difficulty_minutes.medium')); // 7d
             $table->unsignedInteger('hard_time')->default(config('flashcard.difficulty_minutes.hard')); // 28d
-            $table->unsignedInteger('points')->default(0);
+            $table->bigInteger('points')->default(0);
+            $table->unsignedInteger('page_limit')->default(config('app.default_page_limit')); // 25
+            $table->tinyInteger('lose_points')->default(0); // TODO allow losing points on incorrect answers
             $table->rememberToken();
             $table->timestamps();
         });

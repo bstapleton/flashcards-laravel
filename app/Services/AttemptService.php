@@ -3,32 +3,44 @@
 namespace App\Services;
 
 use App\Models\Attempt;
-use App\Repositories\AttemptRepository;
+use App\Models\GivenAnswer;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Pagination\LengthAwarePaginator;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Validation\UnauthorizedException;
 
 class AttemptService
 {
-    protected Attempt $attempt;
-
-    public function __construct(protected AttemptRepository $repository)
-    {
-    }
-
     public function all()
     {
         if (!Gate::authorize('list', Attempt::class)) {
             throw new UnauthorizedException();
         }
 
-        return $this->repository->all();
+        $chunks = Attempt::where('user_id', Auth::id())
+            ->orderBy('answered_at', 'desc')
+            ->get()
+            ->groupBy('question')
+            ->map(function ($group) {
+                $latest = $group->first();
+                $previousAttempts = $group->filter(function ($attempt) use ($latest) {
+                    return $attempt->id !== $latest->id;
+                });
+
+                $latest->previous_attempts = $previousAttempts;
+                return $latest;
+            });
+
+        return new LengthAwarePaginator(
+            $chunks,
+            count($chunks),
+            Auth::user()->page_limit,
+        );
     }
 
-    public function show(int $id): Attempt
+    public function show(Attempt $attempt): Attempt
     {
-        $attempt = $this->repository->show($id);
-
         if (!Gate::authorize('show', $attempt)) {
             throw new UnauthorizedException();
         }
@@ -36,24 +48,58 @@ class AttemptService
         return $attempt;
     }
 
-    public function related(int $id): Builder
+    /**
+     * Get all other attempts with the same question text
+     *
+     * @param Attempt $attempt
+     * @return Builder
+     */
+    public function related(Attempt $attempt): Builder
     {
-        return $this->repository->related($id);
+        return Attempt::where('question', Attempt::find($attempt)->question)
+            ->where('id', '<>', $attempt->id)
+            ->orderBy('answered_at', 'desc');
     }
 
     public function store(array $data): Attempt
     {
-        return $this->repository->store($data);
+        return Attempt::create([
+            'user_id' => Auth::id(),
+            'question' => $data['question'],
+            'correctness' => $data['correctness'],
+            'question_type' => $data['question_type'],
+            'difficulty' => $data['difficulty'],
+            'points_earned' => $data['points_earned'],
+            'answered_at' => $data['answered_at'],
+            'answers' => $data['answers'],
+            'tags' => $data['tags'],
+        ]);
     }
 
-    public function destroy(int $id): void
+    public function destroy(Attempt $attempt): void
     {
-        $flashcard = $this->repository->show($id);
-
-        if (!Gate::authorize('delete', $flashcard)) {
+        if (!Gate::authorize('delete', $attempt)) {
             throw new UnauthorizedException();
         }
 
-        $this->repository->destroy($id);
+        $attempt->delete();
+    }
+
+    public function createGivenAnswer(string $text, bool $isCorrect, bool $wasSelected, ?int $id = null, ?string $explanation = null)
+    {
+        $givenAnswer = new GivenAnswer();
+        $givenAnswer->setText($text);
+        $givenAnswer->setIsCorrect($isCorrect);
+        $givenAnswer->setWasSelected($wasSelected);
+
+        if ($id) {
+            $givenAnswer->setId($id);
+        }
+
+        if ($explanation) {
+            $givenAnswer->setExplanation($explanation);
+        }
+
+        return $givenAnswer;
     }
 }

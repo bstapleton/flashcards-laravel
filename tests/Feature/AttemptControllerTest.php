@@ -2,10 +2,7 @@
 
 namespace Tests\Feature;
 
-use App\Enums\Correctness;
-use App\Enums\Difficulty;
 use App\Models\Attempt;
-use App\Models\Flashcard;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -14,6 +11,7 @@ use Tests\TestCase;
 class AttemptControllerTest extends TestCase
 {
     use RefreshDatabase;
+    protected User $user;
 
     public function setUp(): void
     {

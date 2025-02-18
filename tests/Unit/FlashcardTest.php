@@ -4,13 +4,10 @@ namespace Tests\Unit;
 
 use App\Enums\Difficulty;
 use App\Enums\QuestionType;
-use App\Exceptions\AnswerMismatchException;
 use App\Models\Answer;
 use App\Models\User;
-use App\Repositories\FlashcardRepository;
 use App\Services\FlashcardService;
 use App\Models\Flashcard;
-use Carbon\Carbon;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
@@ -51,8 +48,7 @@ class FlashcardTest extends TestCase
             $answer->flashcard()->associate($this->otherFlashcard);
         }
 
-        $this->service = new FlashcardService(new FlashcardRepository());
-        $this->service->setFlashcard($this->flashcard);
+        $this->service = new FlashcardService();
 
         $this->flashcard->difficulty = Difficulty::HARD->value;
         $this->flashcard->is_true = true;
@@ -101,7 +97,7 @@ class FlashcardTest extends TestCase
     public function testIncreasingDifficultyForEasy()
     {
         $this->flashcard->difficulty = Difficulty::EASY;
-        $this->service->increaseDifficulty();
+        $this->service->increaseDifficulty($this->flashcard);
         $this->assertTrue($this->flashcard->difficulty === Difficulty::MEDIUM);
     }
 
@@ -118,7 +114,7 @@ class FlashcardTest extends TestCase
     public function testIncreasingDifficultyForMedium()
     {
         $this->flashcard->difficulty = Difficulty::MEDIUM;
-        $this->service->increaseDifficulty();
+        $this->service->increaseDifficulty($this->flashcard);
         $this->assertTrue($this->flashcard->difficulty === Difficulty::HARD);
     }
 
@@ -134,7 +130,7 @@ class FlashcardTest extends TestCase
     public function testIncreasingDifficultyForHard()
     {
         $this->flashcard->difficulty = Difficulty::HARD;
-        $this->service->increaseDifficulty();
+        $this->service->increaseDifficulty($this->flashcard);
         $this->assertTrue($this->flashcard->difficulty === Difficulty::BURIED);
     }
 
@@ -151,7 +147,7 @@ class FlashcardTest extends TestCase
     public function testBuriedIdempotency()
     {
         $this->flashcard->difficulty = Difficulty::BURIED;
-        $this->service->increaseDifficulty();
+        $this->service->increaseDifficulty($this->flashcard);
         $this->assertTrue($this->flashcard->difficulty === Difficulty::BURIED);
     }
 
@@ -169,7 +165,7 @@ class FlashcardTest extends TestCase
         $this->flashcard->difficulty = Difficulty::MEDIUM;
         $this->assertFalse($this->flashcard->difficulty === Difficulty::EASY);
 
-        $this->service->resetDifficulty();
+        $this->service->resetDifficulty($this->flashcard);
 
         $this->assertTrue($this->flashcard->difficulty === Difficulty::EASY);
     }
@@ -188,7 +184,7 @@ class FlashcardTest extends TestCase
         $this->flashcard->difficulty = Difficulty::HARD;
         $this->assertFalse($this->flashcard->difficulty === Difficulty::EASY);
 
-        $this->service->resetDifficulty();
+        $this->service->resetDifficulty($this->flashcard);
 
         $this->assertTrue($this->flashcard->difficulty === Difficulty::EASY);
     }
@@ -207,7 +203,7 @@ class FlashcardTest extends TestCase
         $this->flashcard->difficulty = Difficulty::BURIED;
         $this->assertFalse($this->flashcard->difficulty === Difficulty::EASY);
 
-        $this->service->resetDifficulty();
+        $this->service->resetDifficulty($this->flashcard);
 
         $this->assertTrue($this->flashcard->difficulty === Difficulty::EASY);
     }
@@ -233,32 +229,9 @@ class FlashcardTest extends TestCase
             $this->otherFlashcard->answers->pluck('id')->toArray()
         );
         $this->assertCount((self::ANSWER_COUNT * 2), $answers);
-        $filtered = $this->service->filterValidAnswers($answers);
+        $filtered = $this->service->filterValidAnswers($this->flashcard, $answers);
         $this->assertCount(self::ANSWER_COUNT, $filtered);
         $this->assertTrue($actualAnswers === $filtered);
-    }
-
-    /**
-     * Test to ensure that some answers have actually been passed
-     *
-     * @return void
-     * @throws AnswerMismatchException
-     */
-    public function testValidAnswers()
-    {
-        $this->assertNotEmpty($this->service->validateAnswers([1, 2]));
-    }
-
-    /**
-     * Test to ensure that an exception is thrown if no answers are passed
-     *
-     * @return void
-     * @throws AnswerMismatchException
-     */
-    public function testInvalidAnswers()
-    {
-        $this->expectException(AnswerMismatchException::class);
-        $this->service->validateAnswers([]);
     }
 
     // TODO: calculateCorrectness
