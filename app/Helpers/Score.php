@@ -24,18 +24,26 @@ class Score
      * @param QuestionType $type
      * @param Correctness $correctness
      * @param Difficulty $currentDifficulty
+     * @param bool $userCanLosePoints
      * @return int
      */
-    public function getScore(QuestionType $type, Correctness $correctness, Difficulty $currentDifficulty): int
+    public function getScore(QuestionType $type, Correctness $correctness, Difficulty $currentDifficulty, bool $userCanLosePoints = false): int
     {
         if (Difficulty::BURIED === $currentDifficulty) {
             return 0;
         }
 
-        if (
-            in_array($type, [QuestionType::STATEMENT, QuestionType::SINGLE])
-            && Correctness::COMPLETE === $correctness
-        ) {
+        if ($userCanLosePoints && Correctness::COMPLETE !== $correctness) {
+            if (in_array($type, [QuestionType::STATEMENT, QuestionType::SINGLE])) {
+                return 0 - ($this->baseScore * self::getMultiplier($currentDifficulty));
+            }
+
+            if (QuestionType::MULTIPLE === $type) {
+                return 0 - (($this->baseScore * self::getMultiplier($currentDifficulty)) * $this->multiplier);
+            }
+        }
+
+        if (in_array($type, [QuestionType::STATEMENT, QuestionType::SINGLE]) && Correctness::COMPLETE === $correctness) {
             return $this->baseScore * self::getMultiplier($currentDifficulty);
         }
 

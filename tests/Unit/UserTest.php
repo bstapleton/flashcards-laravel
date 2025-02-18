@@ -54,4 +54,12 @@ class UserTest extends TestCase
         // Hard must be longer than medium
         $this->assertGreaterThan($user->medium_time, $user->hard_time);
     }
+
+    #[Test]
+    public function user_that_can_lose_points()
+    {
+        $user = UserFactory::new()->losePoints()->create();
+
+        $this->assertTrue($user->lose_points);
+    }
 }

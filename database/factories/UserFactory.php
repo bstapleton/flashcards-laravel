@@ -54,4 +54,11 @@ class UserFactory extends Factory
             'hard_time' => config('flashcard.difficulty_minutes.hard') + rand(42000, 70000),
         ]);
     }
+
+    public function losePoints(): static
+    {
+        return $this->state(fn (array $attributes) => [
+            'lose_points' => true
+        ]);
+    }
 }

@@ -165,7 +165,7 @@ class FlashcardService
         $flashcard->last_seen_at = Carbon::now();
 
         $score = new Score();
-        $pointsEarned = $score->getScore($flashcard->type, $correctness, $flashcard->difficulty);
+        $pointsEarned = $score->getScore($flashcard->type, $correctness, $flashcard->difficulty, $user->lose_points);
 
         $attempt = $this->attemptService->store([
             'question' => $flashcard->text,
