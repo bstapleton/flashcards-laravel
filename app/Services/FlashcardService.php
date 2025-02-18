@@ -5,7 +5,6 @@ namespace App\Services;
 use App\Enums\Correctness;
 use App\Enums\Difficulty;
 use App\Enums\QuestionType;
-use App\Exceptions\AnswerMismatchException;
 use App\Exceptions\NoEligibleQuestionsException;
 use App\Helpers\Score;
 use App\Models\Flashcard;
@@ -241,20 +240,6 @@ class FlashcardService
         $flashcard->tags()->detach($tag);
 
         return $flashcard;
-    }
-
-    /**
-     * Handles if none of the answer IDs passed by the consumer are valid for the flashcard
-     *
-     * @throws AnswerMismatchException
-     */
-    public function validateAnswers(array $validatedAnswers): array
-    {
-        if (0 === count($validatedAnswers)) {
-            throw new AnswerMismatchException();
-        }
-
-        return $validatedAnswers;
     }
 
     /**

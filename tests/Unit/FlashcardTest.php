@@ -4,7 +4,6 @@ namespace Tests\Unit;
 
 use App\Enums\Difficulty;
 use App\Enums\QuestionType;
-use App\Exceptions\AnswerMismatchException;
 use App\Models\Answer;
 use App\Models\User;
 use App\Services\FlashcardService;
@@ -233,29 +232,6 @@ class FlashcardTest extends TestCase
         $filtered = $this->service->filterValidAnswers($this->flashcard, $answers);
         $this->assertCount(self::ANSWER_COUNT, $filtered);
         $this->assertTrue($actualAnswers === $filtered);
-    }
-
-    /**
-     * Test to ensure that some answers have actually been passed
-     *
-     * @return void
-     * @throws AnswerMismatchException
-     */
-    public function testValidAnswers()
-    {
-        $this->assertNotEmpty($this->service->validateAnswers([1, 2]));
-    }
-
-    /**
-     * Test to ensure that an exception is thrown if no answers are passed
-     *
-     * @return void
-     * @throws AnswerMismatchException
-     */
-    public function testInvalidAnswers()
-    {
-        $this->expectException(AnswerMismatchException::class);
-        $this->service->validateAnswers([]);
     }
 
     // TODO: calculateCorrectness

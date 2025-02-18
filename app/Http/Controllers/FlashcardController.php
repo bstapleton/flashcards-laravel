@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Exceptions\AnswerMismatchException;
 use App\Exceptions\NoEligibleQuestionsException;
 use App\Models\Flashcard;
 use App\Services\FlashcardService;
@@ -323,15 +322,7 @@ class FlashcardController extends Controller
      */
     public function answer(Request $request, Flashcard $flashcard): JsonResponse
     {
-        try {
-            $scorecardResponse = $this->service->answer($flashcard, $request->input('answers'), $request->user());
-        } catch (AnswerMismatchException $e) {
-            return response()->json([
-                'title' => 'Answer mismatch',
-                'message' => $e->getMessage(),
-                'code' => 'answer_mismatch'
-            ]);
-        }
+        $scorecardResponse = $this->service->answer($flashcard, $request->input('answers'), $request->user());
 
         return fractal($scorecardResponse, new ScorecardTransformer())->respond();
     }
