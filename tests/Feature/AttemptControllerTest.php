@@ -3,6 +3,7 @@
 namespace Tests\Feature;
 
 use App\Models\Attempt;
+use App\Models\Keyword;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -12,6 +13,7 @@ class AttemptControllerTest extends TestCase
 {
     use RefreshDatabase;
     protected User $user;
+    protected string $word;
 
     public function setUp(): void
     {
@@ -23,8 +25,20 @@ class AttemptControllerTest extends TestCase
             'user_id' => $this->user->id,
         ]);
 
+        $attempts->map(function ($attempt) {
+            Keyword::factory()->count(2)->create([
+                'attempt_id' => $attempt->id
+            ]);
+        });
+
         $this->firstAttempt = $attempts[0];
         $this->secondAttempt = $attempts[1];
+
+        $this->word = fake()->word();
+        Keyword::factory()->create([
+            'attempt_id' => $this->firstAttempt->id,
+            'name' => $this->word,
+        ]);
     }
 
     public function test_index_method_returns_all_attempts()
@@ -52,7 +66,7 @@ class AttemptControllerTest extends TestCase
                     'newer_attempts' => [],
                     'answered_at' => Carbon::parse($this->firstAttempt->answered_at)->toIso8601String(),
                     'answers_given' => json_decode($this->firstAttempt->answers) ?? [],
-                    'tags' => explode(',', $this->firstAttempt->tags),
+                    'keywords' => $this->firstAttempt->keywords->pluck('name')->toArray(),
                 ],
                 [
                     'id' => $this->secondAttempt->id,
@@ -65,7 +79,7 @@ class AttemptControllerTest extends TestCase
                     'newer_attempts' => [],
                     'answered_at' => Carbon::parse($this->secondAttempt->answered_at)->toIso8601String(),
                     'answers_given' => json_decode($this->secondAttempt->answers) ?? [],
-                    'tags' => explode(',', $this->secondAttempt->tags),
+                    'keywords' => $this->secondAttempt->keywords->pluck('name')->toArray(),
                 ],
             ],
         ]);
@@ -78,6 +92,18 @@ class AttemptControllerTest extends TestCase
         ]);
 
         $response->assertUnauthorized();
+    }
+
+    public function test_filtering_single_tag()
+    {
+        $this->actingAs($this->user);
+
+        $response = $this->getJson('/api/attempts?tags=' . $this->word);
+
+        $response->assertSuccessful();
+
+        // Assert that the response only contains the attempt with the filtered word
+        $response->assertJsonCount(1, 'data');
     }
 
     // TODO: test show method
