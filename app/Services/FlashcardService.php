@@ -31,7 +31,7 @@ class FlashcardService
             throw new UnauthorizedException();
         }
 
-        return Flashcard::where('user_id', Auth::id())
+        return Flashcard::currentUser()
             ->orderBy('created_at');
     }
 
@@ -83,7 +83,9 @@ class FlashcardService
             throw new UnauthorizedException();
         }
 
-        return Flashcard::buried();
+        return Flashcard::currentUser()
+            ->buried()
+            ->orderBy('last_seen_at', 'desc');
     }
 
     public function alive()
@@ -92,7 +94,20 @@ class FlashcardService
             throw new UnauthorizedException();
         }
 
-        return Flashcard::alive();
+        return Flashcard::currentUser()
+            ->alive()
+            ->orderBy('last_seen_at', 'desc');
+    }
+
+    public function draft()
+    {
+        if (!Gate::authorize('list', Flashcard::class)) {
+            throw new UnauthorizedException();
+        }
+
+        return Flashcard::currentUser()
+            ->draft()
+            ->orderBy('created_at', 'desc');
     }
 
     public function random()
@@ -101,13 +116,18 @@ class FlashcardService
             throw new UnauthorizedException();
         }
 
-        $flashcards = Flashcard::inRandomOrder()->where('user_id', Auth::id())->get()->filter(function ($flashcard) {
-            if ($flashcard->eligible_at->lessThan(now()) || !$flashcard->last_seen_at) {
-                return true;
-            }
+        $flashcards = Flashcard::currentUser()
+            ->alive()
+            ->inRandomOrder()
+            ->get()
+            ->filter(function ($flashcard) {
+                if ($flashcard->eligible_at->lessThan(now()) || !$flashcard->last_seen_at) {
+                    return true;
+                }
 
-            return false;
-        });
+                return false;
+            }
+        );
 
         if (!$flashcards->count()) {
             // Consumer has no eligible flashcards

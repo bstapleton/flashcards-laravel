@@ -3,6 +3,7 @@
 namespace App\Console\Commands;
 
 use App\Enums\QuestionType;
+use App\Enums\Status;
 use App\Enums\TagColour;
 use App\Models\Answer;
 use App\Models\Flashcard;
@@ -64,7 +65,8 @@ class ImportFlashcards extends Command
             'text' => $question->text,
         ], [
             'is_true' => $question->is_true,
-            'explanation' => property_exists($question, 'explanation') ? $question->explanation : null
+            'explanation' => property_exists($question, 'explanation') ? $question->explanation : null,
+            'status' => Status::PUBLISHED,
         ]);
 
         $this->handleTags($question->tags, $flashcard);
@@ -74,6 +76,8 @@ class ImportFlashcards extends Command
     {
         $flashcard = $user->flashcards()->firstOrCreate([
             'text' => $question->text,
+        ], [
+            'status' => Status::PUBLISHED,
         ]);
 
         foreach ($question->answers as $a) {

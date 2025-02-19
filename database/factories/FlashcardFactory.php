@@ -3,6 +3,7 @@
 namespace Database\Factories;
 
 use App\Enums\Difficulty;
+use App\Enums\Status;
 use App\Models\Flashcard;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
@@ -55,6 +56,24 @@ class FlashcardFactory extends Factory
         return $this->state(function (array $attributes) {
             return [
                 'difficulty' => Difficulty::BURIED
+            ];
+        });
+    }
+
+    public function publishedStatus(): Factory
+    {
+        return $this->state(function (array $attributes) {
+            return [
+                'status' => Status::PUBLISHED
+            ];
+        });
+    }
+
+    public function hiddenStatus(): Factory
+    {
+        return $this->state(function (array $attributes) {
+            return [
+                'status' => Status::HIDDEN
             ];
         });
     }

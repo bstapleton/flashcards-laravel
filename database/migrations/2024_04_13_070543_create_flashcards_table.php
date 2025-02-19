@@ -1,6 +1,7 @@
 <?php
 
 use App\Enums\Difficulty;
+use App\Enums\Status;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -17,6 +18,7 @@ return new class extends Migration
             $table->boolean('is_true')->nullable();
             $table->longText('explanation')->nullable();
             $table->dateTime('last_seen_at')->nullable();
+            $table->tinyText('status')->default(Status::DRAFT);
             $table->timestamps();
         });
     }
