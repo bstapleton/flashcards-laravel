@@ -74,11 +74,7 @@ class FlashcardController extends Controller
      *     path="/api/flashcards/{flashcard}",
      *     summary="Show a flashcard",
      *     tags={"flashcard"},
-     *     @OA\Parameter(
-     *         name="flashcard",
-     *         in="path",
-     *         @OA\Schema(type="integer")
-     *     ),
+     *     @OA\Parameter(name="flashcard", in="path", @OA\Schema(type="integer")),
      *     @OA\Response(response="200", description="Success"),
      *     @OA\Response(response="404", description="Model not found"),
      *     @OA\Response(response="403", description="Not permitted"),
@@ -104,18 +100,18 @@ class FlashcardController extends Controller
      *     summary="Create flashcard",
      *     tags={"flashcard"},
      *     @OA\RequestBody(
-     *         @OA\MediaType(
-     *             mediaType="application/json",
-     *             @OA\Schema(
-     *                 @OA\Property(
-     *                     property="text",
-     *                     type="string"
-     *                 )
-     *             )
+     *         required=true,
+     *         @OA\JsonContent(
+     *             required={"text"},
+     *             @OA\Property(property="text", type="string", example="What colour is the sky?"),
+     *             @OA\Property(property="is_true", type="boolean"),
+     *             @OA\Property(property="explanation", type="string"),
+     *             @OA\Property(property="answers", type="array", @OA\Items(ref="#/components/schemas/Answer"))
      *         )
      *     ),
      *     @OA\Response(response="200", description="Success"),
      *     @OA\Response(response="403", description="Not permitted"),
+     *     @OA\Response(response="422", description="Validation error"),
      *     security={{"bearerAuth":{}}}
      * )
      */
@@ -150,20 +146,11 @@ class FlashcardController extends Controller
      *     path="/api/flashcards/{flashcard}",
      *     summary="Update flashcard",
      *     tags={"flashcard"},
-     *     @OA\Parameter(
-     *         name="flashcard",
-     *         in="path",
-     *         @OA\Schema(type="integer")
-     *     ),
+     *     @OA\Parameter(name="flashcard", in="path", @OA\Schema(type="integer")),
      *     @OA\RequestBody(
-     *         @OA\MediaType(
-     *             mediaType="application/json",
-     *             @OA\Schema(
-     *                 @OA\Property(
-     *                     property="text",
-     *                     type="string"
-     *                 )
-     *             )
+     *         required=true,
+     *         @OA\JsonContent(
+     *             @OA\Property(property="text", type="string")
      *         )
      *     ),
      *     @OA\Response(response="200", description="Success"),
@@ -195,11 +182,7 @@ class FlashcardController extends Controller
      *     path="/api/flashcards/{flashcard}",
      *     summary="Delete flashcard",
      *     tags={"flashcard"},
-     *     @OA\Parameter(
-     *         name="flashcard",
-     *         in="path",
-     *         @OA\Schema(type="integer")
-     *     ),
+     *     @OA\Parameter(name="flashcard", in="path", @OA\Schema(type="integer")),
      *     @OA\Response(response="204", description="No content"),
      *     @OA\Response(response="404", description="Model not found"),
      *     @OA\Response(response="403", description="Not permitted"),
@@ -278,11 +261,7 @@ class FlashcardController extends Controller
      *     description="Revive a flashcard from the graveyard back to the easy difficulty",
      *     summary="Resurrect a buried flashcard",
      *     tags={"flashcard"},
-     *     @OA\Parameter(
-     *         name="flashcard",
-     *         in="path",
-     *         @OA\Schema(type="integer")
-     *     ),
+     *     @OA\Parameter(name="flashcard", in="path", @OA\Schema(type="integer")),
      *     @OA\Response(response="200", description="Success"),
      *     @OA\Response(response="404", description="Model not found"),
      *     @OA\Response(response="403", description="Not permitted"),
@@ -308,21 +287,11 @@ class FlashcardController extends Controller
      *     description="Attempt to answer the question and be judged accordingly",
      *     summary="Pass an answer or set of answers to the question",
      *     tags={"flashcard"},
-     *     @OA\Parameter(
-     *         name="flashcard",
-     *         in="path",
-     *         @OA\Schema(type="integer")
-     *     ),
+     *     @OA\Parameter(name="flashcard", in="path", @OA\Schema(type="integer")),
      *     @OA\RequestBody(
-     *         @OA\MediaType(
-     *             mediaType="Application/json",
-     *             @OA\Schema(
-     *                 @OA\Property(
-     *                     property="answers",
-     *                     type="array",
-     *                     @OA\Items(type="integer")
-     *                 )
-     *             )
+     *         required=true,
+     *         @OA\JsonContent(
+     *             @OA\Property(property="answers", type="array", @OA\Items(type="integer"))
      *         )
      *     ),
      *     @OA\Response(response="200", description="Success"),

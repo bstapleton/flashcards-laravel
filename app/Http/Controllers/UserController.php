@@ -21,26 +21,15 @@ class UserController extends Controller
      *     path="/api/register",
      *     summary="Register a new user",
      *     tags={"auth"},
-     *     @OA\Parameter(
-     *         name="username",
-     *         in="query",
-     *         description="User's login",
+     *     @OA\RequestBody(
      *         required=true,
-     *         @OA\Schema(type="string")
-     *     ),
-     *     @OA\Parameter(
-     *         name="password",
-     *         in="query",
-     *         description="User's password",
-     *         required=true,
-     *         @OA\Schema(type="string")
-     *     ),
-     *     @OA\Parameter(
-     *         name="display_name",
-     *         in="query",
-     *         description="User's display name",
-     *         required=true,
-     *         @OA\Schema(type="string")
+     *         @OA\JsonContent(
+     *             required={"username", "password", "password_confirmation", "display_name"},
+     *             @OA\Property(property="username", type="string"),
+     *             @OA\Property(property="password", type="password"),
+     *             @OA\Property(property="password_confirmation", type="password"),
+     *             @OA\Property(property="display_name", type="string"),
+     *         )
      *     ),
      *     @OA\Response(response="201", description="User registered successfully"),
      *     @OA\Response(response="422", description="Validation errors")
@@ -66,9 +55,10 @@ class UserController extends Controller
 
     /**
      * @OA\Get(
-     *     path="/api/user",
+     *     path="/api/user/{user}",
      *     summary="Get logged-in user details",
      *     tags={"auth"},
+     *     @OA\Parameter(name="user", in="path", @OA\Schema(type="integer")),
      *     @OA\Response(response="200", description="Success"),
      *     security={{"bearerAuth":{}}}
      * )
@@ -78,7 +68,7 @@ class UserController extends Controller
         $user = $request->user();
 
         if (!$user) {
-            return ApiResponse::error('Not found', 'Flashcard not found', 'not_found', 404);
+            return ApiResponse::error('Not found', 'User not found', 'not_found', 404);
         }
 
         return fractal($user, new UserTransformer())->respond();

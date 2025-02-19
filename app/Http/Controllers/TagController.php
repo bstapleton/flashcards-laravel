@@ -28,11 +28,13 @@ class TagController extends Controller
      *     path="/api/tags",
      *     summary="Create a tag",
      *     tags={"tag"},
-     *     @OA\Parameter(
-     *         name="name",
-     *         in="query",
+     *     @OA\RequestBody(
      *         required=true,
-     *         @OA\Schema(type="string")
+     *         @OA\JsonContent(
+     *             required={"name", "colour"},
+     *             @OA\Property(property="name", type="string", example="Mathematics"),
+     *             @OA\Property(property="colour", type="string", example="green"),
+     *         )
      *     ),
      *     @OA\Response(response="200", description="Success"),
      *     security={{"bearerAuth":{}}}
@@ -52,20 +54,19 @@ class TagController extends Controller
 
     /**
      * @OA\Put(
-     *     path="/api/tags/{id}",
+     *     path="/api/tags/{tag}",
      *     summary="Update a tag",
      *     tags={"tag"},
-     *     @OA\Parameter(
-     *         name="id",
-     *         in="path",
-     *         @OA\Schema(type="integer")
-     *     ),
-     *     @OA\Parameter(
-     *         name="name",
-     *         in="query",
+     *     @OA\Parameter(name="tag", in="path", @OA\Schema(type="integer")),
+     *     @OA\RequestBody(
      *         required=true,
-     *         @OA\Schema(type="string")
+     *         @OA\JsonContent(
+     *             required={"name", "colour"},
+     *             @OA\Property(property="name", type="string", example="Mathematics"),
+     *             @OA\Property(property="colour", type="string", example="green"),
+     *         )
      *     ),
+     *     @OA\Parameter(name="name", in="query", required=true, @OA\Schema(type="string")),
      *     @OA\Response(response="200", description="Success"),
      *     @OA\Response(response="404", description="Tag not found"),
      *     security={{"bearerAuth":{}}}
@@ -91,11 +92,7 @@ class TagController extends Controller
      *     path="/api/tags/{id}",
      *     summary="Delete a tag",
      *     tags={"tag"},
-     *     @OA\Parameter(
-     *         name="id",
-     *         in="path",
-     *         @OA\Schema(type="integer")
-     *     ),
+     *     @OA\Parameter(name="id", in="path", @OA\Schema(type="integer")),
      *     @OA\Response(response="204", description="No content"),
      *     security={{"bearerAuth":{}}}
      * )

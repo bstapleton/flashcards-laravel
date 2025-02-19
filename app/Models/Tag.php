@@ -10,6 +10,12 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 /**
  * @property string name
  * @property TagColour colour
+ *
+ * @OA\Schema(
+ *     required={"name", "colour"},
+ *     @OA\Property(property="name", type="string", example="Mathematics"),
+ *     @OA\Property(property="colour", type="string", example="green")
+ * )
  */
 class Tag extends Model
 {

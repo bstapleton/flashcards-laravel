@@ -168,9 +168,53 @@
                 "summary": "List attempts",
                 "description": "Return all attempts for the current user, paginated",
                 "operationId": "17be1018f13f02dc5c6e77cafd33d828",
+                "parameters": [
+                    {
+                        "name": "tags",
+                        "in": "query",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "Success"
+                    },
+                    "403": {
+                        "description": "Not permitted"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/attempt/{attempt}": {
+            "get": {
+                "tags": [
+                    "attempt"
+                ],
+                "summary": "Show an attempt",
+                "description": "Return an attempt",
+                "operationId": "bd6cf621af769869be0ea6f721f853f0",
+                "parameters": [
+                    {
+                        "name": "attempt",
+                        "in": "path",
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success"
+                    },
+                    "404": {
+                        "description": "Model not found"
                     },
                     "403": {
                         "description": "Not permitted"
@@ -212,12 +256,29 @@
                 "summary": "Create flashcard",
                 "operationId": "daad21d01dc5de91b535ea881fb18b52",
                 "requestBody": {
+                    "required": true,
                     "content": {
                         "application/json": {
                             "schema": {
+                                "required": [
+                                    "text"
+                                ],
                                 "properties": {
                                     "text": {
+                                        "type": "string",
+                                        "example": "What colour is the sky?"
+                                    },
+                                    "is_true": {
+                                        "type": "boolean"
+                                    },
+                                    "explanation": {
                                         "type": "string"
+                                    },
+                                    "answers": {
+                                        "type": "array",
+                                        "items": {
+                                            "$ref": "#/components/schemas/Answer"
+                                        }
                                     }
                                 },
                                 "type": "object"
@@ -231,6 +292,9 @@
                     },
                     "403": {
                         "description": "Not permitted"
+                    },
+                    "422": {
+                        "description": "Validation error"
                     }
                 },
                 "security": [
@@ -263,16 +327,16 @@
                 ]
             }
         },
-        "/api/flashcards/{id}": {
+        "/api/flashcards/{flashcard}": {
             "get": {
                 "tags": [
                     "flashcard"
                 ],
                 "summary": "Show a flashcard",
-                "operationId": "944c908dc91be311a8330cb6a9283565",
+                "operationId": "1c30177165bc2aadc62af11696df906c",
                 "parameters": [
                     {
-                        "name": "id",
+                        "name": "flashcard",
                         "in": "path",
                         "schema": {
                             "type": "integer"
@@ -302,10 +366,10 @@
                 ],
                 "summary": "Pass an answer or set of answers to the question",
                 "description": "Attempt to answer the question and be judged accordingly",
-                "operationId": "74aa428e2d23c8f550297d3f8f8868ba",
+                "operationId": "299249a1cadd0d7fbe7de378ddebd0de",
                 "parameters": [
                     {
-                        "name": "id",
+                        "name": "flashcard",
                         "in": "path",
                         "schema": {
                             "type": "integer"
@@ -313,8 +377,9 @@
                     }
                 ],
                 "requestBody": {
+                    "required": true,
                     "content": {
-                        "Application/json": {
+                        "application/json": {
                             "schema": {
                                 "properties": {
                                     "answers": {
@@ -351,10 +416,10 @@
                     "flashcard"
                 ],
                 "summary": "Delete flashcard",
-                "operationId": "e13e394722776ff618e1248072e7033f",
+                "operationId": "94fe4dfd3153b01a20b068e45cad6f2c",
                 "parameters": [
                     {
-                        "name": "id",
+                        "name": "flashcard",
                         "in": "path",
                         "schema": {
                             "type": "integer"
@@ -383,10 +448,10 @@
                     "flashcard"
                 ],
                 "summary": "Update flashcard",
-                "operationId": "349b62d95119992ef0b43e7ba8d286f4",
+                "operationId": "edaa84d0ded0ac32545433e408066a46",
                 "parameters": [
                     {
-                        "name": "id",
+                        "name": "flashcard",
                         "in": "path",
                         "schema": {
                             "type": "integer"
@@ -394,6 +459,7 @@
                     }
                 ],
                 "requestBody": {
+                    "required": true,
                     "content": {
                         "application/json": {
                             "schema": {
@@ -474,17 +540,17 @@
                 ]
             }
         },
-        "/api/flashcards/{id}/revive": {
+        "/api/flashcards/{flashcard}/revive": {
             "post": {
                 "tags": [
                     "flashcard"
                 ],
                 "summary": "Resurrect a buried flashcard",
                 "description": "Revive a flashcard from the graveyard back to the easy difficulty",
-                "operationId": "760978efb44e282898b2b4663ab71aaa",
+                "operationId": "4ad9fdbff04c4096badde7914e688b34",
                 "parameters": [
                     {
-                        "name": "id",
+                        "name": "flashcard",
                         "in": "path",
                         "schema": {
                             "type": "integer"
@@ -509,17 +575,17 @@
                 ]
             }
         },
-        "/api/flashcards/{id}/tags/{tag}": {
+        "/api/flashcards/{flashcard}/tags/{tag}": {
             "post": {
                 "tags": [
                     "flashcard"
                 ],
                 "summary": "Attach a tag to a flashcard",
                 "description": "Attach a tag",
-                "operationId": "92f1983c8329c1ff6286830f2501b61d",
+                "operationId": "6ccef4256e554333866e9caeec0d8e92",
                 "parameters": [
                     {
-                        "name": "id",
+                        "name": "flashcard",
                         "in": "path",
                         "schema": {
                             "type": "integer"
@@ -556,10 +622,10 @@
                 ],
                 "summary": "Detach a tag",
                 "description": "Detach a tag from a flashcard",
-                "operationId": "213beaa1dbf5c7f6577134d0ee87ac1d",
+                "operationId": "4aa1cfd0e7806637ef415f2125731791",
                 "parameters": [
                     {
-                        "name": "id",
+                        "name": "flashcard",
                         "in": "path",
                         "schema": {
                             "type": "integer"
@@ -637,16 +703,30 @@
                 ],
                 "summary": "Create a tag",
                 "operationId": "a0a246f29dcb119a2189fd230fc10028",
-                "parameters": [
-                    {
-                        "name": "name",
-                        "in": "query",
-                        "required": true,
-                        "schema": {
-                            "type": "string"
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "name",
+                                    "colour"
+                                ],
+                                "properties": {
+                                    "name": {
+                                        "type": "string",
+                                        "example": "Mathematics"
+                                    },
+                                    "colour": {
+                                        "type": "string",
+                                        "example": "green"
+                                    }
+                                },
+                                "type": "object"
+                            }
                         }
                     }
-                ],
+                },
                 "responses": {
                     "200": {
                         "description": "Success"
@@ -659,16 +739,16 @@
                 ]
             }
         },
-        "/api/tags/{id}": {
+        "/api/tags/{tag}": {
             "put": {
                 "tags": [
                     "tag"
                 ],
                 "summary": "Update a tag",
-                "operationId": "91c5f77096ddaaf2bed585f48d054044",
+                "operationId": "41b49eb4f2a830e150f50252f4d831b8",
                 "parameters": [
                     {
-                        "name": "id",
+                        "name": "tag",
                         "in": "path",
                         "schema": {
                             "type": "integer"
@@ -683,6 +763,30 @@
                         }
                     }
                 ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "name",
+                                    "colour"
+                                ],
+                                "properties": {
+                                    "name": {
+                                        "type": "string",
+                                        "example": "Mathematics"
+                                    },
+                                    "colour": {
+                                        "type": "string",
+                                        "example": "green"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
                 "responses": {
                     "200": {
                         "description": "Success"
@@ -696,7 +800,9 @@
                         "bearerAuth": []
                     }
                 ]
-            },
+            }
+        },
+        "/api/tags/{id}": {
             "delete": {
                 "tags": [
                     "tag"
@@ -731,35 +837,36 @@
                 ],
                 "summary": "Register a new user",
                 "operationId": "2f25885f3b6f61ca11724ec302d2e439",
-                "parameters": [
-                    {
-                        "name": "username",
-                        "in": "query",
-                        "description": "User's login",
-                        "required": true,
-                        "schema": {
-                            "type": "string"
-                        }
-                    },
-                    {
-                        "name": "password",
-                        "in": "query",
-                        "description": "User's password",
-                        "required": true,
-                        "schema": {
-                            "type": "string"
-                        }
-                    },
-                    {
-                        "name": "display_name",
-                        "in": "query",
-                        "description": "User's display name",
-                        "required": true,
-                        "schema": {
-                            "type": "string"
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "username",
+                                    "password",
+                                    "password_confirmation",
+                                    "display_name"
+                                ],
+                                "properties": {
+                                    "username": {
+                                        "type": "string"
+                                    },
+                                    "password": {
+                                        "type": "password"
+                                    },
+                                    "password_confirmation": {
+                                        "type": "password"
+                                    },
+                                    "display_name": {
+                                        "type": "string"
+                                    }
+                                },
+                                "type": "object"
+                            }
                         }
                     }
-                ],
+                },
                 "responses": {
                     "201": {
                         "description": "User registered successfully"
@@ -770,13 +877,22 @@
                 }
             }
         },
-        "/api/user": {
+        "/api/user/{user}": {
             "get": {
                 "tags": [
                     "auth"
                 ],
                 "summary": "Get logged-in user details",
-                "operationId": "9cd1cee912e0176094a7ec83cc9b432f",
+                "operationId": "a0fa3a08f20fb611866a52d1bb2e43dd",
+                "parameters": [
+                    {
+                        "name": "user",
+                        "in": "path",
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "Success"
@@ -791,6 +907,129 @@
         }
     },
     "components": {
+        "schemas": {
+            "Answer": {
+                "required": [
+                    "text"
+                ],
+                "properties": {
+                    "flashcard_id": {
+                        "type": "integer",
+                        "example": 1
+                    },
+                    "text": {
+                        "type": "string",
+                        "example": "Blue"
+                    },
+                    "explanation": {
+                        "type": "string",
+                        "example": "Blue is the colour of the sky"
+                    },
+                    "is_correct": {
+                        "type": "boolean"
+                    },
+                    "created_at": {
+                        "description": "Initial creation timestamp",
+                        "type": "string",
+                        "format": "date-time",
+                        "readOnly": "true"
+                    },
+                    "updated_at": {
+                        "description": "Last update timestamp",
+                        "type": "string",
+                        "format": "date-time",
+                        "readOnly": "true"
+                    }
+                },
+                "type": "object"
+            },
+            "Flashcard": {
+                "required": [
+                    "text"
+                ],
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "example": 1
+                    },
+                    "text": {
+                        "type": "string"
+                    },
+                    "difficulty": {
+                        "type": "string"
+                    },
+                    "is_true": {
+                        "type": "boolean"
+                    },
+                    "explanation": {
+                        "type": "string"
+                    },
+                    "status": {
+                        "type": "string"
+                    },
+                    "type": {
+                        "type": "string"
+                    },
+                    "eligible_at": {
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "last_seen_at": {
+                        "type": "string",
+                        "format": "date-time"
+                    }
+                },
+                "type": "object"
+            },
+            "Tag": {
+                "required": [
+                    "name",
+                    "colour"
+                ],
+                "properties": {
+                    "name": {
+                        "type": "string",
+                        "example": "Mathematics"
+                    },
+                    "colour": {
+                        "type": "string",
+                        "example": "green"
+                    }
+                },
+                "type": "object"
+            },
+            "User": {
+                "required": [
+                    "username",
+                    "password",
+                    "display_name"
+                ],
+                "properties": {
+                    "username": {
+                        "type": "string"
+                    },
+                    "display_name": {
+                        "type": "string"
+                    },
+                    "password": {
+                        "type": "password"
+                    },
+                    "points": {
+                        "type": "number"
+                    },
+                    "easy_time": {
+                        "type": "number"
+                    },
+                    "medium_time": {
+                        "type": "number"
+                    },
+                    "page_limit": {
+                        "type": "number"
+                    }
+                },
+                "type": "object"
+            }
+        },
         "securitySchemes": {
             "bearerAuth": {
                 "type": "http",

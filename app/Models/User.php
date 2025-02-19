@@ -22,6 +22,17 @@ use RedExplosion\Sqids\Concerns\HasSqids;
  * @property int hard_time
  * @property int page_limit
  * @property bool lose_points
+ *
+ * @OA\Schema(
+ *     required={"username", "password", "display_name"},
+ *     @OA\Property(property="username", type="string"),
+ *     @OA\Property(property="display_name", type="string"),
+ *     @OA\Property(property="password", type="password"),
+ *     @OA\Property(property="points", type="number"),
+ *     @OA\Property(property="easy_time", type="number"),
+ *     @OA\Property(property="medium_time", type="number"),
+ *     @OA\Property(property="page_limit", type="number")
+ * )
  */
 class User extends Authenticatable
 {

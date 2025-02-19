@@ -17,29 +17,12 @@ class AnswerController extends Controller
      *     path="/api/answers",
      *     summary="Create an answer",
      *     tags={"answer"},
-     *     @OA\Parameter(
-     *         name="flashcardId",
-     *         in="query",
-     *         required=true,
-     *         @OA\Schema(type="integer")
-     *     ),
+     *     @OA\Parameter(name="flashcardId", in="query", required=true, @OA\Schema(type="integer")),
      *     @OA\RequestBody(
-     *          @OA\MediaType(
-     *              mediaType="application/json",
-     *              @OA\Schema(
-     *                 @OA\Property(
-     *                     property="text",
-     *                     type="string"
-     *                 ),
-     *                 @OA\Property(
-     *                     property="explanation",
-     *                     type="string"
-     *                 ),
-     *                 @OA\Property(
-     *                     property="is_correct",
-     *                     type="boolean"
-     *                 )
-     *             )
+     *         @OA\JsonContent(
+     *             @OA\Property(property="text", type="string"),
+     *             @OA\Property(property="explanation", type="string"),
+     *             @OA\Property(property="is_correct", type="boolean")
      *         )
      *     ),
      *     @OA\Response(response="200", description="Success"),
@@ -69,11 +52,7 @@ class AnswerController extends Controller
      *     path="/api/answers/{id}",
      *     summary="Get an answer",
      *     tags={"answer"},
-     *     @OA\Parameter(
-     *         name="id",
-     *         in="path",
-     *         @OA\Schema(type="integer")
-     *     ),
+     *     @OA\Parameter(name="id", in="path", @OA\Schema(type="integer")),
      *     @OA\Response(response="200", description="Success"),
      *     @OA\Response(response="404", description="Answer not found"),
      *     security={{"bearerAuth":{}}}
@@ -89,30 +68,14 @@ class AnswerController extends Controller
      *     path="/api/answers/{id}",
      *     summary="Update an answer",
      *     tags={"answer"},
-     *     @OA\Parameter(
-     *         name="id",
-     *         in="path",
-     *         @OA\Schema(type="integer")
-     *     ),
+     *     @OA\Parameter(name="id", in="path", @OA\Schema(type="integer")),
      *     @OA\RequestBody(
-     *           @OA\MediaType(
-     *               mediaType="application/json",
-     *               @OA\Schema(
-     *                  @OA\Property(
-     *                      property="text",
-     *                      type="string"
-     *                  ),
-     *                  @OA\Property(
-     *                      property="explanation",
-     *                      type="string"
-     *                  ),
-     *                  @OA\Property(
-     *                      property="is_correct",
-     *                      type="boolean"
-     *                  )
-     *              )
-     *          )
-     *      ),
+     *         @OA\JsonContent(
+     *             @OA\Property(property="text", type="string"),
+     *             @OA\Property(property="explanation", type="string"),
+     *             @OA\Property(property="is_correct", type="boolean")
+     *         )
+     *     ),
      *     @OA\Response(response="200", description="Success"),
      *     security={{"bearerAuth":{}}}
      * )
@@ -129,11 +92,7 @@ class AnswerController extends Controller
      *     path="/api/answers/{id}",
      *     summary="Delete an answer",
      *     tags={"answer"},
-     *     @OA\Parameter(
-     *         name="id",
-     *         in="path",
-     *         @OA\Schema(type="integer")
-     *     ),
+     *     @OA\Parameter(name="id", in="path", @OA\Schema(type="integer")),
      *     @OA\Response(response="204", description="No content"),
      *     security={{"bearerAuth":{}}}
      * )

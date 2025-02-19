@@ -27,6 +27,19 @@ use Illuminate\Support\Facades\Auth;
  * @property Carbon last_seen_at
  * @property Carbon eligible_at
  * @property Status status
+ *
+ * @OA\Schema(
+ *     required={"text"},
+ *     @OA\Property(property="id", type="integer", example=1),
+ *     @OA\Property(property="text", type="string"),
+ *     @OA\Property(property="difficulty", type="string"),
+ *     @OA\Property(property="is_true", type="boolean"),
+ *     @OA\Property(property="explanation", type="string"),
+ *     @OA\Property(property="status", type="string"),
+ *     @OA\Property(property="type", type="string"),
+ *     @OA\Property(property="eligible_at", type="string", format="date-time"),
+ *     @OA\Property(property="last_seen_at", type="string", format="date-time"),
+ * )
  */
 class Flashcard extends Model
 {
