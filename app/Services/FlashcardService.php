@@ -6,6 +6,7 @@ use App\Enums\Correctness;
 use App\Enums\Difficulty;
 use App\Enums\QuestionType;
 use App\Exceptions\NoEligibleQuestionsException;
+use App\Exceptions\UndeterminedQuestionTypeException;
 use App\Helpers\Score;
 use App\Models\Flashcard;
 use App\Models\Scorecard;
@@ -48,6 +49,11 @@ class FlashcardService
     {
         if (!Gate::authorize('store', Flashcard::class)) {
             throw new UnauthorizedException();
+        }
+
+        // Cannot create a statement with questions
+        if (isset($data['is_true']) && isset($data['questions'])) {
+            throw new UndeterminedQuestionTypeException();
         }
 
         return Flashcard::create([

@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Exceptions\NoEligibleQuestionsException;
+use App\Exceptions\UndeterminedQuestionTypeException;
+use App\Helpers\ApiResponse;
 use App\Models\Flashcard;
 use App\Services\FlashcardService;
 use App\Transformers\FlashcardTransformer;
@@ -120,13 +122,22 @@ class FlashcardController extends Controller
     public function store(Request $request): JsonResponse
     {
         $request->validate([
-            'text' => 'required|max:1024'
+            'text' => 'required|max:1024',
+            'is_true' => 'nullable|required_without:answers',
+            'answers' => 'nullable|required_without:is_true'
         ]);
 
         try {
             $flashcardResponse = $this->service->store($request->all());
         } catch (UnauthorizedException) {
             return $this->handleForbidden();
+        } catch (UndeterminedQuestionTypeException $e) {
+            return ApiResponse::error(
+                'Undetermined question type',
+                $e->getMessage(),
+                'undetermined_question_type',
+                422
+            );
         }
 
         // TODO: validation and storage
