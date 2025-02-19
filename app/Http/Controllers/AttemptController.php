@@ -27,7 +27,7 @@ class AttemptController extends Controller
      *         name="tags",
      *         in="query",
      *         @OA\Schema(type="string")
-     *     )
+     *     ),
      *     @OA\Response(response="200", description="Success"),
      *     @OA\Response(response="403", description="Not permitted"),
      *     security={{"bearerAuth":{}}}
