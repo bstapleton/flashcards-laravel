@@ -46,6 +46,7 @@ class Flashcard extends Model
     use HasFactory;
 
     protected $fillable = [
+        'user_id',
         'text',
         'difficulty',
         'is_true',

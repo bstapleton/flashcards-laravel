@@ -5,6 +5,7 @@ namespace App\Services;
 use App\Enums\Correctness;
 use App\Enums\Difficulty;
 use App\Enums\QuestionType;
+use App\Exceptions\LessThanOneCorrectAnswerException;
 use App\Exceptions\NoEligibleQuestionsException;
 use App\Exceptions\UndeterminedQuestionTypeException;
 use App\Helpers\Score;
@@ -45,22 +46,54 @@ class FlashcardService
         return $flashcard;
     }
 
+    /**
+     * @throws UndeterminedQuestionTypeException
+     * @throws LessThanOneCorrectAnswerException
+     */
     public function store(array $data)
     {
         if (!Gate::authorize('store', Flashcard::class)) {
             throw new UnauthorizedException();
         }
 
-        // Cannot create a statement with questions
-        if (isset($data['is_true']) && isset($data['questions'])) {
+        // Cannot create a statement with answers
+        if (isset($data['is_true']) && isset($data['answers'])) {
             throw new UndeterminedQuestionTypeException();
         }
 
-        return Flashcard::create([
+        // If there are answers, ensure that at least one of them is flagged as being the correct one
+        if (isset($data['answers'])) {
+            $hasAtLeastOneCorrectAnswer = false;
+
+            foreach ($data['answers'] as $answer) {
+                if ($answer['is_correct'] ?? false) {
+                    $hasAtLeastOneCorrectAnswer = true;
+                    break;
+                }
+            }
+
+            if (!$hasAtLeastOneCorrectAnswer) {
+                throw new LessThanOneCorrectAnswerException();
+            }
+        }
+
+        $flashcard = Flashcard::create([
+            'user_id' => Auth::id(),
             'text' => $data['text'],
             'is_true' => $data['is_true'] ?? null,
             'explanation' => $data['explanation'] ?? null,
+            'difficulty' => Difficulty::EASY,
         ]);
+
+        if (isset($data['answers'])) {
+            $flashcard->answers()->createMany($data['answers']);
+        }
+
+        if (isset($data['tags'])) {
+            $flashcard->tags()->attach($data['tags']);
+        }
+
+        return $flashcard;
     }
 
     public function update(array $data, Flashcard $flashcard)

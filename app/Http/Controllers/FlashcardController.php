@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Exceptions\LessThanOneCorrectAnswerException;
 use App\Exceptions\NoEligibleQuestionsException;
 use App\Exceptions\UndeterminedQuestionTypeException;
 use App\Helpers\ApiResponse;
@@ -106,7 +107,8 @@ class FlashcardController extends Controller
      *             @OA\Property(property="text", type="string", example="What colour is the sky?"),
      *             @OA\Property(property="is_true", type="boolean"),
      *             @OA\Property(property="explanation", type="string"),
-     *             @OA\Property(property="answers", type="array", @OA\Items(ref="#/components/schemas/Answer"))
+     *             @OA\Property(property="answers", type="array", @OA\Items(ref="#/components/schemas/Answer")),
+     *             @OA\Property(property="tags", type="array", @OA\Items(ref="#/components/schemas/Tag"))
      *         )
      *     ),
      *     @OA\Response(response="200", description="Success"),
@@ -134,9 +136,14 @@ class FlashcardController extends Controller
                 'undetermined_question_type',
                 422
             );
+        } catch (LessThanOneCorrectAnswerException $e) {
+            return ApiResponse::error(
+                'Less than one correct answer',
+                $e->getMessage(),
+                'less_than_one_correct_answer',
+                422
+            );
         }
-
-        // TODO: validation and storage
 
         return fractal($flashcardResponse, new FlashcardTransformer())->respond();
     }
