@@ -25,12 +25,16 @@ Route::controller(FlashcardController::class)->prefix('flashcards')->middleware(
     Route::get('/all', 'all')->name('flashcards.all');
     Route::get('/random', 'random')->name('flashcards.random');
     Route::get('/graveyard', 'graveyard')->name('flashcards.graveyard');
+    Route::get('/drafts', 'draft')->name('flashcards.drafts');
+    Route::get('/hidden', 'hidden')->name('flashcards.hidden');
     Route::prefix('{flashcard}')->group(function () {
         Route::get('/', 'show')->name('flashcards.show');
         Route::post('/', 'answer')->name('flashcards.answer');
         Route::patch('/', 'update')->name('flashcards.update');
         Route::delete('/', 'destroy')->name('flashcards.destroy');
         Route::post('/revive', 'revive')->name('flashcards.revive');
+        Route::post('/hide', 'hide')->name('flashcards.hide');
+        Route::post('/unhide', 'unhide')->name('flashcards.unhide');
 
         Route::controller(FlashcardTagController::class)->prefix('tags')->group(function () {
             Route::post('/{tag}', 'attachTag')->name('flashcards.tags.attach');

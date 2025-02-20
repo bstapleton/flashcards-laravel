@@ -171,6 +171,17 @@ class FlashcardService
             ->orderBy('created_at', 'desc');
     }
 
+    public function hidden()
+    {
+        if (!Gate::authorize('list', Flashcard::class)) {
+            throw new UnauthorizedException();
+        }
+
+        return Flashcard::currentUser()
+            ->hidden()
+            ->orderBy('created_at', 'desc');
+    }
+
     public function random()
     {
         if (!Gate::authorize('list', Flashcard::class)) {

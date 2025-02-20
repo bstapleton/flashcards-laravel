@@ -253,11 +253,12 @@ class FlashcardController extends Controller
         } catch (ModelNotFoundException) {
             return $this->handleNotFound();
         } catch (NoEligibleQuestionsException $e) {
-            return response()->json([
-                'title' => 'No eligible questions',
-                'message' => $e->getMessage(),
-                'code' => 'nothing_eligible'
-            ]);
+            return ApiResponse::error(
+                'No eligible questions',
+                $e->getMessage(),
+                'nothing_eligible',
+                404
+            );
         } catch (UnauthorizedException) {
             return $this->handleForbidden();
         }
@@ -268,7 +269,7 @@ class FlashcardController extends Controller
     /**
      * @OA\Post(
      *     path="/api/flashcards/{flashcard}/revive",
-     *     description="Revive a flashcard from the graveyard back to the easy difficulty",
+     *     description="Revive a flashcard from the graveyard back to the easy difficulty. This will additionally remove it's hidden status if it had one.",
      *     summary="Resurrect a buried flashcard",
      *     tags={"flashcard"},
      *     @OA\Parameter(name="flashcard", in="path", @OA\Schema(type="integer")),
@@ -284,6 +285,72 @@ class FlashcardController extends Controller
             $flashcardResponse = $this->service->revive($flashcard);
         } catch (ModelNotFoundException) {
             return $this->handleNotFound();
+        } catch (UnauthorizedException) {
+            return $this->handleForbidden();
+        }
+
+        return fractal($flashcardResponse, new FlashcardTransformer())->respond();
+    }
+
+    /**
+     * @OA\Post(
+     *     path="/api/flashcards/{flashcard}/hide",
+     *     description="Hide a flashcard from the pool, even if it's eligible",
+     *     summary="Stop a flashcard from showing up when drawing a random question to answer",
+     *     tags={"flashcard"},
+     *     @OA\Parameter(name="flashcard", in="path", @OA\Schema(type="integer")),
+     *     @OA\Response(response="200", description="Success"),
+     *     @OA\Response(response="400", description="Cannot change status"),
+     *     @OA\Response(response="404", description="Model not found"),
+     *     @OA\Response(response="403", description="Not permitted"),
+     *     security={{"bearerAuth":{}}}
+     * )
+     */
+    public function hide(Request $request, Flashcard $flashcard): JsonResponse
+    {
+        try {
+            $flashcardResponse = $this->service->hide($flashcard);
+        } catch (ModelNotFoundException) {
+            return $this->handleNotFound();
+        } catch (DraftQuestionsCannotChangeStatusException $e) {
+            return ApiResponse::error(
+                'Cannot change status',
+                $e->getMessage(),
+                'draft_status_cannot_change'
+            );
+        } catch (UnauthorizedException) {
+            return $this->handleForbidden();
+        }
+
+        return fractal($flashcardResponse, new FlashcardTransformer())->respond();
+    }
+
+    /**
+     * @OA\Post(
+     *     path="/api/flashcards/{flashcard}/unhide",
+     *     description="Re-enable a flashcard for eligibility to be drawn from the pool",
+     *     summary="Allow the flashcard to be drawn again when drawing a random question to answer",
+     *     tags={"flashcard"},
+     *     @OA\Parameter(name="flashcard", in="path", @OA\Schema(type="integer")),
+     *     @OA\Response(response="200", description="Success"),
+     *     @OA\Response(response="400", description="Cannot change status"),
+     *     @OA\Response(response="404", description="Model not found"),
+     *     @OA\Response(response="403", description="Not permitted"),
+     *     security={{"bearerAuth":{}}}
+     * )
+     */
+    public function unhide(Request $request, Flashcard $flashcard): JsonResponse
+    {
+        try {
+            $flashcardResponse = $this->service->unhide($flashcard);
+        } catch (ModelNotFoundException) {
+            return $this->handleNotFound();
+        } catch (DraftQuestionsCannotChangeStatusException $e) {
+            return ApiResponse::error(
+                'Cannot change status',
+                $e->getMessage(),
+                'draft_status_cannot_change'
+            );
         } catch (UnauthorizedException) {
             return $this->handleForbidden();
         }
@@ -315,5 +382,48 @@ class FlashcardController extends Controller
         $scorecardResponse = $this->service->answer($flashcard, $request->input('answers'), $request->user());
 
         return fractal($scorecardResponse, new ScorecardTransformer())->respond();
+    }
+
+
+    /**
+     * @OA\Get(
+     *     path="/api/flashcards/drafts",
+     *     summary="Get all flashcards that are missing some data that stops them from being published",
+     *     tags={"flashcard"},
+     *     @OA\Response(response="200", description="Success"),
+     *     @OA\Response(response="403", description="Not permitted"),
+     *     security={{"bearerAuth":{}}}
+     * )
+     */
+    public function draft(Request $request): JsonResponse
+    {
+        try {
+            $flashcards = $this->service->draft()->paginate(Auth::user()->page_limit);
+        } catch (UnauthorizedException) {
+            return $this->handleForbidden();
+        }
+
+        return fractal($flashcards, new FlashcardTransformer())->respond();
+    }
+
+    /**
+     * @OA\Get(
+     *     path="/api/flashcards/hidden",
+     *     summary="Get all flashcards that have been hidden by the user",
+     *     tags={"flashcard"},
+     *     @OA\Response(response="200", description="Success"),
+     *     @OA\Response(response="403", description="Not permitted"),
+     *     security={{"bearerAuth":{}}}
+     * )
+     */
+    public function hidden(Request $request): JsonResponse
+    {
+        try {
+            $flashcards = $this->service->hidden()->paginate(Auth::user()->page_limit);
+        } catch (UnauthorizedException) {
+            return $this->handleForbidden();
+        }
+
+        return fractal($flashcards, new FlashcardTransformer())->respond();
     }
 }
