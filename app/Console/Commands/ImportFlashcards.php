@@ -105,6 +105,7 @@ class ImportFlashcards extends Command
             $colour = array_rand(TagColour::cases());
             $tag = Tag::firstOrCreate([
                 'name' => $topic,
+                'user_id' => $this->argument('user'),
             ], [
                 'colour' => TagColour::from($colour),
             ]);

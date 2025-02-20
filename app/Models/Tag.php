@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 /**
+ * @property int user_id
  * @property string name
  * @property TagColour colour
  *
@@ -23,6 +24,7 @@ class Tag extends Model
     public $timestamps = false;
 
     protected $fillable = [
+        'user_id',
         'name',
         'colour',
     ];

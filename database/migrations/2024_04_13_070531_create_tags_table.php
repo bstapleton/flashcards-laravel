@@ -10,6 +10,7 @@ return new class extends Migration
     {
         Schema::create('tags', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('user_id')->constrained();
             $table->text('name');
             $table->text('colour')->default(0);
         });
