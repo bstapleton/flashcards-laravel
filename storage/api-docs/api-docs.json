@@ -279,6 +279,12 @@
                                         "items": {
                                             "$ref": "#/components/schemas/Answer"
                                         }
+                                    },
+                                    "tags": {
+                                        "type": "array",
+                                        "items": {
+                                            "$ref": "#/components/schemas/Tag"
+                                        }
                                     }
                                 },
                                 "type": "object"
@@ -546,7 +552,7 @@
                     "flashcard"
                 ],
                 "summary": "Resurrect a buried flashcard",
-                "description": "Revive a flashcard from the graveyard back to the easy difficulty",
+                "description": "Revive a flashcard from the graveyard back to the easy difficulty. This will additionally remove it's hidden status if it had one.",
                 "operationId": "4ad9fdbff04c4096badde7914e688b34",
                 "parameters": [
                     {
@@ -563,6 +569,126 @@
                     },
                     "404": {
                         "description": "Model not found"
+                    },
+                    "403": {
+                        "description": "Not permitted"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/flashcards/{flashcard}/hide": {
+            "post": {
+                "tags": [
+                    "flashcard"
+                ],
+                "summary": "Stop a flashcard from showing up when drawing a random question to answer",
+                "description": "Hide a flashcard from the pool, even if it's eligible",
+                "operationId": "5a6d29d897648f83233390afeb50925d",
+                "parameters": [
+                    {
+                        "name": "flashcard",
+                        "in": "path",
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success"
+                    },
+                    "400": {
+                        "description": "Cannot change status"
+                    },
+                    "404": {
+                        "description": "Model not found"
+                    },
+                    "403": {
+                        "description": "Not permitted"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/flashcards/{flashcard}/unhide": {
+            "post": {
+                "tags": [
+                    "flashcard"
+                ],
+                "summary": "Allow the flashcard to be drawn again when drawing a random question to answer",
+                "description": "Re-enable a flashcard for eligibility to be drawn from the pool",
+                "operationId": "7630452a80f589efe4f6a834390456b8",
+                "parameters": [
+                    {
+                        "name": "flashcard",
+                        "in": "path",
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success"
+                    },
+                    "400": {
+                        "description": "Cannot change status"
+                    },
+                    "404": {
+                        "description": "Model not found"
+                    },
+                    "403": {
+                        "description": "Not permitted"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/flashcards/drafts": {
+            "get": {
+                "tags": [
+                    "flashcard"
+                ],
+                "summary": "Get all flashcards that are missing some data that stops them from being published",
+                "operationId": "9ccc188473a75f86a4d693f02ba02f47",
+                "responses": {
+                    "200": {
+                        "description": "Success"
+                    },
+                    "403": {
+                        "description": "Not permitted"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/flashcards/hidden": {
+            "get": {
+                "tags": [
+                    "flashcard"
+                ],
+                "summary": "Get all flashcards that have been hidden by the user",
+                "operationId": "f2a70c48c295ea6ebd33070490192992",
+                "responses": {
+                    "200": {
+                        "description": "Success"
                     },
                     "403": {
                         "description": "Not permitted"
