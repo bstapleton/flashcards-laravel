@@ -95,16 +95,35 @@ class FlashcardService
             $flashcard->tags()->attach($data['tags']);
         }
 
+        if ($flashcard->answers()->count() > 1 || $flashcard->is_true) {
+            $this->setStatus($flashcard, Status::PUBLISHED);
+        }
+
         return $flashcard;
     }
 
-    public function update(array $data, Flashcard $flashcard)
+    public function update(array $data, Flashcard $flashcard): Flashcard
     {
         if (!Gate::authorize('update', $flashcard)) {
             throw new UnauthorizedException();
         }
 
-        $flashcard->update($data);
+        // Only update the truthiness of a question if it's already set up as a statement type
+        if (isset($flashcard->is_true) && isset($data['is_true']))
+        {
+            $flashcard->is_true = $data['is_true'];
+        }
+
+        if (isset($data['text'])) {
+            $flashcard->text = $data['text'];
+        }
+
+        if (isset($data['explanation'])) {
+            $flashcard->explanation = $data['explanation'];
+        }
+
+        $flashcard->save();
+        $this->resetDifficulty($flashcard);
 
         return $flashcard;
     }
