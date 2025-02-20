@@ -6,6 +6,7 @@ use App\Enums\Difficulty;
 use App\Enums\QuestionType;
 use App\Models\Answer;
 use App\Models\Flashcard;
+use App\Models\Tag;
 use App\Models\User;
 use Illuminate\Database\Seeder;
 
@@ -29,6 +30,10 @@ class FlashcardSeeder extends Seeder
             Answer::factory()->correct()->create([
                 'flashcard_id' => $flashcard->id,
                 'text' => 'correct'
+            ]);
+
+            Tag::factory()->count(3)->create([
+                'user_id' => $flashcard->user_id
             ]);
         });
 
