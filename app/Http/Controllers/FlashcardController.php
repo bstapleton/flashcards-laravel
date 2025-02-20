@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\Status;
+use App\Exceptions\DraftQuestionsCannotChangeStatusException;
 use App\Exceptions\LessThanOneCorrectAnswerException;
 use App\Exceptions\NoEligibleQuestionsException;
 use App\Exceptions\UndeterminedQuestionTypeException;
@@ -169,9 +171,10 @@ class FlashcardController extends Controller
     public function update(Request $request, Flashcard $flashcard): JsonResponse
     {
         $request->validate([
-            'text' => 'required|max:1024'
+            'text' => 'string|max:1024',
+            'explanation' => 'string|max:1024',
+            'is_true' => 'boolean',
         ]);
-        // TODO validation
 
         try {
             $flashcardResponse = $this->service->update($request->all(), $flashcard);

@@ -5,6 +5,8 @@ namespace App\Services;
 use App\Enums\Correctness;
 use App\Enums\Difficulty;
 use App\Enums\QuestionType;
+use App\Enums\Status;
+use App\Exceptions\DraftQuestionsCannotChangeStatusException;
 use App\Exceptions\LessThanOneCorrectAnswerException;
 use App\Exceptions\NoEligibleQuestionsException;
 use App\Exceptions\UndeterminedQuestionTypeException;
@@ -185,6 +187,12 @@ class FlashcardService
         $flashcard->update([
             'difficulty' => Difficulty::EASY,
         ]);
+
+        // It can only be hidden if it was preciously published, and since we're adding it back to the pool, make sure
+        // it gets unhidden at the same time.
+        if ($flashcard->status === Status::HIDDEN) {
+            $this->setStatus($flashcard, Status::PUBLISHED);
+        }
 
         return $flashcard;
     }
@@ -411,5 +419,47 @@ class FlashcardService
         $flashcard->save();
 
         return $flashcard->difficulty;
+    }
+
+    /**
+     * User wishes to hide the question from the being eligible
+     *
+     * @param Flashcard $flashcard
+     * @return Flashcard
+     * @throws DraftQuestionsCannotChangeStatusException
+     */
+    public function hide(Flashcard $flashcard): Flashcard
+    {
+        if ($flashcard->status === Status::DRAFT) {
+            throw new DraftQuestionsCannotChangeStatusException();
+        }
+
+        $this->setStatus($flashcard, Status::HIDDEN);
+
+        return $flashcard;
+    }
+
+    /**
+     * User wishes to unhide a question so it is eligible for answering again
+     *
+     * @param Flashcard $flashcard
+     * @return Flashcard
+     * @throws DraftQuestionsCannotChangeStatusException
+     */
+    public function unhide(Flashcard $flashcard): Flashcard
+    {
+        if ($flashcard->status === Status::DRAFT) {
+            throw new DraftQuestionsCannotChangeStatusException();
+        }
+
+        $this->setStatus($flashcard, Status::PUBLISHED);
+
+        return $flashcard;
+    }
+
+    public function setStatus(Flashcard $flashcard, Status $status): void
+    {
+        $flashcard->status = $status;
+        $flashcard->save();
     }
 }
