@@ -156,7 +156,8 @@ class FlashcardService
 
         return Flashcard::currentUser()
             ->alive()
-            ->orderBy('last_seen_at', 'desc');
+            ->orderBy('last_seen_at', 'desc')
+            ->orderBy('created_at', 'desc');
     }
 
     public function draft()
