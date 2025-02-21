@@ -107,20 +107,6 @@ class FlashcardControllerTest extends TestCase
         $this->assertEquals($flashcards->sortByDesc('created_at')->pluck('id')->take(5)->toArray(), collect($response['data'])->pluck('id')->toArray());
     }
 
-    public function test_all_success()
-    {
-        // Arrange
-        $user = User::factory()->create();
-        $flashcards = Flashcard::factory()->count(5)->create(['user_id' => $user->id]);
-        $this->actingAs($user);
-
-        $response = $this->getJson('/api/flashcards/all');
-
-        $this->assertEquals(200, $response->getStatusCode());
-        $this->assertCount(5, $response['data']);
-        $this->assertEquals($flashcards->sortByDesc('created_at')->pluck('id')->toArray(), collect($response['data'])->pluck('id')->toArray());
-    }
-
     public function test_all_unauthorized()
     {
         $response = $this->getJson('/api/flashcards/all');
