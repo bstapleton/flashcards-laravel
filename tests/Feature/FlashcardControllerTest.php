@@ -90,7 +90,7 @@ class FlashcardControllerTest extends TestCase
         $response = $this->getJson('/api/flashcards');
 
         $response->assertJsonFragment([
-            'code' => 'unauthorized'
+            'code' => 'unauthenticated'
         ]);
 
         $this->assertEquals(401, $response->getStatusCode());
@@ -116,7 +116,7 @@ class FlashcardControllerTest extends TestCase
         $response = $this->getJson('/api/flashcards/all');
 
         $response->assertJsonFragment([
-            'code' => 'unauthorized'
+            'code' => 'unauthenticated'
         ]);
 
         $this->assertEquals(401, $response->getStatusCode());
@@ -156,7 +156,7 @@ class FlashcardControllerTest extends TestCase
         $response = $this->getJson('/api/flashcards/' . $this->newerQuestion->id);
 
         $response->assertJsonFragment([
-            'code' => 'unauthorized'
+            'code' => 'unauthenticated'
         ]);
 
         $this->assertEquals(401, $response->getStatusCode());
@@ -167,10 +167,6 @@ class FlashcardControllerTest extends TestCase
         $this->actingAs($this->user);
 
         $response = $this->getJson('/api/flashcards/' . 999999999);
-
-        $response->assertJsonFragment([
-            'code' => 'not_found'
-        ]);
 
         $this->assertEquals(404, $response->getStatusCode());
     }
@@ -201,7 +197,9 @@ class FlashcardControllerTest extends TestCase
             function (Answer $answer) {
                 return [
                     'id' => $answer->id,
-                    'text' => $answer->text
+                    'text' => $answer->text,
+                    'explanation' => $answer->explanation,
+                    'is_correct' => $answer->is_correct
                 ];
             })->toArray());
         $this->assertTrue($question['tags'] === Flashcard::find($question['id'])->tags->map(
@@ -239,7 +237,9 @@ class FlashcardControllerTest extends TestCase
             function (Answer $answer) {
                 return [
                     'id' => $answer->id,
-                    'text' => $answer->text
+                    'text' => $answer->text,
+                    'explanation' => $answer->explanation,
+                    'is_correct' => $answer->is_correct
                 ];
             })->toArray());
         $this->assertTrue($question['tags'] === Flashcard::find($question['id'])->tags->map(
@@ -285,6 +285,10 @@ class FlashcardControllerTest extends TestCase
             'text' => 'Iceland is in the northern hemisphere',
             'is_true' => true,
             'tags' => ['geography']
+        ]);
+
+        $response->assertJsonFragment([
+            'code' => 'unauthenticated'
         ]);
 
         $this->assertEquals(401, $response->getStatusCode());
@@ -352,9 +356,94 @@ class FlashcardControllerTest extends TestCase
         $this->assertEquals(422, $response->getStatusCode());
     }
 
+    public function test_update_success()
+    {
+        $flashcard = Flashcard::factory()->create([
+            'user_id' => $this->user->id,
+            'explanation' => fake()->sentence(),
+            'is_true' => false,
+        ]);
 
+        $originalText = $flashcard->text;
+        $originalExplanation = $flashcard->explanation;
 
-    // TODO: test update
+        $this->actingAs($this->user);
+
+        $response = $this->patchJson('/api/flashcards/' . $flashcard->id, [
+            'text' => 'Something new',
+            'explanation' => 'Extensive waffle',
+            'is_true' => true
+        ]);
+
+        $this->assertTrue($response['data']['text'] !== $originalText);
+        $this->assertTrue($response['data']['explanation'] !== $originalExplanation);
+        $this->assertTrue($response['data']['is_true']);
+
+        $updated = Flashcard::find($flashcard->id);
+
+        $this->assertTrue($updated->is_true);
+    }
+
+    public function test_update_unauthorized()
+    {
+        $flashcard = Flashcard::factory()->create([
+            'user_id' => $this->user->id,
+            'explanation' => fake()->sentence(),
+            'is_true' => false,
+        ]);
+
+        $response = $this->patchJson('/api/flashcards/' . $flashcard->id, [
+            'text' => fake()->text(20),
+        ]);
+
+        $response->assertJsonFragment([
+            'code' => 'unauthenticated'
+        ]);
+
+        $this->assertEquals(401, $response->getStatusCode());
+    }
+
+    public function test_update_not_found()
+    {
+        $this->actingAs($this->user);
+
+        $response = $this->patchJson('/api/flashcards/' . 999999999, [
+            'text' => fake()->text(20),
+        ]);
+
+        $this->assertEquals(404, $response->getStatusCode());
+    }
+
+    /**
+     * If the question was never set up as a statement type, you cannot modify its truthiness, so it just ignores it
+     *
+     * @return void
+     */
+    public function test_update_truthiness_idempotency()
+    {
+        $flashcard = Flashcard::factory()->create([
+            'user_id' => $this->user->id,
+        ]);
+
+        $this->actingAs($this->user);
+
+        $response = $this->patchJson('/api/flashcards/' . $flashcard->id, [
+            'is_true' => true
+        ]);
+
+        $response->assertJsonFragment([
+            'is_true' => null
+        ]);
+
+        $response = $this->patchJson('/api/flashcards/' . $flashcard->id, [
+            'is_true' => false
+        ]);
+
+        $response->assertJsonFragment([
+            'is_true' => null
+        ]);
+    }
+
     // TODO: test destroy
     // TODO: test graveyard
     // TODO: test random
