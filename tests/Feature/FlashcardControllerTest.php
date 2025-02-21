@@ -277,6 +277,58 @@ class FlashcardControllerTest extends TestCase
         $this->assertEquals(422, $response->getStatusCode());
     }
 
+    public function test_store_undetermined_question_type()
+    {
+        $this->actingAs($this->user);
+
+        $response = $this->postJson('/api/flashcards', [
+            'text' => 'Some weird mutant question',
+            'is_true' => true,
+            'answers' => [
+                [
+                    'text' => 'Apple',
+                    'is_correct' => true
+                ],
+                [
+                    'text' => 'Banana'
+                ]
+            ],
+            'tags' => ['food']
+        ]);
+
+        $response->assertJsonFragment([
+            'code' => 'undetermined_question_type'
+        ]);
+
+        $this->assertEquals(422, $response->getStatusCode());
+    }
+
+    public function test_store_less_than_one_correct_answer()
+    {
+        $this->actingAs($this->user);
+
+        $response = $this->postJson('/api/flashcards', [
+            'text' => 'Some weird mutant question',
+            'answers' => [
+                [
+                    'text' => 'Apple',
+                ],
+                [
+                    'text' => 'Banana'
+                ]
+            ],
+            'tags' => ['food']
+        ]);
+
+        $response->assertJsonFragment([
+            'code' => 'less_than_one_correct_answer'
+        ]);
+
+        $this->assertEquals(422, $response->getStatusCode());
+    }
+
+
+
     // TODO: test update
     // TODO: test destroy
     // TODO: test graveyard
