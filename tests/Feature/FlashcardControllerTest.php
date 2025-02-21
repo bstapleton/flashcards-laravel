@@ -89,6 +89,10 @@ class FlashcardControllerTest extends TestCase
     {
         $response = $this->getJson('/api/flashcards');
 
+        $response->assertJsonFragment([
+            'code' => 'unauthorized'
+        ]);
+
         $this->assertEquals(401, $response->getStatusCode());
     }
 
@@ -110,6 +114,10 @@ class FlashcardControllerTest extends TestCase
     public function test_all_unauthorized()
     {
         $response = $this->getJson('/api/flashcards/all');
+
+        $response->assertJsonFragment([
+            'code' => 'unauthorized'
+        ]);
 
         $this->assertEquals(401, $response->getStatusCode());
     }
@@ -147,7 +155,24 @@ class FlashcardControllerTest extends TestCase
     {
         $response = $this->getJson('/api/flashcards/' . $this->newerQuestion->id);
 
+        $response->assertJsonFragment([
+            'code' => 'unauthorized'
+        ]);
+
         $this->assertEquals(401, $response->getStatusCode());
+    }
+
+    public function test_show_not_found()
+    {
+        $this->actingAs($this->user);
+
+        $response = $this->getJson('/api/flashcards/' . 999999999);
+
+        $response->assertJsonFragment([
+            'code' => 'not_found'
+        ]);
+
+        $this->assertEquals(404, $response->getStatusCode());
     }
 
     public function test_store_success_multiple_choice_single_correct()
