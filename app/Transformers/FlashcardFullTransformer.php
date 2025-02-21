@@ -9,9 +9,11 @@ use Illuminate\Support\Carbon;
 use League\Fractal\TransformerAbstract;
 
 /**
- * This transformer is used to 'hide' certain aspects of the flashcard from the consumer, making it harder to cheat.
+ * The intention of this 'full' transformer is for consumers to be able to see all the data they created/updated at
+ * that point in the flow. The other transformer is what you get back after submitting an answer. Basically, some
+ * rudimentary anti-cheat, even though you're only cheating yourself if you do it.
  */
-class FlashcardTransformer extends TransformerAbstract
+class FlashcardFullTransformer extends TransformerAbstract
 {
     public function transform(Flashcard $flashcard): array
     {
@@ -21,6 +23,7 @@ class FlashcardTransformer extends TransformerAbstract
             'status' => $flashcard->status->value,
             'text' => $flashcard->text,
             'explanation' => $flashcard->explanation,
+            'is_true' => $flashcard->is_true,
             'difficulty' => $flashcard->difficulty,
             'eligible_at' => Carbon::parse($flashcard->eligible_at)->toIso8601String(),
             'tags' => $flashcard->tags->map(function (Tag $tag) {
@@ -30,6 +33,8 @@ class FlashcardTransformer extends TransformerAbstract
                 return [
                     'id' => $answer->id,
                     'text' => $answer->text,
+                    'explanation' => $answer->explanation,
+                    'is_correct' => $answer->is_correct
                 ];
             })
         ];

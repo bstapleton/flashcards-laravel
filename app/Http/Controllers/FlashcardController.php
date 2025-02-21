@@ -9,6 +9,7 @@ use App\Exceptions\UndeterminedQuestionTypeException;
 use App\Helpers\ApiResponse;
 use App\Models\Flashcard;
 use App\Services\FlashcardService;
+use App\Transformers\FlashcardFullTransformer;
 use App\Transformers\FlashcardTransformer;
 use App\Transformers\ScorecardTransformer;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
@@ -93,7 +94,7 @@ class FlashcardController extends Controller
             return $this->handleForbidden();
         }
 
-        return fractal($flashcardResponse, new FlashcardTransformer())->respond();
+        return fractal($flashcardResponse, new FlashcardFullTransformer())->respond();
     }
 
     /**
@@ -146,7 +147,7 @@ class FlashcardController extends Controller
             );
         }
 
-        return fractal($flashcardResponse, new FlashcardTransformer())->respond();
+        return fractal($flashcardResponse, new FlashcardFullTransformer())->respond();
     }
 
     /**
@@ -183,7 +184,7 @@ class FlashcardController extends Controller
             return $this->handleForbidden();
         }
 
-        return fractal($flashcardResponse, new FlashcardTransformer())->respond();
+        return fractal($flashcardResponse, new FlashcardFullTransformer())->respond();
     }
 
     /**
