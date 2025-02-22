@@ -4,6 +4,7 @@ namespace Tests\Feature;
 
 use App\Enums\Difficulty;
 use App\Enums\QuestionType;
+use App\Enums\Status;
 use App\Models\Answer;
 use App\Models\Flashcard;
 use App\Models\Tag;
@@ -444,12 +445,372 @@ class FlashcardControllerTest extends TestCase
         ]);
     }
 
-    // TODO: test destroy
-    // TODO: test graveyard
-    // TODO: test random
-    // TODO: test revive
-    // TODO: test hide
-    // TODO: test unhide
+    public function test_destroy_flashcard_returns_204()
+    {
+        $this->actingAs($this->user);
+
+        $flashcard = Flashcard::factory()->create([
+            'user_id' => $this->user->id,
+        ]);
+
+        $response = $this->deleteJson('/api/flashcards/' . $flashcard->id);
+
+        $response->assertNoContent();
+    }
+
+    public function test_destroy_flashcard_deletes_flashcard()
+    {
+        $this->actingAs($this->user);
+
+        $flashcard = Flashcard::factory()->create([
+            'user_id' => $this->user->id,
+        ]);
+
+        $this->deleteJson('/api/flashcards/' . $flashcard->id);
+
+        $this->assertDatabaseMissing('flashcards', ['id' => $flashcard->id]);
+    }
+
+    public function test_destroy_flashcard_returns_404_if_flashcard_not_found()
+    {
+        $this->actingAs($this->user);
+
+        $response = $this->deleteJson('/api/flashcards/' . 999999999);
+
+        $this->assertEquals(404, $response->getStatusCode());
+    }
+
+    public function test_destroy_another_users_flashcard_returns_not_found()
+    {
+        $newUser = User::factory()->create();
+        $this->actingAs($newUser);
+
+        $flashcard = Flashcard::factory()->create([
+            'user_id' => $this->user->id,
+        ]);
+
+        $response = $this->deleteJson('/api/flashcards/' . $flashcard->id);
+
+        $this->assertEquals(404, $response->getStatusCode());
+        $this->assertNotNull(Flashcard::find($flashcard->id));
+    }
+
+    public function test_destroy_flashcard_returns_401_if_not_authenticated()
+    {
+        $flashcard = Flashcard::factory()->create([
+            'user_id' => $this->user->id,
+        ]);
+
+        $response = $this->deleteJson('/api/flashcards/' . $flashcard->id);
+
+        $this->assertEquals(401, $response->getStatusCode());
+    }
+
+    public function test_graveyard_returns_200()
+    {
+        $this->actingAs($this->user);
+
+        $response = $this->getJson('/api/flashcards/graveyard');
+
+        $response->assertSuccessful();
+    }
+
+    public function test_graveyard_returns_buried_flashcards()
+    {
+        $this->actingAs($this->user);
+
+        $buriedFlashcard = Flashcard::factory()->buriedDifficulty()->create([
+            'user_id' => $this->user->id,
+        ]);
+
+        $easyFlashcard = Flashcard::factory()->easyDifficulty()->create([
+            'user_id' => $this->user->id,
+        ]);
+
+        $mediumFlashcard = Flashcard::factory()->mediumDifficulty()->create([
+            'user_id' => $this->user->id,
+        ]);
+
+        $hardFlashcard = Flashcard::factory()->hardDifficulty()->create([
+            'user_id' => $this->user->id,
+        ]);
+
+        $response = $this->getJson('/api/flashcards/graveyard');
+
+        $responseData = json_decode($response->getContent(), true);
+        $this->assertArrayHasKey('data', $responseData);
+        $this->assertEquals($buriedFlashcard->id, $responseData['data'][0]['id']);
+        $this->assertCount(1, $responseData['data']);
+    }
+
+    public function test_graveyard_returns_empty_array_if_no_buried_flashcards()
+    {
+        $this->actingAs($this->user);
+
+        $response = $this->getJson('/api/flashcards/graveyard');
+
+        $responseData = json_decode($response->getContent(), true);
+        $this->assertArrayHasKey('data', $responseData);
+        $this->assertEquals([], $responseData['data']);
+    }
+
+    public function test_graveyard_returns_401_if_not_authenticated()
+    {
+        $response = $this->getJson('/api/flashcards/graveyard');
+
+        $this->assertEquals(401, $response->getStatusCode());
+    }
+
+    public function test_graveyard_paginates_results()
+    {
+        $this->actingAs($this->user);
+
+        Flashcard::factory($this->user->page_limit + 10)->create([
+            'user_id' => $this->user->id,
+            'difficulty' => Difficulty::BURIED,
+        ]);
+
+        $response = $this->getJson('/api/flashcards/graveyard');
+
+        $responseData = json_decode($response->getContent(), true);
+        $this->assertArrayHasKey('data', $responseData);
+        $this->assertCount($this->user->page_limit, $responseData['data']); // assuming page limit is 10
+    }
+
+    public function test_random_flashcard_returns_200()
+    {
+        Flashcard::factory()->count(10)->create([
+            'user_id' => $this->user->id,
+        ]);
+
+        $this->actingAs($this->user);
+
+        $response = $this->getJson('/api/flashcards/random');
+
+        $response->assertSuccessful();
+    }
+
+    public function test_random_flashcard_returns_flashcard_data()
+    {
+        $this->actingAs($this->user);
+
+        $response = $this->getJson('/api/flashcards/random');
+
+        $responseData = json_decode($response->getContent(), true);
+        $this->assertArrayHasKey('data', $responseData);
+        $this->assertArrayHasKey('id', $responseData['data']);
+        $this->assertArrayHasKey('text', $responseData['data']);
+    }
+
+    public function test_random_flashcard_returns_404_if_no_eligible_questions()
+    {
+        // Arrange: create a user with no eligible flashcards
+        $user = User::factory()->create();
+        $this->actingAs($user);
+
+        $response = $this->getJson('/api/flashcards/random');
+
+        $this->assertEquals(404, $response->getStatusCode());
+    }
+
+    public function test_random_flashcard_returns_401_if_not_authenticated()
+    {
+        $response = $this->getJson('/api/flashcards/random');
+
+        $this->assertEquals(401, $response->getStatusCode());
+    }
+
+    public function test_revive_returns_200()
+    {
+        $this->actingAs($this->user);
+
+        $buriedFlashcard = Flashcard::factory()->create([
+            'user_id' => $this->user->id,
+            'difficulty' => Difficulty::BURIED,
+        ]);
+
+        $response = $this->postJson('/api/flashcards/' . $buriedFlashcard->id . '/revive');
+
+        $response->assertSuccessful();
+    }
+
+    public function test_revive_revives_buried_flashcard()
+    {
+        $this->actingAs($this->user);
+
+        $buriedFlashcard = Flashcard::factory()->create([
+            'user_id' => $this->user->id,
+            'difficulty' => Difficulty::BURIED,
+        ]);
+
+        $this->postJson('/api/flashcards/' . $buriedFlashcard->id . '/revive');
+
+        $revivedFlashcard = Flashcard::find($buriedFlashcard->id);
+        $this->assertEquals(Difficulty::EASY, $revivedFlashcard->difficulty);
+    }
+
+    public function test_revive_returns_404_if_flashcard_not_found()
+    {
+        $this->actingAs($this->user);
+
+        $response = $this->postJson('/api/flashcards/' . 999999999 . '/revive');
+
+        $this->assertEquals(404, $response->getStatusCode());
+    }
+
+    public function test_revive_returns_401_if_not_authenticated()
+    {
+        $buriedFlashcard = Flashcard::factory()->create([
+            'user_id' => $this->user->id,
+            'difficulty' => Difficulty::BURIED,
+        ]);
+
+        $response = $this->postJson('/api/flashcards/' . $buriedFlashcard->id . '/revive');
+
+        $this->assertEquals(401, $response->getStatusCode());
+    }
+
+    public function test_revive_unhides_flashcard_if_it_was_hidden()
+    {
+        $this->actingAs($this->user);
+
+        $buriedFlashcard = Flashcard::factory()->create([
+            'user_id' => $this->user->id,
+            'difficulty' => Difficulty::BURIED,
+            'status' => Status::HIDDEN,
+        ]);
+
+        $this->postJson('/api/flashcards/' . $buriedFlashcard->id . '/revive');
+
+        $revivedFlashcard = Flashcard::find($buriedFlashcard->id);
+        $this->assertEquals(Status::PUBLISHED, $revivedFlashcard->status);
+    }
+
+    public function test_hide_returns_200()
+    {
+        $this->actingAs($this->user);
+
+        $flashcard = Flashcard::factory()->publishedStatus()->create([
+            'user_id' => $this->user->id,
+        ]);
+
+        $response = $this->postJson('/api/flashcards/' . $flashcard->id . '/hide');
+
+        $response->assertSuccessful();
+    }
+
+    public function test_hide_hides_flashcard()
+    {
+        $this->actingAs($this->user);
+
+        $flashcard = Flashcard::factory()->easyDifficulty()->publishedStatus()->create([
+            'user_id' => $this->user->id,
+        ]);
+
+        $this->postJson('/api/flashcards/' . $flashcard->id . '/hide');
+
+        $hiddenFlashcard = Flashcard::find($flashcard->id);
+        $this->assertEquals(Status::HIDDEN, $hiddenFlashcard->status);
+        $this->assertEquals(Difficulty::EASY, $hiddenFlashcard->difficulty);
+    }
+
+    public function test_hide_returns_404_if_flashcard_not_found()
+    {
+        $this->actingAs($this->user);
+
+        $response = $this->postJson('/api/flashcards/' . 999999999 . '/hide');
+
+        $this->assertEquals(404, $response->getStatusCode());
+    }
+
+    public function test_hide_returns_401_if_not_authenticated()
+    {
+        $flashcard = Flashcard::factory()->publishedStatus()->create([
+            'user_id' => $this->user->id,
+        ]);
+
+        $response = $this->postJson('/api/flashcards/' . $flashcard->id . '/hide');
+
+        $this->assertEquals(401, $response->getStatusCode());
+    }
+
+    public function test_hide_cannot_change_status_if_draft()
+    {
+        $this->actingAs($this->user);
+
+        $flashcard = Flashcard::factory()->draftStatus()->create([
+            'user_id' => $this->user->id,
+        ]);
+
+        $response = $this->postJson('/api/flashcards/' . $flashcard->id . '/hide');
+
+        $this->assertEquals(400, $response->getStatusCode());
+    }
+
+    public function test_unhide_returns_200()
+    {
+        $this->actingAs($this->user);
+
+        $flashcard = Flashcard::factory()->create([
+            'user_id' => $this->user->id,
+            'status' => Status::HIDDEN,
+        ]);
+
+        $response = $this->postJson('/api/flashcards/' . $flashcard->id . '/unhide');
+
+        $response->assertSuccessful();
+    }
+
+    public function test_unhide_unhides_flashcard()
+    {
+        $this->actingAs($this->user);
+
+        $flashcard = Flashcard::factory()->create([
+            'user_id' => $this->user->id,
+            'status' => Status::HIDDEN,
+        ]);
+
+        $this->postJson('/api/flashcards/' . $flashcard->id . '/unhide');
+
+        $unhiddenFlashcard = Flashcard::find($flashcard->id);
+        $this->assertEquals(Status::PUBLISHED, $unhiddenFlashcard->status);
+    }
+
+    public function test_unhide_returns_404_if_flashcard_not_found()
+    {
+        $this->actingAs($this->user);
+
+        $response = $this->postJson('/api/flashcards/' . 999999999 . '/unhide');
+
+        $this->assertEquals(404, $response->getStatusCode());
+    }
+
+    public function test_unhide_returns_401_if_not_authenticated()
+    {
+        $flashcard = Flashcard::factory()->create([
+            'user_id' => $this->user->id,
+            'status' => Status::HIDDEN,
+        ]);
+
+        $response = $this->postJson('/api/flashcards/' . $flashcard->id . '/unhide');
+
+        $this->assertEquals(401, $response->getStatusCode());
+    }
+
+    public function test_unhide_cannot_change_status_if_draft()
+    {
+        $this->actingAs($this->user);
+
+        $flashcard = Flashcard::factory()->create([
+            'user_id' => $this->user->id,
+            'status' => Status::DRAFT,
+        ]);
+
+        $response = $this->postJson('/api/flashcards/' . $flashcard->id . '/unhide');
+
+        $this->assertEquals(400, $response->getStatusCode());
+    }
+
     // TODO: test answer
     // TODO: test drafts
     // TODO: test hidden
