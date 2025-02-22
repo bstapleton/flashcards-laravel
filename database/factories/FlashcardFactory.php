@@ -60,6 +60,15 @@ class FlashcardFactory extends Factory
         });
     }
 
+    public function draftStatus(): Factory
+    {
+        return $this->state(function (array $attributes) {
+            return [
+                'status' => Status::DRAFT
+            ];
+        });
+    }
+
     public function publishedStatus(): Factory
     {
         return $this->state(function (array $attributes) {
