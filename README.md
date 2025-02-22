@@ -103,6 +103,7 @@ You can set the type to `multiple` if you intend to have multiple answers in the
   - Including segmentation by tag
   - Allow for losing points on an incorrect attempt
 - Allow for image-type answers: e.g. select the correct x from the images below
+- Bypass errors when creating multiple-choice questions when you don't have at least one correct answer - allow consumers to complete the data later and use the draft status until then: can still be automatic draft->published, just don't force them to have all the data complete at the point of flashcard creation.
 - Tests. So many tests.
 - Error checking and handling for
   - Single answer multiple-choice questions where more than one answer has been flagged as correct
