@@ -24,6 +24,24 @@ class FlashcardFactory extends Factory
         ];
     }
 
+    public function trueStatement(): Factory
+    {
+        return $this->state(function (array $attributes) {
+            return [
+                'is_true' => true,
+            ];
+        });
+    }
+
+    public function falseStatement(): Factory
+    {
+        return $this->state(function (array $attributes) {
+            return [
+                'is_true' => false,
+            ];
+        });
+    }
+
     public function easyDifficulty(): Factory
     {
         return $this->state(function (array $attributes) {

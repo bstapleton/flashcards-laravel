@@ -379,7 +379,13 @@ class FlashcardController extends Controller
      */
     public function answer(Request $request, Flashcard $flashcard): JsonResponse
     {
-        $scorecardResponse = $this->service->answer($flashcard, $request->input('answers'), $request->user());
+        try {
+            $scorecardResponse = $this->service->answer($flashcard, $request->input('answers'), $request->user());
+        } catch (ModelNotFoundException) {
+            return $this->handleNotFound();
+        } catch (UnauthorizedException) {
+            return $this->handleForbidden();
+        }
 
         return fractal($scorecardResponse, new ScorecardTransformer())->respond();
     }

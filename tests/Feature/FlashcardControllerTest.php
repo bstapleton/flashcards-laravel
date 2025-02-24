@@ -2,6 +2,7 @@
 
 namespace Tests\Feature;
 
+use App\Enums\Correctness;
 use App\Enums\Difficulty;
 use App\Enums\QuestionType;
 use App\Enums\Status;
@@ -811,7 +812,329 @@ class FlashcardControllerTest extends TestCase
         $this->assertEquals(400, $response->getStatusCode());
     }
 
-    // TODO: test answer
+    /**
+     * A question with one correct answer but the consumer gets the answer wrong
+     *
+     * @return void
+     */
+    public function test_answering_incorrectly_multiple_choice_single_correct_answer()
+    {
+        $this->actingAs($this->user);
+
+        $flashcard = Flashcard::factory()->create(['user_id' => $this->user->id]);
+        $answers = Answer::factory()->count(2)->create(['flashcard_id' => $flashcard->id]);
+
+        $answers->first()->update([
+            'is_correct' => true
+        ]);
+
+        $response = $this->postJson('/api/flashcards/' . $flashcard->id, [
+            'answers' => [
+                $answers->reverse()->first()->id
+            ]
+        ]);
+
+        $response->assertSuccessful();
+        $response->assertJsonFragment([
+            'correctness' => Correctness::NONE,
+            'type' => QuestionType::SINGLE,
+            'score' => 0
+        ]);
+    }
+
+    /**
+     * A question with one correct answer and the consumer selects it correctly
+     *
+     * @return void
+     */
+    public function test_answering_correctly_multiple_choice_single_correct_answer()
+    {
+        $this->actingAs($this->user);
+
+        $flashcard = Flashcard::factory()->create(['user_id' => $this->user->id]);
+        $answers = Answer::factory()->count(2)->create(['flashcard_id' => $flashcard->id]);
+
+        $answers->first()->update([
+            'is_correct' => true
+        ]);
+
+        $response = $this->postJson('/api/flashcards/' . $flashcard->id, [
+            'answers' => [
+                $answers->first()->id
+            ]
+        ]);
+
+        $response->assertSuccessful();
+        $response->assertJsonFragment([
+            'correctness' => Correctness::COMPLETE,
+            'type' => QuestionType::SINGLE
+        ]);
+
+        $this->assertTrue($response['data']['score'] > 0);
+    }
+
+    /**
+     * A question with more than one correct answer, but the consumer does not select any of them
+     *
+     * @return void
+     */
+    public function test_answering_multiple_choice_multiple_correct_answers_consumer_selects_none_of_them()
+    {
+        $this->actingAs($this->user);
+
+        $flashcard = Flashcard::factory()->create(['user_id' => $this->user->id]);
+        $answers = Answer::factory()->count(3)->create(['flashcard_id' => $flashcard->id, 'is_correct' => true]);
+
+        $answers->first()->update([
+            'is_correct' => false
+        ]);
+
+        $response = $this->postJson('/api/flashcards/' . $flashcard->id, [
+            'answers' => [
+                $answers->first()->id,
+            ]
+        ]);
+
+        $response->assertSuccessful();
+        $response->assertJsonFragment([
+            'correctness' => Correctness::NONE,
+            'type' => QuestionType::MULTIPLE,
+            'score' => 0
+        ]);
+    }
+
+    /**
+     * A question with more than one correct answer, but the consumer does not select all of them
+     *
+     * @return void
+     */
+    public function test_answering_multiple_choice_multiple_correct_answers_user_selects_some_of_them()
+    {
+        $this->actingAs($this->user);
+
+        $flashcard = Flashcard::factory()->create(['user_id' => $this->user->id]);
+        $answers = Answer::factory()->count(3)->create(['flashcard_id' => $flashcard->id, 'is_correct' => true]);
+
+        $answers->first()->update([
+            'is_correct' => false
+        ]);
+
+        $response = $this->postJson('/api/flashcards/' . $flashcard->id, [
+            'answers' => [
+                $answers->first()->id,
+                $answers->reverse()->first()->id
+            ]
+        ]);
+
+        $response->assertSuccessful();
+        $response->assertJsonFragment([
+            'correctness' => Correctness::PARTIAL,
+            'type' => QuestionType::MULTIPLE,
+            'score' => 0
+        ]);
+    }
+
+    /**
+     * A question with more than one correct answer, and all the correct ones are selected
+     *
+     * @return void
+     */
+    public function test_answering_completely_correct_multiple_choice_multiple_correct_answers()
+    {
+        $this->actingAs($this->user);
+
+        $flashcard = Flashcard::factory()->create(['user_id' => $this->user->id]);
+        $answers = Answer::factory()->count(3)->create(['flashcard_id' => $flashcard->id, 'is_correct' => false]);
+
+        $answers->first()->update([
+            'is_correct' => true
+        ]);
+
+        $answers->reverse()->first()->update([
+            'is_correct' => true
+        ]);
+
+        $response = $this->postJson('/api/flashcards/' . $flashcard->id, [
+            'answers' => [
+                $answers->first()->id,
+                $answers->reverse()->first()->id
+            ]
+        ]);
+
+        $response->assertSuccessful();
+        $response->assertJsonFragment([
+            'correctness' => Correctness::COMPLETE,
+            'type' => QuestionType::MULTIPLE,
+        ]);
+
+        $this->assertTrue($response['data']['score'] > 0);
+    }
+
+    /**
+     * A question with more than one correct answer, and all the correct ones are selected AND at least one is incorrect
+     * as well
+     *
+     * @return void
+     */
+    public function test_multiple_choice_multiple_correct_answers_user_selects_some_wrong_as_well()
+    {
+        $this->actingAs($this->user);
+
+        $flashcard = Flashcard::factory()->create(['user_id' => $this->user->id]);
+        $answers = Answer::factory()->count(3)->create(['flashcard_id' => $flashcard->id, 'is_correct' => false]);
+
+        $answers->first()->update([
+            'is_correct' => true
+        ]);
+
+        $answers->reverse()->first()->update([
+            'is_correct' => true
+        ]);
+
+        $response = $this->postJson('/api/flashcards/' . $flashcard->id, [
+            'answers' => $answers->pluck('id')->toArray()
+        ]);
+
+        $response->assertSuccessful();
+        $response->assertJsonFragment([
+            'correctness' => Correctness::PARTIAL,
+            'type' => QuestionType::MULTIPLE,
+            'score' => 0
+        ]);
+    }
+
+    public function test_answering_true_statement_incorrectly()
+    {
+        $this->actingAs($this->user);
+
+        $flashcard = Flashcard::factory()->trueStatement()->create(['user_id' => $this->user->id]);
+
+        $response = $this->postJson('/api/flashcards/' . $flashcard->id, [
+            'answers' => [
+                false
+            ]
+        ]);
+
+        $response->assertSuccessful();
+        $response->assertJsonFragment([
+            'correctness' => Correctness::NONE,
+            'type' => QuestionType::STATEMENT,
+            'score' => 0
+        ]);
+    }
+
+    public function test_answering_true_statement_correctly()
+    {
+        $this->actingAs($this->user);
+
+        $flashcard = Flashcard::factory()->trueStatement()->create(['user_id' => $this->user->id]);
+
+        $response = $this->postJson('/api/flashcards/' . $flashcard->id, [
+            'answers' => [
+                true
+            ]
+        ]);
+
+        $response->assertSuccessful();
+        $response->assertJsonFragment([
+            'correctness' => Correctness::COMPLETE,
+            'type' => QuestionType::STATEMENT,
+        ]);
+
+        $this->assertTrue($response['data']['score'] > 0);
+    }
+
+    public function test_answering_false_statement_incorrectly()
+    {
+        $this->actingAs($this->user);
+
+        $flashcard = Flashcard::factory()->falseStatement()->create(['user_id' => $this->user->id]);
+
+        $response = $this->postJson('/api/flashcards/' . $flashcard->id, [
+            'answers' => [
+                true
+            ]
+        ]);
+
+        $response->assertSuccessful();
+        $response->assertJsonFragment([
+            'correctness' => Correctness::NONE,
+            'type' => QuestionType::STATEMENT,
+            'score' => 0
+        ]);
+    }
+
+    public function test_answering_false_statement_correctly()
+    {
+        $this->actingAs($this->user);
+
+        $flashcard = Flashcard::factory()->falseStatement()->create(['user_id' => $this->user->id]);
+
+        $response = $this->postJson('/api/flashcards/' . $flashcard->id, [
+            'answers' => [
+                false
+            ]
+        ]);
+
+        $response->assertSuccessful();
+        $response->assertJsonFragment([
+            'correctness' => Correctness::COMPLETE,
+            'type' => QuestionType::STATEMENT,
+        ]);
+
+        $this->assertTrue($response['data']['score'] > 0);
+    }
+
+    public function test_answering_another_user_question()
+    {
+        $this->actingAs($this->user);
+
+        $newUser = User::factory()->create();
+
+        $flashcard = Flashcard::factory()->falseStatement()->create(['user_id' => $newUser->id]);
+
+        $response = $this->postJson('/api/flashcards/' . $flashcard->id, [
+            'answers' => [
+                false
+            ]
+        ]);
+
+        $response->assertStatus(404);
+    }
+
+    public function test_answering_unauthenticated()
+    {
+        $flashcard = Flashcard::factory()->falseStatement()->create(['user_id' => $this->user->id]);
+
+        $response = $this->postJson('/api/flashcards/' . $flashcard->id, [
+            'answers' => [
+                false
+            ]
+        ]);
+
+        $response->assertStatus(401);
+    }
+
+    public function test_answering_handles_malformed_data_array()
+    {
+        $this->actingAs($this->user);
+
+        $flashcard = Flashcard::factory()->falseStatement()->create(['user_id' => $this->user->id]);
+
+        $response = $this->postJson('/api/flashcards/' . $flashcard->id, [
+            'answers' => [
+                fake()->sentence(3)
+            ]
+        ]);
+
+        $response->assertSuccessful();
+        $response->assertJsonFragment([
+            'correctness' => Correctness::NONE,
+            'type' => QuestionType::STATEMENT,
+            'score' => 0
+        ]);
+    }
+
     // TODO: test drafts
     // TODO: test hidden
 }
