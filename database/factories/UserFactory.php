@@ -30,6 +30,8 @@ class UserFactory extends Factory
             'password' => static::$password ??= Hash::make('password'),
             'remember_token' => Str::random(10),
             'page_limit' => rand(2, 20),
+            'points' => 0,
+            'lose_points' => false,
         ];
     }
 
