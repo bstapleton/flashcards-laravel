@@ -1135,6 +1135,51 @@ class FlashcardControllerTest extends TestCase
         ]);
     }
 
-    // TODO: test drafts
-    // TODO: test hidden
+    public function test_drafts_success()
+    {
+        $newUser = User::factory()->create();
+        $this->actingAs($newUser);
+
+        Flashcard::factory()->draftStatus()->count(2)->create(['user_id' => $newUser->id]);
+        $hidden = Flashcard::factory()->hiddenStatus()->count(2)->create(['user_id' => $newUser->id]);
+        $published = Flashcard::factory()->publishedStatus()->count(2)->create(['user_id' => $newUser->id, 'is_true' => true]);
+
+        $response = $this->getJson('/api/flashcards/drafts');
+
+        $response->assertSuccessful();
+        $this->assertCount(2, $response['data']);
+        $this->assertNotContains($hidden->pluck('id')->toArray(), collect($response['data'])->pluck('id')->toArray());
+        $this->assertNotContains($published->pluck('id')->toArray(), collect($response['data'])->pluck('id')->toArray());
+    }
+
+    public function test_drafts_unauthorised()
+    {
+        $response = $this->getJson('/api/flashcards/drafts');
+
+        $response->assertStatus(401);
+    }
+
+    public function test_hidden_success()
+    {
+        $newUser = User::factory()->create();
+        $this->actingAs($newUser);
+
+        Flashcard::factory()->hiddenStatus()->count(2)->create(['user_id' => $newUser->id]);
+        $draft = Flashcard::factory()->draftStatus()->count(2)->create(['user_id' => $newUser->id]);
+        $published = Flashcard::factory()->publishedStatus()->count(2)->create(['user_id' => $newUser->id, 'is_true' => true]);
+
+        $response = $this->getJson('/api/flashcards/hidden');
+
+        $response->assertSuccessful();
+        $this->assertCount(2, $response['data']);
+        $this->assertNotContains($draft->pluck('id')->toArray(), collect($response['data'])->pluck('id')->toArray());
+        $this->assertNotContains($published->pluck('id')->toArray(), collect($response['data'])->pluck('id')->toArray());
+    }
+
+    public function test_hidden_unauthorised()
+    {
+        $response = $this->getJson('/api/flashcards/hidden');
+
+        $response->assertStatus(401);
+    }
 }
