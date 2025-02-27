@@ -3,6 +3,7 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
+use App\Events\UserCreated;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -83,6 +84,10 @@ class User extends Authenticatable
             'lose_points' => 'boolean',
         ];
     }
+
+    protected $dispatchesEvents = [
+        'created' => UserCreated::class,
+    ];
 
     public function flashcards(): HasMany
     {
