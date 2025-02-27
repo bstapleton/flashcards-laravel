@@ -54,6 +54,7 @@ class User extends Authenticatable
         'medium_time',
         'hard_time',
         'page_limit',
+        'lose_points',
     ];
 
     /**
