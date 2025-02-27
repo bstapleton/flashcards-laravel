@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Exceptions\DraftQuestionsCannotChangeStatusException;
+use App\Exceptions\FreeUserFlashcardLimitException;
 use App\Exceptions\LessThanOneCorrectAnswerException;
 use App\Exceptions\NoEligibleQuestionsException;
 use App\Exceptions\UndeterminedQuestionTypeException;
@@ -96,7 +97,6 @@ class FlashcardController extends Controller
 
         return fractal($flashcardResponse, new FlashcardFullTransformer())->respond();
     }
-
     /**
      * @OA\Post(
      *     path="/api/flashcards",
@@ -114,6 +114,7 @@ class FlashcardController extends Controller
      *         )
      *     ),
      *     @OA\Response(response="200", description="Success"),
+     *     @OA\Response(response="400", description="Free account limitation reached"),
      *     @OA\Response(response="403", description="Not permitted"),
      *     @OA\Response(response="422", description="Validation error"),
      *     security={{"bearerAuth":{}}}
@@ -131,6 +132,12 @@ class FlashcardController extends Controller
             $flashcardResponse = $this->service->store($request->all());
         } catch (UnauthorizedException) {
             return $this->handleForbidden();
+        } catch (FreeUserFlashcardLimitException $e) {
+            return ApiResponse::error(
+                'Free user account limitation',
+                $e->getMessage(),
+                'free_account_limit'
+            );
         } catch (UndeterminedQuestionTypeException $e) {
             return ApiResponse::error(
                 'Undetermined question type',
@@ -149,6 +156,7 @@ class FlashcardController extends Controller
 
         return fractal($flashcardResponse, new FlashcardFullTransformer())->respond();
     }
+
 
     /**
      * @OA\Patch(

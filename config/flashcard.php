@@ -9,5 +9,6 @@ return [
         'easy' => 30,
         'medium' => 10080, // 7 days
         'hard' => 40320, // 28 days
-    ]
+    ],
+    'free_account_limit' => 10,
 ];

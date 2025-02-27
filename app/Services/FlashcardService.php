@@ -7,6 +7,7 @@ use App\Enums\Difficulty;
 use App\Enums\QuestionType;
 use App\Enums\Status;
 use App\Exceptions\DraftQuestionsCannotChangeStatusException;
+use App\Exceptions\FreeUserFlashcardLimitException;
 use App\Exceptions\LessThanOneCorrectAnswerException;
 use App\Exceptions\NoEligibleQuestionsException;
 use App\Exceptions\UndeterminedQuestionTypeException;
@@ -56,6 +57,13 @@ class FlashcardService
     {
         if (!Gate::authorize('store', Flashcard::class)) {
             throw new UnauthorizedException();
+        }
+
+        $role = Auth::user()->roles->where('code', 'advanced_user')->first();
+
+        // Cannot create questions if you're a free user and already have 10 created
+        if (!$role && Auth::user()->flashcards->count() >= config('flashcard.free_account_limit')) {
+            throw new FreeUserFlashcardLimitException();
         }
 
         // Cannot create a statement with answers
