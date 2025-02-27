@@ -8,6 +8,7 @@ use App\Enums\QuestionType;
 use App\Enums\Status;
 use App\Models\Answer;
 use App\Models\Flashcard;
+use App\Models\Role;
 use App\Models\Tag;
 use App\Models\User;
 use Tests\TestCase;
@@ -279,6 +280,46 @@ class FlashcardControllerTest extends TestCase
                     'colour' => $tag->colour
                 ];
             })->toArray());
+    }
+
+    public function test_store_free_limit()
+    {
+        $this->actingAs($this->user);
+
+        Flashcard::factory()->count(config('flashcard.free_account_limit'))->create([
+            'user_id' => $this->user->id
+        ]);
+
+        $response = $this->postJson('/api/flashcards', [
+            'text' => 'Iceland is in the northern hemisphere',
+            'is_true' => true,
+            'tags' => ['geography']
+        ]);
+
+        $response->assertJsonFragment([
+            'code' => 'free_account_limit'
+        ]);
+
+        $this->assertEquals(400, $response->getStatusCode());
+    }
+
+    public function test_store_advanced_unlimited()
+    {
+        $this->actingAs($this->user);
+
+        $this->user->roles()->attach(Role::where('code', 'advanced_user')->first()->id);
+
+        Flashcard::factory()->count(config('flashcard.free_account_limit'))->create([
+            'user_id' => $this->user->id
+        ]);
+
+        $response = $this->postJson('/api/flashcards', [
+            'text' => 'Iceland is in the northern hemisphere',
+            'is_true' => true,
+            'tags' => ['geography']
+        ]);
+
+        $response->assertSuccessful();
     }
 
     public function test_store_unauthorized()

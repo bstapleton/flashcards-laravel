@@ -9,8 +9,9 @@ class DatabaseSeeder extends Seeder
 {
     public function run(): void
     {
-        $user = User::factory()->create([
-            'username' => 'tester'
+        $demo = User::factory()->create([
+            'username' => 'demo',
+            'display_name' => 'Demo user',
         ]);
     }
 }

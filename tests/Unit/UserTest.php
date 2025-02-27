@@ -2,7 +2,10 @@
 
 namespace Tests\Unit;
 
+use App\Models\Role;
+use App\Models\RoleUser;
 use App\Models\User;
+use Carbon\Carbon;
 use Database\Factories\UserFactory;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use PHPUnit\Framework\Attributes\CoversClass;
@@ -61,5 +64,66 @@ class UserTest extends TestCase
         $user = UserFactory::new()->losePoints()->create();
 
         $this->assertTrue($user->lose_points);
+    }
+
+    #[Test]
+    public function role_has_name_and_code()
+    {
+        $name = 'Test Role';
+        $code = 'test-role';
+        $role = Role::create([
+            'name' => $name,
+            'code' => $code
+        ]);
+
+        $this->assertEquals($name, $role->name);
+        $this->assertEquals($code, $role->code);
+    }
+
+    #[Test]
+    public function role_user_pivot_has_valid_until_and_auto_renew()
+    {
+        $role = Role::create([
+            'name' => 'Test Role',
+            'code' => 'test-role',
+        ]);
+
+        $user = UserFactory::new()->create();
+        $validity = Carbon::now()->addDays(30);
+
+        $user->roles()->attach($role, [
+            'valid_until' => $validity,
+            'auto_renew' => true,
+        ]);
+
+        $roleToCheck = $user->roles->where('code', 'test-role')->first();
+
+        $this->assertEquals($validity, $roleToCheck->pivot->valid_until);
+        $this->assertTrue($roleToCheck->pivot->auto_renew === 1);
+    }
+
+    #[Test]
+    public function role_user_pivot_can_be_updated()
+    {
+        $role = new Role();
+        $role->name = 'Test Role';
+        $role->code = 'test-role';
+
+        $user = UserFactory::new()->create();
+
+        $user->roles()->attach($user, [
+            'valid_until' => Carbon::now()->addDays(30),
+            'auto_renew' => true,
+        ]);
+
+        $newValidity = Carbon::now()->addDays(60);
+
+        foreach ($user->roles as $role) {
+            $role->pivot->valid_until = $newValidity;
+            $role->pivot->auto_renew = false;
+
+            $this->assertEquals($newValidity, $role->pivot->valid_until);
+            $this->assertEquals(0, $role->pivot->auto_renew);
+        }
     }
 }
