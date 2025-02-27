@@ -6,6 +6,7 @@ use App\Enums\Status;
 use App\Enums\TagColour;
 use App\Models\Answer;
 use App\Models\Flashcard;
+use App\Models\Role;
 use App\Models\Tag;
 use App\Models\User;
 use Illuminate\Console\Command;
@@ -26,6 +27,13 @@ class ImportFlashcards extends Command
             $user = User::factory()->create([
                 'username' => $this->argument('username')
             ]);
+        }
+
+        $role = Role::where('code', 'advanced_user')->first();
+        $userRoles = $user->roles->pluck('code')->toArray();
+
+        if(!in_array($role->code, $userRoles)) {
+            $user->roles()->attach($role);
         }
 
         $data = Storage::disk('import')->json('questions.json');
