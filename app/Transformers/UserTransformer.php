@@ -12,8 +12,7 @@ class UserTransformer extends TransformerAbstract
     {
         return [
             'id' => $user->sqid,
-            'name' => $user->name,
-            'email' => $user->email,
+            'name' => $user->display_name,
             'points' => $user->points,
             'created_at' => Carbon::parse($user->created_at)->toIso8601String()
         ];
