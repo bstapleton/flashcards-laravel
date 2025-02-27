@@ -7,17 +7,21 @@ use App\Exceptions\LessThanOneCorrectAnswerException;
 use App\Exceptions\NoEligibleQuestionsException;
 use App\Exceptions\UndeterminedQuestionTypeException;
 use App\Helpers\ApiResponse;
+use App\Helpers\Boolean;
+use App\Http\Requests\SuggestionRequest;
 use App\Models\Flashcard;
 use App\Services\FlashcardService;
 use App\Transformers\FlashcardFullTransformer;
 use App\Transformers\FlashcardTransformer;
 use App\Transformers\ScorecardTransformer;
+use GeminiAPI\Resources\Parts\TextPart;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\UnauthorizedException;
+use GeminiAPI\Client as Gemini;
 
 class FlashcardController extends Controller
 {
@@ -432,4 +436,49 @@ class FlashcardController extends Controller
 
         return fractal($flashcards, new FlashcardTransformer())->respond();
     }
+
+    /**
+     * @OA\Get(
+     *     path="/api/flashcards/suggest",
+     *     summary="Suggest a question based on the type and topic",
+     *     tags={"flashcard"},
+     *     @OA\Parameter(name="statement", in="query", @OA\Schema(type="boolean")),
+     *     @OA\Parameter(name="topic", in="query", @OA\Schema(type="string")),
+     *     @OA\Response(response="200", description="Success"),
+     *     @OA\Response(response="401", description="Unauthenticated"),
+     *     @OA\Response(response="403", description="Not permitted"),
+     *     @OA\Response(response="422", description="Validation error"),
+     * )
+     */
+    public function suggest(SuggestionRequest $request): JsonResponse
+    {
+        $topic = $request->input('topic');
+        $isStatement = (new Boolean)->handle($request->input('statement'));
+        $formatting = ' but as raw text without the surrounding backticks and language denotation.';
+
+        if ($isStatement) {
+            $prompt = 'Give me one statement on the topic of ' . $topic . '. The statement can be either true or ' .
+                'false. If the statement is false, include an explanation of why it is false. Return the response ' .
+                'with the following JSON structure: '.
+                '{"text":"statement","is_true": true,"explanation":"explanation"}' . $formatting;
+        } else {
+            $prompt = 'Give me one multiple choice question on the topic of ' . $topic . '. There must be at least ' .
+                'two possible answers in your response, but no more than five. One or more of the answers must be ' .
+                'correct. Return the response with the following JSON structure: '.
+                '{"text":"question","answers":[{"text":"answer","is_correct":true}]}' . $formatting;
+        }
+
+        $client = new Gemini(env('GEMINI_API_KEY'));
+        $result = $client->generativeModel('gemini-2.0-flash-001')->generateContent(
+            new TextPart($prompt),
+        );
+        $response = new JsonResponse();
+        $response->setData([
+            'data' => json_decode($result->text())
+        ]);
+
+        return $response;
+    }
+
+
 }

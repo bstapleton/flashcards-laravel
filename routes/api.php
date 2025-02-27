@@ -27,6 +27,7 @@ Route::controller(FlashcardController::class)->prefix('flashcards')->middleware(
     Route::get('/graveyard', 'graveyard')->name('flashcards.graveyard');
     Route::get('/drafts', 'draft')->name('flashcards.drafts');
     Route::get('/hidden', 'hidden')->name('flashcards.hidden');
+    Route::get('/suggest', 'suggest')->name('flashcards.suggest');
     Route::prefix('{flashcard}')->group(function () {
         Route::get('/', 'show')->name('flashcards.show');
         Route::post('/', 'answer')->name('flashcards.answer');
