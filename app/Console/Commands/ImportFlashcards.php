@@ -14,19 +14,19 @@ use Illuminate\Support\Facades\Storage;
 
 class ImportFlashcards extends Command
 {
-    protected $signature = 'app:import-flashcards {user}';
+    protected $signature = 'app:import-flashcards {username}';
 
     protected $description = 'Imports flashcards from the /public/import/ directory - pop in a questions.json file ' .
     'and run this. More info can be found in the readme regarding formatting.';
 
     public function handle(): int
     {
-        $user = User::find($this->argument('user'));
+        $user = User::where('username', $this->argument('username'))->first();
 
         if (!$user) {
-            $this->error('User not found.');
-
-            return 1;
+            $user = User::factory()->create([
+                'username' => $this->argument('username')
+            ]);
         }
 
         $data = Storage::disk('import')->json('questions.json');
@@ -105,7 +105,7 @@ class ImportFlashcards extends Command
             $colour = array_rand(TagColour::cases());
             $tag = Tag::firstOrCreate([
                 'name' => $topic,
-                'user_id' => $this->argument('user'),
+                'user_id' => User::where('username', $this->argument('username'))->first()->id,
             ], [
                 'colour' => TagColour::from($colour),
             ]);
