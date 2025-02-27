@@ -2,11 +2,11 @@
 
 namespace App\Console\Commands;
 
-use App\Enums\QuestionType;
 use App\Enums\Status;
 use App\Enums\TagColour;
 use App\Models\Answer;
 use App\Models\Flashcard;
+use App\Models\Role;
 use App\Models\Tag;
 use App\Models\User;
 use Illuminate\Console\Command;
@@ -14,19 +14,26 @@ use Illuminate\Support\Facades\Storage;
 
 class ImportFlashcards extends Command
 {
-    protected $signature = 'app:import-flashcards {user}';
+    protected $signature = 'app:import-flashcards {username}';
 
     protected $description = 'Imports flashcards from the /public/import/ directory - pop in a questions.json file ' .
     'and run this. More info can be found in the readme regarding formatting.';
 
     public function handle(): int
     {
-        $user = User::find($this->argument('user'));
+        $user = User::where('username', $this->argument('username'))->first();
 
         if (!$user) {
-            $this->error('User not found.');
+            $user = User::factory()->create([
+                'username' => $this->argument('username')
+            ]);
+        }
 
-            return 1;
+        $role = Role::where('code', 'advanced_user')->first();
+        $userRoles = $user->roles->pluck('code')->toArray();
+
+        if(!in_array($role->code, $userRoles)) {
+            $user->roles()->attach($role);
         }
 
         $data = Storage::disk('import')->json('questions.json');
@@ -40,16 +47,10 @@ class ImportFlashcards extends Command
         $json = json_decode(json_encode($data));
 
         foreach ($json as $question) {
-            if (
-                property_exists($question, 'answers')
-                && in_array($question->type, [QuestionType::MULTIPLE->value, QuestionType::SINGLE->value])
-            ) {
+            if (property_exists($question, 'answers')) {
                 $this->createFlashcardWithAnswers($user, $question);
-            } elseif (QuestionType::STATEMENT->value === $question->type) {
-                $this->createStatementFlashcard($user, $question);
             } else {
-                $this->warn('Invalid question type "' . $question->type . '", skipping. Valid types are: ' .
-                    'statement, single, multiple.');
+                $this->createStatementFlashcard($user, $question);
             }
         }
 
@@ -105,7 +106,7 @@ class ImportFlashcards extends Command
             $colour = array_rand(TagColour::cases());
             $tag = Tag::firstOrCreate([
                 'name' => $topic,
-                'user_id' => $this->argument('user'),
+                'user_id' => User::where('username', $this->argument('username'))->first()->id,
             ], [
                 'colour' => TagColour::from($colour),
             ]);
