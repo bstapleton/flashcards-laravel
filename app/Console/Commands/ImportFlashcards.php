@@ -2,7 +2,6 @@
 
 namespace App\Console\Commands;
 
-use App\Enums\QuestionType;
 use App\Enums\Status;
 use App\Enums\TagColour;
 use App\Models\Answer;
@@ -40,16 +39,10 @@ class ImportFlashcards extends Command
         $json = json_decode(json_encode($data));
 
         foreach ($json as $question) {
-            if (
-                property_exists($question, 'answers')
-                && in_array($question->type, [QuestionType::MULTIPLE->value, QuestionType::SINGLE->value])
-            ) {
+            if (property_exists($question, 'answers')) {
                 $this->createFlashcardWithAnswers($user, $question);
-            } elseif (QuestionType::STATEMENT->value === $question->type) {
-                $this->createStatementFlashcard($user, $question);
             } else {
-                $this->warn('Invalid question type "' . $question->type . '", skipping. Valid types are: ' .
-                    'statement, single, multiple.');
+                $this->createStatementFlashcard($user, $question);
             }
         }
 

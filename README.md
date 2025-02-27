@@ -7,9 +7,11 @@ Disclaimer: Big ol' chunks of what's written below isn't complete yet (including
 ## Flashcards
 
 Create flashcards of different types:
-1. statement - these have no answers to select, and just give you a fact/statement/whatever to digest
-2. question - these have multiple answers and only one correct answer
-3. multiple-choice - these have multiple answers with two or more correct answers
+1. statement - these give you a fact/statement/whatever to digest, you get to choose if the statement is true or false
+2. single - these have multiple answers and only one correct answer
+3. multiple - these have multiple answers with two or more correct answers
+
+Functionally 2 and 3 are pretty indistinguishable, though there's additional scoring logic applied (see below) for 3 vs 2.
 
 Flashcards have tags, which you can think of like subjects or topics.
 
@@ -26,7 +28,7 @@ If you answer incorrectly, then it will be reset to 'easy'
 
 ### Scoring
 
-Each time you provide a correct answer, you'll get an increase in score. In the case of a multiple choice, you'll only get a score increase if you get ALL the correct answers and NONE of the incorrect ones, so think carefully...
+Each time you provide a correct answer, you'll get an increase in score. In the case of a multiple choice, you'll only get a score increase if you get ALL the correct answers and NONE of the incorrect ones, so think carefully... You get more points for these types of questions though!
 
 ## Running it
 
@@ -38,7 +40,9 @@ Each time you provide a correct answer, you'll get an increase in score. In the 
    2. `php artisan seed --class=FlashcardSeeder` will make some flashcards of different types for you to try out
 5. `php artisan serve` and you can check it out in Swagger
 
-To use the endpoints, you'll need to hit the login one first. The seeded user's email is `f2@test.com` and their password is very secure: `password`. I assume you know what you're doing with bearer tokens, or you're going to have Bad Time(tm).
+I generally prefer containerisation with Laravel Sail, so if you know what you're doing, you can just do a `sail up -d` and then all the commands above are largely the same, except instead of `php artisan` you do `sail artisan` instead.
+
+To use the endpoints, you'll need to hit the login one first. The seeded username is `demo` and their password is very secure: `password`. I assume you know what you're doing with bearer tokens, or you're going to have Bad Time(tm).
 
 ### Known issues
 
@@ -50,14 +54,13 @@ If you want to import your own questions to try it out - something I recommend i
 
 First, you need a `questions.json` file. You can put it into the `/storage/import` directory so the command can find it.
 
-Read through the following sections for formatting constraints, then when you're ready, you can run `php artisan app:import-flashcards {user}`, replacing `{user}` with the id of your seeded/created user in the DB.
+Read through the following sections for formatting constraints, then when you're ready, you can run `php artisan app:import-flashcards {username}`, replacing `{username}` with whatever you want. If it's a username of an existing user you have in your DB, it will assign the questions to them.
 
 #### For statement (i.e. true/false) questions
 ```json
 [
     {
         "text": "Two plus two is seven",
-        "type": "statement",
         "is_true": false,
         "explanation": "The correct answer is four.",
         "tags": [
@@ -67,7 +70,7 @@ Read through the following sections for formatting constraints, then when you're
 ]
 ```
 
-Statements require no answers, only a flag to stipulate whether the statement itself is true or not. 
+Statements require no answers, only a flag to stipulate whether the statement itself is true or not. The lack of an answers array is what the importer will look for in terms of processing the data correctly.
 
 If the statement is false, it is recommended to provide an `explanation` so the user can know what the correct answer would be if it were to come up as another type of question.
 
@@ -76,7 +79,6 @@ If the statement is false, it is recommended to provide an `explanation` so the 
 [
     {
         "text": "What is two plus two?",
-        "type": "single",
         "answers": [
             {
                 "text": "Four",
@@ -95,7 +97,7 @@ If the statement is false, it is recommended to provide an `explanation` so the 
 ]
 ```
 
-You can set the type to `multiple` if you intend to have multiple answers in the set that are correct. The `explanation` is optional, but recommended for incorrect answers. It is useful for correct ones to provide more context if desired.
+The `explanation` is optional, but recommended for incorrect answers. It can also be useful for correct ones to provide more context if desired.
 
 ## The TODO list
 
