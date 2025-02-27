@@ -4,9 +4,11 @@ namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Collection;
 use Laravel\Sanctum\HasApiTokens;
 use RedExplosion\Sqids\Concerns\HasSqids;
 
@@ -22,6 +24,7 @@ use RedExplosion\Sqids\Concerns\HasSqids;
  * @property int hard_time
  * @property int page_limit
  * @property bool lose_points
+ * @property Collection roles
  *
  * @OA\Schema(
  *     required={"username", "password", "display_name"},
@@ -89,6 +92,11 @@ class User extends Authenticatable
     public function attempts(): HasMany
     {
         return $this->hasMany(Attempt::class);
+    }
+
+    public function roles(): BelongsToMany
+    {
+        return $this->belongsToMany(Role::class)->withPivot(['valid_until', 'auto_renew']);
     }
 
     public function adjustPoints(int $score, $operation = 'add'): static
