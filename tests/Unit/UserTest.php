@@ -89,16 +89,17 @@ class UserTest extends TestCase
         ]);
 
         $user = UserFactory::new()->create();
+        $validity = Carbon::now()->addDays(30);
 
         $user->roles()->attach($role, [
-            'valid_until' => Carbon::now()->addDays(30),
+            'valid_until' => $validity,
             'auto_renew' => true,
         ]);
 
-        foreach($user->roles as $role) {
-            $this->assertEquals(Carbon::now()->addDays(30), $role->pivot->valid_until);
-            $this->assertTrue($role->pivot->auto_renew === 1);
-        }
+        $roleToCheck = $user->roles->where('code', 'test-role')->first();
+
+        $this->assertEquals($validity, $roleToCheck->pivot->valid_until);
+        $this->assertTrue($roleToCheck->pivot->auto_renew === 1);
     }
 
     #[Test]
