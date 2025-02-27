@@ -296,6 +296,9 @@
                     "200": {
                         "description": "Success"
                     },
+                    "400": {
+                        "description": "Free account limitation reached"
+                    },
                     "403": {
                         "description": "Not permitted"
                     },
