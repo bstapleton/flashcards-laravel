@@ -1223,4 +1223,52 @@ class FlashcardControllerTest extends TestCase
 
         $response->assertStatus(401);
     }
+
+    public function test_expired_trial_users_cannot_store()
+    {
+        $user = User::factory()->twoMonthsOld()->create();
+
+        $this->actingAs($user);
+
+        $response = $this->postJson('/api/flashcards', [
+            'text' => 'Iceland is in the northern hemisphere',
+            'is_true' => true,
+            'tags' => ['geography']
+        ]);
+
+        $response->assertUnauthorized();
+    }
+
+    public function test_expired_trial_users_cannot_update()
+    {
+        $user = User::factory()->twoMonthsOld()->create();
+
+        $this->actingAs($user);
+        $flashcard = Flashcard::factory()->trueStatement()->create(['user_id' => $user->id]);
+
+        $response = $this->patchJson('/api/flashcards/' . $flashcard->id, [
+            'text' => 'Something new',
+            'explanation' => 'Extensive waffle',
+            'is_true' => false
+        ]);
+
+        $response->assertUnauthorized();
+        $this->assertTrue($flashcard->is_true);
+        $this->assertFalse($flashcard->text === 'Something new');
+        $this->assertFalse($flashcard->explanation === 'Extensive waffle');
+    }
+
+    public function test_expired_trial_users_cannot_answer()
+    {
+        $user = User::factory()->twoMonthsOld()->create();
+        $this->actingAs($user);
+
+        $flashcard = Flashcard::factory()->trueStatement()->create(['user_id' => $user->id]);
+
+        $response = $this->postJson('/api/flashcards/' . $flashcard->id, [
+            'answers' => [true]
+        ]);
+
+        $response->assertUnauthorized();
+    }
 }
