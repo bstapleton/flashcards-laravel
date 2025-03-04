@@ -5,12 +5,17 @@ use App\Http\Controllers\AttemptController;
 use App\Http\Controllers\FlashcardController;
 use App\Http\Controllers\FlashcardTagController;
 use App\Http\Controllers\TagController;
+use App\Http\Controllers\UserController;
 use App\Http\Middleware\CheckAuthed;
 use Illuminate\Support\Facades\Route;
 
 Route::post('/register', 'App\Http\Controllers\UserController@register')->name('auth.register');
 Route::post('/login', 'App\Http\Controllers\LoginController@login')->name('auth.login');
-Route::get('/user', 'App\Http\Controllers\UserController@show')->middleware('auth:sanctum')->name('auth.user');
+
+Route::controller(UserController::class)->prefix('user')->middleware(['auth:sanctum', CheckAuthed::class])->group(function () {
+    Route::get('/', 'show')->name('auth.user');
+    Route::get('/count_questions', 'countQuestions')->name('user.questions');
+});
 
 Route::controller(AnswerController::class)->prefix('answers')->middleware(['auth:sanctum', CheckAuthed::class])->group(function () {
     Route::post('/', 'store')->name('answers.store');
