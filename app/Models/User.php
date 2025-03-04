@@ -27,6 +27,7 @@ use RedExplosion\Sqids\Concerns\HasSqids;
  * @property int page_limit
  * @property bool lose_points
  * @property Collection roles
+ * @property bool is_trial_expired
  *
  * @OA\Schema(
  *     required={"username", "password", "display_name"},
