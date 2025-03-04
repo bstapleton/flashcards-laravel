@@ -63,4 +63,11 @@ class UserFactory extends Factory
             'lose_points' => true
         ]);
     }
+
+    public function twoMonthsOld(): static
+    {
+        return $this->state(fn (array $attributes) => [
+            'created_at' => now()->subMonths(2)
+        ]);
+    }
 }

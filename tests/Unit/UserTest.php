@@ -3,7 +3,6 @@
 namespace Tests\Unit;
 
 use App\Models\Role;
-use App\Models\RoleUser;
 use App\Models\User;
 use Carbon\Carbon;
 use Database\Factories\UserFactory;
@@ -125,5 +124,32 @@ class UserTest extends TestCase
             $this->assertEquals($newValidity, $role->pivot->valid_until);
             $this->assertEquals(0, $role->pivot->auto_renew);
         }
+    }
+
+    #[Test]
+    public function normal_user_has_an_active_trial()
+    {
+        $user = UserFactory::new()->create();
+
+        $this->assertFalse($user->roles()->where('code', 'advanced_user')->exists());
+        $this->assertFalse($user->is_trial_expired);
+    }
+
+    #[Test]
+    public function normal_user_has_an_expired_trial()
+    {
+        $user = UserFactory::new()->twoMonthsOld()->create();
+
+        $this->assertFalse($user->roles()->where('code', 'advanced_user')->exists());
+        $this->assertTrue($user->is_trial_expired);
+    }
+
+    #[Test]
+    public function advanced_user_cannot_have_an_expired_trial()
+    {
+        $user = UserFactory::new()->twoMonthsOld()->hasRoles(1, ['name' => 'Advanced user', 'code' => 'advanced_user'])->create();
+
+        $this->asserttrue($user->roles()->where('code', 'advanced_user')->exists());
+        $this->assertFalse($user->is_trial_expired);
     }
 }
