@@ -149,7 +149,7 @@ class UserTest extends TestCase
     {
         $user = UserFactory::new()->twoMonthsOld()->hasRoles(1, ['name' => 'Advanced user', 'code' => 'advanced_user'])->create();
 
-        $this->asserttrue($user->roles()->where('code', 'advanced_user')->exists());
+        $this->assertTrue($user->roles()->where('code', 'advanced_user')->exists());
         $this->assertFalse($user->is_trial_expired);
     }
 }
