@@ -190,31 +190,46 @@ class FlashcardService
             ->orderBy('created_at', 'desc');
     }
 
+    /**
+     * @throws NoEligibleQuestionsException
+     */
     public function random()
     {
         if (!Gate::authorize('list', Flashcard::class)) {
             throw new UnauthorizedException();
         }
 
-        $flashcards = Flashcard::currentUser()
+        $eligibleQuestions = Flashcard::currentUser()
+            ->published()
             ->alive()
             ->inRandomOrder()
             ->get()
             ->filter(function ($flashcard) {
-                if ($flashcard->eligible_at->lessThan(now()) || !$flashcard->last_seen_at) {
-                    return true;
-                }
-
-                return false;
+                return $flashcard->eligible_at->lessThan(now()) || !$flashcard->last_seen_at;
             }
         );
 
-        if (!$flashcards->count()) {
-            // Consumer has no eligible flashcards
-            throw new NoEligibleQuestionsException();
+        if (!$eligibleQuestions->count()) {
+            $flashcard = Flashcard::currentUser()
+                ->published()
+                ->alive()
+                ->get()
+                ->filter(function ($flashcard) {
+                    return (bool)$flashcard->eligible_at->greaterThan(now());
+                })
+                ->sortBy(function ($flashcard) {
+                    return $flashcard->eligible_at;
+                })
+                ->first();
+
+            if (!$flashcard) {
+                throw new NoEligibleQuestionsException();
+            }
+
+            throw new NoEligibleQuestionsException($flashcard->eligible_at);
         }
 
-        return $flashcards->first();
+        return $eligibleQuestions->first();
     }
 
     public function revive(Flashcard $flashcard): Flashcard
