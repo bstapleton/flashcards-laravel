@@ -249,7 +249,7 @@ class FlashcardController extends Controller
      *     summary="Get a random flashcard",
      *     tags={"flashcard"},
      *     @OA\Response(response="200", description="Success"),
-     *     @OA\Response(response="404", description="Model not found, OR no eligible questions"),
+     *     @OA\Response(response="404", description="Model not found"),
      *     @OA\Response(response="403", description="Not permitted"),
      *     security={{"bearerAuth":{}}}
      * )
@@ -261,12 +261,16 @@ class FlashcardController extends Controller
         } catch (ModelNotFoundException) {
             return $this->handleNotFound();
         } catch (NoEligibleQuestionsException $e) {
-            return ApiResponse::error(
-                'No eligible questions',
-                $e->getMessage(),
-                'nothing_eligible',
-                404
-            );
+            return response()->json([
+                'data' => [
+                    'title' => 'No eligible questions',
+                    'message' => $e->getMessage(),
+                    'code' => 'nothing_eligible',
+                    'next_eligible_at' => $e->getEligibleAt()
+                        ? $e->getEligibleAt()->diffForHumans()
+                        : null
+                ]
+            ]);
         } catch (UnauthorizedException) {
             return $this->handleForbidden();
         }

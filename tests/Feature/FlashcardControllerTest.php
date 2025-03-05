@@ -11,6 +11,7 @@ use App\Models\Flashcard;
 use App\Models\Role;
 use App\Models\Tag;
 use App\Models\User;
+use Illuminate\Support\Carbon;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
@@ -25,7 +26,7 @@ class FlashcardControllerTest extends TestCase
 
         $this->user = User::factory()->create();
 
-        $this->newerQuestion = Flashcard::factory()->easyDifficulty()->create([
+        $this->newerQuestion = Flashcard::factory()->publishedStatus()->easyDifficulty()->create([
             'user_id' => $this->user->id,
             'last_seen_at' => now(),
         ]);
@@ -38,7 +39,7 @@ class FlashcardControllerTest extends TestCase
 
         $this->newerQuestion->tags()->sync($tags->pluck('id')->toArray());
 
-        $this->olderQuestion = Flashcard::factory()->hardDifficulty()->create([
+        $this->olderQuestion = Flashcard::factory()->publishedStatus()->hardDifficulty()->create([
             'user_id' => $this->user->id,
             'created_at' => now()->subMinutes(2),
         ]);
@@ -644,15 +645,34 @@ class FlashcardControllerTest extends TestCase
         $this->assertArrayHasKey('text', $responseData['data']);
     }
 
-    public function test_random_flashcard_returns_404_if_no_eligible_questions()
+    public function test_random_flashcard_with_no_flashcards_published()
     {
-        // Arrange: create a user with no eligible flashcards
+        // Arrange: create a user with no flashcards
         $user = User::factory()->create();
         $this->actingAs($user);
 
         $response = $this->getJson('/api/flashcards/random');
 
-        $this->assertEquals(404, $response->getStatusCode());
+        $response->assertSuccessful();
+        $this->assertTrue($response['data']['code'] === 'nothing_eligible');
+        $this->assertNull($response['data']['next_eligible_at']);
+    }
+
+    public function test_random_flashcard_but_nothing_currently_eligible()
+    {
+        // Arrange: create a user with no eligible flashcards
+        $user = User::factory()->create(['easy_time' => 60]);
+        Flashcard::factory()->publishedStatus()->create([
+            'user_id' => $user->id,
+            'last_seen_at' => Carbon::now()->subMinutes(2),
+        ]);
+        $this->actingAs($user);
+
+        $response = $this->getJson('/api/flashcards/random');
+
+        $response->assertSuccessful();
+        $this->assertTrue($response['data']['code'] === 'nothing_eligible');
+        $this->assertNotNull($response['data']['next_eligible_at']);
     }
 
     public function test_random_flashcard_returns_401_if_not_authenticated()
