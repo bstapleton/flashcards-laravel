@@ -65,7 +65,7 @@ class UserControllerTest extends TestCase
 
         $response->assertStatus(200);
         $this->assertEquals(0, $response['data']['count']);
-        $this->assertEquals(config('flashcards.free_account_limit'), $response['data']['remaining']);
+        $this->assertEquals(config('flashcard.free_account_limit'), $response['data']['remaining']);
     }
 
     public function test_count_trial_user_questions_with_some_utilisation()
@@ -78,7 +78,7 @@ class UserControllerTest extends TestCase
 
         $response->assertStatus(200);
         $this->assertEquals($flashcards->count(), $response['data']['count']);
-        $this->assertEquals(config('flashcards.free_account_limit') - $flashcards->count(), $response['data']['remaining']);
+        $this->assertEquals(config('flashcard.free_account_limit') - $flashcards->count(), $response['data']['remaining']);
     }
 
     public function test_count_advanced_user_questions()

@@ -85,7 +85,7 @@ class UserController extends Controller
                 'count' => $request->user()->flashcards()->count(),
                 'remaining' => $request->user()->roles()->where('code', 'advanced_user')->exists()
                     ? null
-                    : config('flashcards.free_account_limit') - $request->user()->flashcards()->count()
+                    : config('flashcard.free_account_limit') - $request->user()->flashcards()->count()
             ]
         ]);
     }
