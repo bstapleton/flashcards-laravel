@@ -454,13 +454,23 @@ class FlashcardController extends Controller
      *     tags={"flashcard"},
      *     @OA\Parameter(name="topic", in="query", required=true, @OA\Schema(type="string")),
      *     @OA\Response(response="200", description="Success"),
-     *     @OA\Response(response="403", description="Not permitted"),
+     *     @OA\Response(response="401", description="Not authenticated"),
      *     @OA\Response(response="404", description="Import file not found"),
+     *     @OA\Response(response="422", description="Validation error"),
      *     security={{"bearerAuth":{}}}
      * )
      */
     public function import(Request $request): JsonResponse
     {
+        if ($request->input('topic') === null) {
+            return ApiResponse::error(
+                'Validation error',
+                'Topic parameter is required',
+                'validation_error',
+                422
+            );
+        }
+
         try {
             $importCount = $this->service->import($request->input('topic'));
         } catch (FileNotFoundException) {
