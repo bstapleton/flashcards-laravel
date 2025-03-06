@@ -29,6 +29,7 @@ use RedExplosion\Sqids\Concerns\HasSqids;
  * @property Collection roles
  * @property bool is_trial_expired
  * @property bool is_trial_user
+ * @property int total_questions
  *
  * @OA\Schema(
  *     required={"username", "password", "display_name"},
@@ -131,6 +132,11 @@ class User extends Authenticatable
         }
 
         return false;
+    }
+
+    public function getTotalQuestionsAttribute(): int
+    {
+        return $this->flashcards()->count();
     }
 
     public function adjustPoints(int $score, $operation = 'add'): static
