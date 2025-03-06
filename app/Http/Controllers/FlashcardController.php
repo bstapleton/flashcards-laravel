@@ -455,6 +455,7 @@ class FlashcardController extends Controller
      *     @OA\Parameter(name="topic", in="query", required=true, @OA\Schema(type="string")),
      *     @OA\Response(response="200", description="Success"),
      *     @OA\Response(response="403", description="Not permitted"),
+     *     @OA\Response(response="404", description="Import file not found"),
      *     security={{"bearerAuth":{}}}
      * )
      */
