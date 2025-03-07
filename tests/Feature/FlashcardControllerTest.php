@@ -1292,12 +1292,33 @@ class FlashcardControllerTest extends TestCase
         $response->assertUnauthorized();
     }
 
-    public function test_import_returns_200()
+    public function test_import_returns_200_for_literature()
     {
         $this->actingAs($this->user);
         $existingCount = $this->user->flashcards->count();
 
         $response = $this->postJson('/api/flashcards/import', ['topic' => 'literature']);
+
+        $response->assertSuccessful();
+        $response->assertJsonStructure([
+            'data' => [
+                'count',
+                'imported',
+                'remaining',
+            ]
+        ]);
+
+        $this->assertTrue($response['data']['count'] === 10 + $existingCount);
+        $this->assertTrue($response['data']['imported'] === 10);
+        $this->assertTrue($response['data']['remaining'] === config('flashcard.free_account_limit') - $existingCount - 10);
+    }
+
+    public function test_import_returns_200_for_physics()
+    {
+        $this->actingAs($this->user);
+        $existingCount = $this->user->flashcards->count();
+
+        $response = $this->postJson('/api/flashcards/import', ['topic' => 'physics']);
 
         $response->assertSuccessful();
         $response->assertJsonStructure([

@@ -532,11 +532,11 @@ class FlashcardService
             return null;
         }
 
-        $data = Storage::disk('import')->json($topic . '.json');
-
-        if (!$data) {
+        if (!Storage::disk('import')->exists($topic . '.json')) {
             throw new FileNotFoundException();
         }
+
+        $data = Storage::disk('import')->json($topic . '.json');
 
         $questions = collect(json_decode(json_encode($data)));
 
