@@ -20,12 +20,32 @@ class FlashcardPolicy
 
     public function store(User $user): Response
     {
+        if ($user->roles()->where('code', 'advanced_user')->exists()) {
+            return Response::allow();
+        }
+
+        if ($user->is_trial_expired) {
+            return Response::denyWithStatus(401, 'Your trial has expired');
+        }
+
         return Response::allow();
     }
 
     public function update(User $user, Flashcard $flashcard): Response
     {
-        return self::currentUser($user, $flashcard);
+        if ($user->id !== $flashcard->user_id) {
+            return Response::denyAsNotFound();
+        }
+
+        if ($user->roles()->where('code', 'advanced_user')->exists()) {
+            return Response::allow();
+        }
+
+        if ($user->is_trial_expired) {
+            return Response::denyWithStatus(401, 'Your trial has expired');
+        }
+
+        return Response::allow();
     }
 
     public function revive(User $user, Flashcard $flashcard): Response
@@ -35,7 +55,19 @@ class FlashcardPolicy
 
     public function answer(User $user, Flashcard $flashcard): Response
     {
-        return self::currentUser($user, $flashcard);
+        if ($user->id !== $flashcard->user_id) {
+            return Response::denyAsNotFound();
+        }
+
+        if ($user->roles()->where('code', 'advanced_user')->exists()) {
+            return Response::allow();
+        }
+
+        if ($user->is_trial_expired) {
+            return Response::denyWithStatus(401, 'Your trial has expired');
+        }
+
+        return Response::allow();
     }
 
     public function delete(User $user, Flashcard $flashcard): Response

@@ -16,6 +16,7 @@ use App\Transformers\FlashcardFullTransformer;
 use App\Transformers\FlashcardTransformer;
 use App\Transformers\ScorecardTransformer;
 use GeminiAPI\Resources\Parts\TextPart;
+use Illuminate\Contracts\Filesystem\FileNotFoundException;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -23,6 +24,7 @@ use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\UnauthorizedException;
 use GeminiAPI\Client as Gemini;
+use OpenApi\Annotations as OA;
 
 class FlashcardController extends Controller
 {
@@ -253,7 +255,7 @@ class FlashcardController extends Controller
      *     summary="Get a random flashcard",
      *     tags={"flashcard"},
      *     @OA\Response(response="200", description="Success"),
-     *     @OA\Response(response="404", description="Model not found, OR no eligible questions"),
+     *     @OA\Response(response="404", description="Model not found"),
      *     @OA\Response(response="403", description="Not permitted"),
      *     security={{"bearerAuth":{}}}
      * )
@@ -265,12 +267,16 @@ class FlashcardController extends Controller
         } catch (ModelNotFoundException) {
             return $this->handleNotFound();
         } catch (NoEligibleQuestionsException $e) {
-            return ApiResponse::error(
-                'No eligible questions',
-                $e->getMessage(),
-                'nothing_eligible',
-                404
-            );
+            return response()->json([
+                'data' => [
+                    'title' => 'No eligible questions',
+                    'message' => $e->getMessage(),
+                    'code' => 'nothing_eligible',
+                    'next_eligible_at' => $e->getEligibleAt()
+                        ? $e->getEligibleAt()->diffForHumans()
+                        : null
+                ]
+            ]);
         } catch (UnauthorizedException) {
             return $this->handleForbidden();
         }
@@ -489,4 +495,47 @@ class FlashcardController extends Controller
     }
 
 
+
+    /**
+     * @OA\Post(
+     *     path="/api/flashcards/import",
+     *     summary="Import flashcards",
+     *     tags={"flashcard"},
+     *     @OA\Parameter(name="topic", in="query", required=true, @OA\Schema(type="string")),
+     *     @OA\Response(response="200", description="Success"),
+     *     @OA\Response(response="401", description="Not authenticated"),
+     *     @OA\Response(response="404", description="Import file not found"),
+     *     @OA\Response(response="422", description="Validation error"),
+     *     security={{"bearerAuth":{}}}
+     * )
+     */
+    public function import(Request $request): JsonResponse
+    {
+        if ($request->input('topic') === null) {
+            return ApiResponse::error(
+                'Validation error',
+                'Topic parameter is required',
+                'validation_error',
+                422
+            );
+        }
+
+        try {
+            $importCount = $this->service->import($request->input('topic'));
+        } catch (FileNotFoundException) {
+            return $this->handleNotFound();
+        } catch (UnauthorizedException) {
+            return $this->handleForbidden();
+        }
+
+        return response()->json([
+            'data' => [
+                'count' => $request->user()->total_questions,
+                'imported' => $importCount,
+                'remaining' => $request->user()->roles()->where('code', 'advanced_user')->exists()
+                    ? null
+                    : config('flashcard.free_account_limit') - $request->user()->flashcards()->count()
+            ]
+        ], 200);
+    }
 }

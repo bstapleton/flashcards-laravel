@@ -48,7 +48,14 @@ To use the endpoints, you'll need to hit the login one first. The seeded usernam
 
 - Write operations will fail when using Swagger UI, giving a CSRF error. You can get around this by importing the generated file (`api-docs.json`) into an API testing/documentation app like Postman.
 
-### Importing data
+### Getting some questions the quick way
+
+A selection of questions have been provided and made available to add to your seeded account. Using the endpoint `/flashcards/import?topic=` and calling the name of one of the question 'packs' when you're authenticated, you'll get some sample questions to try out, with the following limitations:
+- As a 'free'/'trial' account, the most questions you can have is 20, and attempting to import anything over that number will get trimmed
+- Advanced users have no such limitation, so if you create an advanced user account, have at it
+- It won't create duplicates, but if you change the question text _at all_, it won't recognise it as a duplicate and import it again.
+
+### Importing data (aka, the slower way)
 
 If you want to import your own questions to try it out - something I recommend if you want to give this a proper test - there's a command you can run to do this.
 

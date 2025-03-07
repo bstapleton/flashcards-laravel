@@ -536,7 +536,7 @@
                         "description": "Success"
                     },
                     "404": {
-                        "description": "Model not found, OR no eligible questions"
+                        "description": "Model not found"
                     },
                     "403": {
                         "description": "Not permitted"
@@ -741,6 +741,44 @@
                         "description": "Validation error"
                     }
                 }
+            }
+        },
+        "/api/flashcards/import": {
+            "post": {
+                "tags": [
+                    "flashcard"
+                ],
+                "summary": "Import flashcards",
+                "operationId": "b7e417d313fdfc5a68ce5f70814451eb",
+                "parameters": [
+                    {
+                        "name": "topic",
+                        "in": "query",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success"
+                    },
+                    "401": {
+                        "description": "Not authenticated"
+                    },
+                    "404": {
+                        "description": "Import file not found"
+                    },
+                    "422": {
+                        "description": "Validation error"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
             }
         },
         "/api/flashcards/{flashcard}/tags/{tag}": {
@@ -1064,6 +1102,31 @@
                 "responses": {
                     "200": {
                         "description": "Success"
+                    },
+                    "401": {
+                        "description": "Unauthorised"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/user/count_questions": {
+            "get": {
+                "tags": [
+                    "auth"
+                ],
+                "summary": "Get the number of flashcards the user has made",
+                "operationId": "874ea29ca38e0d32e5988e5387fb57a9",
+                "responses": {
+                    "200": {
+                        "description": "Success"
+                    },
+                    "401": {
+                        "description": "Unauthorised"
                     }
                 },
                 "security": [

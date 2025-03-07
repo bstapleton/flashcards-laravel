@@ -17,6 +17,7 @@ class UserTransformer extends TransformerAbstract
             'name' => $user->display_name,
             'points' => $user->points,
             'created_at' => Carbon::parse($user->created_at)->toIso8601String(),
+            'question_count' => $user->flashcards()->count(),
             'options' => [
                 'easy_time' => $user->easy_time,
                 'medium_time' => $user->medium_time,

@@ -11,6 +11,7 @@ use App\Models\Flashcard;
 use App\Models\Role;
 use App\Models\Tag;
 use App\Models\User;
+use Illuminate\Support\Carbon;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
@@ -25,7 +26,7 @@ class FlashcardControllerTest extends TestCase
 
         $this->user = User::factory()->create();
 
-        $this->newerQuestion = Flashcard::factory()->easyDifficulty()->create([
+        $this->newerQuestion = Flashcard::factory()->publishedStatus()->easyDifficulty()->create([
             'user_id' => $this->user->id,
             'last_seen_at' => now(),
         ]);
@@ -38,7 +39,7 @@ class FlashcardControllerTest extends TestCase
 
         $this->newerQuestion->tags()->sync($tags->pluck('id')->toArray());
 
-        $this->olderQuestion = Flashcard::factory()->hardDifficulty()->create([
+        $this->olderQuestion = Flashcard::factory()->publishedStatus()->hardDifficulty()->create([
             'user_id' => $this->user->id,
             'created_at' => now()->subMinutes(2),
         ]);
@@ -644,15 +645,34 @@ class FlashcardControllerTest extends TestCase
         $this->assertArrayHasKey('text', $responseData['data']);
     }
 
-    public function test_random_flashcard_returns_404_if_no_eligible_questions()
+    public function test_random_flashcard_with_no_flashcards_published()
     {
-        // Arrange: create a user with no eligible flashcards
+        // Arrange: create a user with no flashcards
         $user = User::factory()->create();
         $this->actingAs($user);
 
         $response = $this->getJson('/api/flashcards/random');
 
-        $this->assertEquals(404, $response->getStatusCode());
+        $response->assertSuccessful();
+        $this->assertTrue($response['data']['code'] === 'nothing_eligible');
+        $this->assertNull($response['data']['next_eligible_at']);
+    }
+
+    public function test_random_flashcard_but_nothing_currently_eligible()
+    {
+        // Arrange: create a user with no eligible flashcards
+        $user = User::factory()->create(['easy_time' => 60]);
+        Flashcard::factory()->publishedStatus()->create([
+            'user_id' => $user->id,
+            'last_seen_at' => Carbon::now()->subMinutes(2),
+        ]);
+        $this->actingAs($user);
+
+        $response = $this->getJson('/api/flashcards/random');
+
+        $response->assertSuccessful();
+        $this->assertTrue($response['data']['code'] === 'nothing_eligible');
+        $this->assertNotNull($response['data']['next_eligible_at']);
     }
 
     public function test_random_flashcard_returns_401_if_not_authenticated()
@@ -1220,6 +1240,142 @@ class FlashcardControllerTest extends TestCase
     public function test_hidden_unauthorised()
     {
         $response = $this->getJson('/api/flashcards/hidden');
+
+        $response->assertStatus(401);
+    }
+
+    public function test_expired_trial_users_cannot_store()
+    {
+        $user = User::factory()->twoMonthsOld()->create();
+
+        $this->actingAs($user);
+
+        $response = $this->postJson('/api/flashcards', [
+            'text' => 'Iceland is in the northern hemisphere',
+            'is_true' => true,
+            'tags' => ['geography']
+        ]);
+
+        $response->assertUnauthorized();
+    }
+
+    public function test_expired_trial_users_cannot_update()
+    {
+        $user = User::factory()->twoMonthsOld()->create();
+
+        $this->actingAs($user);
+        $flashcard = Flashcard::factory()->trueStatement()->create(['user_id' => $user->id]);
+
+        $response = $this->patchJson('/api/flashcards/' . $flashcard->id, [
+            'text' => 'Something new',
+            'explanation' => 'Extensive waffle',
+            'is_true' => false
+        ]);
+
+        $response->assertUnauthorized();
+        $this->assertTrue($flashcard->is_true);
+        $this->assertFalse($flashcard->text === 'Something new');
+        $this->assertFalse($flashcard->explanation === 'Extensive waffle');
+    }
+
+    public function test_expired_trial_users_cannot_answer()
+    {
+        $user = User::factory()->twoMonthsOld()->create();
+        $this->actingAs($user);
+
+        $flashcard = Flashcard::factory()->trueStatement()->create(['user_id' => $user->id]);
+
+        $response = $this->postJson('/api/flashcards/' . $flashcard->id, [
+            'answers' => [true]
+        ]);
+
+        $response->assertUnauthorized();
+    }
+
+    public function test_import_returns_200_for_literature()
+    {
+        $this->actingAs($this->user);
+        $existingCount = $this->user->flashcards->count();
+
+        $response = $this->postJson('/api/flashcards/import', ['topic' => 'literature']);
+
+        $response->assertSuccessful();
+        $response->assertJsonStructure([
+            'data' => [
+                'count',
+                'imported',
+                'remaining',
+            ]
+        ]);
+
+        $this->assertTrue($response['data']['count'] === 10 + $existingCount);
+        $this->assertTrue($response['data']['imported'] === 10);
+        $this->assertTrue($response['data']['remaining'] === config('flashcard.free_account_limit') - $existingCount - 10);
+    }
+
+    public function test_import_returns_200_for_physics()
+    {
+        $this->actingAs($this->user);
+        $existingCount = $this->user->flashcards->count();
+
+        $response = $this->postJson('/api/flashcards/import', ['topic' => 'physics']);
+
+        $response->assertSuccessful();
+        $response->assertJsonStructure([
+            'data' => [
+                'count',
+                'imported',
+                'remaining',
+            ]
+        ]);
+
+        $this->assertTrue($response['data']['count'] === 10 + $existingCount);
+        $this->assertTrue($response['data']['imported'] === 10);
+        $this->assertTrue($response['data']['remaining'] === config('flashcard.free_account_limit') - $existingCount - 10);
+    }
+
+    public function test_import_returns_200_for_dogs()
+    {
+        $this->actingAs($this->user);
+        $existingCount = $this->user->flashcards->count();
+
+        $response = $this->postJson('/api/flashcards/import', ['topic' => 'dogs']);
+
+        $response->assertSuccessful();
+        $response->assertJsonStructure([
+            'data' => [
+                'count',
+                'imported',
+                'remaining',
+            ]
+        ]);
+
+        $this->assertTrue($response['data']['count'] === 10 + $existingCount);
+        $this->assertTrue($response['data']['imported'] === 10);
+        $this->assertTrue($response['data']['remaining'] === config('flashcard.free_account_limit') - $existingCount - 10);
+    }
+
+    public function test_import_requires_topic_parameter()
+    {
+        $this->actingAs($this->user);
+
+        $response = $this->postJson('/api/flashcards/import');
+
+        $response->assertStatus(422);
+    }
+
+    public function test_import_throws_file_not_found_exception_if_topic_file_does_not_exist()
+    {
+        $this->actingAs($this->user);
+
+        $response = $this->postJson('/api/flashcards/import', ['topic' => 'non-existent-topic']);
+
+        $response->assertStatus(404);
+    }
+
+    public function test_import_returns_401_if_user_is_not_authenticated()
+    {
+        $response = $this->postJson('/api/flashcards/import', ['topic' => 'literature']);
 
         $response->assertStatus(401);
     }

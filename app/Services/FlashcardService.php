@@ -6,19 +6,23 @@ use App\Enums\Correctness;
 use App\Enums\Difficulty;
 use App\Enums\QuestionType;
 use App\Enums\Status;
+use App\Enums\TagColour;
 use App\Exceptions\DraftQuestionsCannotChangeStatusException;
 use App\Exceptions\FreeUserFlashcardLimitException;
 use App\Exceptions\LessThanOneCorrectAnswerException;
 use App\Exceptions\NoEligibleQuestionsException;
 use App\Exceptions\UndeterminedQuestionTypeException;
 use App\Helpers\Score;
+use App\Models\Answer;
 use App\Models\Flashcard;
 use App\Models\Scorecard;
 use App\Models\Tag;
 use App\Models\User;
+use Illuminate\Contracts\Filesystem\FileNotFoundException;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\UnauthorizedException;
 
 class FlashcardService
@@ -190,31 +194,46 @@ class FlashcardService
             ->orderBy('created_at', 'desc');
     }
 
+    /**
+     * @throws NoEligibleQuestionsException
+     */
     public function random()
     {
         if (!Gate::authorize('list', Flashcard::class)) {
             throw new UnauthorizedException();
         }
 
-        $flashcards = Flashcard::currentUser()
+        $eligibleQuestions = Flashcard::currentUser()
+            ->published()
             ->alive()
             ->inRandomOrder()
             ->get()
             ->filter(function ($flashcard) {
-                if ($flashcard->eligible_at->lessThan(now()) || !$flashcard->last_seen_at) {
-                    return true;
-                }
-
-                return false;
+                return $flashcard->eligible_at->lessThan(now()) || !$flashcard->last_seen_at;
             }
         );
 
-        if (!$flashcards->count()) {
-            // Consumer has no eligible flashcards
-            throw new NoEligibleQuestionsException();
+        if (!$eligibleQuestions->count()) {
+            $flashcard = Flashcard::currentUser()
+                ->published()
+                ->alive()
+                ->get()
+                ->filter(function ($flashcard) {
+                    return (bool)$flashcard->eligible_at->greaterThan(now());
+                })
+                ->sortBy(function ($flashcard) {
+                    return $flashcard->eligible_at;
+                })
+                ->first();
+
+            if (!$flashcard) {
+                throw new NoEligibleQuestionsException();
+            }
+
+            throw new NoEligibleQuestionsException($flashcard->eligible_at);
         }
 
-        return $flashcards->first();
+        return $eligibleQuestions->first();
     }
 
     public function revive(Flashcard $flashcard): Flashcard
@@ -500,5 +519,76 @@ class FlashcardService
     {
         $flashcard->status = $status;
         $flashcard->save();
+    }
+
+    public function import(string $topic)
+    {
+        $existingCount = Auth::user()->flashcards()->count();
+        $freeLimit = config('flashcard.free_account_limit');
+        $amountRemaining = $freeLimit - $existingCount;
+
+        // User is on a trial and has already met or exceeded the limit
+        if ($existingCount >= $freeLimit && Auth::user()->is_trial_user) {
+            return null;
+        }
+
+        if (!Storage::disk('import')->exists($topic . '.json')) {
+            throw new FileNotFoundException();
+        }
+
+        $data = Storage::disk('import')->json($topic . '.json');
+
+        $questions = collect(json_decode(json_encode($data)));
+
+        // Only try to import the amount that a trial user has remaining. Other users can import anything they want.
+        if (Auth::user()->is_trial_user) {
+            $questions = $questions->take($amountRemaining);
+        }
+
+        // Can't import anything? Abort
+        if ($questions->count() === 0) {
+            return null;
+        }
+
+        // Create the tag
+        $tag = Tag::firstOrCreate([
+            'user_id' => Auth::id(),
+            'name' => $topic,
+        ], [
+            'colour' => array_rand(TagColour::cases()),
+        ]);
+
+        $importCount = 0;
+        foreach ($questions as $question) {
+            if (!Flashcard::where('text', $question->text)->where('user_id', Auth::id())->exists()) {
+                $importCount++;
+            }
+            $flashcard = Flashcard::firstOrCreate([
+                'user_id' => Auth::id(),
+                'text' => $question->text,
+            ], [
+                'status' => Status::PUBLISHED,
+                'explanation' => property_exists($question, 'explanation') ? $question->explanation : null
+            ]);
+
+            $flashcard->tags()->syncWithoutDetaching($tag);
+
+            if (property_exists($question, 'answers')) {
+                foreach ($question->answers as $a) {
+                    Answer::create([
+                        'flashcard_id' => $flashcard->id,
+                        'text' => $a->text,
+                        'explanation' => property_exists($a, 'explanation') ? $a->explanation : null,
+                        'is_correct' => $a->is_correct ?? false
+                    ]);
+                }
+            } else {
+                $flashcard->update([
+                    'is_true' => $question->is_true
+                ]);
+            }
+        }
+
+        return $importCount;
     }
 }

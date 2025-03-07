@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Helpers\ApiResponse;
 use App\Models\User;
 use App\Transformers\UserTransformer;
 use Illuminate\Http\JsonResponse;
@@ -60,17 +59,34 @@ class UserController extends Controller
      *     tags={"auth"},
      *     @OA\Parameter(name="user", in="path", @OA\Schema(type="integer")),
      *     @OA\Response(response="200", description="Success"),
+     *     @OA\Response(response="401", description="Unauthorised"),
      *     security={{"bearerAuth":{}}}
      * )
      */
     public function show(Request $request): JsonResponse
     {
-        $user = $request->user();
+        return fractal($request->user(), new UserTransformer())->respond();
+    }
 
-        if (!$user) {
-            return ApiResponse::error('Not found', 'User not found', 'not_found', 404);
-        }
-
-        return fractal($user, new UserTransformer())->respond();
+    /**
+     * @OA\Get(
+     *     path="/api/user/count_questions",
+     *     summary="Get the number of flashcards the user has made",
+     *     tags={"auth"},
+     *     @OA\Response(response="200", description="Success"),
+     *     @OA\Response(response="401", description="Unauthorised"),
+     *     security={{"bearerAuth":{}}}
+     * )
+     */
+    public function countQuestions(Request $request): JsonResponse
+    {
+        return response()->json([
+            'data' => [
+                'count' => $request->user()->flashcards()->count(),
+                'remaining' => $request->user()->roles()->where('code', 'advanced_user')->exists()
+                    ? null
+                    : config('flashcard.free_account_limit') - $request->user()->flashcards()->count()
+            ]
+        ]);
     }
 }

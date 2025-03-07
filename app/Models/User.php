@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
 use Laravel\Sanctum\HasApiTokens;
 use RedExplosion\Sqids\Concerns\HasSqids;
@@ -26,6 +27,9 @@ use RedExplosion\Sqids\Concerns\HasSqids;
  * @property int page_limit
  * @property bool lose_points
  * @property Collection roles
+ * @property bool is_trial_expired
+ * @property bool is_trial_user
+ * @property int total_questions
  *
  * @OA\Schema(
  *     required={"username", "password", "display_name"},
@@ -82,6 +86,8 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
             'lose_points' => 'boolean',
+            'is_trial_expired' => 'boolean',
+            'is_trial_user' => 'boolean',
         ];
     }
 
@@ -102,6 +108,35 @@ class User extends Authenticatable
     public function roles(): BelongsToMany
     {
         return $this->belongsToMany(Role::class)->withPivot(['valid_until', 'auto_renew']);
+    }
+
+    public function getIsTrialUserAttribute(): bool
+    {
+        if ($this->roles()->where('code', 'advanced_user')->exists()) {
+            return false;
+        }
+
+        return true;
+    }
+
+    public function getIsTrialExpiredAttribute(): bool
+    {
+        // Already upgraded? Not a trial to be expired
+        if ($this->roles()->where('code', 'advanced_user')->exists()) {
+            return false;
+        }
+
+        // Older than the trial allows for
+        if (now()->subMonth()->greaterThan(Carbon::parse($this->created_at))) {
+            return true;
+        }
+
+        return false;
+    }
+
+    public function getTotalQuestionsAttribute(): int
+    {
+        return $this->flashcards()->count();
     }
 
     public function adjustPoints(int $score, $operation = 'add'): static
