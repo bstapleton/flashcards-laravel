@@ -28,6 +28,8 @@ use RedExplosion\Sqids\Concerns\HasSqids;
  * @property bool lose_points
  * @property Collection roles
  * @property bool is_trial_expired
+ * @property bool is_trial_user
+ * @property int total_questions
  *
  * @OA\Schema(
  *     required={"username", "password", "display_name"},
@@ -85,6 +87,7 @@ class User extends Authenticatable
             'password' => 'hashed',
             'lose_points' => 'boolean',
             'is_trial_expired' => 'boolean',
+            'is_trial_user' => 'boolean',
         ];
     }
 
@@ -107,6 +110,15 @@ class User extends Authenticatable
         return $this->belongsToMany(Role::class)->withPivot(['valid_until', 'auto_renew']);
     }
 
+    public function getIsTrialUserAttribute(): bool
+    {
+        if ($this->roles()->where('code', 'advanced_user')->exists()) {
+            return false;
+        }
+
+        return true;
+    }
+
     public function getIsTrialExpiredAttribute(): bool
     {
         // Already upgraded? Not a trial to be expired
@@ -120,6 +132,11 @@ class User extends Authenticatable
         }
 
         return false;
+    }
+
+    public function getTotalQuestionsAttribute(): int
+    {
+        return $this->flashcards()->count();
     }
 
     public function adjustPoints(int $score, $operation = 'add'): static

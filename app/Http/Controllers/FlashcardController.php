@@ -13,12 +13,14 @@ use App\Services\FlashcardService;
 use App\Transformers\FlashcardFullTransformer;
 use App\Transformers\FlashcardTransformer;
 use App\Transformers\ScorecardTransformer;
+use Illuminate\Contracts\Filesystem\FileNotFoundException;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\UnauthorizedException;
+use OpenApi\Annotations as OA;
 
 class FlashcardController extends Controller
 {
@@ -443,5 +445,48 @@ class FlashcardController extends Controller
         }
 
         return fractal($flashcards, new FlashcardTransformer())->respond();
+    }
+
+    /**
+     * @OA\Post(
+     *     path="/api/flashcards/import",
+     *     summary="Import flashcards",
+     *     tags={"flashcard"},
+     *     @OA\Parameter(name="topic", in="query", required=true, @OA\Schema(type="string")),
+     *     @OA\Response(response="200", description="Success"),
+     *     @OA\Response(response="401", description="Not authenticated"),
+     *     @OA\Response(response="404", description="Import file not found"),
+     *     @OA\Response(response="422", description="Validation error"),
+     *     security={{"bearerAuth":{}}}
+     * )
+     */
+    public function import(Request $request): JsonResponse
+    {
+        if ($request->input('topic') === null) {
+            return ApiResponse::error(
+                'Validation error',
+                'Topic parameter is required',
+                'validation_error',
+                422
+            );
+        }
+
+        try {
+            $importCount = $this->service->import($request->input('topic'));
+        } catch (FileNotFoundException) {
+            return $this->handleNotFound();
+        } catch (UnauthorizedException) {
+            return $this->handleForbidden();
+        }
+
+        return response()->json([
+            'data' => [
+                'count' => $request->user()->total_questions,
+                'imported' => $importCount,
+                'remaining' => $request->user()->roles()->where('code', 'advanced_user')->exists()
+                    ? null
+                    : config('flashcard.free_account_limit') - $request->user()->flashcards()->count()
+            ]
+        ], 200);
     }
 }

@@ -1,0 +1,130 @@
+[
+    {
+        "text": "Sound waves can travel through a vacuum.",
+        "is_true": false,
+        "explanation": "Sound waves cannot travel through a vacuum, because they need a medium to travel through. Air is the medium that sound waves travel through."
+    },
+    {
+        "text": "An object at rest stays at rest, and an object in motion stays in motion in a straight line unless acted upon by a force.",
+        "is_true": true,
+        "explanation": "This is Newton's first of three laws of motion."
+    },
+    {
+        "text": "Which of the following is the strongest fundamental force?",
+        "answers": [
+            {
+                "text": "Gravitational",
+                "explanation": "Gravity is the weakest of the interactions at an atomic scale."
+            },
+            {
+                "text": "Electromagnetic",
+                "explanation": "Electromagnetic force is the second strongest of the fundamental forces ans has an unlimited range."
+            },
+            {
+                "text": "Strong nuclear",
+                "is_correct": true,
+                "explanation": "The strong interaction or strong nuclear force is the most complicated interaction, mainly due to how it varies with distance."
+            },
+            {
+                "text": "Higgs interaction",
+                "explanation": "The Higgs interactions is not generally counted amongst the four fundamental forces."
+            },
+            {
+                "text": "Weak interaction",
+                "explanation": "Not a trick question."
+            }
+        ]
+    },
+    {
+        "text": "What is the speed of light?",
+        "answers": [
+            {
+                "text": "299,792,458 metres per second",
+                "is_correct": true
+            },
+            {
+                "text": "299,792,458 kilometres per second"
+            },
+            {
+                "text": "399,792,458 metres per second"
+            }
+        ]
+    },
+    {
+        "text": "0 degrees Celsius is known as absolute zero.",
+        "is_true": false,
+        "explanation": "Absolute zero is 0 degrees Kelvin, or approximately -273.15 degrees Celsius. 0 Celsius is the freezing point of water."
+    },
+    {
+        "text": "Energy can always be created, but never destroyed.",
+        "is_true": false,
+        "explanation": "The law of conservation states that energy can neither be created OR destroyed, only transformed from one form to another."
+    },
+    {
+        "text": "Light behaves only as a wave and not as a particle.",
+        "is_true": false,
+        "explanation": "Light exhibits wave-particle duality, meaning it can behave as both a wave (electromagnetic waves) and a particle (a photon)."
+    },
+    {
+        "text": "Which of the following is the SI unit of force?",
+        "explanation": "There are seven base SI units, and 22 SI derived units.",
+        "answers": [
+            {
+                "text": "Joule",
+                "explanation": "The joule is the SI unit of energy, named after English physicist James Prescott Joule."
+            },
+            {
+                "text": "Newton",
+                "is_correct": true,
+                "explanation": "Named after Sir Isaac Newton."
+            },
+            {
+                "text": "Pascal",
+                "explanation": "The pascal is the SI unit of pressure, named after French mathematician and physicist Blaise Pascal."
+            },
+            {
+                "text": "Watt",
+                "explanation": "The watt is the SI unit of power, named after Scottish inventor, mechanical engineer and chemist James Watt."
+            }
+        ]
+    },
+    {
+        "text": "Which of the following are examples of electromagnetic radiation?",
+        "answers": [
+            {
+                "text": "Sound waves",
+                "explanation": "Sound is a vibration that propagates as an acoustic waves through a transmission medium."
+            },
+            {
+                "text": "X-rays",
+                "is_correct": true
+            },
+            {
+                "text": "Radio waves",
+                "is_correct": true
+            },
+            {
+                "text": "Visible light",
+                "is_correct": true
+            }
+        ]
+    },
+    {
+        "text": "Which of the following describes the relationship between voltage, current, and resistance in a circuit?",
+        "answers": [
+            {
+                "text": "Voltage = Current + Resistance"
+            },
+            {
+                "text": "Voltage = Current x Resistance",
+                "is_correct": true
+            },
+            {
+                "text": "Voltage = Current / Resistance"
+            },
+            {
+                "text": "Voltage = Resistance / Current"
+            }
+        ]
+    }
+]

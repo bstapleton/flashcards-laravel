@@ -1,0 +1,144 @@
+[
+    {
+        "text": "The books 'A Christmas Carol' and 'Oliver Twist' were both written by whom?",
+        "answers": [
+            {
+                "text": "Charles Dickens",
+                "is_correct": true,
+                "explanation": "He also wrote 'Hard Times', and 'Great Expectations', amongst many other titles during his life."
+            },
+            {
+                "text": "Charles Darwin",
+                "is_correct": false,
+                "explanation": "Darwin wrote extensively on nature, and is particularly known for his works on evolution. The books mentioned in this question are all works of fiction, however."
+            },
+            {
+                "text": "William Shakespeare",
+                "is_correct": false,
+                "explanation": "Arguably the most famous playwright in the history of the world, Shakespeare wrote many plays, but was not known as a novelist."
+            }
+        ]
+    },
+    {
+        "text": "Alfred Lord Tennyson is a famous...",
+        "answers": [
+            {
+                "text": "Politician"
+            },
+            {
+                "text": "Poet",
+                "is_correct": true,
+                "explanation": "He wrote many classic poems, including 'The Lotos-Eaters', 'Ulysses' and 'Charge of the Light Brigade'."
+            },
+            {
+                "text": "Actor"
+            }
+        ]
+    },
+    {
+        "text": "Which of the following are plays by William Shakespeare?",
+        "explanation": "Shakespeare was incredibly prolific during his time, and these are just a few of his plays.",
+        "answers": [
+            {
+                "text": "Much Ado About Nothing",
+                "is_correct": true
+            },
+            {
+                "text": "The Jew of Malta",
+                "explanation": "This was written by Christopher Marlowe, who was active around the same time as, and some believe was a great influence on Shakespeare."
+            },
+            {
+                "text": "The Merchant of Venice",
+                "is_correct": true
+            },
+            {
+                "text": "Twelfth Night",
+                "is_correct": true
+            },
+            {
+                "text": "Romeo and Juliet",
+                "is_correct": true
+            },
+            {
+                "text": "A Midsummer Night's Dream",
+                "is_correct": true
+            },
+            {
+                "text": "The Merry Wives of Windsor",
+                "is_correct": true,
+                "explanation": "This is a lesser-known play by Shakespeare. Cheeky-sneaky answer, tbh."
+            }
+        ]
+    },
+    {
+        "text": "Jane Austen only ever published 3 novels in her lifetime.",
+        "explanation": "She published 6 novels: Sense and Sensibility, Pride and Prejudice, Mansfield Park, Emma, Northanger Abbey, and Persuasion.",
+        "is_true": false
+    },
+    {
+        "text": "Peter Rabbit, Jemima Puddle-Duck and Mrs. Tiggy-Winkle are all fictional characters in books by this author.",
+        "answers": [
+            {
+                "text": "A.A. Milne",
+                "explanation": "Milne was active around the same time as Potter, but is famous for his Winnie the Pooh stories."
+            },
+            {
+                "text": "Beatrix Potter",
+                "is_correct": true,
+                "explanation": "The Tale of Peter Rabbit was first published in 1902. Potter not only wrote and illustrated her children's books, but was also an active natural scientist and conservationist."
+            },
+            {
+                "text": "Enid Blyton",
+                "explanation": "Blyton is most famous for writing the children's stories about The Famous Five, and The Secret Seven."
+            }
+        ]
+    },
+    {
+        "text": "The character of Sherlock Holmes was created by Charles Dickens.",
+        "explanation": "Sherlock Holmes was created by Sir Arthur Conan Doyle.",
+        "is_true": false
+    },
+    {
+        "text": "The epic poem 'The Odyssey' was written by Virgil.",
+        "explanation": "'Odyssey', as well as 'Iliad' were written by Homer in the 8th century BC. Virgil wrote 'The Aeneid' in the 1st century BC.",
+        "is_true": false
+    },
+    {
+        "text": "The play 'Hamlet' ends with multiple deaths.",
+        "explanation": "The end of the play sees the entire Danish royal family dead, and the character Fortinbras - a prince of Norway - takes the crown for himself.",
+        "is_true": true
+    },
+    {
+        "text": "Edgar Allan Poe is famous for writing mostly humorous short stories.",
+        "explanation": "He is considered as one of the main figures of romanticism and gothic fiction. He was the first well-known American writer to earn a living exclusively through writing.",
+        "is_true": false
+    },
+    {
+        "text": "Which of the following authors are known for writing science fiction?",
+        "answers": [
+            {
+                "text": "Jane Austen",
+                "explanation": "Her books implicitly interpret, critique and comment on the English gentry towards the end of the 18th century"
+            },
+            {
+                "text": "Isaac Asimov",
+                "explanation": "His most famous work is the 'Foundation' series. He is considered to be one of the 'big three' science fiction writers, along with Robert A. Heinlein and Arthur C. Clarke. He was a prolific write in his time, writing or editing more than 500 books.",
+                "is_correct": true
+            },
+            {
+                "text": "H.G. Wells",
+                "explanation": "He is best known for his science fiction novel 'The Time Machine' and 'The War of the Worlds'.",
+                "is_correct": true
+            },
+            {
+                "text": "Emily Bronte",
+                "explanation": "Similar to Asten, Bronte's books were of and about her time, with the most famous example being Wuthering Heights."
+            },
+            {
+                "text": "Ursula K. Le Guin",
+                "explanation": "As well as science fiction, she is also known for her works in speculative fiction, and published 20 novels and more than a hundred short stories during her lifetime.",
+                "is_correct": true
+            }
+        ]
+    }
+]

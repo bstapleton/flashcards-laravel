@@ -1291,4 +1291,92 @@ class FlashcardControllerTest extends TestCase
 
         $response->assertUnauthorized();
     }
+
+    public function test_import_returns_200_for_literature()
+    {
+        $this->actingAs($this->user);
+        $existingCount = $this->user->flashcards->count();
+
+        $response = $this->postJson('/api/flashcards/import', ['topic' => 'literature']);
+
+        $response->assertSuccessful();
+        $response->assertJsonStructure([
+            'data' => [
+                'count',
+                'imported',
+                'remaining',
+            ]
+        ]);
+
+        $this->assertTrue($response['data']['count'] === 10 + $existingCount);
+        $this->assertTrue($response['data']['imported'] === 10);
+        $this->assertTrue($response['data']['remaining'] === config('flashcard.free_account_limit') - $existingCount - 10);
+    }
+
+    public function test_import_returns_200_for_physics()
+    {
+        $this->actingAs($this->user);
+        $existingCount = $this->user->flashcards->count();
+
+        $response = $this->postJson('/api/flashcards/import', ['topic' => 'physics']);
+
+        $response->assertSuccessful();
+        $response->assertJsonStructure([
+            'data' => [
+                'count',
+                'imported',
+                'remaining',
+            ]
+        ]);
+
+        $this->assertTrue($response['data']['count'] === 10 + $existingCount);
+        $this->assertTrue($response['data']['imported'] === 10);
+        $this->assertTrue($response['data']['remaining'] === config('flashcard.free_account_limit') - $existingCount - 10);
+    }
+
+    public function test_import_returns_200_for_dogs()
+    {
+        $this->actingAs($this->user);
+        $existingCount = $this->user->flashcards->count();
+
+        $response = $this->postJson('/api/flashcards/import', ['topic' => 'dogs']);
+
+        $response->assertSuccessful();
+        $response->assertJsonStructure([
+            'data' => [
+                'count',
+                'imported',
+                'remaining',
+            ]
+        ]);
+
+        $this->assertTrue($response['data']['count'] === 10 + $existingCount);
+        $this->assertTrue($response['data']['imported'] === 10);
+        $this->assertTrue($response['data']['remaining'] === config('flashcard.free_account_limit') - $existingCount - 10);
+    }
+
+    public function test_import_requires_topic_parameter()
+    {
+        $this->actingAs($this->user);
+
+        $response = $this->postJson('/api/flashcards/import');
+
+        $response->assertStatus(422);
+    }
+
+    public function test_import_throws_file_not_found_exception_if_topic_file_does_not_exist()
+    {
+        $this->actingAs($this->user);
+
+        $response = $this->postJson('/api/flashcards/import', ['topic' => 'non-existent-topic']);
+
+        $response->assertStatus(404);
+    }
+
+    public function test_import_returns_401_if_user_is_not_authenticated()
+    {
+        $response = $this->postJson('/api/flashcards/import', ['topic' => 'literature']);
+
+        $response->assertStatus(401);
+    }
 }
