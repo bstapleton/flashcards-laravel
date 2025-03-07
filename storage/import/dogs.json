@@ -1,0 +1,169 @@
+[
+    {
+        "text": "Which of the following is considered the smallest dog breed?",
+        "answers": [
+            {
+                "text": "Pomeranian"
+            },
+            {
+                "text": "Chihuahua",
+                "is_correct": true
+            },
+            {
+                "text": "Pug"
+            },
+            {
+                "text": "Dachshund"
+            },
+            {
+                "text": "Maltese"
+            }
+        ]
+    },
+    {
+        "text": "Which of the following are common signs of stress in dogs?",
+        "answers": [
+            {
+                "text": "Tail wagging vigorously"
+            },
+            {
+                "text": "Excessive yawning",
+                "is_correct": true,
+                "explanation": "Dogs will yawn when tired or bored, but also when stressed. A stress-based yawn is more prolonged and intense than a sleepy yawn."
+            },
+            {
+                "text": "Pacing or shaking",
+                "is_correct": true,
+                "explanation": "Dogs will quite often 'shake it off' quite literally when stressed, so unless they have just been rolling around in the grass or emerged from a bath, this may be indicative of stress."
+            },
+            {
+                "text": "Barking excessively",
+                "explanation": "Whining and backing can be a sign of stress in a dog, but vocalisation is a normal form of self-expression for dogs. If they are barking much more than usual though, it could be an indication of stress, so this is sort of half-true."
+            }
+        ]
+    },
+    {
+        "text": "Which of the following are common health issues in larger dog breeds?",
+        "answers": [
+            {
+                "text": "Hip dysplasia",
+                "is_correct": true
+            },
+            {
+                "text": "Patellar luxation",
+                "explanation": "A condition where the kneecap (patella) dislocates and moves out of its normal position, often causing a 'skipping' gait in dogs."
+            },
+            {
+                "text": "Bloating",
+                "is_correct": true
+            },
+            {
+                "text": "Tracheal collapse",
+                "explanation": "Characterised by incomplete formation or weakening of the cartilaginous rings of the trachea resulting in flattening. It is a dynamic condition and can be either congenital or acquired."
+            },
+            {
+                "text": "Cataracts",
+                "explanation": "More likely to be caused by genetic predisposition or canine diabetes than specifically relating to the size of the breed."
+            }
+        ]
+    },
+    {
+        "text": "Which of the following are considered herding dog breeds?",
+        "answers": [
+            {
+                "text": "Golden Retrieves"
+            },
+            {
+                "text": "Border Collie",
+                "is_correct": true
+            },
+            {
+                "text": "German Shepherd",
+                "is_correct": true
+            },
+            {
+                "text": "Beagle"
+            },
+            {
+                "text": "Australian Shepherd",
+                "is_correct": true
+            }
+        ]
+    },
+    {
+        "text": "Dogs are colourblind.",
+        "is_true": false,
+        "explanation": "This is a myth. Dogs have dichromatic vision, which means they see fewer colours than humans, but they DO see colour."
+    },
+    {
+        "text": "Dogs have a very strong sense of smell.",
+        "is_true": true,
+        "explanation": "Dogs have millions more scent detectors than humans."
+    },
+    {
+        "text": "Dogs sweat through their paws.",
+        "is_true": true,
+        "explanation": "Dogs primarily regulate their body temperature by panting, but they do have sweat glands in their paws."
+    },
+    {
+        "text": "Dogs normally have 42 teeth.",
+        "is_true": true
+    },
+    {
+        "text": "Names of dogs in movies",
+        "answers": [
+            {
+                "text": "Scooby-Doo",
+                "is_correct": true,
+                "explanation": "First featuring in the TV show 'Scooby-Doo Where Are You?' starting in 1969. While many direct-to-TV and direct-to-video films were made after 1987, Scooby's first feature film appearance was in the live-action 'Scooby-Doo' in 2002."
+            },
+            {
+                "text": "Brian Griffin",
+                "explanation": "At the time of writing, there is no feature film for Family Guy, but the show is still ongoing and currently airing its 23rd season."
+            },
+            {
+                "text": "Benji",
+                "is_correct": true,
+                "explanation": "Benji featured in 8 total movies, but his first appearance was in the 1974 film 'Benji'. The character in that film is portrayed by a dog named Benjean."
+            },
+            {
+                "text": "Charlie B. Barkin",
+                "is_correct": true,
+                "explanation": "The main character in the movie 'All Dogs Go To Heaven', set in the late 1930s."
+            },
+            {
+                "text": "Dodger",
+                "is_correct": true,
+                "explanation": "The 1989 animated Disney movie 'Oliver and Company' was inspired by the Charles Dickens novel 'Oliver Twist' and features several characters with names from the book. Dodger is the leader of Fagin's gang of dogs and is portrayed by Billy Joel."
+            },
+            {
+                "text": "Lassie",
+                "is_correct": true,
+                "explanation": "Set in depression-era Yorkshire in England, the film 'Lassie Come Home' was first released in 1943 and was based on the 1940 book of the same name."
+            }
+        ]
+    },
+    {
+        "text": "Which president of the United States popularised the name 'Fido'?",
+        "explanation": "Fido comes from the latin term for 'faithful'.",
+        "answers": [
+            {
+                "text": "Abraham Lincoln",
+                "is_correct": true,
+                "explanation": "While the name has been used for pets dating all the way back to Ancient Rome, it was popularised when Lincoln came to office in 1861 and he introduced his dog Fido to the nation."
+            },
+            {
+                "text": "Richard Nixon",
+                "explanation": "Nixon's famous televised 'Checkers speech' was named after his cocker spaniel."
+            },
+            {
+                "text": "George Washington",
+                "explanation": "Washington was a passionate dog breeder and kept many dogs, and is recognised a the father of the American Foxhound breed."
+            },
+            {
+                "text": "James K. Polk",
+                "explanation": "The 11th president of the United States, Polk is one of very few presidents of the country to not keep any pets."
+            }
+        ]
+    }
+]
