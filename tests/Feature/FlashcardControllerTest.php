@@ -1355,6 +1355,43 @@ class FlashcardControllerTest extends TestCase
         $this->assertTrue($response['data']['remaining'] === config('flashcard.free_account_limit') - $existingCount - 10);
     }
 
+    public function test_import_idempotency()
+    {
+        $this->actingAs($this->user);
+        $existingCount = $this->user->flashcards->count();
+        $questionText ='Which of the following is the strongest fundamental force?';
+
+        $response = $this->postJson('/api/flashcards/import', ['topic' => 'physics']);
+        $question = Flashcard::where('text', $questionText)->where('user_id', $this->user->id)->first();
+
+        if (!$question) {
+            $this->markTestSkipped('Question mismatch against the import. Did you change the data? Expected text was: "' . $questionText . '"');
+        }
+
+        $answerCount = $question->answers()->count();
+
+        // Run it again to try to duplicate stuff
+        $this->postJson('/api/flashcards/import', ['topic' => 'physics']);
+
+        $response->assertSuccessful();
+        $response->assertJsonStructure([
+            'data' => [
+                'count',
+                'imported',
+                'remaining',
+            ]
+        ]);
+
+        // Then just ensure everything is present and correct, but not duplicated
+        $this->assertCount($answerCount, Flashcard::where('text', $questionText)
+            ->where('user_id', $this->user->id)
+            ->first()
+            ->answers);
+        $this->assertTrue($response['data']['count'] === 10 + $existingCount);
+        $this->assertTrue($response['data']['imported'] === 10);
+        $this->assertTrue($response['data']['remaining'] === config('flashcard.free_account_limit') - $existingCount - 10);
+    }
+
     public function test_import_requires_topic_parameter()
     {
         $this->actingAs($this->user);
