@@ -575,9 +575,10 @@ class FlashcardService
 
             if (property_exists($question, 'answers')) {
                 foreach ($question->answers as $a) {
-                    Answer::create([
+                    Answer::firstOrCreate([
                         'flashcard_id' => $flashcard->id,
                         'text' => $a->text,
+                    ], [
                         'explanation' => property_exists($a, 'explanation') ? $a->explanation : null,
                         'is_correct' => $a->is_correct ?? false
                     ]);
