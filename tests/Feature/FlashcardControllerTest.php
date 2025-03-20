@@ -283,6 +283,30 @@ class FlashcardControllerTest extends TestCase
             })->toArray());
     }
 
+    public function test_store_multiple_choice_answer_limit()
+    {
+        $this->actingAs($this->user);
+
+        $answers = [];
+
+        for ($i = 0; $i < (config('flashcard.answer_per_question_limit') + 5); $i++) {
+            $answers[] = [
+                'text' => fake()->text(50),
+                'is_correct' => true
+            ];
+        }
+
+        $response = $this->postJson('/api/flashcards', [
+            'text' => 'Which of these are savoury foods?',
+            'answers' => $answers
+        ]);
+
+        $responseData = json_decode($response->getContent(), true);
+        $question = $responseData['data'];
+
+        $this->assertCount(config('flashcard.answer_per_question_limit'), $question['answers']);
+    }
+
     public function test_store_free_limit()
     {
         $this->actingAs($this->user);

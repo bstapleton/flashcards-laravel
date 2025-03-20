@@ -75,22 +75,6 @@ class FlashcardService
             throw new UndeterminedQuestionTypeException();
         }
 
-        // If there are answers, ensure that at least one of them is flagged as being the correct one
-        if (isset($data['answers'])) {
-            $hasAtLeastOneCorrectAnswer = false;
-
-            foreach ($data['answers'] as $answer) {
-                if ($answer['is_correct'] ?? false) {
-                    $hasAtLeastOneCorrectAnswer = true;
-                    break;
-                }
-            }
-
-            if (!$hasAtLeastOneCorrectAnswer) {
-                throw new LessThanOneCorrectAnswerException();
-            }
-        }
-
         $flashcard = Flashcard::create([
             'user_id' => Auth::id(),
             'text' => $data['text'],
@@ -100,7 +84,24 @@ class FlashcardService
         ]);
 
         if (isset($data['answers'])) {
-            $flashcard->answers()->createMany($data['answers']);
+            // Set a maximum number of answers per question
+            $answers = array_slice($data['answers'], 0, config('flashcard.answer_per_question_limit'));
+
+            $hasAtLeastOneCorrectAnswer = false;
+
+            // Ensure that at least one answer is flagged as being the correct one
+            foreach ($answers as $answer) {
+                if ($answer['is_correct'] ?? false) {
+                    $hasAtLeastOneCorrectAnswer = true;
+                    break;
+                }
+            }
+
+            if (!$hasAtLeastOneCorrectAnswer) {
+                throw new LessThanOneCorrectAnswerException();
+            }
+
+            $flashcard->answers()->createMany($answers);
         }
 
         if (isset($data['tags'])) {
