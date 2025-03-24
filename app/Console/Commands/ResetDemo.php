@@ -19,7 +19,7 @@ class ResetDemo extends Command
     {
         $user = User::find(1);
 
-        if (!$user) {
+        if (! $user) {
             $this->fail('User does not exist.');
         }
 

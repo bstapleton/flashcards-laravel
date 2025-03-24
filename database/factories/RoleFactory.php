@@ -2,7 +2,6 @@
 
 namespace Database\Factories;
 
-use App\Enums\TagColour;
 use App\Models\Answer;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
@@ -19,9 +18,10 @@ class RoleFactory extends Factory
     public function definition(): array
     {
         $name = fake()->word();
+
         return [
             'name' => $name,
-            'code' => strtolower($name)
+            'code' => strtolower($name),
         ];
     }
 }

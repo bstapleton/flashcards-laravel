@@ -29,7 +29,7 @@ class ScorecardTransformer extends TransformerAbstract
                     'was_selected' => $answer->getWasSelected(),
                     'explanation' => $answer->getExplanation(),
                 ];
-            })
+            }),
         ];
     }
 }

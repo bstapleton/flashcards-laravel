@@ -11,16 +11,17 @@ use App\Models\Flashcard;
 use App\Models\Role;
 use App\Models\Tag;
 use App\Models\User;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Carbon;
 use Tests\TestCase;
-use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class FlashcardControllerTest extends TestCase
 {
     use RefreshDatabase;
+
     protected User $user;
 
-    public function setUp(): void
+    protected function setUp(): void
     {
         parent::setUp();
 
@@ -31,7 +32,7 @@ class FlashcardControllerTest extends TestCase
             'last_seen_at' => now(),
         ]);
         $this->newerQuestion->answers = Answer::factory()->count(3)->create([
-            'flashcard_id' => $this->newerQuestion->id
+            'flashcard_id' => $this->newerQuestion->id,
         ]);
         $tags = Tag::factory()->count(3)->create([
             'user_id' => $this->user->id,
@@ -77,14 +78,14 @@ class FlashcardControllerTest extends TestCase
             function (Tag $tag) {
                 return [
                     'name' => $tag->name,
-                    'colour' => strtolower($tag->colour->name)
+                    'colour' => strtolower($tag->colour->name),
                 ];
             })->toArray() === $questions[0]['tags']);
         $this->assertTrue($this->newerQuestion->answers->map(
             function (Answer $answer) {
                 return [
                     'id' => $answer->id,
-                    'text' => $answer->text
+                    'text' => $answer->text,
                 ];
             })->toArray() === $questions[0]['answers']);
     }
@@ -94,7 +95,7 @@ class FlashcardControllerTest extends TestCase
         $response = $this->getJson('/api/flashcards');
 
         $response->assertJsonFragment([
-            'code' => 'unauthenticated'
+            'code' => 'unauthenticated',
         ]);
 
         $this->assertEquals(401, $response->getStatusCode());
@@ -103,7 +104,7 @@ class FlashcardControllerTest extends TestCase
     public function test_index_pagination()
     {
         $user = User::factory()->create([
-            'page_limit' => 5
+            'page_limit' => 5,
         ]);
         $flashcards = Flashcard::factory()->count(10)->create(['user_id' => $user->id]);
         $this->actingAs($user);
@@ -120,7 +121,7 @@ class FlashcardControllerTest extends TestCase
         $response = $this->getJson('/api/flashcards/all');
 
         $response->assertJsonFragment([
-            'code' => 'unauthenticated'
+            'code' => 'unauthenticated',
         ]);
 
         $this->assertEquals(401, $response->getStatusCode());
@@ -129,7 +130,7 @@ class FlashcardControllerTest extends TestCase
     public function test_all_pagination()
     {
         $user = User::factory()->create([
-            'page_limit' => 5
+            'page_limit' => 5,
         ]);
         $flashcards = Flashcard::factory()->count(10)->create(['user_id' => $user->id]);
         $this->actingAs($user);
@@ -145,7 +146,7 @@ class FlashcardControllerTest extends TestCase
     {
         $this->actingAs($this->user);
 
-        $response = $this->getJson('/api/flashcards/' . $this->newerQuestion->id);
+        $response = $this->getJson('/api/flashcards/'.$this->newerQuestion->id);
 
         $response->assertSuccessful();
 
@@ -157,10 +158,10 @@ class FlashcardControllerTest extends TestCase
 
     public function test_show_unauthorized()
     {
-        $response = $this->getJson('/api/flashcards/' . $this->newerQuestion->id);
+        $response = $this->getJson('/api/flashcards/'.$this->newerQuestion->id);
 
         $response->assertJsonFragment([
-            'code' => 'unauthenticated'
+            'code' => 'unauthenticated',
         ]);
 
         $this->assertEquals(401, $response->getStatusCode());
@@ -170,7 +171,7 @@ class FlashcardControllerTest extends TestCase
     {
         $this->actingAs($this->user);
 
-        $response = $this->getJson('/api/flashcards/' . 999999999);
+        $response = $this->getJson('/api/flashcards/'. 999999999);
 
         $this->assertEquals(404, $response->getStatusCode());
     }
@@ -184,9 +185,9 @@ class FlashcardControllerTest extends TestCase
             'answers' => [
                 ['text' => 'Paris', 'is_correct' => true],
                 ['text' => 'London'],
-                ['text' => 'Berlin']
+                ['text' => 'Berlin'],
             ],
-            'tags' => ['history', 'geography']
+            'tags' => ['history', 'geography'],
         ]);
 
         $response->assertSuccessful();
@@ -203,14 +204,14 @@ class FlashcardControllerTest extends TestCase
                     'id' => $answer->id,
                     'text' => $answer->text,
                     'explanation' => $answer->explanation,
-                    'is_correct' => $answer->is_correct
+                    'is_correct' => $answer->is_correct,
                 ];
             })->toArray());
         $this->assertTrue($question['tags'] === Flashcard::find($question['id'])->tags->map(
             function (Tag $tag) {
                 return [
                     'name' => $tag->name,
-                    'colour' => $tag->colour
+                    'colour' => $tag->colour,
                 ];
             })->toArray());
     }
@@ -224,9 +225,9 @@ class FlashcardControllerTest extends TestCase
             'answers' => [
                 ['text' => 'Cheese', 'is_correct' => true],
                 ['text' => 'Bread', 'is_correct' => true],
-                ['text' => 'Ice cream']
+                ['text' => 'Ice cream'],
             ],
-            'tags' => ['food']
+            'tags' => ['food'],
         ]);
 
         $response->assertSuccessful();
@@ -243,14 +244,14 @@ class FlashcardControllerTest extends TestCase
                     'id' => $answer->id,
                     'text' => $answer->text,
                     'explanation' => $answer->explanation,
-                    'is_correct' => $answer->is_correct
+                    'is_correct' => $answer->is_correct,
                 ];
             })->toArray());
         $this->assertTrue($question['tags'] === Flashcard::find($question['id'])->tags->map(
             function (Tag $tag) {
                 return [
                     'name' => $tag->name,
-                    'colour' => $tag->colour
+                    'colour' => $tag->colour,
                 ];
             })->toArray());
     }
@@ -262,7 +263,7 @@ class FlashcardControllerTest extends TestCase
         $response = $this->postJson('/api/flashcards', [
             'text' => 'Iceland is in the northern hemisphere',
             'is_true' => true,
-            'tags' => ['geography']
+            'tags' => ['geography'],
         ]);
 
         $response->assertSuccessful();
@@ -278,7 +279,7 @@ class FlashcardControllerTest extends TestCase
             function (Tag $tag) {
                 return [
                     'name' => $tag->name,
-                    'colour' => $tag->colour
+                    'colour' => $tag->colour,
                 ];
             })->toArray());
     }
@@ -292,13 +293,13 @@ class FlashcardControllerTest extends TestCase
         for ($i = 0; $i < (config('flashcard.answer_per_question_limit') + 5); $i++) {
             $answers[] = [
                 'text' => fake()->text(50),
-                'is_correct' => true
+                'is_correct' => true,
             ];
         }
 
         $response = $this->postJson('/api/flashcards', [
             'text' => 'Which of these are savoury foods?',
-            'answers' => $answers
+            'answers' => $answers,
         ]);
 
         $responseData = json_decode($response->getContent(), true);
@@ -312,17 +313,17 @@ class FlashcardControllerTest extends TestCase
         $this->actingAs($this->user);
 
         Flashcard::factory()->count(config('flashcard.free_account_limit'))->create([
-            'user_id' => $this->user->id
+            'user_id' => $this->user->id,
         ]);
 
         $response = $this->postJson('/api/flashcards', [
             'text' => 'Iceland is in the northern hemisphere',
             'is_true' => true,
-            'tags' => ['geography']
+            'tags' => ['geography'],
         ]);
 
         $response->assertJsonFragment([
-            'code' => 'free_account_limit'
+            'code' => 'free_account_limit',
         ]);
 
         $this->assertEquals(400, $response->getStatusCode());
@@ -335,13 +336,13 @@ class FlashcardControllerTest extends TestCase
         $this->user->roles()->attach(Role::where('code', 'advanced_user')->first()->id);
 
         Flashcard::factory()->count(config('flashcard.free_account_limit'))->create([
-            'user_id' => $this->user->id
+            'user_id' => $this->user->id,
         ]);
 
         $response = $this->postJson('/api/flashcards', [
             'text' => 'Iceland is in the northern hemisphere',
             'is_true' => true,
-            'tags' => ['geography']
+            'tags' => ['geography'],
         ]);
 
         $response->assertSuccessful();
@@ -352,11 +353,11 @@ class FlashcardControllerTest extends TestCase
         $response = $this->postJson('/api/flashcards', [
             'text' => 'Iceland is in the northern hemisphere',
             'is_true' => true,
-            'tags' => ['geography']
+            'tags' => ['geography'],
         ]);
 
         $response->assertJsonFragment([
-            'code' => 'unauthenticated'
+            'code' => 'unauthenticated',
         ]);
 
         $this->assertEquals(401, $response->getStatusCode());
@@ -368,7 +369,7 @@ class FlashcardControllerTest extends TestCase
 
         $response = $this->postJson('/api/flashcards', [
             'is_true' => true,
-            'tags' => ['geography']
+            'tags' => ['geography'],
         ]);
 
         $this->assertEquals(422, $response->getStatusCode());
@@ -384,17 +385,17 @@ class FlashcardControllerTest extends TestCase
             'answers' => [
                 [
                     'text' => 'Apple',
-                    'is_correct' => true
+                    'is_correct' => true,
                 ],
                 [
-                    'text' => 'Banana'
-                ]
+                    'text' => 'Banana',
+                ],
             ],
-            'tags' => ['food']
+            'tags' => ['food'],
         ]);
 
         $response->assertJsonFragment([
-            'code' => 'undetermined_question_type'
+            'code' => 'undetermined_question_type',
         ]);
 
         $this->assertEquals(422, $response->getStatusCode());
@@ -411,14 +412,14 @@ class FlashcardControllerTest extends TestCase
                     'text' => 'Apple',
                 ],
                 [
-                    'text' => 'Banana'
-                ]
+                    'text' => 'Banana',
+                ],
             ],
-            'tags' => ['food']
+            'tags' => ['food'],
         ]);
 
         $response->assertJsonFragment([
-            'code' => 'less_than_one_correct_answer'
+            'code' => 'less_than_one_correct_answer',
         ]);
 
         $this->assertEquals(422, $response->getStatusCode());
@@ -437,10 +438,10 @@ class FlashcardControllerTest extends TestCase
 
         $this->actingAs($this->user);
 
-        $response = $this->patchJson('/api/flashcards/' . $flashcard->id, [
+        $response = $this->patchJson('/api/flashcards/'.$flashcard->id, [
             'text' => 'Something new',
             'explanation' => 'Extensive waffle',
-            'is_true' => true
+            'is_true' => true,
         ]);
 
         $this->assertTrue($response['data']['text'] !== $originalText);
@@ -460,12 +461,12 @@ class FlashcardControllerTest extends TestCase
             'is_true' => false,
         ]);
 
-        $response = $this->patchJson('/api/flashcards/' . $flashcard->id, [
+        $response = $this->patchJson('/api/flashcards/'.$flashcard->id, [
             'text' => fake()->text(20),
         ]);
 
         $response->assertJsonFragment([
-            'code' => 'unauthenticated'
+            'code' => 'unauthenticated',
         ]);
 
         $this->assertEquals(401, $response->getStatusCode());
@@ -475,7 +476,7 @@ class FlashcardControllerTest extends TestCase
     {
         $this->actingAs($this->user);
 
-        $response = $this->patchJson('/api/flashcards/' . 999999999, [
+        $response = $this->patchJson('/api/flashcards/'. 999999999, [
             'text' => fake()->text(20),
         ]);
 
@@ -495,20 +496,20 @@ class FlashcardControllerTest extends TestCase
 
         $this->actingAs($this->user);
 
-        $response = $this->patchJson('/api/flashcards/' . $flashcard->id, [
-            'is_true' => true
+        $response = $this->patchJson('/api/flashcards/'.$flashcard->id, [
+            'is_true' => true,
         ]);
 
         $response->assertJsonFragment([
-            'is_true' => null
+            'is_true' => null,
         ]);
 
-        $response = $this->patchJson('/api/flashcards/' . $flashcard->id, [
-            'is_true' => false
+        $response = $this->patchJson('/api/flashcards/'.$flashcard->id, [
+            'is_true' => false,
         ]);
 
         $response->assertJsonFragment([
-            'is_true' => null
+            'is_true' => null,
         ]);
     }
 
@@ -520,7 +521,7 @@ class FlashcardControllerTest extends TestCase
             'user_id' => $this->user->id,
         ]);
 
-        $response = $this->deleteJson('/api/flashcards/' . $flashcard->id);
+        $response = $this->deleteJson('/api/flashcards/'.$flashcard->id);
 
         $response->assertNoContent();
     }
@@ -533,7 +534,7 @@ class FlashcardControllerTest extends TestCase
             'user_id' => $this->user->id,
         ]);
 
-        $this->deleteJson('/api/flashcards/' . $flashcard->id);
+        $this->deleteJson('/api/flashcards/'.$flashcard->id);
 
         $this->assertDatabaseMissing('flashcards', ['id' => $flashcard->id]);
     }
@@ -542,7 +543,7 @@ class FlashcardControllerTest extends TestCase
     {
         $this->actingAs($this->user);
 
-        $response = $this->deleteJson('/api/flashcards/' . 999999999);
+        $response = $this->deleteJson('/api/flashcards/'. 999999999);
 
         $this->assertEquals(404, $response->getStatusCode());
     }
@@ -556,7 +557,7 @@ class FlashcardControllerTest extends TestCase
             'user_id' => $this->user->id,
         ]);
 
-        $response = $this->deleteJson('/api/flashcards/' . $flashcard->id);
+        $response = $this->deleteJson('/api/flashcards/'.$flashcard->id);
 
         $this->assertEquals(404, $response->getStatusCode());
         $this->assertNotNull(Flashcard::find($flashcard->id));
@@ -568,7 +569,7 @@ class FlashcardControllerTest extends TestCase
             'user_id' => $this->user->id,
         ]);
 
-        $response = $this->deleteJson('/api/flashcards/' . $flashcard->id);
+        $response = $this->deleteJson('/api/flashcards/'.$flashcard->id);
 
         $this->assertEquals(401, $response->getStatusCode());
     }
@@ -715,7 +716,7 @@ class FlashcardControllerTest extends TestCase
             'difficulty' => Difficulty::BURIED,
         ]);
 
-        $response = $this->postJson('/api/flashcards/' . $buriedFlashcard->id . '/revive');
+        $response = $this->postJson('/api/flashcards/'.$buriedFlashcard->id.'/revive');
 
         $response->assertSuccessful();
     }
@@ -729,7 +730,7 @@ class FlashcardControllerTest extends TestCase
             'difficulty' => Difficulty::BURIED,
         ]);
 
-        $this->postJson('/api/flashcards/' . $buriedFlashcard->id . '/revive');
+        $this->postJson('/api/flashcards/'.$buriedFlashcard->id.'/revive');
 
         $revivedFlashcard = Flashcard::find($buriedFlashcard->id);
         $this->assertEquals(Difficulty::EASY, $revivedFlashcard->difficulty);
@@ -739,7 +740,7 @@ class FlashcardControllerTest extends TestCase
     {
         $this->actingAs($this->user);
 
-        $response = $this->postJson('/api/flashcards/' . 999999999 . '/revive');
+        $response = $this->postJson('/api/flashcards/'. 999999999 .'/revive');
 
         $this->assertEquals(404, $response->getStatusCode());
     }
@@ -751,7 +752,7 @@ class FlashcardControllerTest extends TestCase
             'difficulty' => Difficulty::BURIED,
         ]);
 
-        $response = $this->postJson('/api/flashcards/' . $buriedFlashcard->id . '/revive');
+        $response = $this->postJson('/api/flashcards/'.$buriedFlashcard->id.'/revive');
 
         $this->assertEquals(401, $response->getStatusCode());
     }
@@ -766,7 +767,7 @@ class FlashcardControllerTest extends TestCase
             'status' => Status::HIDDEN,
         ]);
 
-        $this->postJson('/api/flashcards/' . $buriedFlashcard->id . '/revive');
+        $this->postJson('/api/flashcards/'.$buriedFlashcard->id.'/revive');
 
         $revivedFlashcard = Flashcard::find($buriedFlashcard->id);
         $this->assertEquals(Status::PUBLISHED, $revivedFlashcard->status);
@@ -780,7 +781,7 @@ class FlashcardControllerTest extends TestCase
             'user_id' => $this->user->id,
         ]);
 
-        $response = $this->postJson('/api/flashcards/' . $flashcard->id . '/hide');
+        $response = $this->postJson('/api/flashcards/'.$flashcard->id.'/hide');
 
         $response->assertSuccessful();
     }
@@ -793,7 +794,7 @@ class FlashcardControllerTest extends TestCase
             'user_id' => $this->user->id,
         ]);
 
-        $this->postJson('/api/flashcards/' . $flashcard->id . '/hide');
+        $this->postJson('/api/flashcards/'.$flashcard->id.'/hide');
 
         $hiddenFlashcard = Flashcard::find($flashcard->id);
         $this->assertEquals(Status::HIDDEN, $hiddenFlashcard->status);
@@ -804,7 +805,7 @@ class FlashcardControllerTest extends TestCase
     {
         $this->actingAs($this->user);
 
-        $response = $this->postJson('/api/flashcards/' . 999999999 . '/hide');
+        $response = $this->postJson('/api/flashcards/'. 999999999 .'/hide');
 
         $this->assertEquals(404, $response->getStatusCode());
     }
@@ -815,7 +816,7 @@ class FlashcardControllerTest extends TestCase
             'user_id' => $this->user->id,
         ]);
 
-        $response = $this->postJson('/api/flashcards/' . $flashcard->id . '/hide');
+        $response = $this->postJson('/api/flashcards/'.$flashcard->id.'/hide');
 
         $this->assertEquals(401, $response->getStatusCode());
     }
@@ -828,7 +829,7 @@ class FlashcardControllerTest extends TestCase
             'user_id' => $this->user->id,
         ]);
 
-        $response = $this->postJson('/api/flashcards/' . $flashcard->id . '/hide');
+        $response = $this->postJson('/api/flashcards/'.$flashcard->id.'/hide');
 
         $this->assertEquals(400, $response->getStatusCode());
     }
@@ -842,7 +843,7 @@ class FlashcardControllerTest extends TestCase
             'status' => Status::HIDDEN,
         ]);
 
-        $response = $this->postJson('/api/flashcards/' . $flashcard->id . '/unhide');
+        $response = $this->postJson('/api/flashcards/'.$flashcard->id.'/unhide');
 
         $response->assertSuccessful();
     }
@@ -856,7 +857,7 @@ class FlashcardControllerTest extends TestCase
             'status' => Status::HIDDEN,
         ]);
 
-        $this->postJson('/api/flashcards/' . $flashcard->id . '/unhide');
+        $this->postJson('/api/flashcards/'.$flashcard->id.'/unhide');
 
         $unhiddenFlashcard = Flashcard::find($flashcard->id);
         $this->assertEquals(Status::PUBLISHED, $unhiddenFlashcard->status);
@@ -866,7 +867,7 @@ class FlashcardControllerTest extends TestCase
     {
         $this->actingAs($this->user);
 
-        $response = $this->postJson('/api/flashcards/' . 999999999 . '/unhide');
+        $response = $this->postJson('/api/flashcards/'. 999999999 .'/unhide');
 
         $this->assertEquals(404, $response->getStatusCode());
     }
@@ -878,7 +879,7 @@ class FlashcardControllerTest extends TestCase
             'status' => Status::HIDDEN,
         ]);
 
-        $response = $this->postJson('/api/flashcards/' . $flashcard->id . '/unhide');
+        $response = $this->postJson('/api/flashcards/'.$flashcard->id.'/unhide');
 
         $this->assertEquals(401, $response->getStatusCode());
     }
@@ -892,7 +893,7 @@ class FlashcardControllerTest extends TestCase
             'status' => Status::DRAFT,
         ]);
 
-        $response = $this->postJson('/api/flashcards/' . $flashcard->id . '/unhide');
+        $response = $this->postJson('/api/flashcards/'.$flashcard->id.'/unhide');
 
         $this->assertEquals(400, $response->getStatusCode());
     }
@@ -910,20 +911,20 @@ class FlashcardControllerTest extends TestCase
         $answers = Answer::factory()->count(2)->create(['flashcard_id' => $flashcard->id]);
 
         $answers->first()->update([
-            'is_correct' => true
+            'is_correct' => true,
         ]);
 
-        $response = $this->postJson('/api/flashcards/' . $flashcard->id, [
+        $response = $this->postJson('/api/flashcards/'.$flashcard->id, [
             'answers' => [
-                $answers->reverse()->first()->id
-            ]
+                $answers->reverse()->first()->id,
+            ],
         ]);
 
         $response->assertSuccessful();
         $response->assertJsonFragment([
             'correctness' => Correctness::NONE,
             'type' => QuestionType::SINGLE,
-            'score' => 0
+            'score' => 0,
         ]);
     }
 
@@ -940,19 +941,19 @@ class FlashcardControllerTest extends TestCase
         $answers = Answer::factory()->count(2)->create(['flashcard_id' => $flashcard->id]);
 
         $answers->first()->update([
-            'is_correct' => true
+            'is_correct' => true,
         ]);
 
-        $response = $this->postJson('/api/flashcards/' . $flashcard->id, [
+        $response = $this->postJson('/api/flashcards/'.$flashcard->id, [
             'answers' => [
-                $answers->first()->id
-            ]
+                $answers->first()->id,
+            ],
         ]);
 
         $response->assertSuccessful();
         $response->assertJsonFragment([
             'correctness' => Correctness::COMPLETE,
-            'type' => QuestionType::SINGLE
+            'type' => QuestionType::SINGLE,
         ]);
 
         $this->assertTrue($response['data']['score'] > 0);
@@ -971,20 +972,20 @@ class FlashcardControllerTest extends TestCase
         $answers = Answer::factory()->count(3)->create(['flashcard_id' => $flashcard->id, 'is_correct' => true]);
 
         $answers->first()->update([
-            'is_correct' => false
+            'is_correct' => false,
         ]);
 
-        $response = $this->postJson('/api/flashcards/' . $flashcard->id, [
+        $response = $this->postJson('/api/flashcards/'.$flashcard->id, [
             'answers' => [
                 $answers->first()->id,
-            ]
+            ],
         ]);
 
         $response->assertSuccessful();
         $response->assertJsonFragment([
             'correctness' => Correctness::NONE,
             'type' => QuestionType::MULTIPLE,
-            'score' => 0
+            'score' => 0,
         ]);
     }
 
@@ -1001,21 +1002,21 @@ class FlashcardControllerTest extends TestCase
         $answers = Answer::factory()->count(3)->create(['flashcard_id' => $flashcard->id, 'is_correct' => true]);
 
         $answers->first()->update([
-            'is_correct' => false
+            'is_correct' => false,
         ]);
 
-        $response = $this->postJson('/api/flashcards/' . $flashcard->id, [
+        $response = $this->postJson('/api/flashcards/'.$flashcard->id, [
             'answers' => [
                 $answers->first()->id,
-                $answers->reverse()->first()->id
-            ]
+                $answers->reverse()->first()->id,
+            ],
         ]);
 
         $response->assertSuccessful();
         $response->assertJsonFragment([
             'correctness' => Correctness::PARTIAL,
             'type' => QuestionType::MULTIPLE,
-            'score' => 0
+            'score' => 0,
         ]);
     }
 
@@ -1032,18 +1033,18 @@ class FlashcardControllerTest extends TestCase
         $answers = Answer::factory()->count(3)->create(['flashcard_id' => $flashcard->id, 'is_correct' => false]);
 
         $answers->first()->update([
-            'is_correct' => true
+            'is_correct' => true,
         ]);
 
         $answers->reverse()->first()->update([
-            'is_correct' => true
+            'is_correct' => true,
         ]);
 
-        $response = $this->postJson('/api/flashcards/' . $flashcard->id, [
+        $response = $this->postJson('/api/flashcards/'.$flashcard->id, [
             'answers' => [
                 $answers->first()->id,
-                $answers->reverse()->first()->id
-            ]
+                $answers->reverse()->first()->id,
+            ],
         ]);
 
         $response->assertSuccessful();
@@ -1069,22 +1070,22 @@ class FlashcardControllerTest extends TestCase
         $answers = Answer::factory()->count(3)->create(['flashcard_id' => $flashcard->id, 'is_correct' => false]);
 
         $answers->first()->update([
-            'is_correct' => true
+            'is_correct' => true,
         ]);
 
         $answers->reverse()->first()->update([
-            'is_correct' => true
+            'is_correct' => true,
         ]);
 
-        $response = $this->postJson('/api/flashcards/' . $flashcard->id, [
-            'answers' => $answers->pluck('id')->toArray()
+        $response = $this->postJson('/api/flashcards/'.$flashcard->id, [
+            'answers' => $answers->pluck('id')->toArray(),
         ]);
 
         $response->assertSuccessful();
         $response->assertJsonFragment([
             'correctness' => Correctness::PARTIAL,
             'type' => QuestionType::MULTIPLE,
-            'score' => 0
+            'score' => 0,
         ]);
     }
 
@@ -1094,17 +1095,17 @@ class FlashcardControllerTest extends TestCase
 
         $flashcard = Flashcard::factory()->trueStatement()->create(['user_id' => $this->user->id]);
 
-        $response = $this->postJson('/api/flashcards/' . $flashcard->id, [
+        $response = $this->postJson('/api/flashcards/'.$flashcard->id, [
             'answers' => [
-                false
-            ]
+                false,
+            ],
         ]);
 
         $response->assertSuccessful();
         $response->assertJsonFragment([
             'correctness' => Correctness::NONE,
             'type' => QuestionType::STATEMENT,
-            'score' => 0
+            'score' => 0,
         ]);
     }
 
@@ -1114,10 +1115,10 @@ class FlashcardControllerTest extends TestCase
 
         $flashcard = Flashcard::factory()->trueStatement()->create(['user_id' => $this->user->id]);
 
-        $response = $this->postJson('/api/flashcards/' . $flashcard->id, [
+        $response = $this->postJson('/api/flashcards/'.$flashcard->id, [
             'answers' => [
-                true
-            ]
+                true,
+            ],
         ]);
 
         $response->assertSuccessful();
@@ -1135,17 +1136,17 @@ class FlashcardControllerTest extends TestCase
 
         $flashcard = Flashcard::factory()->falseStatement()->create(['user_id' => $this->user->id]);
 
-        $response = $this->postJson('/api/flashcards/' . $flashcard->id, [
+        $response = $this->postJson('/api/flashcards/'.$flashcard->id, [
             'answers' => [
-                true
-            ]
+                true,
+            ],
         ]);
 
         $response->assertSuccessful();
         $response->assertJsonFragment([
             'correctness' => Correctness::NONE,
             'type' => QuestionType::STATEMENT,
-            'score' => 0
+            'score' => 0,
         ]);
     }
 
@@ -1155,10 +1156,10 @@ class FlashcardControllerTest extends TestCase
 
         $flashcard = Flashcard::factory()->falseStatement()->create(['user_id' => $this->user->id]);
 
-        $response = $this->postJson('/api/flashcards/' . $flashcard->id, [
+        $response = $this->postJson('/api/flashcards/'.$flashcard->id, [
             'answers' => [
-                false
-            ]
+                false,
+            ],
         ]);
 
         $response->assertSuccessful();
@@ -1178,10 +1179,10 @@ class FlashcardControllerTest extends TestCase
 
         $flashcard = Flashcard::factory()->falseStatement()->create(['user_id' => $newUser->id]);
 
-        $response = $this->postJson('/api/flashcards/' . $flashcard->id, [
+        $response = $this->postJson('/api/flashcards/'.$flashcard->id, [
             'answers' => [
-                false
-            ]
+                false,
+            ],
         ]);
 
         $response->assertStatus(404);
@@ -1191,10 +1192,10 @@ class FlashcardControllerTest extends TestCase
     {
         $flashcard = Flashcard::factory()->falseStatement()->create(['user_id' => $this->user->id]);
 
-        $response = $this->postJson('/api/flashcards/' . $flashcard->id, [
+        $response = $this->postJson('/api/flashcards/'.$flashcard->id, [
             'answers' => [
-                false
-            ]
+                false,
+            ],
         ]);
 
         $response->assertStatus(401);
@@ -1206,17 +1207,17 @@ class FlashcardControllerTest extends TestCase
 
         $flashcard = Flashcard::factory()->falseStatement()->create(['user_id' => $this->user->id]);
 
-        $response = $this->postJson('/api/flashcards/' . $flashcard->id, [
+        $response = $this->postJson('/api/flashcards/'.$flashcard->id, [
             'answers' => [
-                fake()->sentence(3)
-            ]
+                fake()->sentence(3),
+            ],
         ]);
 
         $response->assertSuccessful();
         $response->assertJsonFragment([
             'correctness' => Correctness::NONE,
             'type' => QuestionType::STATEMENT,
-            'score' => 0
+            'score' => 0,
         ]);
     }
 
@@ -1277,7 +1278,7 @@ class FlashcardControllerTest extends TestCase
         $response = $this->postJson('/api/flashcards', [
             'text' => 'Iceland is in the northern hemisphere',
             'is_true' => true,
-            'tags' => ['geography']
+            'tags' => ['geography'],
         ]);
 
         $response->assertUnauthorized();
@@ -1290,10 +1291,10 @@ class FlashcardControllerTest extends TestCase
         $this->actingAs($user);
         $flashcard = Flashcard::factory()->trueStatement()->create(['user_id' => $user->id]);
 
-        $response = $this->patchJson('/api/flashcards/' . $flashcard->id, [
+        $response = $this->patchJson('/api/flashcards/'.$flashcard->id, [
             'text' => 'Something new',
             'explanation' => 'Extensive waffle',
-            'is_true' => false
+            'is_true' => false,
         ]);
 
         $response->assertUnauthorized();
@@ -1309,8 +1310,8 @@ class FlashcardControllerTest extends TestCase
 
         $flashcard = Flashcard::factory()->trueStatement()->create(['user_id' => $user->id]);
 
-        $response = $this->postJson('/api/flashcards/' . $flashcard->id, [
-            'answers' => [true]
+        $response = $this->postJson('/api/flashcards/'.$flashcard->id, [
+            'answers' => [true],
         ]);
 
         $response->assertUnauthorized();
@@ -1329,7 +1330,7 @@ class FlashcardControllerTest extends TestCase
                 'count',
                 'imported',
                 'remaining',
-            ]
+            ],
         ]);
 
         $this->assertTrue($response['data']['count'] === 10 + $existingCount);
@@ -1350,7 +1351,7 @@ class FlashcardControllerTest extends TestCase
                 'count',
                 'imported',
                 'remaining',
-            ]
+            ],
         ]);
 
         $this->assertTrue($response['data']['count'] === 10 + $existingCount);
@@ -1371,7 +1372,7 @@ class FlashcardControllerTest extends TestCase
                 'count',
                 'imported',
                 'remaining',
-            ]
+            ],
         ]);
 
         $this->assertTrue($response['data']['count'] === 10 + $existingCount);
@@ -1383,13 +1384,13 @@ class FlashcardControllerTest extends TestCase
     {
         $this->actingAs($this->user);
         $existingCount = $this->user->flashcards->count();
-        $questionText ='Which of the following is the strongest fundamental force?';
+        $questionText = 'Which of the following is the strongest fundamental force?';
 
         $response = $this->postJson('/api/flashcards/import', ['topic' => 'physics']);
         $question = Flashcard::where('text', $questionText)->where('user_id', $this->user->id)->first();
 
-        if (!$question) {
-            $this->markTestSkipped('Question mismatch against the import. Did you change the data? Expected text was: "' . $questionText . '"');
+        if (! $question) {
+            $this->markTestSkipped('Question mismatch against the import. Did you change the data? Expected text was: "'.$questionText.'"');
         }
 
         $answerCount = $question->answers()->count();
@@ -1403,7 +1404,7 @@ class FlashcardControllerTest extends TestCase
                 'count',
                 'imported',
                 'remaining',
-            ]
+            ],
         ]);
 
         // Then just ensure everything is present and correct, but not duplicated

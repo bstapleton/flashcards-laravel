@@ -12,10 +12,12 @@ use Tests\TestCase;
 class AttemptControllerTest extends TestCase
 {
     use RefreshDatabase;
+
     protected User $user;
+
     protected string $word;
 
-    public function setUp(): void
+    protected function setUp(): void
     {
         parent::setUp();
 
@@ -27,7 +29,7 @@ class AttemptControllerTest extends TestCase
 
         $attempts->map(function ($attempt) {
             Keyword::factory()->count(2)->create([
-                'attempt_id' => $attempt->id
+                'attempt_id' => $attempt->id,
             ]);
         });
 
@@ -88,7 +90,7 @@ class AttemptControllerTest extends TestCase
     public function test_index_method_requires_authentication()
     {
         $response = $this->getJson('/api/attempts', [
-            'Authorization' => 'Bearer '
+            'Authorization' => 'Bearer ',
         ]);
 
         $response->assertUnauthorized();
@@ -98,7 +100,7 @@ class AttemptControllerTest extends TestCase
     {
         $this->actingAs($this->user);
 
-        $response = $this->getJson('/api/attempts?tags=' . $this->word);
+        $response = $this->getJson('/api/attempts?tags='.$this->word);
 
         $response->assertSuccessful();
 

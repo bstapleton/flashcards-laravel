@@ -9,6 +9,7 @@ use App\Enums\QuestionType;
 class Score
 {
     protected int $baseScore;
+
     protected int $multiplier;
 
     public function __construct()
@@ -20,44 +21,34 @@ class Score
     /**
      * If the question is in the graveyard, don't score it. Otherwise, work out the score based on its correctness and
      * difficulty.
-     *
-     * @param QuestionType $type
-     * @param Correctness $correctness
-     * @param Difficulty $currentDifficulty
-     * @param bool $userCanLosePoints
-     * @return int
      */
     public function getScore(QuestionType $type, Correctness $correctness, Difficulty $currentDifficulty, bool $userCanLosePoints = false): int
     {
-        if (Difficulty::BURIED === $currentDifficulty) {
+        if ($currentDifficulty === Difficulty::BURIED) {
             return 0;
         }
 
-        if ($userCanLosePoints && Correctness::COMPLETE !== $correctness) {
+        if ($userCanLosePoints && $correctness !== Correctness::COMPLETE) {
             if (in_array($type, [QuestionType::STATEMENT, QuestionType::SINGLE])) {
                 return 0 - ($this->baseScore * self::getMultiplier($currentDifficulty));
             }
 
-            if (QuestionType::MULTIPLE === $type) {
+            if ($type === QuestionType::MULTIPLE) {
                 return 0 - (($this->baseScore * self::getMultiplier($currentDifficulty)) * $this->multiplier);
             }
         }
 
-        if (in_array($type, [QuestionType::STATEMENT, QuestionType::SINGLE]) && Correctness::COMPLETE === $correctness) {
+        if (in_array($type, [QuestionType::STATEMENT, QuestionType::SINGLE]) && $correctness === Correctness::COMPLETE) {
             return $this->baseScore * self::getMultiplier($currentDifficulty);
         }
 
-        if (QuestionType::MULTIPLE === $type && Correctness::COMPLETE === $correctness) {
+        if ($type === QuestionType::MULTIPLE && $correctness === Correctness::COMPLETE) {
             return ($this->baseScore * self::getMultiplier($currentDifficulty)) * $this->multiplier;
         }
 
         return 0;
     }
 
-    /**
-     * @param Difficulty $difficulty
-     * @return int
-     */
     private static function getMultiplier(Difficulty $difficulty): int
     {
         return match ($difficulty) {

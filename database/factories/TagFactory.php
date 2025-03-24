@@ -20,7 +20,7 @@ class TagFactory extends Factory
     {
         return [
             'name' => fake()->word(),
-            'colour' => array_rand(TagColour::cases())
+            'colour' => array_rand(TagColour::cases()),
         ];
     }
 }

@@ -25,17 +25,17 @@ class AttemptFactory extends Factory
             $answers[$i] = [
                 'is_correct' => fake()->boolean(),
                 'text' => fake()->sentence(rand(2, 5)),
-                'was_selected' => fake()->boolean()
+                'was_selected' => fake()->boolean(),
             ];
         }
 
         return [
             'question' => $question ?? fake()->sentence(4),
-            'correctness' => Correctness::cases()[rand(0, count(Correctness::cases())-1)],
-            'question_type' => QuestionType::cases()[rand(0, count(QuestionType::cases())-1)],
-            'difficulty' => Difficulty::cases()[rand(0, count(Difficulty::cases())-1)],
+            'correctness' => Correctness::cases()[rand(0, count(Correctness::cases()) - 1)],
+            'question_type' => QuestionType::cases()[rand(0, count(QuestionType::cases()) - 1)],
+            'difficulty' => Difficulty::cases()[rand(0, count(Difficulty::cases()) - 1)],
             'points_earned' => rand(1, 8),
-            'answered_at' => now()->subMinutes(rand(30,6000)),
+            'answered_at' => now()->subMinutes(rand(30, 6000)),
             'answers' => json_encode($answers),
         ];
     }

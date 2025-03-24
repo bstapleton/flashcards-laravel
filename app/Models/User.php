@@ -33,6 +33,7 @@ use RedExplosion\Sqids\Concerns\HasSqids;
  *
  * @OA\Schema(
  *     required={"username", "password", "display_name"},
+ *
  *     @OA\Property(property="username", type="string"),
  *     @OA\Property(property="display_name", type="string"),
  *     @OA\Property(property="password", type="password"),
@@ -44,7 +45,7 @@ use RedExplosion\Sqids\Concerns\HasSqids;
  */
 class User extends Authenticatable
 {
-    use HasFactory, Notifiable, HasApiTokens, HasSqids;
+    use HasApiTokens, HasFactory, HasSqids, Notifiable;
 
     protected string $sqidPrefix = 'u';
 
@@ -141,7 +142,7 @@ class User extends Authenticatable
 
     public function adjustPoints(int $score, $operation = 'add'): static
     {
-        if ('add' === $operation) {
+        if ($operation === 'add') {
             $this->points += $score;
         } else {
             $this->points = $this->points - $score;

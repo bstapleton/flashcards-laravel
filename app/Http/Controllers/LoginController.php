@@ -13,6 +13,7 @@ class LoginController extends Controller
      *     summary="Authenticate user and generate JWT token",
      *     tags={"auth"},
      *     security={{"basicAuth":{}}},
+     *
      *     @OA\Response(response="200", description="Login successful"),
      *     @OA\Response(response="401", description="Invalid credentials")
      * )
@@ -24,7 +25,7 @@ class LoginController extends Controller
         if ($authHeader) {
             $authString = explode(' ', $authHeader);
             $credentials = base64_decode($authString[1]);
-            list($email, $password) = explode(':', $credentials);
+            [$email, $password] = explode(':', $credentials);
             $credentials = [
                 'username' => $email,
                 'password' => $password,
@@ -36,7 +37,7 @@ class LoginController extends Controller
                 return response()->json([
                     'display_name' => Auth::user()->display_name,
                     'is_trial_user' => Auth::user()->is_trial_user,
-                    'token' => $token
+                    'token' => $token,
                 ]);
             }
         }
@@ -44,7 +45,7 @@ class LoginController extends Controller
         return response()->json([
             'title' => 'Invalid credentials',
             'message' => 'Username and/or password incorrect',
-            'code' => 'invalid_credentials'
+            'code' => 'invalid_credentials',
         ]);
     }
 }

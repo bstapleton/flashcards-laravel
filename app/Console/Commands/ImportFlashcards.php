@@ -16,29 +16,29 @@ class ImportFlashcards extends Command
 {
     protected $signature = 'app:import-flashcards {username}';
 
-    protected $description = 'Imports flashcards from the /public/import/ directory - pop in a questions.json file ' .
-    'and run this. More info can be found in the readme regarding formatting.';
+    protected $description = 'Imports flashcards from the /public/import/ directory - pop in a questions.json file '.
+        'and run this. More info can be found in the readme regarding formatting.';
 
     public function handle(): int
     {
         $user = User::where('username', $this->argument('username'))->first();
 
-        if (!$user) {
+        if (! $user) {
             $user = User::factory()->create([
-                'username' => $this->argument('username')
+                'username' => $this->argument('username'),
             ]);
         }
 
         $role = Role::where('code', 'advanced_user')->first();
         $userRoles = $user->roles->pluck('code')->toArray();
 
-        if(!in_array($role->code, $userRoles)) {
+        if (! in_array($role->code, $userRoles)) {
             $user->roles()->attach($role);
         }
 
         $data = Storage::disk('import')->json('questions.json');
 
-        if (!$data) {
+        if (! $data) {
             $this->error('File invalid or not found in expected location.');
 
             return 1;
@@ -54,7 +54,7 @@ class ImportFlashcards extends Command
             }
         }
 
-        $this->info('The command ran to completion. If you had any warnings relating to the question types, ' .
+        $this->info('The command ran to completion. If you had any warnings relating to the question types, '.
             'correct them and rerun the command - duplicates will be skipped.');
 
         return 1;
@@ -93,7 +93,7 @@ class ImportFlashcards extends Command
         $answer = Answer::make([
             'text' => $a->text,
             'explanation' => property_exists($a, 'explanation') ? $a->explanation : null,
-            'is_correct' => $a->is_correct ?? false
+            'is_correct' => $a->is_correct ?? false,
         ]);
 
         $answer->flashcard()->associate($flashcard);

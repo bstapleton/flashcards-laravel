@@ -3,11 +3,11 @@
 namespace App\Exceptions;
 
 use Carbon\Carbon;
-use Throwable;
 
 class NoEligibleQuestionsException extends BaseException
 {
-    protected Carbon|null $eligibleAt;
+    protected ?Carbon $eligibleAt;
+
     public function __construct($eligibleAt = null)
     {
         $this->eligibleAt = $eligibleAt;

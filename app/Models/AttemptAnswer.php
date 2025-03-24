@@ -5,7 +5,9 @@ namespace App\Models;
 class AttemptAnswer
 {
     protected string $text;
+
     protected bool $is_correct;
+
     protected bool $was_selected;
 
     public function getIsCorrect(): bool

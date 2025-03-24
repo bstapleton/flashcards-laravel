@@ -72,7 +72,7 @@ class UserTest extends TestCase
         $code = 'test-role';
         $role = Role::create([
             'name' => $name,
-            'code' => $code
+            'code' => $code,
         ]);
 
         $this->assertEquals($name, $role->name);
@@ -104,7 +104,7 @@ class UserTest extends TestCase
     #[Test]
     public function role_user_pivot_can_be_updated()
     {
-        $role = new Role();
+        $role = new Role;
         $role->name = 'Test Role';
         $role->code = 'test-role';
 

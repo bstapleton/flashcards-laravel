@@ -15,7 +15,7 @@ class HistoricAttemptTransformer extends TransformerAbstract
             'correctness' => $attempt->correctness,
             'difficulty' => $attempt->difficulty,
             'points_earned' => $attempt->points_earned,
-            'answered_at' => Carbon::parse($attempt->answered_at)->toIso8601String()
+            'answered_at' => Carbon::parse($attempt->answered_at)->toIso8601String(),
         ];
     }
 }

@@ -5,22 +5,27 @@ namespace Tests\Unit;
 use App\Enums\Difficulty;
 use App\Enums\QuestionType;
 use App\Models\Answer;
+use App\Models\Flashcard;
 use App\Models\User;
 use App\Services\FlashcardService;
-use App\Models\Flashcard;
-use Tests\TestCase;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Tests\TestCase;
 
 class FlashcardTest extends TestCase
 {
     use RefreshDatabase;
+
     const int ANSWER_COUNT = 3;
+
     protected Flashcard $flashcard;
+
     protected Flashcard $otherFlashcard;
+
     protected User $user;
+
     protected FlashcardService $service;
 
-    public function setUp(): void
+    protected function setUp(): void
     {
         parent::setUp();
 
@@ -48,14 +53,14 @@ class FlashcardTest extends TestCase
             $answer->flashcard()->associate($this->otherFlashcard);
         }
 
-        $this->service = new FlashcardService();
+        $this->service = new FlashcardService;
 
         $this->flashcard->difficulty = Difficulty::HARD->value;
         $this->flashcard->is_true = true;
         $this->flashcard->explanation = 'test explanation';
     }
 
-    public function tearDown(): void
+    protected function tearDown(): void
     {
         $this->flashcard->answers->each(function ($answer) {
             $answer->delete();
@@ -70,7 +75,7 @@ class FlashcardTest extends TestCase
         parent::tearDown();
     }
 
-    public function testFlashcardHasAttributes(): void
+    public function test_flashcard_has_attributes(): void
     {
         $this->assertTrue($this->flashcard->hasAttribute('text'));
         $this->assertIsString($this->flashcard->text);
@@ -94,7 +99,7 @@ class FlashcardTest extends TestCase
      *
      * @return void
      */
-    public function testIncreasingDifficultyForEasy()
+    public function test_increasing_difficulty_for_easy()
     {
         $this->flashcard->difficulty = Difficulty::EASY;
         $this->service->increaseDifficulty($this->flashcard);
@@ -111,7 +116,7 @@ class FlashcardTest extends TestCase
      *
      * @return void
      */
-    public function testIncreasingDifficultyForMedium()
+    public function test_increasing_difficulty_for_medium()
     {
         $this->flashcard->difficulty = Difficulty::MEDIUM;
         $this->service->increaseDifficulty($this->flashcard);
@@ -127,7 +132,7 @@ class FlashcardTest extends TestCase
      *
      * @return void
      */
-    public function testIncreasingDifficultyForHard()
+    public function test_increasing_difficulty_for_hard()
     {
         $this->flashcard->difficulty = Difficulty::HARD;
         $this->service->increaseDifficulty($this->flashcard);
@@ -144,7 +149,7 @@ class FlashcardTest extends TestCase
      *
      * @return void
      */
-    public function testBuriedIdempotency()
+    public function test_buried_idempotency()
     {
         $this->flashcard->difficulty = Difficulty::BURIED;
         $this->service->increaseDifficulty($this->flashcard);
@@ -160,7 +165,7 @@ class FlashcardTest extends TestCase
      *
      * @return void
      */
-    public function testResetMediumDifficulty()
+    public function test_reset_medium_difficulty()
     {
         $this->flashcard->difficulty = Difficulty::MEDIUM;
         $this->assertFalse($this->flashcard->difficulty === Difficulty::EASY);
@@ -179,7 +184,7 @@ class FlashcardTest extends TestCase
      *
      * @return void
      */
-    public function testResetHardDifficulty()
+    public function test_reset_hard_difficulty()
     {
         $this->flashcard->difficulty = Difficulty::HARD;
         $this->assertFalse($this->flashcard->difficulty === Difficulty::EASY);
@@ -198,7 +203,7 @@ class FlashcardTest extends TestCase
      *
      * @return void
      */
-    public function testResetBuriedDifficulty()
+    public function test_reset_buried_difficulty()
     {
         $this->flashcard->difficulty = Difficulty::BURIED;
         $this->assertFalse($this->flashcard->difficulty === Difficulty::EASY);
@@ -208,7 +213,7 @@ class FlashcardTest extends TestCase
         $this->assertTrue($this->flashcard->difficulty === Difficulty::EASY);
     }
 
-    public function testFlashcardHasAnswers()
+    public function test_flashcard_has_answers()
     {
         $this->assertCount(self::ANSWER_COUNT, $this->flashcard->answers);
     }
@@ -221,7 +226,7 @@ class FlashcardTest extends TestCase
      *
      * @return void
      */
-    public function testFilterValidAnswers()
+    public function test_filter_valid_answers()
     {
         $actualAnswers = $this->flashcard->answers->pluck('id')->toArray();
         $answers = array_merge(

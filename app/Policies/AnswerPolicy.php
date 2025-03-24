@@ -26,8 +26,6 @@ class AnswerPolicy
     /**
      * Check if the request user is the owner of the model
      *
-     * @param User $user
-     * @param Answer $answer
      * @return Response
      */
     private function currentUser(User $user, Answer $answer)

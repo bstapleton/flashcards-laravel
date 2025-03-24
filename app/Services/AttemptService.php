@@ -13,10 +13,10 @@ use Illuminate\Validation\UnauthorizedException;
 
 class AttemptService
 {
-    public function all(array $keywords = null)
+    public function all(?array $keywords = null)
     {
-        if (!Gate::authorize('list', Attempt::class)) {
-            throw new UnauthorizedException();
+        if (! Gate::authorize('list', Attempt::class)) {
+            throw new UnauthorizedException;
         }
 
         if ($keywords) {
@@ -34,8 +34,8 @@ class AttemptService
 
     public function show(Attempt $attempt): Attempt
     {
-        if (!Gate::authorize('show', $attempt)) {
-            throw new UnauthorizedException();
+        if (! Gate::authorize('show', $attempt)) {
+            throw new UnauthorizedException;
         }
 
         return $attempt;
@@ -43,9 +43,6 @@ class AttemptService
 
     /**
      * Get all other attempts with the same question text
-     *
-     * @param Attempt $attempt
-     * @return Builder
      */
     public function related(Attempt $attempt): Builder
     {
@@ -70,7 +67,7 @@ class AttemptService
         if ($data['tags']) {
             $keywords = explode(',', $data['tags']);
 
-            foreach($keywords as $keyword) {
+            foreach ($keywords as $keyword) {
                 $attempt->keywords()->save(new Keyword(['name' => $keyword]));
             }
         }
@@ -80,8 +77,8 @@ class AttemptService
 
     public function destroy(Attempt $attempt): void
     {
-        if (!Gate::authorize('delete', $attempt)) {
-            throw new UnauthorizedException();
+        if (! Gate::authorize('delete', $attempt)) {
+            throw new UnauthorizedException;
         }
 
         $attempt->delete();
@@ -89,7 +86,7 @@ class AttemptService
 
     public function createGivenAnswer(string $text, bool $isCorrect, bool $wasSelected, ?int $id = null, ?string $explanation = null)
     {
-        $givenAnswer = new GivenAnswer();
+        $givenAnswer = new GivenAnswer;
         $givenAnswer->setText($text);
         $givenAnswer->setIsCorrect($isCorrect);
         $givenAnswer->setWasSelected($wasSelected);
@@ -118,6 +115,7 @@ class AttemptService
                 });
 
                 $latest->previous_attempts = $previousAttempts;
+
                 return $latest;
             });
     }
@@ -138,6 +136,7 @@ class AttemptService
                 });
 
                 $latest->previous_attempts = $previousAttempts;
+
                 return $latest;
             });
     }

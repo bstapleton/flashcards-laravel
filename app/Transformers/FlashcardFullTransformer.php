@@ -17,7 +17,7 @@ class FlashcardFullTransformer extends TransformerAbstract
 {
     public function transform(Flashcard $flashcard): array
     {
-        $data =  [
+        $data = [
             'id' => $flashcard->id,
             'type' => $flashcard->type->value,
             'status' => $flashcard->status->value,
@@ -27,16 +27,16 @@ class FlashcardFullTransformer extends TransformerAbstract
             'difficulty' => $flashcard->difficulty,
             'eligible_at' => Carbon::parse($flashcard->eligible_at)->toIso8601String(),
             'tags' => $flashcard->tags->map(function (Tag $tag) {
-                return (new TagTransformer())->transform($tag);
+                return (new TagTransformer)->transform($tag);
             }),
             'answers' => $flashcard->answers->map(function (Answer $answer) {
                 return [
                     'id' => $answer->id,
                     'text' => $answer->text,
                     'explanation' => $answer->explanation,
-                    'is_correct' => $answer->is_correct
+                    'is_correct' => $answer->is_correct,
                 ];
-            })
+            }),
         ];
 
         return $data;

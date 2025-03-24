@@ -2,8 +2,6 @@
 
 namespace App\Exceptions;
 
-use Throwable;
-
 class FreeUserFlashcardLimitException extends BaseException
 {
     public function __construct()

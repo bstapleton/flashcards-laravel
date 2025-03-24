@@ -14,6 +14,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
  *
  * @OA\Schema(
  *     required={"name", "colour"},
+ *
  *     @OA\Property(property="name", type="string", example="Mathematics"),
  *     @OA\Property(property="colour", type="string", example="green")
  * )
@@ -21,6 +22,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 class Tag extends Model
 {
     use HasFactory;
+
     public $timestamps = false;
 
     protected $fillable = [

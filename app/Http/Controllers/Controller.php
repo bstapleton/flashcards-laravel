@@ -10,6 +10,7 @@ use Illuminate\Http\JsonResponse;
  *    title="Flashcards API",
  *    version="1.0.0",
  * )
+ *
  * @OA\SecurityScheme(
  *     type="http",
  *     securityScheme="bearerAuth",

@@ -60,14 +60,14 @@ class UserFactory extends Factory
     public function losePoints(): static
     {
         return $this->state(fn (array $attributes) => [
-            'lose_points' => true
+            'lose_points' => true,
         ]);
     }
 
     public function twoMonthsOld(): static
     {
         return $this->state(fn (array $attributes) => [
-            'created_at' => now()->subMonths(2)
+            'created_at' => now()->subMonths(2),
         ]);
     }
 }

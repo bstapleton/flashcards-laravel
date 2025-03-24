@@ -7,13 +7,14 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
- * @property integer id
+ * @property int id
  * @property string text
  * @property string explanation
- * @property boolean is_correct
+ * @property bool is_correct
  *
  * @OA\Schema(
  *     required={"text"},
+ *
  *     @OA\Property(property="flashcard_id", type="integer", example=1),
  *     @OA\Property(property="text", type="string", example="Blue"),
  *     @OA\Property(property="explanation", type="string", example="Blue is the colour of the sky"),

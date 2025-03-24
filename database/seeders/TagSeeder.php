@@ -16,7 +16,7 @@ class TagSeeder extends Seeder
         foreach ($types as $type) {
             Tag::factory()->create([
                 'user_id' => $user->id,
-                'name' => $type
+                'name' => $type,
             ]);
         }
     }
