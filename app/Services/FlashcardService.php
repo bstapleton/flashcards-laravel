@@ -210,8 +210,7 @@ class FlashcardService
             ->get()
             ->filter(function ($flashcard) {
                 return $flashcard->eligible_at->lessThan(now()) || ! $flashcard->last_seen_at;
-            }
-            );
+            });
 
         if (! $eligibleQuestions->count()) {
             $flashcard = Flashcard::currentUser()
@@ -233,7 +232,10 @@ class FlashcardService
             throw new NoEligibleQuestionsException($flashcard->eligible_at);
         }
 
-        return $eligibleQuestions->first();
+        $question = $eligibleQuestions->first();
+        $question['data_source'] = 'database';
+
+        return $question;
     }
 
     public function revive(Flashcard $flashcard): Flashcard

@@ -294,7 +294,9 @@ class FlashcardController extends Controller
             return $this->handleForbidden();
         }
 
-        return fractal($flashcardResponse, new UnattemptedQuestionTransformer)->respond();
+        return fractal($flashcardResponse, new UnattemptedQuestionTransformer)
+            ->addMeta($this->addSourceMetaData($flashcardResponse->data_source))
+            ->respond();
     }
 
     /**
