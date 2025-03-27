@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Services\FlashcardService;
-use App\Transformers\FlashcardTransformer;
+use App\Transformers\UnattemptedQuestionTransformer;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -44,7 +44,7 @@ class FlashcardTagController extends Controller
             return $this->handleForbidden();
         }
 
-        return fractal($flashcardResponse, new FlashcardTransformer)->respond();
+        return fractal($flashcardResponse, new UnattemptedQuestionTransformer)->respond();
     }
 
     /**
@@ -73,6 +73,6 @@ class FlashcardTagController extends Controller
             return $this->handleForbidden();
         }
 
-        return fractal($flashcardResponse, new FlashcardTransformer)->respond();
+        return fractal($flashcardResponse, new UnattemptedQuestionTransformer)->respond();
     }
 }

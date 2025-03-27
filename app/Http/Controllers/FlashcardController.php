@@ -10,8 +10,8 @@ use App\Exceptions\UndeterminedQuestionTypeException;
 use App\Helpers\ApiResponse;
 use App\Models\Flashcard;
 use App\Services\FlashcardService;
-use App\Transformers\FlashcardFullTransformer;
-use App\Transformers\FlashcardTransformer;
+use App\Transformers\QuestionTransformer;
+use App\Transformers\UnattemptedQuestionTransformer;
 use App\Transformers\ScorecardTransformer;
 use Illuminate\Contracts\Filesystem\FileNotFoundException;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
@@ -51,7 +51,7 @@ class FlashcardController extends Controller
             return $this->handleForbidden();
         }
 
-        return fractal($flashcards, new FlashcardTransformer)->respond();
+        return fractal($flashcards, new UnattemptedQuestionTransformer)->respond();
     }
 
     /**
@@ -74,7 +74,7 @@ class FlashcardController extends Controller
             return $this->handleForbidden();
         }
 
-        return fractal($flashcards, new FlashcardTransformer)->respond();
+        return fractal($flashcards, new UnattemptedQuestionTransformer)->respond();
     }
 
     /**
@@ -101,7 +101,7 @@ class FlashcardController extends Controller
             return $this->handleForbidden();
         }
 
-        return fractal($flashcardResponse, new FlashcardFullTransformer)->respond();
+        return fractal($flashcardResponse, new QuestionTransformer)->respond();
     }
 
     /**
@@ -165,7 +165,7 @@ class FlashcardController extends Controller
             );
         }
 
-        return fractal($flashcardResponse, new FlashcardFullTransformer)->respond();
+        return fractal($flashcardResponse, new QuestionTransformer)->respond();
     }
 
     /**
@@ -207,7 +207,7 @@ class FlashcardController extends Controller
             return $this->handleForbidden();
         }
 
-        return fractal($flashcardResponse, new FlashcardFullTransformer)->respond();
+        return fractal($flashcardResponse, new QuestionTransformer)->respond();
     }
 
     /**
@@ -257,7 +257,7 @@ class FlashcardController extends Controller
             return $this->handleForbidden();
         }
 
-        return fractal($flashcards, new FlashcardTransformer)->respond();
+        return fractal($flashcards, new UnattemptedQuestionTransformer)->respond();
     }
 
     /**
@@ -294,7 +294,7 @@ class FlashcardController extends Controller
             return $this->handleForbidden();
         }
 
-        return fractal($flashcardResponse, new FlashcardTransformer)->respond();
+        return fractal($flashcardResponse, new UnattemptedQuestionTransformer)->respond();
     }
 
     /**
@@ -322,7 +322,7 @@ class FlashcardController extends Controller
             return $this->handleForbidden();
         }
 
-        return fractal($flashcardResponse, new FlashcardTransformer)->respond();
+        return fractal($flashcardResponse, new UnattemptedQuestionTransformer)->respond();
     }
 
     /**
@@ -357,7 +357,7 @@ class FlashcardController extends Controller
             return $this->handleForbidden();
         }
 
-        return fractal($flashcardResponse, new FlashcardTransformer)->respond();
+        return fractal($flashcardResponse, new UnattemptedQuestionTransformer)->respond();
     }
 
     /**
@@ -392,7 +392,7 @@ class FlashcardController extends Controller
             return $this->handleForbidden();
         }
 
-        return fractal($flashcardResponse, new FlashcardTransformer)->respond();
+        return fractal($flashcardResponse, new UnattemptedQuestionTransformer)->respond();
     }
 
     /**
@@ -451,7 +451,7 @@ class FlashcardController extends Controller
             return $this->handleForbidden();
         }
 
-        return fractal($flashcards, new FlashcardTransformer)->respond();
+        return fractal($flashcards, new UnattemptedQuestionTransformer)->respond();
     }
 
     /**
@@ -473,7 +473,7 @@ class FlashcardController extends Controller
             return $this->handleForbidden();
         }
 
-        return fractal($flashcards, new FlashcardTransformer)->respond();
+        return fractal($flashcards, new UnattemptedQuestionTransformer)->respond();
     }
 
     /**

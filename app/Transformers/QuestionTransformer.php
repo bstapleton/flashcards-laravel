@@ -13,11 +13,11 @@ use League\Fractal\TransformerAbstract;
  * that point in the flow. The other transformer is what you get back after submitting an answer. Basically, some
  * rudimentary anti-cheat, even though you're only cheating yourself if you do it.
  */
-class FlashcardFullTransformer extends TransformerAbstract
+class QuestionTransformer extends TransformerAbstract
 {
     public function transform(Flashcard $flashcard): array
     {
-        $data = [
+        return [
             'id' => $flashcard->id,
             'type' => $flashcard->type->value,
             'status' => $flashcard->status->value,
@@ -38,7 +38,5 @@ class FlashcardFullTransformer extends TransformerAbstract
                 ];
             }),
         ];
-
-        return $data;
     }
 }
