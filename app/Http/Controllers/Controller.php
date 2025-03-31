@@ -30,11 +30,11 @@ abstract class Controller
         return ApiResponse::error('Forbidden', 'You do not have permission to perform this action', 'unauthorized', 403);
     }
 
-    protected function addSourceMetaData($dataSource): ?array
+    protected function addSourceMetaData(?bool $isCached = false): ?array
     {
         if (env('APP_ENV') !== 'production') {
             return [
-                'data_source' => $dataSource,
+                'data_source' => $isCached ? 'cache' : 'database',
             ];
         }
 

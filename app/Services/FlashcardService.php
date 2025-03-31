@@ -232,10 +232,7 @@ class FlashcardService
             throw new NoEligibleQuestionsException($flashcard->eligible_at);
         }
 
-        $question = $eligibleQuestions->first();
-        $question['data_source'] = 'database';
-
-        return $question;
+        return $eligibleQuestions->first();
     }
 
     public function revive(Flashcard $flashcard): Flashcard

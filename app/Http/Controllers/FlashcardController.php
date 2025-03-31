@@ -295,7 +295,6 @@ class FlashcardController extends Controller
         }
 
         return fractal($flashcardResponse, new UnattemptedQuestionTransformer)
-            ->addMeta($this->addSourceMetaData($flashcardResponse->data_source))
             ->respond();
     }
 
