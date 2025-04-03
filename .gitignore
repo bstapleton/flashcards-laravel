@@ -6,10 +6,8 @@
 /storage/import/questions.json
 /storage/*.key
 /vendor
-.env
-.env.backup
+*.env
 .env.testing
-.env.production
 .phpunit.result.cache
 Homestead.json
 Homestead.yaml
