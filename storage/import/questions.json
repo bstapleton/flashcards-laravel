@@ -1,0 +1,3193 @@
+[
+    {
+        "text": "Which bands were principally involved with the Battle for Britpop in the 1990s?",
+        "type": "multiple",
+        "explanation": "Britpop brought alternative rock music into the mainstream, and is considered to be a musical reaction to the darker themes of the grunge movement which was happening around the same time in the US.",
+        "answers": [
+            {
+                "text": "Oasis",
+                "is_correct": true
+            },
+            {
+                "text": "Blur",
+                "is_correct": true
+            },
+            {
+                "text": "Pulp"
+            },
+            {
+                "text": "Ocean Colour Scene"
+            }
+        ],
+        "tags": [
+            "entertainment",
+            "culture"
+        ]
+    },
+    {
+        "text": "'I've got a brand new combine harvester and I'll give you the key' are lyrics to a farm-based parody song of Melanie Safka's 1971 hit 'Brand New Key', but which British band released it?",
+        "type": "single",
+        "answers": [
+            {
+                "text": "The Rolling Stones"
+            },
+            {
+                "text": "The Wurzels",
+                "explanation": "The song is even sung with a westcountry accent, something typically associated with rural farmers.",
+                "is_correct": true
+            },
+            {
+                "text": "The Kinks"
+            }
+        ],
+        "tags": [
+            "entertainment",
+            "culture"
+        ]
+    },
+    {
+        "text": "When a person is referring to someone else when they say 'I'm alright, Jack', what does it mean?",
+        "type": "single",
+        "answers": [
+            {
+                "text": "They are having a good time"
+            },
+            {
+                "text": "They're being selfish",
+                "explanation": "Used to describe people who act only in their own best interests, even if providing assistance to others would take minimal to no effort on their part.",
+                "is_correct": true
+            },
+            {
+                "text": "They're being selfless"
+            }
+        ],
+        "tags": [
+            "language"
+        ]
+    },
+    {
+        "text": "Where are The Wombles from?",
+        "type": "single",
+        "answers": [
+            {
+                "text": "Wimbledon Common",
+                "is_correct": true,
+                "explanation": "The Wombles is a children's TV show from the 1970s that focused on environmentalism and recycling. They had their own catchphrases and even had a successful music career. Their influence can still be seen in various forms of media and pop culture to this day."
+            },
+            {
+                "text": "Winchester Cathedral"
+            },
+            {
+                "text": "Wakefield Green"
+            }
+        ],
+        "tags": [
+            "culture"
+        ]
+    },
+    {
+        "text": "How many lions are on the England national football team's shirts?",
+        "type": "single",
+        "answers": [
+            {
+                "text": "Three",
+                "is_correct": true,
+                "explanation": "The heritage of the three lions dates back to Richard the Lionheart in the 12th century, and represent courage, strength and royalty, and embody the spirit and pride of the English nation."
+            },
+            {
+                "text": "Four",
+                "explanation": "Four Lions is a 2010 black comedy film that satirises and critiques terrorism."
+            },
+            {
+                "text": "Trick question: there are none"
+            }
+        ],
+        "tags": [
+            "sport",
+            "history",
+            "culture"
+        ]
+    },
+    {
+        "text": "A mince pie is savoury.",
+        "type": "statement",
+        "is_true": false,
+        "explanation": "This is a bit of a trick question, because historically, they were in fact savoury and contained real meat. The switch away from meat is often incorrectly attributed to war rationing during WW2, when the truth is that the transition was a much slower and more nuanced process. Today, mince pies are a sweet treat enjoyed over the festive period.",
+        "tags": [
+            "food",
+            "history",
+            "culture"
+        ]
+    },
+    {
+        "text": "What is the 'toad' in toad in the hole?",
+        "type": "single",
+        "answers": [
+            {
+                "text": "A sausage",
+                "is_correct": true,
+                "explanation": "One of the more confusing British dishes, toad in the hole is essentially Yorkshire pudding batter poured into an oven dish, with sausages placed into the batter and then the whole thing is baked in an oven. Often served with vegetables, a la a Sunday roast."
+            },
+            {
+                "text": "Frogs legs",
+                "explanation": "Frogs legs is a French dish that has no association with toad in the hole"
+            },
+            {
+                "text": "A coin hidden in a Christmas pudding",
+                "explanation": "From the Victorian era, this practice was seen as a symbolism of wealth or goof fortune who whomever got the piece with the coin hidden within."
+            }
+        ],
+        "tags": [
+            "food",
+            "culture"
+        ]
+    },
+    {
+        "text": "The Cornish pasty was originally developed for Cornish miners who needed a portable an hearty meal to take with them underground.",
+        "type": "statement",
+        "is_true": true,
+        "explanation": "There is a variation of the Cornish pasty called a two-course pasty, which had a divider in the middle. On one side, the usual savoury (and often meat-heavy) mix would reside, and the other would be filled with something sweet like fruit or jam. The idea behind it was to provide a complete meal: a main course and a dessert. These are pretty uncommon today.",
+        "tags": [
+            "food",
+            "history"
+        ]
+    },
+    {
+        "text": "What is a scotch egg?",
+        "type": "single",
+        "answers": [
+            {
+                "text": "A de-shelled hard boiled egg wrapped in sausage meats, coated in breadcrumbs and then deep fried or baked until crispy",
+                "is_correct": true,
+                "explanation": "Similar to deviled eggs insomuch as it's a popular food to have on a picnic."
+            },
+            {
+                "text": "An egg that has been picked with chilli peppers to make it more spicy. A popular bar snack.",
+                "explanation": "The pickled egg has fallen out of favour in recent decades at fish and chip shops. You can still (usually) find them today, but I doubt you'd see them at a bar."
+            },
+            {
+                "text": "A classic appetiser made from de-shelled hard boiled eggs that have been cut in half, the yolks removed and mixed with other ingredients to create a slightly spicy, but creamy filling.",
+                "explanation": "This is actually a deviled egg. It's sometimes seen at parties or on picnics."
+            }
+        ],
+        "tags": [
+            "food",
+            "culture"
+        ]
+    },
+    {
+        "text": "Who is credited with bringing the potato to England?",
+        "type": "single",
+        "answers": [
+            {
+                "text": "Sir Walter Raleigh",
+                "is_correct": true,
+                "explanation": "While he is credited with this accomplishment, the truth is more likely that this happened through Irish trades with the Spanish at the time."
+            },
+            {
+                "text": "Sir Francis Drake",
+                "explanation": "He was the first Englishman to circumnavigate the globe, but has not association with the humble potato."
+            },
+            {
+                "text": "Christopher Columbus",
+                "explanation": "Columbus is famous for his voyages to the Americas, and while he may be associated with the introduction of new foods from the Caribbean islands, the potato hails from the Andes Mountains in South America."
+            }
+        ],
+        "tags": [
+            "history",
+            "food"
+        ]
+    },
+    {
+        "text": "How many is a baker's dozen?",
+        "type": "single",
+        "answers": [
+            {
+                "text": "12",
+                "explanation": "This is an actual dozen."
+            },
+            {
+                "text": "13",
+                "is_correct": true,
+                "explanation": "Bakers who were found to be 'cheating' their customers by overpricing undersized loaves were subject to strict punishment, including fines or flogging. For fear of accidentally coming up short, they would throw in a bit extra to ensure that they wouldn't end up with a surprise flogging later."
+            },
+            {
+                "text": "11"
+            },
+            {
+                "text": "14",
+                "explanation": "If the baker wanted to be extra super sure to avoid any kind of punishment, then they might make 14, but this was pretty uncommon."
+            }
+        ],
+        "tags": [
+            "culture",
+            "history"
+        ]
+    },
+    {
+        "text": "Catching/taking how many winks means to have a nap?",
+        "type": "single",
+        "explanation": "This idiom is most commonly used to refer to taking short naps, especially during the day or before an event. It is not typically used to mean sleeping through the night.",
+        "answers": [
+            {
+                "text": "40",
+                "is_correct": true,
+                "explanation": "Related to the Thirty-nine Articles, written by the Church of England in the 16th century. The first recorded use of the phrase did not appear until later, in an 1872 edition of Punch Magazine: 'If a man, after reading the Thirty-nine Articles, were to take forty winks...'"
+            },
+            {
+                "text": "60"
+            },
+            {
+                "text": "20"
+            }
+        ],
+        "tags": [
+            "language",
+            "idioms"
+        ]
+    },
+    {
+        "text": "What was the Gunpowder Plot?",
+        "type": "single",
+        "answers": [
+            {
+                "text": "A failed attempt at regicide",
+                "explanation": "The plot consisted of the placement and detonation of explosives directly beneath the House of Lords. The scheme was led by a group of Catholics led by Robert Catesby. Other conspirators included the well-known figure, Guy Fawkes.",
+                "is_correct": true
+            },
+            {
+                "text": "A series of bombings in Northern Ireland during The Troubles of the 1960s onwards"
+            },
+            {
+                "text": "An attempt at subverting an amnesty on handguns in 1997 following the Firearms Act in response to the Dunblane massacre",
+                "explanation": "The Dunblane massacre is the most deadly mass shooting in British history, and in a parallel with the US was undertaken at a school. 16 pupils and 1 teacher were killed, and 15 others were injured before the killed turned the gun on himself."
+            }
+        ],
+        "tags": [
+            "culture",
+            "history"
+        ]
+    },
+    {
+        "text": "When is Bonfire Night?",
+        "type": "single",
+        "explanation": "Bonfire Night is an annual event where an effigy of Guy Fawkes is burned on a fire. It is usually accompanied by fireworks to celebrate the failed attempt to blow up the House of Lords in 1605.",
+        "answers": [
+            {
+                "text": "5th November",
+                "is_correct": true
+            },
+            {
+                "text": "5th December"
+            },
+            {
+                "text": "12th January"
+            }
+        ],
+        "tags": [
+            "culture",
+            "history"
+        ]
+    },
+    {
+        "text": "Which of the following are commonly-held negative British stereotypes (whether true or not)?",
+        "type": "multiple",
+        "answers": [
+            {
+                "text": "Anti-social behaviour abroad",
+                "is_correct": true,
+                "explanation": "The Brits are well-known for being some of the more obnoxious, loud, and rude tourists when visiting other countries, and are associated with binge drinking and violent behaviour."
+            },
+            {
+                "text": "Bad food",
+                "is_correct": true,
+                "explanation": "Jokes are often made about British food all being of low quality or even being inedible. Historically this has been pretty accurate, but following the Second World War, cuisine has become much more diverse."
+            },
+            {
+                "text": "Monolingualism",
+                "is_correct": true,
+                "explanation": "A common belief is that British people can only speak English. While the percentage of multilingual people in the country is low, this is also true of most English-speaking nations."
+            },
+            {
+                "text": "Bad teeth",
+                "is_correct": true,
+                "explanation": "This is predominantly from American media, where artificially straightened and whitened teeth are considered to be the 'ideal', whereas in the UK it's not really the same level of importance."
+            },
+            {
+                "text": "Bad weather",
+                "is_correct": true,
+                "explanation": "It is often portrayed in media that British weather is either windy, rainy, foggy, or any combination thereof. The weather in Britain is unpredictable however, which has led to is being a common point of discussion and small talk amongst the Brits (which is also a stereotype in its own right)."
+            }
+        ],
+        "tags": [
+            "culture"
+        ]
+    },
+    {
+        "text": "Which of the following are commonly-held positive British stereotypes (whether true or not)?",
+        "type": "multiple",
+        "answers": [
+            {
+                "text": "Politeness",
+                "is_correct": true,
+                "explanation": "There's a common view around the world that the British have good manners. This has been perpetuated through Hollywood media that Brits are polite and charming; particularly with the popularity of the James Bond movies."
+            },
+            {
+                "text": "Queueing",
+                "is_correct": true,
+                "explanation": "Queuing is seen everywhere. And has deep connections to ideals such as patience. Brits will queue for essentially anything, even in informal situations, and jumping a queue is considered a social faux-pas, resulting in angry glares, tutting and muttering under the breath from others in the queue."
+            },
+            {
+                "text": "Sense of humour",
+                "is_correct": true,
+                "explanation": "Some of the most highly-regarded comedies in the world are British, such as Monty Python and Mr. Bean."
+            },
+            {
+                "text": "Stoicism",
+                "is_correct": true,
+                "explanation": "The common phrase of 'keep a stiff upper lip' (amongst others) has led to a view of the British as being calm and unemotional, or perhaps pragmatic in the face of adversity."
+            },
+            {
+                "text": "Tea",
+                "is_correct": true,
+                "explanation": "Britain is the 12th largest consumer fo tea in the world, and 75% of the population who do drink it consume at least 2 cups of the stuff a day."
+            },
+            {
+                "text": "Good food",
+                "explanation": "Not at all. Food in general is considered as a negative stereotype, that the Brits mostly eat only bland, grey foods."
+            }
+        ],
+        "tags": [
+            "culture"
+        ]
+    },
+    {
+        "text": "The Black Death was spread by what?",
+        "type": "single",
+        "explanation": "The Black Death was a bubonic plague, and one of the most fatal pandemics in human history. It is estimated to have killed between 30% and 60% of the entire European population. One of the main causes of it being so prevalent was poor hygiene, which ironically was seen as a 'temptation' by Christianity. This would explain why Europe (predominantly Christian at the time) was so severely affected.",
+        "answers": [
+            {
+                "text": "Cats"
+            },
+            {
+                "text": "Rats",
+                "explanation": "It is a common misconception that the rats brought the plague. Rats wer generally the carriers (along with other ground rodents), but the fleas feeding on them - and subsequently humans - were the vector for transmission."
+            },
+            {
+                "text": "Fleas",
+                "is_correct": true,
+                "explanation": "A flea carrying the infection has its midguts blocked by the bacteria, causing it to enter a feeding frenzy and regurgitate into the feeding area in an attempt to allow feeding to be successful. This flushing is what caused the disease to spread."
+            }
+        ],
+        "tags": [
+            "history"
+        ]
+    },
+    {
+        "text": "What does 'fill your boots' mean?",
+        "type": "single",
+        "answers": [
+            {
+                "text": "Put your shoes on",
+                "explanation": "Taken literally, I suppose this would fit, but not the right answer here."
+            },
+            {
+                "text": "Take as much as you can",
+                "is_correct": true,
+                "explanation": "The origins of this is from sailors. A boot in this instance is a leather cup, lined with pitch for drinking, and when times were good, you would get an extra ration, and be told to 'fill yer boots' (with rum, usually)."
+            },
+            {
+                "text": "Deep waters ahead"
+            }
+        ],
+        "tags": [
+            "language",
+            "idioms"
+        ]
+    },
+    {
+        "text": "If you are 'unfettered' it means you are not restricted.",
+        "type": "statement",
+        "is_true": true,
+        "explanation": "In old English, a fetter was a chain or shackle used to bind someone's feet. So to be unfettered means to be free of those chains, i.e. free of restriction.",
+        "tags": [
+            "language"
+        ]
+    },
+    {
+        "text": "Which of the following is grammatically correct?",
+        "type": "single",
+        "answers": [
+            {
+                "text": "There were less people at the party than I expected"
+            },
+            {
+                "text": "There were fewer people at the party than I expected",
+                "is_correct": true,
+                "explanation": "'Fewer' should be used when there are countable nouns. In this case people. The inverse is to use 'less'. e.g. you would say 'there was less water today' and not 'there was fewer water today', because water itself is not a countable noun."
+            }
+        ],
+        "tags": [
+            "language"
+        ]
+    },
+    {
+        "text": "If something is 'partially totally broken', what would that mean?",
+        "type": "single",
+        "explanation": "Bit of a linguistic tongue-twister, but grammatically sound. You're more likely to hear this said than written down, since it's unclear.",
+        "answers": [
+            {
+                "text": "The whole of the subject is broken, but only a little bit"
+            },
+            {
+                "text": "Only part of the subject is broken a little bit"
+            },
+            {
+                "text": "The whole of the subject is completely unusable"
+            },
+            {
+                "text": "Part or parts of the subject are completely broken",
+                "is_correct": true
+            }
+        ],
+        "tags": [
+            "language"
+        ]
+    },
+    {
+        "text": "What does 'up yours' mean?",
+        "type": "single",
+        "answers": [
+            {
+                "text": "A vulgar term, sometimes used with the middle-finger gesture.",
+                "is_correct": true,
+                "explanation": "Less commonly heard these days, since it's quite tame in terms of vulgarities and has fallen out of use somewhere, it was more commonly used in the 80s and 90s."
+            },
+            {
+                "text": "When deciding where to hold an event, you could say 'up yours' or 'up mine'."
+            }
+        ],
+        "tags": [
+            "language",
+            "slang"
+        ]
+    },
+    {
+        "text": "What does 'soundo' mean?",
+        "type": "single",
+        "answers": [
+            {
+                "text": "Sleeping",
+                "is_correct": true,
+                "explanation": "Derived from sound-asleep. Why is it not 'sounda'? No idea."
+            },
+            {
+                "text": "Noisy"
+            },
+            {
+                "text": "Quiet"
+            }
+        ],
+        "tags": [
+            "language",
+            "slang"
+        ]
+    },
+    {
+        "text": "What is the most popular sport in England?",
+        "type": "single",
+        "answers": [
+            {
+                "text": "Football",
+                "is_correct": true
+            },
+            {
+                "text": "Cricket"
+            },
+            {
+                "text": "Tennis"
+            }
+        ],
+        "tags": [
+            "sport",
+            "culture"
+        ]
+    },
+    {
+        "text": "In which year was The Great Fire of London",
+        "type": "single",
+        "answers": [
+            {
+                "text": "1666",
+                "is_correct": true
+            },
+            {
+                "text": "1812",
+                "explanation": "Famously this was the start of a war between the US and UK."
+            },
+            {
+                "text": "1066",
+                "explanation": "This was the year of the Norman invasion of England."
+            }
+        ],
+        "tags": [
+            "history"
+        ]
+    },
+    {
+        "text": "Which English King was beheaded?",
+        "type": "single",
+        "answers": [
+            {
+                "text": "Charles I",
+                "is_correct": true,
+                "explanation": "He was executed at the end of the English Civil War in 1649."
+            },
+            {
+                "text": "Charles II",
+                "explanation": "Died of an apoplectic fit in 1685."
+            },
+            {
+                "text": "William I",
+                "explanation": "Also known as William the Conqueror, who invaded England in 1066. Exact cause of death is unknown: either he fell ill, or was injured by the pommel of his saddle."
+            }
+        ],
+        "tags": [
+            "history"
+        ]
+    },
+    {
+        "text": "Which of the following are plays by William Shakespeare?",
+        "type": "multiple",
+        "explanation": "Shakespeare was incredibly prolific during his time, and these are just a few of his plays.",
+        "answers": [
+            {
+                "text": "Much Ado About Nothing",
+                "is_correct": true
+            },
+            {
+                "text": "The Jew of Malta",
+                "explanation": "This was written by Christopher Marlowe, who was active around the same time as, and some believe was a great influence on Shakespeare."
+            },
+            {
+                "text": "The Merchant of Venice",
+                "is_correct": true
+            },
+            {
+                "text": "Twelfth Night",
+                "is_correct": true
+            },
+            {
+                "text": "Romeo and Juliet",
+                "is_correct": true
+            },
+            {
+                "text": "A Midsummer Night's Dream",
+                "is_correct": true
+            },
+            {
+                "text": "The Merry Wives of Windsor",
+                "is_correct": true,
+                "explanation": "This is a lesser-known play by Shakespeare. Cheeky-sneaky answer, tbh."
+            }
+        ],
+        "tags": [
+            "culture",
+            "history",
+            "entertainment"
+        ]
+    },
+    {
+        "text": "Which of the following phrases advocate for cautiousness?",
+        "type": "multiple",
+        "answers": [
+            {
+                "text": "Better safe than sorry",
+                "is_correct": true
+            },
+            {
+                "text": "Err on the side caution",
+                "explanation": "To err is to act or behave.",
+                "is_correct": true
+            },
+            {
+                "text": "Play it safe",
+                "is_correct": true
+            },
+            {
+                "text": "All is well that ends well",
+                "explanation": "A happy ending makes up for all the bad things that have come before it. But it has nothing to do with being cautious."
+            }
+        ],
+        "tags": [
+            "language",
+            "idioms"
+        ]
+    },
+    {
+        "text": "Better late than ___.",
+        "type": "single",
+        "answers": [
+            {
+                "text": "Never",
+                "is_correct": true,
+                "explanation": "It is better to do something late than never at all."
+            },
+            {
+                "text": "Early"
+            },
+            {
+                "text": "On time"
+            }
+        ],
+        "tags": [
+            "labguage",
+            "idioms"
+        ]
+    },
+    {
+        "text": "A ___ a day keeps the doctor away.",
+        "type": "single",
+        "explanation": "Technically, all the answers to this question would help to keep you healthy. A pear would have much the same effect as an apple. Fish have natural oils that help joints and brain function, and a walk keeps you moving and in good shape, and can help with mental health. The phrase specifically mentions an apple, however.",
+        "answers": [
+            {
+                "text": "Apple",
+                "is_correct": true,
+                "explanation": "Originally from the 19th century, advocating for eating healthful things in order to stay healthy."
+            },
+            {
+                "text": "Fish"
+            },
+            {
+                "text": "Pear"
+            },
+            {
+                "text": "Walk"
+            }
+        ],
+        "tags": [
+            "language",
+            "idioms"
+        ]
+    },
+    {
+        "text": "Peter Rabbit, Jemima Puddle-Duck and Mrs. Tiggy-Winkle are all fictional characters in books by this author.",
+        "type": "single",
+        "answers": [
+            {
+                "text": "A.A. Milne",
+                "explanation": "Milne was active around the same time as Potter, but is famous for his Winnie the Pooh stories."
+            },
+            {
+                "text": "Beatrix Potter",
+                "is_correct": true,
+                "explanation": "The Tale of Peter Rabbit was first published in 1902. Potter not only wrote and illustrated her children's books, but was also an active natural scientist and conservationist."
+            },
+            {
+                "text": "Enid Blyton",
+                "explanation": "Blyton is most famous for writing the children's stories about The Famous Five, and The Secret Seven."
+            }
+        ],
+        "tags": [
+            "culture",
+            "history"
+        ]
+    },
+    {
+        "text": "If you refer to someone as being a 'gannet', what are you implying?",
+        "type": "single",
+        "answers": [
+            {
+                "text": "They are greedy",
+                "is_correct": true,
+                "explanation": "Gannets are sea bird who are known for their insatiable appetites."
+            },
+            {
+                "text": "They are slow"
+            },
+            {
+                "text": "They are too quiet"
+            }
+        ],
+        "tags": [
+            "language",
+            "slang"
+        ]
+    },
+    {
+        "text": "Who is the current British monarch?",
+        "type": "single",
+        "answers": [
+            {
+                "text": "Charles III",
+                "is_correct": true
+            },
+            {
+                "text": "Elizabeth II",
+                "explanation": "Elizabeth's reign ended in 2022 upon her death."
+
+            }
+        ],
+        "tags": [
+            "culture",
+            "history"
+        ]
+    },
+    {
+        "text": "Complete the following saying: 'A bird in the hand is worth two in the ___'",
+        "type": "single",
+        "explanation": "The saying means: A sure thing has greater worth than the chance at something more.",
+        "answers": [
+            {
+                "text": "Bush",
+                "is_correct": true,
+                "explanation": "The origins of this phrase are possibly as far back as the ancient Middle East in the 6th century, who have a saying that 'a sparrow in thy hand is better than a thousand sparrows flying'."
+            },
+            {
+                "text": "Tree",
+                "explanation": "An older variant of this in Latin would have this being correct, but not for the modern English usage. The Latin translation is roughly 'a bird in the hands is worth more than two in the forest'."
+            },
+            {
+                "text": "Field"
+            }
+        ],
+        "tags": [
+            "language",
+            "idioms"
+        ]
+    },
+    {
+        "text": "When something is 'within arm's reach' it means that you have almost completed a goal.",
+        "type": "statement",
+        "is_true": true,
+        "tags": [
+            "language",
+            "idioms"
+        ]
+    },
+    {
+        "text": "A stone's throw away means what?",
+        "type": "single",
+        "answers": [
+            {
+                "text": "The subject is not far",
+                "explanation": "The idea being that whatever the subject is, you could throw a stone and hit it. Naturally, this is almost always an exaggeration, but the phrase is synonymous with something being nearby.",
+                "is_correct": true
+            },
+            {
+                "text": "The subject is far away"
+            },
+            {
+                "text": "You can see the subject"
+            }
+        ],
+        "tags": [
+            "language",
+            "idioms"
+        ]
+    },
+    {
+        "text": "Which of the following stamps can be purchased for posting a standard letter?",
+        "type": "multiple",
+        "answers": [
+            {
+                "text": "First class",
+                "is_correct": true
+            },
+            {
+                "text": "Second class",
+                "is_correct": true
+            },
+            {
+                "text": "Third class",
+                "explanation": "While there are and have been different face-value stamps in circulation by the postal service, no third class stamp has ever existed."
+            }
+        ],
+        "tags": [
+            "culture"
+        ]
+    },
+    {
+        "text": "Which of the following are notes for GBP (£)",
+        "type": "multiple",
+        "answers": [
+            {
+                "text": "1 pound",
+                "explanation": "These did exist in circulation as legal tender between 1978 and 1988, but were subsequently withdrawn."
+            },
+            {
+                "text": "2 pound"
+            },
+            {
+                "text": "5 pound",
+                "explanation": "Often referred to as a 'fiver'.",
+                "is_correct": true
+            },
+            {
+                "text": "10 pound",
+                "explanation": "Often referred to as a 'tenner'.",
+                "is_correct": true
+            },
+            {
+                "text": "20 pound",
+                "is_correct": true
+            },
+            {
+                "text": "50 pound",
+                "explanation": "Some retailers will not accept this note. It has not been widely used since 2019, and concerns have been raised about their extensive use in tax evasion schemes.",
+                "is_correct": true
+            },
+            {
+                "text": "100 pound"
+            }
+        ],
+        "tags": [
+            "culture"
+        ]
+    },
+    {
+        "text": "Which of the following are coins for GBP (£)?",
+        "type": "multiple",
+        "answers": [
+            {
+                "text": "1 pence",
+                "is_correct": true
+            },
+            {
+                "text": "2 pence",
+                "is_correct": true
+            },
+            {
+                "text": "5 pence",
+                "is_correct": true
+            },
+            {
+                "text": "10 pence",
+                "is_correct": true
+            },
+            {
+                "text": "20 pence",
+                "is_correct": true
+            },
+            {
+                "text": "50 pence",
+                "is_correct": true
+            },
+            {
+                "text": "1 pound",
+                "is_correct": true
+            },
+            {
+                "text": "2 pound",
+                "is_correct": true
+            },
+            {
+                "text": "5 pound",
+                "explanation": "A £5 coin was minted in 2022 to celebrate the reign of Elizabeth II, but it is a collectors item rather than legal tender that could be used in a shop."
+            }
+        ],
+        "tags": [
+            "culture"
+        ]
+    },
+    {
+        "text": "The books 'A Christmas Carol' and 'Oliver Twist' were both written by whom?",
+        "type": "single",
+        "answers": [
+            {
+                "text": "Charles Dickens",
+                "is_correct": true,
+                "explanation": "He also wrote 'Hard Times', and 'Great Expectations', amongst many other titles during his life."
+            },
+            {
+                "text": "Charles Darwin",
+                "is_correct": false,
+                "explanation": "Darwin wrote extensively on nature, and is particularly known for his works on evolution. The books mentioned in this question are all works of fiction, however."
+            },
+            {
+                "text": "William Shakespeare",
+                "is_correct": false,
+                "explanation": "Arguably the most famous playwright in the history of the world, Shakespeare wrote many plays, but was not known as a novelist."
+            }
+        ],
+        "tags": [
+            "culture",
+            "history"
+        ]
+    },
+    {
+        "text": "A famous Darwin, Dickens and Dance all share this first name",
+        "type": "single",
+        "answers": [
+            {
+                "text": "Charles",
+                "is_correct": true
+            },
+            {
+                "text": "John",
+                "is_correct": false
+            },
+            {
+                "text": "James",
+                "is_correct": false
+            },
+            {
+                "text": "Adam",
+                "is_correct": false
+            }
+        ],
+        "tags": [
+            "culture",
+            "history"
+        ]
+    },
+    {
+        "text": "In Cockney rhyming slang, what does 'apples and pears' mean?",
+        "type": "single",
+        "answers": [
+            {
+                "text": "Stairs",
+                "is_correct": true
+            },
+            {
+                "text": "Chairs",
+                "is_correct": false
+            },
+            {
+                "text": "Hairs",
+                "is_correct": false
+            }
+        ],
+        "tags": [
+            "language",
+            "slang"
+        ]
+    },
+    {
+        "text": "Saint George's day is celebrated as a national holiday.",
+        "type": "statement",
+        "is_true": false,
+        "explanation": "Saint George's day in England is observed on April 23rd. It is not, however, a national holiday.",
+        "tags": [
+            "culture",
+            "religion"
+        ]
+    },
+    {
+        "text": "Who is the patron saint of England?",
+        "type": "single",
+        "answers": [
+            {
+                "text": "Saint Andrew",
+                "is_correct": false,
+                "explanation": "Saint Andrew is the patron saint of Scotland."
+            },
+            {
+                "text": "Saint Patrick",
+                "is_correct": false,
+                "explanation": "Saint Patrick is the patron saint of Ireland"
+            },
+            {
+                "text": "Saint George",
+                "is_correct": true,
+                "explanation": "Saint George's day is celebrated on the 23rd of April."
+            },
+            {
+                "text": "Saint David",
+                "is_correct": false,
+                "explanation": "Saint David is the patron saint of Wales."
+            }
+        ],
+        "tags": [
+            "religion",
+            "culture"
+        ]
+    },
+    {
+        "text": "Where is Nelson's Column?",
+        "type": "single",
+        "answers": [
+            {
+                "text": "Trafalgar Square, London",
+                "is_correct": true,
+                "explanation": "Constructed between 1840 and 1843, the monument was built to commemorate the decisive victory of Horatio Nelson in the Battle of Trafalgar against the combined fleets of the French and Spanish navies in 1805."
+            },
+            {
+                "text": "Portsmouth Harbour",
+                "is_correct": false,
+                "explanation": "It's an area of special scientific interest due to its geological traits."
+            },
+            {
+                "text":"O'Connell Street, Dublin",
+                "is_correct": false,
+                "explanation": "There was a similar monument there called Nelson's Pillar, but it was damaged during an explosion during The Troubles by Irish republicans and was later completely demolished by the Irish Army in 1966."
+            }
+        ],
+        "tags": [
+            "culture",
+            "history"
+        ]
+    },
+    {
+        "text": "Isembard Kingdom Brunel was voted as the Greatest Briton in a 2002 poll run by the BBC",
+        "type": "statement",
+        "is_true": false,
+        "explanation": "IKB was voted second place, just behind Winston Churchill. Others in the top ten include Charles Darwin (no. 4), William Shakespeare (no. 5), John Lennon (no. 8).",
+        "tags": [
+            "culture"
+        ]
+    },
+    {
+        "text": "The British Empire was described as 'the empire on which the sun never sets'.",
+        "type": "statement",
+        "is_true": true,
+        "explanation": "Because the British Empire was so widespread globally, it meant that the sun was always shining on at least one of its territories.",
+        "tags": [
+            "culture",
+            "history"
+        ]
+    },
+    {
+        "text": "Which of the following are former British colonies?",
+        "type": "multiple",
+        "answers": [
+            {
+                "text": "India",
+                "explanation": "Became independent in 1947",
+                "is_correct": true
+            },
+            {
+                "text": "Kenya",
+                "explanation": "Became independent in 1963",
+                "is_correct": true
+            },
+            {
+                "text": "United Arab Emirates",
+                "explanation": "Known as the Trucial States until 1972",
+                "is_correct": true
+            },
+            {
+                "text": "United States",
+                "explanation": "Known as the Thirteen Colonies of America. Declared independence in 1776, and recognised by Britain in 1783.",
+                "is_correct": true
+            },
+            {
+                "text": "Greece",
+                "explanation": "The Greek Island of Cyprus was a British colony until 1960. Britain has never held Greece itself as a colony. Mainland Europe countries - outside of lengthy historical wars - were never part of empirical expansion plans. This is due to many reasons that are way beyond the scope of a simple explanation, but see: exceptionalism, othering.",
+                "is_correct": false
+            }
+        ],
+        "tags": [
+            "culture",
+            "history"
+        ]
+    },
+    {
+        "text": "What is a car boot sale?",
+        "type": "single",
+        "answers": [
+            {
+                "text": "A gathering of people, selling second-hand goods out of the trunks of their cars",
+                "is_correct": true,
+                "explanation": "Boot and trunk are interchangeable terms and mean the same thing. Trunk is the American-English term, and boot is the British-English one."
+            },
+            {
+                "text": "An event where the trunks of cars are discounted at mechanic shops"
+            },
+            {
+                "text": "An event where both cars and footwear are heavily discounted"
+            }
+        ],
+        "tags": [
+            "culture",
+            "language"
+        ]
+    },
+    {
+        "text": "Which of the following are slang words for food",
+        "type": "multiple",
+        "answers": [
+            {
+                "text": "Nosh",
+                "is_correct": true
+            },
+            {
+                "text": "Grub",
+                "is_correct": true
+            },
+            {
+                "text": "Chow",
+                "is_correct": true
+            }
+        ],
+        "tags": [
+            "language",
+            "slang",
+            "food"
+        ]
+    },
+    {
+        "text": "Pub grub is a term used to describe classic dishes that you might find in a pub.",
+        "type": "statement",
+        "is_true": true,
+        "explanation": "Typically these are easy dishes to produce in large quantities, and served in inns and hotels where travellers would stay.",
+        "tags": [
+            "culture",
+            "food"
+        ]
+    },
+    {
+        "text": "What is bangers and mash?",
+        "type": "single",
+        "answers": [
+            {
+                "text": "A TV show about repairing old cars",
+                "explanation": "There is a show about this, but it is called Bangers and Cash - where the restored old cars (bangers) are usually sold on to collectors."
+            },
+            {
+                "text": "A sausage dish where the sausages are cooked inside a Yorkshire Pudding mix",
+                "explanation": "It is a sausage dish, but this describes a different one: Toad in thr Hole."
+            },
+            {
+                "text": "Sausages with mashed potatoes",
+                "explanation": "It is usually served with onion gravy, but alternatively can be served with fried onions and peas."
+            }
+        ],
+        "tags": [
+            "culture",
+            "food"
+        ]
+    },
+    {
+        "text": "Richard the Lionheart was so named because...",
+        "type": "single",
+        "answers": [
+            {
+                "text": "...he once fought a lion"
+            },
+            {
+                "text": "...he was killed by a lion in Africa"
+            },
+            {
+                "text": "...he had a reputation as a great leader and warrior",
+                "is_correct": true
+            }
+        ],
+        "tags": [
+            "history"
+        ]
+    },
+    {
+        "text": "What is the national religion in England and Wales?",
+        "type": "single",
+        "answers": [
+            {
+                "text": "Islam",
+                "explanation": "Only 6.5% of the population identify as Muslim, according to census data from 2021."
+            },
+            {
+                "text": "Christianity",
+                "is_correct": true,
+                "explanation": "While religion in general continues to wane, Christianity has been the dominant religion in the UK since the 7th century, with 46.2% of the population identifying as such in the 2021 census."
+            },
+            {
+                "text": "Hindu",
+                "explanation": "Only 1.7% of the population identify as Hindu, according to census data from 2021."
+            },
+            {
+                "text": "None",
+                "explanation": "Interestingly, recent surveys report a larger percentage of those who are atheist, nontheist, or agnostic overall than that of Christianity. But in spite of these larger numbers, the census remains the 'source of truth' for official measures."
+            }
+        ],
+        "tags": [
+            "culture"
+        ]
+    },
+    {
+        "text": "A wind-up merchant is someone who sells toys.",
+        "type": "statement",
+        "is_true": false,
+        "explanation": "Someone who is consistently teasing, irritating or annoying other might be considered to be a wind-up merchant: the wares they are peddling is said annoyance.",
+        "tags": [
+            "language",
+            "slang"
+        ]
+    },
+    {
+        "text": "To waffle means to fail to make up one's mind.",
+        "type": "statement",
+        "is_true": true,
+        "tags": [
+            "language",
+            "slang"
+        ]
+    },
+    {
+        "text": "Which of the following roughly mean 'go away'?",
+        "type": "multiple",
+        "answers": [
+            {
+                "text": "Piss off",
+                "is_correct": true
+            },
+            {
+                "text": "Rub off",
+                "explanation": "Despite all the other vulgar words used in a way to mean telling someone to go away, this is actually used to mean masturbation: specifically to 'rub one off'. Not to be confused with something 'rubbing off on you', which means to a transference of social ticks or personality traits."
+            },
+            {
+                "text": "Sod off",
+                "is_correct": true
+            },
+            {
+                "text": "Bugger off",
+                "is_correct": true
+            },
+            {
+                "text": "Do one",
+                "is_correct": true
+            },
+            {
+                "text": "Jog on",
+                "is_correct": true
+            }
+        ],
+        "tags": [
+            "language",
+            "slang"
+        ]
+    },
+    {
+        "text": "Being skint means being naked.",
+        "type": "statement",
+        "is_true": false,
+        "explanation": "It means to be without money. If you answered this incorrectly, you may have been thinking of 'skinny dipping', which means to swim naked.",
+        "tags": [
+            "language",
+            "slang"
+        ]
+    },
+    {
+        "text": "What is skinny dipping?",
+        "type": "single",
+        "answers": [
+            {
+                "text": "Swimming naked",
+                "is_correct": true,
+                "explanation": "First recorded usage in the 1950s. Though skinny as a word is usually only used in this context in modern times, it was also used during World War II to mean 'the naked truth', e.g. 'give us the skinny'. Such usage is pretty rare these days."
+            },
+            {
+                "text": "Deep frying chicken skins"
+            },
+            {
+                "text": "A fitness activity"
+            }
+        ],
+        "tags": [
+            "language",
+            "slang"
+        ]
+    },
+    {
+        "text": "Shagged has two meanings. What are they?",
+        "type": "multiple",
+        "answers": [
+            {
+                "text": "A term used in flooring, particularly carpeting and rugs",
+                "explanation": "A shag carpet is indeed a thing, and means it has a very thick pile, but it is not related tot he term shagged at all."
+            },
+            {
+                "text": "Past tense of shag, which in this context means sexual intercourse",
+                "is_correct": true
+            },
+            {
+                "text": "A type of bird",
+                "explanation": "A shag is also a type of bird, but shagged is not."
+            },
+            {
+                "text": "Extremely tired",
+                "is_correct": true
+            }
+        ],
+        "tags": [
+            "language",
+            "slang"
+        ]
+    },
+    {
+        "text": "What is savvy?",
+        "type": "single",
+        "answers": [
+            {
+                "text": "Knowledge or understanding",
+                "is_correct": true
+            },
+            {
+                "text": "A slang word for the toilet",
+                "explanation": "You may be thinking of the lavvy, as in lavatory."
+            },
+            {
+                "text": "Someone from Liverpool",
+                "explanation": "This is a Scouser."
+            }
+        ],
+        "tags": [
+            "language",
+            "slang"
+        ]
+    },
+    {
+        "text": "A rozzer is a slang term for a policeman",
+        "type": "statement",
+        "is_true": true,
+        "explanation": "In addition to 'the fuzz', various associations to pigs and pig-based products and 'the old bill'.",
+        "tags": [
+            "language",
+            "slang"
+        ]
+    },
+    {
+        "text": "What is a nark?",
+        "type": "single",
+        "answers": [
+            {
+                "text": "A type of bird",
+                "explanation": "You may be thinking of a lark"
+            },
+            {
+                "text": "An informer",
+                "explanation": "From 'narcotics' as in the drug squad of the police force",
+                "is_correct": true
+            }
+        ],
+        "tags": [
+            "language",
+            "slang"
+        ]
+    },
+    {
+        "text": "A quid is 1 pound.",
+        "type": "statement",
+        "is_true": true,
+        "tags": [
+            "language",
+            "slang"
+        ]
+    },
+    {
+        "text": "What is a punter?",
+        "type": "multiple",
+        "answers": [
+            {
+                "text": "Someone who plays crazy golf"
+            },
+            {
+                "text": "A customer",
+                "is_correct": true
+            },
+            {
+                "text": "A victim of a confidence trick",
+                "is_correct": true
+            },
+            {
+                "text": "Someone who plays golf",
+                "explanation": "You may be getting confused with a putter? Not actually a thing, either way."
+            },
+            {
+                "text": "Someone who gambles",
+                "is_correct": true
+            }
+        ],
+        "tags": [
+            "language",
+            "slang"
+        ]
+    },
+    {
+        "text": "A prat is a type of bread.",
+        "type": "statement",
+        "is_true": false,
+        "explanation": "A slang term for a fool.",
+        "tags": [
+            "language",
+            "slang"
+        ]
+    },
+    {
+        "text": "When something has been done badly, you might describe it as...",
+        "type": "single",
+        "answers": [
+            {
+                "text": "The bees knees",
+                "explanation": "This actually means something is good."
+            },
+            {
+                "text": "A pig's ear",
+                "is_correct": true
+            },
+            {
+                "text": "The dog's bollocks",
+                "explanation": "This actually means something very good, probably even better than the bees knees! In stark contract to when you refer to something as simply being bollocks, which is bad. Another variation is 'the mutts nuts'."
+            }
+        ],
+        "tags": [
+            "language",
+            "idioms"
+        ]
+    },
+    {
+        "text": "When something is described as being 'pants' it means...",
+        "type": "single",
+        "answers": [
+            {
+                "text": "Close"
+            },
+            {
+                "text": "Smelly"
+            },
+            {
+                "text": "Worthless",
+                "is_correct": true
+            },
+            {
+                "text": "Warm"
+            }
+        ],
+        "tags": [
+            "language",
+            "slang"
+        ]
+    },
+    {
+        "text": "Pickled, pie-eyed, sloshed, sozzled, mullered are all slang words to mean very drunk.",
+        "type": "statement",
+        "is_true": true,
+        "explanation": "There's many more, including plastered, shit-faced, pissed, wasted, and wankered, but those would have given the game away even more than the above! As you can probably tell, the British like to drink.",
+        "tags": [
+            "language",
+            "slang"
+        ]
+    },
+    {
+        "text": "What is a numpty?",
+        "type": "single",
+        "answers": [
+            {
+                "text": "An old word for a fisherman"
+            },
+            {
+                "text": "A type of inflamed rash that you would get if you had the illness known as the numps",
+                "explanation": "The numps is not a thing. However, mumps is a contagious viral infection that used to be common in children prior to the introduction of a vaccine in the 1980s."
+            },
+            {
+                "text": "Someone who is incompetent",
+                "is_correct": true
+            }
+        ],
+        "tags": [
+            "language",
+            "slang"
+        ]
+    },
+    {
+        "text": "Nosh is both a noun and a verb.",
+        "type": "statement",
+        "is_true": true,
+        "explanation": "Nosh is a slang word for food, but it also means to eat.",
+        "tags": [
+            "language",
+            "slang"
+        ]
+    },
+    {
+        "text": "To use one's noodle is to...",
+        "type": "single",
+        "answers": [
+            {
+                "text": "Think",
+                "is_correct": true
+            },
+            {
+                "text": "Run"
+            },
+            {
+                "text": "Sleep"
+            }
+        ],
+        "tags": [
+            "language",
+            "idioms"
+        ]
+    },
+    {
+        "text": "What does nick mean?",
+        "type": "multiple",
+        "answers": [
+            {
+                "text": "To arrest someone",
+                "is_correct": true
+            },
+            {
+                "text": "To steal something",
+                "is_correct": true
+            },
+            {
+                "text": "The police station or prison",
+                "is_correct": true
+            },
+            {
+                "text": "Referring to the condition of something",
+                "is_correct": true
+            }
+        ],
+        "tags": [
+            "language",
+            "slang"
+        ]
+    },
+    {
+        "text": "What is a mug?",
+        "type": "multiple",
+        "answers": [
+            {
+                "text": "Something you can drink out of",
+                "is_correct": true
+            },
+            {
+                "text": "A face",
+                "is_correct": true
+            },
+            {
+                "text": "A gullible person",
+                "is_correct": true
+            }
+        ],
+        "tags": [
+            "language",
+            "slang"
+        ]
+    },
+    {
+        "text": "Moolah, dosh, dough, and mufti are synonyms for money.",
+        "type": "statement",
+        "is_true": false,
+        "explanation": "Moolah, dosh and dough are all words that mean money. Mufti is the odd one out, which means a non-uniform day in schools.",
+        "tags": [
+            "language",
+            "slang"
+        ]
+    },
+    {
+        "text": "Which of the following means cat?",
+        "type": "single",
+        "answers": [
+            {
+                "text": "Moggy",
+                "is_correct": true
+            },
+            {
+                "text": "Whiskers",
+                "explanation": "Cats do have whiskers, but this is the name of a top cat food brand in the UK, not a slang word for the cat itself."
+            },
+            {
+                "text": "Lightfoot"
+            },
+            {
+                "text": "Furball",
+                "explanation": "This is often used to mean either a cat, a dog, or any fluffy pet companion. It is not unique to cats."
+            }
+        ],
+        "tags": [
+            "language",
+            "slang"
+        ]
+    },
+    {
+        "text": "Someone who is minted is considered to be wealthy.",
+        "type": "statement",
+        "is_true": true,
+        "explanation": "A mint is where money is physically made.",
+        "tags": [
+            "language",
+            "slang"
+        ]
+    },
+    {
+        "text": "Loo, bog and cloakroom are all words referring to the toilet.",
+        "type": "statement",
+        "is_true": true,
+        "tags": [
+            "language",
+            "slang"
+        ]
+    },
+    {
+        "text": "What does someone mean if they refer to 'their local'?",
+        "type": "single",
+        "answers": [
+            {
+                "text": "Corner shop"
+            },
+            {
+                "text": "Pub",
+                "is_correct": true
+            },
+            {
+                "text": "Takeaway"
+            }
+        ],
+        "tags": [
+            "language",
+            "slang"
+        ]
+    },
+    {
+        "text": "Having a knees-up means to have a party.",
+        "type": "statement",
+        "is_true": true,
+        "tags": [
+            "language",
+            "slang"
+        ]
+    },
+    {
+        "text": "What is meant when something is described as being 'jammy'?",
+        "type": "single",
+        "answers": [
+            {
+                "text": "Sticky"
+            },
+            {
+                "text": "Sweet"
+            },
+            {
+                "text": "Lucky",
+                "is_correct": true
+            }
+        ],
+        "tags": [
+            "language",
+            "slang"
+        ]
+    },
+    {
+        "text": "What is meant when referring to ivories?",
+        "type": "multiple",
+        "answers": [
+            {
+                "text": "Teeth",
+                "is_correct": true
+            },
+            {
+                "text": "Paper"
+            },
+            {
+                "text": "Sugar cubes"
+            },
+            {
+                "text": "Dice",
+                "is_correct": true
+            },
+            {
+                "text": "Keys on a piano",
+                "is_correct": true,
+                "explanation": "These traditionally were made of ivory, though obviously not anymore..."
+            }
+        ],
+        "tags": [
+            "language",
+            "slang"
+        ]
+    },
+    {
+        "text": "Hard cheese means to have had good luck.",
+        "type": "statement",
+        "is_true": false,
+        "tags": [
+            "language",
+            "slang"
+        ]
+    },
+    {
+        "text": "Someone who is speaking guff is considered to be speaking nonsense.",
+        "type": "statement",
+        "is_true": true,
+        "explanation": "A guff is a slang word for flatulence, which is hot air. And someone speaking hot air is another idiom for someone speaking something that doesn't matter or means little/nothing.",
+        "tags": [
+            "language",
+            "slang"
+        ]
+    },
+    {
+        "text": "A gaffer is your boss.",
+        "type": "statement",
+        "is_true": true,
+        "tags": [
+            "language",
+            "slang"
+        ]
+    },
+    {
+        "text": "What is a 'gaff'?",
+        "type": "single",
+        "answers": [
+            {
+                "text": "A derogatory term for a German"
+            },
+            {
+                "text": "Boss or employer",
+                "explanation": "Close. Sneaky question, because boss/employer is a 'gaffer'."
+            },
+            {
+                "text": "A house or flat",
+                "is_correct": true
+            }
+        ],
+        "tags": [
+            "language",
+            "slang"
+        ]
+    },
+    {
+        "text": "What does it mean to 'flog a dead horse'?",
+        "type": "multiple",
+        "answers": [
+            {
+                "text": "Working too hard"
+            },
+            {
+                "text": "Continue talking long after a discussion is over",
+                "is_correct": true
+            },
+            {
+                "text": "Attempting to solve something which is believed to be unsolvable",
+                "is_correct": true
+            },
+            {
+                "text": "Repeating yourself",
+                "explanation": "While it does involve repetition, the key aspect of it is the futility of doing so rather than the repetition itself."
+            }
+        ],
+        "tags": [
+            "language",
+            "idioms"
+        ]
+    },
+    {
+        "text": "A fiver means a high five.",
+        "type": "statement",
+        "is_true": false,
+        "explanation": "Slang term for a five pound note. See also: tenner for a ten pound note.",
+        "tags": [
+            "language",
+            "slang"
+        ]
+    },
+    {
+        "text": "A 'doofer' means an idiotic person.",
+        "type": "statement",
+        "is_true": false,
+        "explanation": "An unnamed object. More common in the north of England. When referring to an object between two parties where both are well aware of what the object is without naming it. Example: two people watching TV and complaining about the show that's on and one might say 'hand me the doofer' to mean the TV remote.",
+        "tags": [
+            "language",
+            "slang"
+        ]
+    },
+    {
+        "text": "'Donkey's years' means a long time.",
+        "type": "statement",
+        "is_true": true,
+        "explanation": "In reference to donkeys ears which are quite long, rather than how long a donkey typically lives.",
+        "tags": [
+            "language",
+            "slang"
+        ]
+    },
+    {
+        "text": "Something being described as 'dodgy' means...",
+        "type": "multiple",
+        "answers": [
+            {
+                "text": "Risky or dangerous",
+                "is_correct": true
+            },
+            {
+                "text": "Hard to catch",
+                "explanation": "It actually has nothing to do with dexterity or or swiftness."
+            },
+            {
+                "text": "Of low quality",
+                "is_correct": true
+            }
+        ],
+        "tags": [
+            "language",
+            "slang"
+        ]
+    },
+    {
+        "text": "If something is described as 'corking', it means it is bad.",
+        "type": "statement",
+        "is_true": false,
+        "explanation": "It actually means the opposite. When described as corking, it means it is good.",
+        "tags": [
+            "language",
+            "slang"
+        ]
+    },
+    {
+        "text": "What does it mean to 'make a bomb'?",
+        "type": "single",
+        "answers": [
+            {
+                "text": "Literal bomb-making"
+            },
+            {
+                "text": "A vulgar slang term for defecating."
+            },
+            {
+                "text": "Make lots of money.",
+                "is_correct": true
+            }
+        ],
+        "tags": [
+            "language",
+            "idioms"
+        ]
+    },
+    {
+        "text": "The word blimey means...",
+        "type": "single",
+        "answers": [
+            {
+                "text": "I'm tired."
+            },
+            {
+                "text": "An expression of shock or surprise.",
+                "is_correct": true
+            },
+            {
+                "text": "An expression of frustration."
+            }
+        ],
+        "tags": [
+            "language",
+            "slang"
+        ]
+    },
+    {
+        "text": "The phrase 'bent as a nine bob note' means that something is broken beyond repair.",
+        "type": "statement",
+        "is_true": false,
+        "explanation": "It means extremely corrupt or dishonest. A 'bob' was a British slang word for a shilling, and no note was ever produced for nine of them, hence the phrase.",
+        "tags": [
+            "language",
+            "idioms"
+        ]
+    },
+    {
+        "text": "Without context, what could the word wellington be referring to?",
+        "type": "multiple",
+        "answers": [
+            {
+                "text": "A type of boot",
+                "explanation": "A wellington boot is a calf-length boot usually made a rubber or rubberised substance and is completely waterproof. You'll quite often find them in country homes or farms where heavy rain can make muddy terrain difficult, if not impossible to traverse with standard footwear.",
+                "is_correct": true
+            },
+            {
+                "text": "A town name",
+                "explanation": "There are several towns and villages int he UK named this.",
+                "is_correct": true
+            },
+            {
+                "text": "A type of food",
+                "explanation": "A beef wellington is a steak dish from England where the steak is wrapped in pasty and baked. It is notoriously difficult to cook well without overcooking the meat.",
+                "is_correct": true
+            },
+            {
+                "text": "A Duke",
+                "explanation": "The Duke of Wellington fought in the Battle of Waterloo, defeating Napoleon Bonaparte and heralding the end of the Napoleonic wars in 1815.",
+                "is_correct": true
+            }
+        ],
+        "tags": [
+            "history"
+        ]
+    },
+    {
+        "text": "In what year was the Norman invasion of England?",
+        "type": "single",
+        "answers": [
+            {
+                "text": "1666",
+                "explanation": "The Great Fire of London occurred in 1666, destroying most of the capital in its wake."
+            },
+            {
+                "text": "1066",
+                "explanation": "The Battle of Hastings occurred between the Norman-French armies of William (Duke of Normandy), and the Anglo-Saxon King Harold Godwinson on October 14th 1066. William is immortalised as 'William the Conqueror', so no prizes for guessing who won.",
+                "is_correct": true
+            },
+            {
+                "text": "1203",
+                "explanation": "Nothing of note happened in the UK during this year."
+            }
+        ],
+        "tags": [
+            "history"
+        ]
+    },
+    {
+        "text": "The Union Jack flag is made up of three colours: red, white, and blue. Which nations are represented?",
+        "type": "multiple",
+        "answers": [
+            {
+                "text": "Ireland",
+                "explanation": "The diagonal red cross of Saint Patrick. It represents goth Northern Ireland and The Republic of Ireland, though in the latter you'll only see it on its own as they have seceded from the Union.",
+                "is_correct": true
+            },
+            {
+                "text": "Wales",
+                "explanation": "Neither the red dragon on the Welsh flag, nor any part of the Welsh flag is represented on the Union Jack. Wales is not independently recognised as a jurisdiction, and falls under 'England and Wales'."
+            },
+            {
+                "text": "Scotland",
+                "explanation": "A blue field, defaced by a white diagonal cross of Saint Andrew.",
+                "is_correct": true
+            },
+            {
+                "text": "England",
+                "explanation": "The vertical-horizontal red cross of Saint George.",
+                "is_correct": true
+            }
+        ],
+        "tags": [
+            "culture",
+            "history"
+        ]
+    },
+    {
+        "text": "The Union Jack gets its name from where?",
+        "type": "single",
+        "answers": [
+            {
+                "text": "James VI",
+                "is_correct": true,
+                "explanation": "When Elizabeth I died, she was unmarried and childless, so her cousin, King James VI of Scotland became the King of England as well. Now sharing the same monarch under what was known as the union of the crowns, the name 'Jack' is derived from a shortening of Jacobus, the Latin version of James. James introduced the combined national flag in 1606."
+            },
+            {
+                "text": "Jack Churchill",
+                "explanation": "A famous figure in British army history, sometimes referred to as 'Mad Jack'. Interestingly not related to Winston Churchill, though the Germans during World War II suspected that he might be."
+            }
+        ],
+        "tags": [
+            "culture",
+            "history"
+        ]
+    },
+    {
+        "text": "Alfred Lord Tennyson is a famous...",
+        "type": "single",
+        "answers": [
+            {
+                "text": "Politician"
+            },
+            {
+                "text": "Poet",
+                "is_correct": true,
+                "explanation": "He wrote many classic poems, including The Lotos-Eaters, Ulysses and Charge of the Light Brigade"
+            },
+            {
+                "text": "Actor"
+            }
+        ],
+        "tags": [
+            "culture",
+            "history"
+        ]
+    },
+    {
+        "text": "What does bob's your uncle mean?",
+        "type": "single",
+        "answers": [
+            {
+                "text": "A code phrase to indicate that you have uncovered some secret information"
+            },
+            {
+                "text": "A slang term for a difficult situation"
+            },
+            {
+                "text": "A reference to a historical event in British history, where General Bob Monkhouse triumphed over the French",
+                "explanation": "Bob Monkhouse was a British comedian active from the 1950s. He may have played a comedic General at some point in his long career, but he certainly wasn't a real one, nor ever triumphed over any other nation."
+            },
+            {
+                "text": "There you have it",
+                "explanation": "The origins of this very common phrase are somewhat murky, but some have it dating back to the 1800s. Similar alternatives that mean the same thing include: 1) A piece of cake, 2) Easy peasy.",
+                "is_correct": true
+            }
+        ],
+        "tags": [
+            "language",
+            "idioms"
+        ]
+    },
+    {
+        "text": "Which of the following dishes were invented in the UK?",
+        "type": "multiple",
+        "answers": [
+            {
+                "text": "Fish and chips",
+                "is_correct": true
+            },
+            {
+                "text": "Shepherds pie",
+                "explanation": "A thick gravy-based minced lamb stew topped with mashed potatoes and baked in the oven. A classic comfort food. Sometimes also called a cottage pie, though this is more traditionally beef instead of lamb.",
+                "is_correct": true
+            },
+            {
+                "text": "Chicken tikka masala",
+                "explanation": "The exact origin is uncertain, but some attribute it to Bangladeshi chefs living in Glasgow in the 1960s.",
+                "is_correct": true
+            },
+            {
+                "text": "Hot dogs",
+                "explanation": "Hot dogs are technically of German origin - Frankfurters, Bratwurst, etc - but can reasonably be considered an American dish these days due to the differences between what you'd get served as a hotdog in the US vs what you might expect with bratwurst in Germany."
+            },
+            {
+                "text": "Haggis, neeps and tatties",
+                "explanation": "Haggis is a savoury pudding containing a sheep's heart, liver and lungs with chopped onion, oatmeal, suet, spices, salt and stock, and traditionally contained and boiled in the animal's stomach. It is Scottish, and usually served with neeps - which is swede, and not parsnip as you might mistakenly assume - and tatties, which is simple mashed potatoes. ",
+                "is_correct": true
+            }
+        ],
+        "tags": [
+            "food",
+            "culture"
+        ]
+    },
+    {
+        "text": "What are the exams called at the end of High School in the UK?",
+        "type": "single",
+        "answers": [
+            {
+                "text": "A-Levels",
+                "explanation": "A-Levels are a further education qualification and run after you graduate from high school. They last 2 years, and are often run in something called a Sixth Form on the same campus as the high school itself."
+            },
+            {
+                "text": "O-Levels",
+                "explanation": "The O-Level (or ordinary level) qualifications predate the current GCSE framework, which superseded it in 1988."
+            },
+            {
+                "text": "T-Levels",
+                "explanation": "Technical-based qualifications within the further education period. Similar to A-levels, but inclusive of soft skills and 45 days of work experience placement within a relevant field. These are a newer type of qualification, only introduced in 2017 and offer different pathways depending on the chosen industry."
+            },
+            {
+                "text": "SATs",
+                "explanation": "In the UK, these are held at three 'key stages' of a child's development and are used to help ensure children are placed within the correct level of teaching for their abilities in various subjects. In the US, they also have a different 'SAT's that are used for determining viability for admission to various colleges."
+            },
+            {
+                "text": "GCSEs",
+                "explanation": "The General Certificate of Secondary Education (GCSE) learning period lasts 2 years, and students take their exams at the age of 16. Depending on their results, they can then go on to further education with A-Levels at Sixth Form, or alternative equivalent qualifications at a college. After that, the option for higher education (university) becomes available - again, grades-depending.",
+                "is_correct": true
+            }
+        ],
+        "tags": [
+            "culture"
+        ]
+    },
+    {
+        "text": "What is the legal drinking age in the UK?",
+        "type": "single",
+        "answers": [
+            {
+                "text": "16",
+                "explanation": "In 2009, France raised its legal drinking age from 16 to 18, but minors are still permitted to drink alcohol under the supervision of parental authority - though making a minor drink to the point of intoxication is an offense. There's a few other countries that have similar rules - such as Denmark or Austria - some based on the type of alcohol (spirits vs beer, for example)."
+            },
+            {
+                "text": "21",
+                "explanation": "In the US and some other countries, this is correct, but not in the UK"
+            },
+            {
+                "text": "18",
+                "is_correct": true
+            }
+        ],
+        "tags": [
+            "culture",
+            "law"
+        ]
+    },
+    {
+        "text": "Del Boy, Count Duckula and Danger Mouse are all roles played by this actor",
+        "type": "single",
+        "answers": [
+            {
+                "text": "David Frost",
+                "explanation": "A famous television host ans journalist active from the 1960s onwards.",
+                "is_correct": false
+            },
+            {
+                "text": "John Hurt",
+                "explanation": "David Lynch once described Hurt as 'simply the greatest actor in the world'. He won many awards during his career for some very high profile roles. He never played any of the characters listed above though.",
+                "is_correct": false
+            },
+            {
+                "text": "David Jason",
+                "explanation": "David Jason, much like Del Boy (from the sitcom Only Fools and Horses) is still a household name to this day.",
+                "is_correct": true
+            },
+            {
+                "text": "Benedict Cumberbatch",
+                "explanation": "Perhaps more famously known for his role as Sherlock Holmes rather than anything else, Cumberbatch is an experience actor on both stage and screen, but he's not played any of the roles listed here.",
+                "is_correct": false
+            }
+        ],
+        "tags": [
+            "culture",
+            "entertainment"
+        ]
+    },
+    {
+        "text": "A dogsbody is a slang term for someone who completes unwanted tasks for another person.",
+        "type": "statement",
+        "is_true": true,
+        "explanation": "The term originates from the Royal Navy, who used dried peas boiled in a bag as one of their staple foods in the early 19th century. The item was nicknamed 'dog's body' by the sailors, who then co-opted the term to refer to junior officers and midshipmen who would frequently perform tasks that senior officers would not want to do. It later became widely used to mean the same thing outside of naval circles and is still in general usage today.",
+        "tags": [
+            "language",
+            "idioms"
+        ]
+    },
+    {
+        "text": "What is the name of the actor who plays Mr Bean?",
+        "type": "single",
+        "answers": [
+            {
+                "text": "Ronan Keating",
+                "explanation": "Lead singer of an Irish boy-band in the 1990s, these days he's a judge on various talent shows on TV."
+            },
+            {
+                "text": "Rowan Atkinson",
+                "explanation": "Until the global success of Mr Bean, Atkinson was more famously known as Blackadder in the sitcom of the same name.",
+                "is_correct": true
+            },
+            {
+                "text": "Tony Robinson",
+                "explanation": "Robinson was in Blackadder alongside Atkinson, playing his long-suffering, but dimwitted servant Baldrick, since then, he's mostly been presenting shows about archaeology and history. He was never in Mr Bean."
+            },
+            {
+                "text": "Tom Baker",
+                "explanation": "Tom Baker is most famously the fourth incarnation of Doctor Who (the one with the scarf), but was never in Mr Bean."
+            }
+        ],
+        "tags": [
+            "culture",
+            "entertainment"
+        ]
+    },
+    {
+        "text": "What is afternoon tea?",
+        "type": "single",
+        "answers": [
+            {
+                "text": "A mid-afternoon light meal, consisting of finger foods and a choice of teas. Historically considered a ladies' social occasion.",
+                "explanation": "This is sometimes referred to as low tea, as it is often eaten around a low table (think coffee table).",
+                "is_correct": true
+            },
+            {
+                "text": "A working class meal served in the late afternoon or early evening, at the end of the work day.",
+                "explanation": "This is actually known as 'high tea'. The two are often confused, since afternoon tea is considered to be more associated with high society, but the name has more to do with the height of the tables around which each takes place."
+            }
+        ],
+        "tags": [
+            "culture",
+            "food"
+        ]
+    },
+    {
+        "text": "'Back to the drawing board' means to start again after a failure",
+        "type": "statement",
+        "is_true": true,
+        "tags": [
+            "language",
+            "idioms"
+        ]
+    },
+    {
+        "text": "The Olympics was last hosted by the UK in 2016",
+        "type": "statement",
+        "is_true": false,
+        "explanation": "This actually happened in 2012, in London.",
+        "tags": [
+            "history",
+            "sport"
+        ]
+    },
+    {
+        "text": "What sort of meal is high tea?",
+        "type": "single",
+        "answers": [
+            {
+                "text": "Traditionally the main meal of the day, usually served after 5pm at the end of a work shift.",
+                "explanation": "So named because it is usually consumed around a high table (such as a dining table).",
+                "is_correct": true
+            },
+            {
+                "text": "A form of tea ceremony, including pastries and cakes, as well as scones with jam and cream.",
+                "explanation": "These two are often confused. This describes afternoon tea."
+            }
+        ],
+        "tags": [
+            "culture",
+            "food"
+        ]
+    },
+    {
+        "text": "Which iconic British band is often credited with starting the 'British Invasion' of the United States?",
+        "type": "single",
+        "answers": [
+            {
+                "text": "The Beatles",
+                "explanation": "Dusty Springfield (another British recording artist) entered the Billboard Hot 100 chart with her solo single 'I Only Want to Be With You' a mere week later.",
+                "is_correct": true
+            },
+            {
+                "text": "The Rolling Stones",
+                "explanation": "Whilst the 'Stones were involved in the British Invasion, they aren't credited with starting it."
+            },
+            {
+                "text": "The Monkees",
+                "explanation": "The Monkees were a manufactured band as an attempt to ape (pun intended) the success of The Beatles, and are in fact from the USA."
+            }
+        ],
+        "tags": [
+            "culture",
+            "entertainment"
+        ]
+    },
+    {
+        "text": "What is the name of the annual horse race held at Epsom Downs?",
+        "type": "single",
+        "answers": [
+            {
+                "text": "The Derby",
+                "explanation": "So named due to its original sponsor, the Earl of Derby. It is sometimes called the 'Epsom Derby' in order to differentiate it from the more notable Kentucky Derby in the United States.",
+                "is_correct": true
+            },
+            {
+                "text": "Grand National",
+                "explanation": "The Grand National is also a famous horse racing event, but it is held at Aintree, not Epsom."
+            },
+            {
+                "text": "The Gold Cup",
+                "explanation": "The Gold Cup is also a famous horse racing event, but it is held at Ascot."
+            }
+        ],
+        "tags": [
+            "culture",
+            "sport"
+        ]
+    },
+    {
+        "text": "Which famous annual sporting event takes place at Ascot?",
+        "type": "single",
+        "answers": [
+            {
+                "text": "The Gold Cup",
+                "explanation": "The Gold Cup is an annual horse racing event that takes place in June.",
+                "is_correct": true
+            },
+            {
+                "text": "FA Cup Final",
+                "explanation": "This annual culmination of the football league is one of the most attended domestic football events in the world, and takes place at Wembley Stadium in London."
+            },
+            {
+                "text": "The British Grand Prix",
+                "explanation": "The British leg of the global motorsport, Formula One, is held at Silverstone."
+            }
+        ],
+        "tags": [
+            "sport"
+        ]
+    },
+    {
+        "text": "Which English monarch had the longest reign?",
+        "type": "single",
+        "answers": [
+            {
+                "text": "Queen Elizabeth II",
+                "explanation": "Elizabeth's reign was 7 years longer than that of the second-longest, Queen Victoria.",
+                "is_correct": true
+            },
+            {
+                "text": "Queen Victoria"
+            }
+        ],
+        "tags": [
+            "history"
+        ]
+    },
+    {
+        "text": "How many wives did Henry VIII have?",
+        "type": "single",
+        "answers": [
+            {
+                "text": "6",
+                "explanation": "Often (correctly) depicted as a tyrant, Henry would dispense of his wives - two of whom he had beheaded - if he decided he didn't fancy them anymore, or more importantly, she failed to birth a male heir.",
+                "is_correct": true
+            },
+            {
+                "text": "4"
+            },
+            {
+                "text": "5"
+            }
+        ],
+        "tags": [
+            "history"
+        ]
+    },
+    {
+        "text": "What is the official residence of the British monarch?",
+        "type": "single",
+        "answers": [
+            {
+                "text": "Buckingham Palace",
+                "explanation": "Whilst newer (built in 1703 for the Duke of Buckingham) than the Norman Windsor Castle, Buckingham Palace became the official residence of the monarch following a vote by parliament in 1833-34.",
+                "is_correct": true
+            },
+            {
+                "text": "Windsor Castle",
+                "explanation": "A cheeky trick question. Windsor Castle IS a royal residence for the Windsor family, just not the official one."
+            }
+        ],
+        "tags": [
+            "history",
+            "culture"
+        ]
+    },
+    {
+        "text": "What is the family name of the current British royal family?",
+        "type": "single",
+        "answers": [
+            {
+                "text": "Windsor",
+                "explanation": "Windsor was a Royal proclamation of a change in name. Given the royal family's close ties to the German monarchy (Prince Albert being married to Queen Victoria in the 1800s), the change came about as a result of strong anti-German sentiment during the First World War, during which time long range aircraft had been crossing the English Channel and bombing London.",
+                "is_correct": true
+            },
+            {
+                "text": "Tudor",
+                "explanation": "The House of Tudor held the throne of England between 1485 and 1603 and were succeeded by the Scottish House of Stuart."
+            },
+            {
+                "text": "Stuart",
+                "explanation": "The House of Stuart succeeded the Tudors in 1603 and held the throne until 1714."
+            }
+        ],
+        "tags": [
+            "history",
+            "culture"
+        ]
+    },
+    {
+        "text": "Which English county is famous for its cheddar cheese?",
+        "type": "single",
+        "answers": [
+            {
+                "text": "Somerset",
+                "explanation": "Named after the town where it was created in the county of Somerset, England. A cow's milk cheese, cheddar has no protected origin status, and so can legally be produced outside of Somerset.",
+                "is_correct": true
+            },
+            {
+                "text": "Cheshire",
+                "explanation": "Cheshire cheese was made before cheddar, but is less famous."
+            }
+        ],
+        "tags": [
+            "history",
+            "food"
+        ]
+    },
+    {
+        "text": "What is the name of the British Prime Minister's official residence?",
+        "type": "single",
+        "answers": [
+            {
+                "text": "10 Downing Street",
+                "explanation": "Upon conclusion of a general election, the leader of the winning party, along with their family, moves into 10 Downing Street.",
+                "is_correct": true
+            },
+            {
+                "text": "Whitehall",
+                "explanation": "Whitehall is adjacent to Downing Street, but is more often used as a metonym for 'the government'."
+            }
+        ],
+        "tags": [
+            "culture",
+            "politics"
+        ]
+    },
+    {
+        "text": "What is the name of the British Chancellor of the Exchequer's official residence?",
+        "type": "single",
+        "answers": [
+            {
+                "text": "11 Downing Street",
+                "explanation": "While officially residence of the Chancellor, sometimes the sitting Prime Minister will opt to live in the flat above No. 11 because it is larger than the flat above No. 10.",
+                "is_correct": true
+            },
+            {
+                "text": "10 Downing Street",
+                "explanation": "This is the official residence of the Prime Minister, not the Chancellor."
+            }
+        ],
+        "tags": [
+            "culture",
+            "politics"
+        ]
+    },
+    {
+        "text": "Which English city is home to the world-famous Shakespeare's Globe Theatre?",
+        "type": "single",
+        "answers": [
+            {
+                "text": "London",
+                "explanation": "The Globe Theatre is located along the South Bank in London.",
+                "is_correct": true
+            },
+            {
+                "text": "Stratford-upon-Avon",
+                "explanation": "Shakespeare's birthplace was in Stratford-upon-Avon, where the Royal Shakespeare Theatre still resides."
+            },
+            {
+                "text": "Edinburgh"
+            }
+        ],
+        "tags": [
+            "history",
+            "culture",
+            "entertainment"
+        ]
+    },
+    {
+        "text": "Fill in the blank for this iconic British TV show: Only Fools and ___",
+        "type": "single",
+        "answers": [
+            {
+                "text": "Horses",
+                "explanation": "Based on a proverb that 'only fools and horses work', which holds that people not looking for an easier way of living must be fools. The irony being that the characters depicted in the show, whilst looking for that easier way of living, are undeniably fools.",
+                "is_correct": true
+            },
+            {
+                "text": "Jokers",
+                "explanation": "It could very well be some kind of stand-up show, but no."
+            },
+            {
+                "text": "Cats",
+                "explanation": "Of the many adjectives you could use to describe cats, foolish is probably not one."
+            }
+        ],
+        "tags": [
+            "culture",
+            "entertainment"
+        ]
+    },
+    {
+        "text": "What is the name of the fighter used by British pilots during World War II?",
+        "type": "single",
+        "answers": [
+            {
+                "text": "Spitfire",
+                "explanation": "The Spitfire is a single-occupant fighter that was used throughout the war by British and Allied forces.",
+                "is_correct": true
+            },
+            {
+                "text": "Lancaster",
+                "explanation": "The Avro Lancaster was used during the same period, but is a heavy bomber aircraft."
+            }
+        ],
+        "tags": [
+            "history"
+        ]
+    },
+    {
+        "text": "Which British Prime Minister is most associated with the 'Iron Lady' nickname?",
+        "type": "single",
+        "answers": [
+            {
+                "text": "Margaret Thatcher",
+                "explanation": "Thatcher was the first female UK Prime Minister, who embraced the nickname given to her by the Soviet Union in 1976.",
+                "is_correct": true
+            },
+            {
+                "text": "Theresa May"
+            }
+        ],
+        "tags": [
+            "politics",
+            "history"
+        ]
+    },
+    {
+        "text": "What was the name of the political party that was most in control British politics for the 20th century?",
+        "type": "single",
+        "answers": [
+            {
+                "text": "Conservatives",
+                "explanation": "The Conservative Party were in power for more than 50 total years during the 20th century.",
+                "is_correct": true
+            },
+            {
+                "text": "Labour",
+                "explanation": "The Labour Party was founded in 1900, and while today they are usually considered the main political rivals of the Conservatives, historically that title was held by the Liberal Party (not to be confused with the modern-day equivalent, the Liberal Democrats)."
+            }
+        ],
+        "tags": [
+            "politics",
+            "history"
+        ]
+    },
+    {
+        "text": "What is the name of the book featuring a near-future dystopian vision of the UK written by George Orwell?",
+        "type": "single",
+        "answers": [
+            {
+                "text": "Nineteen Eighty-Four",
+                "explanation": "A cautionary tale on the consequences of totalitarianism, and mass surveillance of people and behaviours within society, this book written in 1949 is as relevant today as it was when it was written.",
+                "is_correct": true
+            },
+            {
+                "text": "Animal Farm",
+                "explanation": "Also written by George Orwell, Animal Farm is a satirical allegory about a group of anthropomorphic animals who rebel against their human farmer in the hopes of creating an equal, free and happy society. However the rebellion is betrayed and ultimately leads to a dictatorship."
+            }
+        ],
+        "tags": [
+            "politics",
+            "history",
+            "entertainment"
+        ]
+    },
+    {
+        "text": "Which major event led to the decline of the British Empire?",
+        "type": "single",
+        "answers": [
+            {
+                "text": "World War II",
+                "explanation": "Following the war, Britain was essentially bankrupt, and over a period of roughly 40 years, decolonisation occurred across the empire.",
+                "is_correct": true
+            },
+            {
+                "text": "The Great Depression",
+                "explanation": "The Great Depression (1929-1939) certainly didn't help, but it was WW2 that tipped the scales towards an inevitable conclusion."
+            }
+        ],
+        "tags": [
+            "politics",
+            "history"
+        ]
+    },
+    {
+        "text": "What was the name of the period of rapid economic and social change in Britain after World War II?",
+        "type": "single",
+        "answers": [
+            {
+                "text": "The Post-War Consensus",
+                "explanation": "Following the war, this period tolerated and encouraged nationalisation, strong trade unions, heavy regulation, high taxes, and an extensive welfare state. It was ended in the 1950s by Thatcher's Conservative government.",
+                "is_correct": true
+            },
+            {
+                "text": "The Victorian Era",
+                "explanation": "The Victorian era is book-ended by the reign of Queen Victoria (1837-1901), and predates the era by some 44 years."
+            },
+            {
+                "text": "The Industrial Revolution",
+                "explanation": "The invention of the printing press, and the age of steam predates WW2 significantly, and ushered in an age of machinery and automation (as well as a LOT of pollution)."
+            },
+            {
+                "text": "The Renaissance",
+                "explanation": "A period of European history in the 15th and 16th centuries that represented the transition from the middle ages to modernity, an is often characterised as an effort to revive and surpass the ideas and achievements of classical antiquity."
+            }
+        ],
+        "tags": [
+            "politics",
+            "history",
+            "culture"
+        ]
+    },
+    {
+        "text": "Which British monarch was crowned during the Second World War?",
+        "type": "single",
+        "answers": [
+            {
+                "text": "King George VI",
+                "explanation": "George was crowned in 1936 and reigned until 1952 when he died at the age of 56 from a coronary thrombosis as a result of ongoing illnesses, including lung cancer. The 2010 dramatisation, 'The King's Speech' is about George's difficulty with verbal communication and how he overcame his stammer.",
+                "is_correct": true
+            },
+            {
+                "text": "Queen Elizabeth II",
+                "explanation": "Elizabeth succeeded George after his untimely death."
+            }
+        ],
+        "tags": [
+            "history"
+        ]
+    },
+    {
+        "text": "What was the name of the political movement that advocated for Scottish independence?",
+        "type": "single",
+        "answers": [
+            {
+                "text": "Scottish National Party (SNP)",
+                "explanation": "The SNP was the first governing party of the devolved Scottish parliament, and won an outright majority in 2011, leading to the independence referendum in 2014. Despite solid support for the movement to pass, it failed with a 55% vote for 'no'.",
+                "is_correct": true
+            },
+            {
+                "text": "Plaid Cymru",
+                "explanation": "Plaid Cymru is a centre-left Welsh political party."
+            }
+        ],
+        "tags": [
+            "politics",
+            "history"
+        ]
+    },
+    {
+        "text": "What was the name of the economic policy implemented by Margaret Thatcher?",
+        "type": "single",
+        "answers": [
+            {
+                "text": "Thatcherism",
+                "explanation": "Thatcherism is (essentially) a British-localised naming for neoliberalism, and broke down a lot of the changes of the post-war consensus (inc. trade unions and the welfare state), in favour of capitalism.",
+                "is_correct": true
+            },
+            {
+                "text":"Nationalisation",
+                "explanation": "In stark contrast to Thatcherism, Nationalisation seeks to move more services under the control of the state instead of private capital."
+            }
+        ],
+        "tags": [
+            "politics",
+            "history"
+        ]
+    },
+    {
+        "text": "Which major terrorist organization operated in Northern Ireland during the Troubles?",
+        "type": "single",
+        "answers": [
+            {
+                "text": "Provisional Irish Republican Army (IRA)",
+                "explanation": "The IRA was a paramilitary force representing the reunification of the Republic of Ireland and Northern Ireland, and sought to sever ties with mainland Britain through force, often through terrorist acts such as bombing. In 2005, the group disarmed following a military stalemate, whereby British troops withdrew, and both sides agreed to work towards their aims solely through peaceful political means.",
+                "is_correct": true
+            },
+            {
+                "text": "Order of Nine Angles",
+                "explanation": "The Order of Nine Angles is a militant Satanic occultist network originating in the UK, but spread throughout the world."
+            }
+        ],
+        "tags": [
+            "politics",
+            "history"
+        ]
+    },
+    {
+        "text": "Which British Prime Minister resigned after the Brexit referendum?",
+        "type": "single",
+        "answers": [
+            {
+                "text": "David Cameron",
+                "explanation": "After backfiring (with 52% voting to leave the EU), rather than stay on to help guide Britain out of the EU, he resigned his position. May succeeded him.",
+                "is_correct": true
+            },
+            {
+                "text": "Boris Johnson",
+                "explanation": "Far from resigning, Johnson was one of the key figures behind the misleading campaign backing the Leave movement, and later came to power after May stepped down."
+            },
+            {
+                "text": "Theresa May",
+                "explanation": "Both Theresa May and David Cameron backed remaining in the EU. However it was Cameron who was in power and triggered the referendum in 2016 in order to fulfil a promise on the manifesto that saw him elected."
+            }
+        ],
+        "tags": [
+            "politics",
+            "history"
+        ]
+    },
+    {
+        "text": "What does the phrase 'keep your head down' mean?",
+        "type": "single",
+        "answers": [
+            {
+                "text": "Avoid attracting attention or trouble.",
+                "explanation": "Origins in military tactics: keep your head down to avoid being spotted by the enemy.",
+                "is_correct": true
+            },
+            {
+                "text": "Be confident and assertive."
+            }
+        ],
+        "tags": [
+            "language",
+            "idioms"
+        ]
+    },
+    {
+        "text": "What does 'raining cats and dogs' mean?",
+        "type": "single",
+        "answers": [
+            {
+                "text": "Raining heavily.",
+                "explanation": "This one is very old and has multiple possible origins dating back as far as the 1600s. It should only be used when describing heavy rain.",
+                "is_correct": true
+            },
+            {
+                "text": "Frozen rain, sometimes called sleet or hail."
+            }
+        ],
+        "tags": [
+            "language",
+            "idioms"
+        ]
+    },
+    {
+        "text": "What does 'bite the bullet' mean?",
+        "type": "single",
+        "answers": [
+            {
+                "text": "To face a difficult or unpleasant situation bravely.",
+                "explanation": "Contentious history on this one states that military patients clench a bullet between their teeth as a way to cope with pain of a surgical procedure without anesthetic, but evidence of doing biting on a bullet instead of the more traditional leather strap remains sparse.",
+                "is_correct": true
+            },
+            {
+                "text": "To give up on something."
+            }
+        ],
+        "tags": [
+            "language",
+            "idioms"
+        ]
+    },
+    {
+        "text": "What does 'let the cat out of the bag' mean?",
+        "type": "single",
+        "answers": [
+            {
+                "text": "To reveal facts that have been hidden.",
+                "explanation": "It can be related to conspiracy, letting an outsider into an inner circle, or the revealing of a plot twist in a movie. It can also mean revealing a secret carelessly or by mistake.",
+                "is_correct": true
+            },
+            {
+                "text": "To release animals into the wild."
+            }
+        ],
+        "incorrect": "To release animals into the wild.",
+        "tags": [
+            "language",
+            "idioms"
+        ]
+    },
+    {
+        "text": "What does 'a storm in a teacup' mean?",
+        "type": "single",
+        "answers": [
+            {
+                "text": "A fuss about something unimportant.",
+                "explanation": "Popularised as a result of the tax on tea in 1773 which directly impacted the British colonies at the time. This resulted in (amongst other things), the famous Boston Tea Party, where demonstrators boarded merchant ships in Boston (US) harbour and threw crates of tea overboard. Ironically, given the saying's connection to 'trivial' acts, this was a significant event that helped accelerate and intensify colonial support for the American Revolution.",
+                "is_correct": true
+            },
+            {
+                "text": "Weather that was predicted to be very harsh turned out to be mild."
+            },
+            {
+                "text": "A small but serious argument."
+            }
+        ],
+        "tags": [
+            "language",
+            "idioms"
+        ]
+    },
+    {
+        "text": "What does 'hit the nail on the head' mean?",
+        "type": "single",
+        "answers": [
+            {
+                "text": "To say or do something exactly right",
+                "explanation": "More commonly heard in a shortened from of 'nailed it', and dates back as far as the 1400s.",
+                "is_correct": true
+            },
+            {
+                "text": "To make a mistake"
+            },
+            {
+                "text": "To expertly build/construct something"
+            }
+        ],
+        "tags": [
+            "language",
+            "idioms"
+        ]
+    },
+    {
+        "text": "What does 'spill the beans' mean?",
+        "type": "single",
+        "answers": [
+            {
+                "text": "To reveal a secret",
+                "explanation": "Analogous to 'let the cat out of the bag', or 'spill the tea', the act of pouring something out is synonymous with revelation.",
+                "is_correct": true
+            },
+            {
+                "text": "To make breakfast"
+            }
+        ],
+        "tags": [
+            "language",
+            "idioms"
+        ]
+    },
+    {
+        "text": "What does 'kick the bucket' mean?",
+        "type": "single",
+        "answers": [
+            {
+                "text": "To die, or cease functioning",
+                "explanation": "There are two variants of the origin of this. The first is to do with suicide by hanging - you can probably guess in what capacity the phrase exhibits itself. The second is an old use of the word bucket, which related to hanging pigs by their legs prior to slaughter to a beam (the bucket) and the death throes of the pig would result in them kicking said beam.",
+                "is_correct": true
+            },
+            {
+                "text": "To be exhausted"
+            },
+            {
+                "text": "To go to bed"
+            }
+        ],
+        "tags": [
+            "language",
+            "idioms"
+        ]
+    },
+    {
+        "text": "What does 'piece of cake' mean?",
+        "type": "single",
+        "answers": [
+            {
+                "text": "Something very easy",
+                "explanation": "Cakes have an agreeable taste and are (usually) very soft in texture, making them easy to consume. Originally from American English, but used in British English as well.",
+                "is_correct": true
+            },
+            {
+                "text": "Something delicious",
+                "explanation": "Cake IS delicious, but that's not what the saying means."
+            },
+            {
+                "text": "Something that is easy to slice"
+            }
+        ],
+        "tags": [
+            "language",
+            "idioms"
+        ]
+    },
+    {
+        "text": "What does 'break a leg' mean?",
+        "type": "single",
+        "answers": [
+            {
+                "text": "Good luck",
+                "explanation": "The origins of this one are unclear and widely debated. You say this to someone who is going to perform on stage or some other comparable endeavour. In fact it is considered bad luck to say 'good luck' to a performer instead of 'break a leg'.",
+                "is_correct": true
+            },
+            {
+                "text": "Be careful"
+            },
+            {
+                "text": "Try not to get hurt too badly"
+            }
+        ],
+        "tags": [
+            "language",
+            "idioms"
+        ]
+    },
+    {
+        "text": "What does 'cost an arm and a leg' mean?",
+        "type": "single",
+        "answers": [
+            {
+                "text": "Very expensive",
+                "explanation": "It should be obvious that if something literally cost you one of your arms and one of your legs then it was very expensive indeed!",
+                "is_correct": true
+            },
+            {
+                "text": "Cheap"
+            },
+            {
+                "text": "Moderately expensive"
+            }
+        ],
+        "tags": [
+            "language",
+            "idioms"
+        ]
+    },
+    {
+        "text": "What does 'let sleeping dogs lie' mean?",
+        "type": "single",
+        "answers": [
+            {
+                "text": "Avoid a potentially difficult situation",
+                "explanation": "Dogs bark and could be vicious. But they aren't when they're sleeping, so it is often best to leave them be.",
+                "is_correct": true
+            },
+            {
+                "text": "Letting your partner sleep in on the weekend",
+                "explanation": "Don't call your partner a dog..."
+            },
+            {
+                "text": "Never wake a dog from their sleep"
+            }
+        ],
+        "tags": [
+            "language",
+            "idioms"
+        ]
+    },
+    {
+        "text": "What does 'it's not rocket science' mean?",
+        "type": "single",
+        "answers": [
+            {
+                "text": "Something is easy to understand",
+                "explanation": "Typically rocket science is considered one of the more difficult careers, since it requires a mastery of chemistry, mathematics and physics. Therefore, if something is 'not rocket science', then it is considered easy. You might hear alternate terms for this, such as brain surgery - another difficult field to master - or a blend of both, stating that you don't need to be a 'rocket surgeon'/'brain scientist' to understand [thing].",
+                "is_correct": true
+            },
+            {
+                "text": "A sarcastic phrase to indicate that is very difficult",
+                "explanation": "While technically this could be said in a sarcastic tone to imply the opposite of its actual meaning, it never really is."
+            }
+        ],
+        "tags": [
+            "language",
+            "idioms"
+        ]
+    },
+    {
+        "text": "What does 'under the weather' mean?",
+        "type": "single",
+        "answers": [
+            {
+                "text": "Feeling unwell or sick",
+                "explanation": "From a nautical term, 'under the weather bow', which means to be seasick. The bow of a ship is the side which is being exposed to bad weather.",
+                "is_correct": true
+            },
+            {
+                "text": "Feeling energetic"
+            },
+            {
+                "text": "It looks like it's about to rain heavily."
+            }
+        ],
+        "tags": [
+            "language",
+            "idioms"
+        ]
+    },
+    {
+        "text": "What does 'the sun is over the yardarm' mean?",
+        "type": "single",
+        "answers": [
+            {
+                "text": "An excuse to start drinking",
+                "explanation": "Nautical term to indicate that the sun has risen above the foreyard of the ship - usually around 11am - at which time many officers would slip below deck for their first drink of the day. It is in common use, but a more common variant is 'it's 5 o'clock somewhere' to indicate the end of a working day and time for a drink.",
+                "is_correct": true
+            },
+            {
+                "text": "An appropriate time for a nap"
+            },
+            {
+                "text": "The sun is about to set"
+            },
+            {
+                "text": "The sun has just risen"
+            }
+        ],
+        "tags": [
+            "language",
+            "idioms"
+        ]
+    },
+    {
+        "text": "What does 'hit the hay' mean?",
+        "type": "single",
+        "answers": [
+            {
+                "text": "To go to bed",
+                "explanation": "Farmers would tend to stuff the hay from their farms into sacks, and then lay atop of them when they went to sleep. An alternative is 'hit the sack'",
+                "is_correct": true
+            },
+            {
+                "text": "Threshing wheat after reaping"
+            },
+            {
+                "text": "To practice boxing"
+            }
+        ],
+        "tags": [
+            "language",
+            "idioms"
+        ]
+    },
+    {
+        "text": "What does 'pull someone's leg' mean?",
+        "type": "single",
+        "answers": [
+            {
+                "text": "To tease or joke with someone",
+                "explanation": "Originally from Scotland. It is theorised that it could have meant the physical act of yanking or pulling on another person's leg as they walk in order to make them stumble and thus look foolish.",
+                "is_correct": true
+            },
+            {
+                "text": "To be serious"
+            },
+            {
+                "text": "Going for a walk with a friend"
+            }
+        ],
+        "tags": [
+            "language",
+            "idioms"
+        ]
+    },
+    {
+        "text": "What does 'beat about the bush' mean?",
+        "type": "single",
+        "answers": [
+            {
+                "text": "Avoid saying something directly",
+                "explanation": "This is often used in the inverse: 'don't beat about the bush' to encourage the person being spoken to to get to the point.",
+                "is_correct": true
+            },
+            {
+                "text": "To look for something which you lost"
+            },
+            {
+                "text": "A farming term related to the harvesting of crops"
+            }
+        ],
+        "tags": [
+            "language",
+            "idioms"
+        ]
+    },
+    {
+        "text": "What does 'bite off more than you can chew' mean?",
+        "type": "single",
+        "answers": [
+            {
+                "text": "Take on too much work or responsibility",
+                "explanation": "Chewing being a synonym for processing something (in one's mouth), if you bite off more than you are able to chew, means you are taking on too much responsibility, or a challenge that is beyond your means to overcome.",
+                "is_correct": true
+            },
+            {
+                "text": "Eating too much"
+            },
+            {
+                "text": "Cook far more food than you'll be able to eat",
+                "explanation": "Not far off from the truth, but not quite right. If you undertook a cooking task that you were enable to complete on your own, then it would be a closer fit."
+            }
+        ],
+        "tags": [
+            "language",
+            "idioms"
+        ]
+    },
+    {
+        "text": "'Eyes too big for your stomach' means you ordered too much food.",
+        "type": "statement",
+        "is_true": true,
+        "explanation": "Look at all those delicious pictures in the menu. And you're so very hungry right now. You're sure you could eat all that easily... or maybe not.",
+        "tags": [
+            "food",
+            "language",
+            "idioms"
+        ]
+    },
+    {
+        "text": "Which of the following statements would be regarded as self-damaging behaviour?",
+        "type": "single",
+        "answers": [
+            {
+                "text": "Biting the hand that feeds you",
+                "explanation": "Causing harm to a benefactor, especially one that you may be dependent upon.",
+                "is_correct": true
+            },
+            {
+                "text": "Chasing your own tail",
+                "explanation": "Going around in circles isn't strictly self-damaging, though it could be considered a waste of time."
+            }
+        ],
+        "tags": [
+            "language",
+            "idioms"
+        ]
+    },
+    {
+        "text": "If you are being inefficient with your time, or repeating yourself, how might that be described?",
+        "type": "single",
+        "answers": [
+            {
+                "text": "Chasing your own tail",
+                "explanation": "A dog chasing its own tail will go around and around, which is a waste of time: they cannot catch it since it is attached to their body!",
+                "is_correct": true
+            },
+            {
+                "text": "Chasing the dragon",
+                "explanation": "Originally from Hong Kong, this means to chase after a fulfilling high of an addictive substance, whether that be a drug or some personal goal or achievement that is always just out of reach."
+            }
+        ],
+        "tags": [
+            "language",
+            "idioms"
+        ]
+    },
+    {
+        "text": "What does 'a blessing in disguise' mean?",
+        "type": "single",
+        "answers": [
+            {
+                "text": "Something good that initially seems bad",
+                "explanation": "A seeming misfortune that turns out for the best. The opposite of the 'poisoned chalice'.",
+                "is_correct": true
+            },
+            {
+                "text": "Something bad that initially seems good",
+                "explanation": "A 'poisoned chalice' is something that appears to be be good, but is actually bad; e.g. poison."
+            },
+            {
+                "text": "A friend makes a surprise visit",
+                "explanation": "Depending on your disposition towards random social encounters, this could be a blessing or a curse. Sadly though, this is not what the saying means."
+            }
+        ],
+        "tags": [
+            "language",
+            "idioms"
+        ]
+    },
+    {
+        "text": "What does 'a penny for your thoughts' mean?",
+        "type": "single",
+        "answers": [
+            {
+                "text": "Asking someone what they are thinking",
+                "explanation": "Inquiring into the thoughts and feelings of another, particularly if they appear to be conflicted, or deep in thought; you offer a penny as an exchange for finding out what they were thinking about. There is no ACTUAL exchange of currency though, don't worry.",
+                "is_correct": true
+            },
+            {
+                "text": "Paying someone for their ideas"
+            },
+            {
+                "text": "An insult to someone's intelligence, implying that their thoughts are not worth much."
+            }
+        ],
+        "tags": [
+            "language",
+            "idioms"
+        ]
+    }
+]

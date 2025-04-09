@@ -3,7 +3,6 @@
 /public/build
 /public/hot
 /public/storage
-/storage/import/questions.json
 /storage/*.key
 /vendor
 *.env
