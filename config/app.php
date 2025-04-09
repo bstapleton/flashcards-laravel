@@ -124,5 +124,6 @@ return [
     ],
 
     'default_page_limit' => env('DEFAULT_PAGE_LIMIT', 25),
+    'import_user_password' => env('IMPORT_USER_PASSWORD', 'password'),
 
 ];

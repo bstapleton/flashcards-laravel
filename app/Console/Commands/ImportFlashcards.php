@@ -10,7 +10,9 @@ use App\Models\Role;
 use App\Models\Tag;
 use App\Models\User;
 use Illuminate\Console\Command;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 
 class ImportFlashcards extends Command
 {
@@ -24,9 +26,12 @@ class ImportFlashcards extends Command
         $user = User::where('username', $this->argument('username'))->first();
 
         if (! $user) {
-            $user = User::factory()->create([
+            $user = User::create([
                 'username' => $this->argument('username'),
                 'display_name' => ucfirst($this->argument('username')),
+                'email_verified_at' => now(),
+                'password' => Hash::make(config('app.import_user_password')),
+                'remember_token' => Str::random(10),
             ]);
         }
 
