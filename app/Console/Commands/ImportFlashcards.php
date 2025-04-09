@@ -26,6 +26,7 @@ class ImportFlashcards extends Command
         if (! $user) {
             $user = User::factory()->create([
                 'username' => $this->argument('username'),
+                'display_name' => ucfirst($this->argument('username')),
             ]);
         }
 
