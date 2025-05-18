@@ -157,12 +157,12 @@
         "type": "single",
         "answers": [
             {
-                "text": "A de-shelled hard boiled egg wrapped in sausage meats, coated in breadcrumbs and then deep fried or baked until crispy",
+                "text": "A de-shelled hard boiled egg wrapped in sausage meat, coated in breadcrumbs and then deep fried or baked until crispy",
                 "is_correct": true,
                 "explanation": "Similar to deviled eggs insomuch as it's a popular food to have on a picnic."
             },
             {
-                "text": "An egg that has been picked with chilli peppers to make it more spicy. A popular bar snack.",
+                "text": "An egg that has been pickled with chilli peppers to make it more spicy. A popular bar snack.",
                 "explanation": "The pickled egg has fallen out of favour in recent decades at fish and chip shops. You can still (usually) find them today, but I doubt you'd see them at a bar."
             },
             {
@@ -1816,6 +1816,7 @@
             },
             {
                 "text": "Of low quality",
+                "explanation": "'That bridge looks dodgy, let's find another way across.'",
                 "is_correct": true
             }
         ],
