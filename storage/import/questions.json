@@ -1,5 +1,239 @@
 [
     {
+        "text": "What is the significance of Feb 14th in the UK?",
+        "type": "single",
+        "explanation": "This is kind of a sneaky question that can trip you up, but can actually come up in citizenship tests.",
+        "answers": [
+            {
+                "text": "Valentines Day",
+                "is_correct": true
+            },
+            {
+                "text": "St. George's Day",
+                "explanation": "St George is the Patron Saint of England. It is (normally) observed on April 23rd, but has no national holiday associated with it."
+            },
+            {
+                "text": "Pancake day",
+                "explanation": "More commonly referred to as Shrove Tuesday outside of the UK, this has more religious significance. It also has a 'floating' date due to its association with Easter - which also moves about on the calendar between years."
+            }
+        ],
+        "tags": [
+            "culture",
+            "history",
+            "religion"
+        ]
+    },
+    {
+        "text": "What are the two most common animals kept as pets in the UK?",
+        "type": "multiple",
+        "explanation": "Similar low percentages as the incorrect answers listed here include: Tortoises, turtles, Guinea pigs, horses, and ponies.",
+        "answers": [
+            {
+                "text": "Dogs",
+                "is_correct": true,
+                "explanation": "Dogs have an estimated 36% share of households in the UK, and is the largest percentage of animals kept as pets in the country."
+            },
+            {
+                "text": "Cats",
+                "is_correct": true,
+                "explanation": "Cats come in second place to dogs, but still make up a sizeable 29%"
+            },
+            {
+                "text": "Birds",
+                "explanation": "Birds make up only 3%"
+            },
+            {
+                "text": "Rabbits",
+                "explanation": "Rabbits make up only 1.6%"
+            },
+            {
+                "text": "Hamsters",
+                "explanation": "Hamsters make up only 1.5%"
+            }
+        ],
+        "tags": [
+            "culture"
+        ]
+    },
+    {
+        "text": "What date did Britain join World War II?",
+        "type": "single",
+        "answers": [
+            {
+                "text": "September 3rd, 1939",
+                "is_correct": true,
+                "explanation": "Following an ultimatum from Britain to Germany to cease military operations which was ignored when Germany invaded Poland two days prior, Britain and France declared war on Germany."
+            },
+            {
+                "text": "September 5th, 1939"
+            },
+            {
+                "text": "May 7th, 1945",
+                "explanation": "This was the date on which Germany signed an unconditional surrender."
+            },
+            {
+                "text": "August 6th, 1945",
+                "explanation": "The United States dropped the first atomic bomb on Hiroshima on this date."
+            }
+        ],
+        "tags": [
+            "history"
+        ]
+    },
+    {
+        "text": "On what date is VE Day observed?",
+        "type": "single",
+        "answers": [
+            {
+                "text": "8th May",
+                "explanation": "Some nations observe the date as 9th May as Germany's unconditional surrender came into effect at 23:01 on the 8th local time. For example, most Soviet countries (which are an hour or more ahead) will observe it on the following day instead.",
+                "is_correct": true
+            },
+            {
+                "text": "1st April",
+                "explanation": "Obviously April Fools Day, but this was also the date of the Battle of Okinawa in WW2"
+            },
+            {
+                "text": "5th May"
+            }
+        ],
+        "tags": [
+            "history"
+        ]
+    },
+    {
+        "text": "How long was The Hundred Year War?",
+        "type": "single",
+        "answers": [
+            {
+                "text": "100 Years"
+            },
+            {
+                "text": "116 Years",
+                "is_correct": true
+            },
+            {
+                "text": "96 Years"
+            },
+            {
+                "text": "115 Years"
+            }
+        ],
+        "tags": [
+            "history"
+        ]
+    },
+    {
+        "text": "In what year was the Magna Carta?",
+        "type": "single",
+        "explanation": "The Magna Carta established the principle that everyone, including the king, is subject to the law, thereby limiting royal power and laying a foundational stone for individual rights and due process.",
+        "answers": [
+            {
+                "text": "1215",
+                "is_correct": true
+            },
+            {
+                "text": "1216"
+            },
+            {
+                "text": "1214"
+            },
+            {
+                "text": "1066",
+                "explanation": "1066 is famous for the Battle of Hastings, that marked the Norman Invasion of Britain."
+            }
+        ],
+        "tags": [
+            "history"
+        ]
+    },
+    {
+        "text": "Which of the following countries are still part of The Commonwealth (in 2025)",
+        "type": "multiple",
+        "explanation": "The formal creation of the British Commonwealth of Nations was in 1931, but the modern iteration, simply yhr Commonwealth of Nations was formed in 1949. The origins of the Commonwealth evolved from the British Empire",
+        "answers": [
+            {
+                "text": "Hong Kong",
+                "explanation": "Hong Kong was leased from the Chinese on a 100 year basis, and fell back into Chinese rule in 1997 when the lease expired."
+            },
+            {
+                "text": "South Africa",
+                "explanation": "South Africa left the Commonwealth when it became a Republic in 1961, but has since rejoined in 1994 after the end of apartheid.",
+                "is_correct": true
+            },
+            {
+                "text": "Zimbabwe",
+                "explanation": "Was suspended from the Commonwealth in 2003 due to concerns over human rights violations, but is currently seeking to rejoin."
+            },
+            {
+                "text": "Canada",
+                "explanation": "Joined in 1931 on its original founding",
+                "is_correct": true
+            },
+            {
+                "text": "Australia",
+                "explanation": "Joined in 1931 on its original founding",
+                "is_correct": true
+            },
+            {
+                "text": "India",
+                "explanation": "Joined in 1947",
+                "is_correct": true
+            },
+            {
+                "text": "Ireland",
+                "explanation": "Left the Commonwealth in 1949"
+            }
+        ],
+        "tags": [
+            "history",
+            "geography"
+        ]
+    },
+    {
+        "text": "When was full electoral equality for women granted in England?",
+        "type": "single",
+        "answers": [
+            {
+                "text": "1918",
+                "explanation": "Women were first allowed to vote in 1918, but with strict guidelines. Namely that they had to be over 30 years old, met certain property qualifications, or were university graduates."
+            },
+            {
+                "text": "1928",
+                "is_correct": true,
+                "explanation": "The Representation of People Act of 1928"
+            },
+            {
+                "text": "1931"
+            }
+        ],
+        "tags": [
+            "history",
+            "politics"
+        ]
+    },
+    {
+        "text": "When was the Battle of Britain?",
+        "type": "single",
+        "explanation": "The Battle of Britain was the first major military campaign fought entirely in the air. It overlaps the period of large-scale night bombings of strategic and civilian centres, known as The Blitz.",
+        "answers": [
+            {
+                "text": "1940",
+                "explanation": "It officially ran from 10th July until 31st October 1940.",
+                "is_correct": true
+            },
+            {
+                "text": "1939"
+            },
+            {
+                "text": "1944"
+            }
+        ],
+        "tags": [
+            "history"
+        ]
+    },
+    {
         "text": "Which bands were principally involved with the Battle for Britpop in the 1990s?",
         "type": "multiple",
         "explanation": "Britpop brought alternative rock music into the mainstream, and is considered to be a musical reaction to the darker themes of the grunge movement which was happening around the same time in the US.",
