@@ -59,15 +59,12 @@ class DuplicateAnswerCleaner extends Command
             $keepId = array_shift($answerIds);
             $deleteIds = $answerIds;
 
-            if ($isDryRun) {
-                $this->info("    Text: '{$text}' (Count: {$count}). Would keep ID: {$keepId}. Would delete IDs: ".implode(', ', $deleteIds));
-            } else {
-                $this->info("    Text: '{$text}' (Count: {$count}). Keeping ID: {$keepId}. Deleting IDs: ".implode(', ', $deleteIds));
-            }
-
             if (! $isDryRun) {
+                $this->info("    Text: '{$text}' (Count: {$count}). Keeping ID: {$keepId}. Deleting IDs: ".implode(', ', $deleteIds));
                 Answer::whereIn('id', $deleteIds)->delete();
                 $this->line('    Successfully deleted '.count($deleteIds).' duplicate answers.');
+            } else {
+                $this->info("    Text: '{$text}' (Count: {$count}). Would keep ID: {$keepId}. Would delete IDs: ".implode(', ', $deleteIds));
             }
         }
     }
