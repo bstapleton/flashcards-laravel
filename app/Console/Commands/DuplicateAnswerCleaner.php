@@ -35,12 +35,25 @@ class DuplicateAnswerCleaner extends Command
     {
         $this->comment("Processing Question ID: {$question->id}");
 
-        $duplicatesFound = DB::table('answers')
-            ->select('text', DB::raw('COUNT(*) as count'), DB::raw('GROUP_CONCAT(id ORDER BY id ASC) as ids'))
-            ->where('flashcard_id', $question->id)
-            ->groupBy('text')
-            ->having('count', '>', 1)
-            ->get();
+        if (env('DB_CONNECTION') === 'pgsql') {
+            $duplicatesFound = DB::table('answers')
+                ->select(
+                    'text',
+                    DB::raw('COUNT(*) as count'),
+                    DB::raw("STRING_AGG(CAST(id AS TEXT), ',' ORDER BY id ASC) as ids")
+                )
+                ->where('question_id', $question->id)
+                ->groupBy('text')
+                ->having('count', '>', 1)
+                ->get();
+        } else {
+            $duplicatesFound = DB::table('answers')
+                ->select('text', DB::raw('COUNT(*) as count'), DB::raw('GROUP_CONCAT(id ORDER BY id ASC) as ids'))
+                ->where('flashcard_id', $question->id)
+                ->groupBy('text')
+                ->having('count', '>', 1)
+                ->get();
+        }
 
         if ($duplicatesFound->isEmpty()) {
             $this->line("  No duplicates found for Question ID: {$question->id}");
