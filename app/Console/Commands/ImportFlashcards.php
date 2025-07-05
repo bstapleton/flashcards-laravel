@@ -96,7 +96,7 @@ class ImportFlashcards extends Command
 
     private function createAnswer(Flashcard $flashcard, \stdClass $a): void
     {
-        $answer = Answer::updateOrCreate([
+        Answer::updateOrCreate([
             'text', $a->text,
         ], [
             'explanation' => property_exists($a, 'explanation') ? $a->explanation : null,
