@@ -42,7 +42,7 @@ class DuplicateAnswerCleaner extends Command
                     DB::raw('COUNT(*) as count'),
                     DB::raw("STRING_AGG(CAST(id AS TEXT), ',' ORDER BY id ASC) as ids")
                 )
-                ->where('question_id', $question->id)
+                ->where('flashcard_id', $question->id)
                 ->groupBy('text')
                 ->having('count', '>', 1)
                 ->get();
