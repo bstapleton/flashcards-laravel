@@ -96,14 +96,13 @@ class ImportFlashcards extends Command
 
     private function createAnswer(Flashcard $flashcard, \stdClass $a): void
     {
-        $answer = Answer::make([
-            'text' => $a->text,
+        Answer::updateOrCreate([
+            'text', $a->text,
+        ], [
             'explanation' => property_exists($a, 'explanation') ? $a->explanation : null,
             'is_correct' => $a->is_correct ?? false,
+            'flashcard_id' => $flashcard->id,
         ]);
-
-        $answer->flashcard()->associate($flashcard);
-        $answer->save();
     }
 
     private function handleTags(array $tags, Flashcard $flashcard): void
