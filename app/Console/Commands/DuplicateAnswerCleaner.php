@@ -44,7 +44,7 @@ class DuplicateAnswerCleaner extends Command
                 )
                 ->where('flashcard_id', $question->id)
                 ->groupBy('text')
-                ->having('count', '>', 1)
+                ->having(DB::raw('COUNT(*)'), '>', 1)
                 ->get();
         } else {
             $duplicatesFound = DB::table('answers')
