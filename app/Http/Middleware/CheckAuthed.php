@@ -2,8 +2,8 @@
 
 namespace App\Http\Middleware;
 
-use Symfony\Component\HttpFoundation\Response;
 use Laravel\Sanctum\Http\Middleware\EnsureFrontendRequestsAreStateful;
+use Symfony\Component\HttpFoundation\Response;
 
 class CheckAuthed extends EnsureFrontendRequestsAreStateful
 {
@@ -16,8 +16,8 @@ class CheckAuthed extends EnsureFrontendRequestsAreStateful
                 'data' => [
                     'title' => 'Unauthenticated',
                     'message' => 'You need to be logged in to use this',
-                    'code' => 'unauthenticated'
-                ]
+                    'code' => 'unauthenticated',
+                ],
             ], 401);
         }
 

@@ -13,6 +13,7 @@ use Illuminate\Database\Eloquent\Relations\Pivot;
 class RoleUser extends Pivot
 {
     public $timestamps = false;
+
     public $incrementing = true;
 
     protected $fillable = [
@@ -25,7 +26,7 @@ class RoleUser extends Pivot
     protected function casts(): array
     {
         return [
-            'auto_renew' => 'boolean'
+            'auto_renew' => 'boolean',
         ];
     }
 }

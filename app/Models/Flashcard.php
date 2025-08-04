@@ -17,19 +17,20 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Facades\Auth;
 
 /**
- * @property integer id
- * @property integer user_id
+ * @property int id
+ * @property int user_id
  * @property string text
  * @property Difficulty difficulty
  * @property string explanation
  * @property QuestionType type
- * @property boolean is_true
+ * @property bool is_true
  * @property Carbon last_seen_at
  * @property Carbon eligible_at
  * @property Status status
  *
  * @OA\Schema(
  *     required={"text"},
+ *
  *     @OA\Property(property="id", type="integer", example=1),
  *     @OA\Property(property="text", type="string"),
  *     @OA\Property(property="difficulty", type="string"),
@@ -96,7 +97,7 @@ class Flashcard extends Model
     public function getCorrectAnswersAttribute(): Collection
     {
         if ($this->type !== QuestionType::MULTIPLE) {
-            return new Collection();
+            return new Collection;
         }
 
         return $this->answers->where('is_correct');
@@ -117,13 +118,13 @@ class Flashcard extends Model
         return QuestionType::SINGLE;
     }
 
-    public function getEligibleAtAttribute(User $user = null): Carbon
+    public function getEligibleAtAttribute(?User $user = null): Carbon
     {
-        if (!$user) {
+        if (! $user) {
             $user = Auth::user();
         }
 
-        if (!$this->last_seen_at) {
+        if (! $this->last_seen_at) {
             return Carbon::now();
         }
 

@@ -11,11 +11,11 @@ use League\Fractal\TransformerAbstract;
 /**
  * This transformer is used to 'hide' certain aspects of the flashcard from the consumer, making it harder to cheat.
  */
-class FlashcardTransformer extends TransformerAbstract
+class UnattemptedQuestionTransformer extends TransformerAbstract
 {
     public function transform(Flashcard $flashcard): array
     {
-        $data =  [
+        return [
             'id' => $flashcard->id,
             'type' => $flashcard->type->value,
             'status' => $flashcard->status->value,
@@ -24,16 +24,14 @@ class FlashcardTransformer extends TransformerAbstract
             'difficulty' => $flashcard->difficulty,
             'eligible_at' => Carbon::parse($flashcard->eligible_at)->toIso8601String(),
             'tags' => $flashcard->tags->map(function (Tag $tag) {
-                return (new TagTransformer())->transform($tag);
+                return (new TagTransformer)->transform($tag);
             }),
             'answers' => $flashcard->answers->map(function (Answer $answer) {
                 return [
                     'id' => $answer->id,
                     'text' => $answer->text,
                 ];
-            })
+            }),
         ];
-
-        return $data;
     }
 }

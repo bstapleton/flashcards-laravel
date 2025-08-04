@@ -10,6 +10,7 @@ use Illuminate\Http\JsonResponse;
  *    title="Flashcards API",
  *    version="1.0.0",
  * )
+ *
  * @OA\SecurityScheme(
  *     type="http",
  *     securityScheme="bearerAuth",
@@ -27,5 +28,16 @@ abstract class Controller
     protected function handleForbidden(): JsonResponse
     {
         return ApiResponse::error('Forbidden', 'You do not have permission to perform this action', 'unauthorized', 403);
+    }
+
+    protected function addSourceMetaData(?bool $isCached = false): ?array
+    {
+        if (env('APP_ENV') !== 'production') {
+            return [
+                'data_source' => $isCached ? 'cache' : 'database',
+            ];
+        }
+
+        return null;
     }
 }

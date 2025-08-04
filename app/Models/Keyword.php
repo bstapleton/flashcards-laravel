@@ -14,6 +14,7 @@ class Keyword extends Model
     use HasFactory;
 
     protected $table = 'attempt_keyword';
+
     public $timestamps = false;
 
     protected $fillable = [

@@ -2,8 +2,6 @@
 
 namespace App\Exceptions;
 
-use Throwable;
-
 class LessThanOneCorrectAnswerException extends BaseException
 {
     public function __construct()

@@ -12,8 +12,8 @@ use App\Helpers\Boolean;
 use App\Http\Requests\SuggestionRequest;
 use App\Models\Flashcard;
 use App\Services\FlashcardService;
-use App\Transformers\FlashcardFullTransformer;
-use App\Transformers\FlashcardTransformer;
+use App\Transformers\QuestionTransformer;
+use App\Transformers\UnattemptedQuestionTransformer;
 use App\Transformers\ScorecardTransformer;
 use GeminiAPI\Resources\Parts\TextPart;
 use Illuminate\Contracts\Filesystem\FileNotFoundException;
@@ -41,6 +41,7 @@ class FlashcardController extends Controller
      *     summary="List all active flashcards",
      *     description="Return all flashcards that are not in the graveyard, for the current user, paginated",
      *     tags={"flashcard"},
+     *
      *     @OA\Response(response="200", description="Success"),
      *     @OA\Response(response="403", description="Not permitted"),
      *     security={{"bearerAuth":{}}}
@@ -54,7 +55,7 @@ class FlashcardController extends Controller
             return $this->handleForbidden();
         }
 
-        return fractal($flashcards, new FlashcardTransformer())->respond();
+        return fractal($flashcards, new UnattemptedQuestionTransformer)->respond();
     }
 
     /**
@@ -63,6 +64,7 @@ class FlashcardController extends Controller
      *     summary="List all flashcards",
      *     description="Return all flashcards - alive or buried - for the current user, paginated",
      *     tags={"flashcard"},
+     *
      *     @OA\Response(response="200", description="Success"),
      *     @OA\Response(response="403", description="Not permitted"),
      *     security={{"bearerAuth":{}}}
@@ -76,7 +78,7 @@ class FlashcardController extends Controller
             return $this->handleForbidden();
         }
 
-        return fractal($flashcards, new FlashcardTransformer())->respond();
+        return fractal($flashcards, new UnattemptedQuestionTransformer)->respond();
     }
 
     /**
@@ -84,7 +86,9 @@ class FlashcardController extends Controller
      *     path="/api/flashcards/{flashcard}",
      *     summary="Show a flashcard",
      *     tags={"flashcard"},
+     *
      *     @OA\Parameter(name="flashcard", in="path", @OA\Schema(type="integer")),
+     *
      *     @OA\Response(response="200", description="Success"),
      *     @OA\Response(response="404", description="Model not found"),
      *     @OA\Response(response="403", description="Not permitted"),
@@ -101,17 +105,21 @@ class FlashcardController extends Controller
             return $this->handleForbidden();
         }
 
-        return fractal($flashcardResponse, new FlashcardFullTransformer())->respond();
+        return fractal($flashcardResponse, new QuestionTransformer)->respond();
     }
+
     /**
      * @OA\Post(
      *     path="/api/flashcards",
      *     summary="Create flashcard",
      *     tags={"flashcard"},
+     *
      *     @OA\RequestBody(
      *         required=true,
+     *
      *         @OA\JsonContent(
      *             required={"text"},
+     *
      *             @OA\Property(property="text", type="string", example="What colour is the sky?"),
      *             @OA\Property(property="is_true", type="boolean"),
      *             @OA\Property(property="explanation", type="string"),
@@ -119,6 +127,7 @@ class FlashcardController extends Controller
      *             @OA\Property(property="tags", type="array", @OA\Items(ref="#/components/schemas/Tag"))
      *         )
      *     ),
+     *
      *     @OA\Response(response="200", description="Success"),
      *     @OA\Response(response="400", description="Free account limitation reached"),
      *     @OA\Response(response="403", description="Not permitted"),
@@ -131,7 +140,7 @@ class FlashcardController extends Controller
         $request->validate([
             'text' => 'required|max:1024',
             'is_true' => 'nullable|required_without:answers',
-            'answers' => 'nullable|required_without:is_true'
+            'answers' => 'nullable|required_without:is_true',
         ]);
 
         try {
@@ -160,22 +169,26 @@ class FlashcardController extends Controller
             );
         }
 
-        return fractal($flashcardResponse, new FlashcardFullTransformer())->respond();
+        return fractal($flashcardResponse, new QuestionTransformer)->respond();
     }
-
 
     /**
      * @OA\Patch(
      *     path="/api/flashcards/{flashcard}",
      *     summary="Update flashcard",
      *     tags={"flashcard"},
+     *
      *     @OA\Parameter(name="flashcard", in="path", @OA\Schema(type="integer")),
+     *
      *     @OA\RequestBody(
      *         required=true,
+     *
      *         @OA\JsonContent(
+     *
      *             @OA\Property(property="text", type="string")
      *         )
      *     ),
+     *
      *     @OA\Response(response="200", description="Success"),
      *     @OA\Response(response="404", description="Model not found"),
      *     @OA\Response(response="403", description="Not permitted"),
@@ -198,7 +211,7 @@ class FlashcardController extends Controller
             return $this->handleForbidden();
         }
 
-        return fractal($flashcardResponse, new FlashcardFullTransformer())->respond();
+        return fractal($flashcardResponse, new QuestionTransformer)->respond();
     }
 
     /**
@@ -206,7 +219,9 @@ class FlashcardController extends Controller
      *     path="/api/flashcards/{flashcard}",
      *     summary="Delete flashcard",
      *     tags={"flashcard"},
+     *
      *     @OA\Parameter(name="flashcard", in="path", @OA\Schema(type="integer")),
+     *
      *     @OA\Response(response="204", description="No content"),
      *     @OA\Response(response="404", description="Model not found"),
      *     @OA\Response(response="403", description="Not permitted"),
@@ -232,6 +247,7 @@ class FlashcardController extends Controller
      *     summary="Get all flashcards currently in the graveyard",
      *     description="'Buried' flashcards are those which have been anwered correctly on the Hard difficulty",
      *     tags={"flashcard"},
+     *
      *     @OA\Response(response="200", description="Success"),
      *     @OA\Response(response="403", description="Not permitted"),
      *     security={{"bearerAuth":{}}}
@@ -245,7 +261,7 @@ class FlashcardController extends Controller
             return $this->handleForbidden();
         }
 
-        return fractal($flashcards, new FlashcardTransformer())->respond();
+        return fractal($flashcards, new UnattemptedQuestionTransformer)->respond();
     }
 
     /**
@@ -254,6 +270,7 @@ class FlashcardController extends Controller
      *     description="Gets a random flashcard, regardless of difficulty or tags",
      *     summary="Get a random flashcard",
      *     tags={"flashcard"},
+     *
      *     @OA\Response(response="200", description="Success"),
      *     @OA\Response(response="404", description="Model not found"),
      *     @OA\Response(response="403", description="Not permitted"),
@@ -274,14 +291,15 @@ class FlashcardController extends Controller
                     'code' => 'nothing_eligible',
                     'next_eligible_at' => $e->getEligibleAt()
                         ? $e->getEligibleAt()->diffForHumans()
-                        : null
-                ]
+                        : null,
+                ],
             ]);
         } catch (UnauthorizedException) {
             return $this->handleForbidden();
         }
 
-        return fractal($flashcardResponse, new FlashcardTransformer())->respond();
+        return fractal($flashcardResponse, new UnattemptedQuestionTransformer)
+            ->respond();
     }
 
     /**
@@ -290,7 +308,9 @@ class FlashcardController extends Controller
      *     description="Revive a flashcard from the graveyard back to the easy difficulty. This will additionally remove it's hidden status if it had one.",
      *     summary="Resurrect a buried flashcard",
      *     tags={"flashcard"},
+     *
      *     @OA\Parameter(name="flashcard", in="path", @OA\Schema(type="integer")),
+     *
      *     @OA\Response(response="200", description="Success"),
      *     @OA\Response(response="404", description="Model not found"),
      *     @OA\Response(response="403", description="Not permitted"),
@@ -307,7 +327,7 @@ class FlashcardController extends Controller
             return $this->handleForbidden();
         }
 
-        return fractal($flashcardResponse, new FlashcardTransformer())->respond();
+        return fractal($flashcardResponse, new UnattemptedQuestionTransformer)->respond();
     }
 
     /**
@@ -316,7 +336,9 @@ class FlashcardController extends Controller
      *     description="Hide a flashcard from the pool, even if it's eligible",
      *     summary="Stop a flashcard from showing up when drawing a random question to answer",
      *     tags={"flashcard"},
+     *
      *     @OA\Parameter(name="flashcard", in="path", @OA\Schema(type="integer")),
+     *
      *     @OA\Response(response="200", description="Success"),
      *     @OA\Response(response="400", description="Cannot change status"),
      *     @OA\Response(response="404", description="Model not found"),
@@ -340,7 +362,7 @@ class FlashcardController extends Controller
             return $this->handleForbidden();
         }
 
-        return fractal($flashcardResponse, new FlashcardTransformer())->respond();
+        return fractal($flashcardResponse, new UnattemptedQuestionTransformer)->respond();
     }
 
     /**
@@ -349,7 +371,9 @@ class FlashcardController extends Controller
      *     description="Re-enable a flashcard for eligibility to be drawn from the pool",
      *     summary="Allow the flashcard to be drawn again when drawing a random question to answer",
      *     tags={"flashcard"},
+     *
      *     @OA\Parameter(name="flashcard", in="path", @OA\Schema(type="integer")),
+     *
      *     @OA\Response(response="200", description="Success"),
      *     @OA\Response(response="400", description="Cannot change status"),
      *     @OA\Response(response="404", description="Model not found"),
@@ -373,7 +397,7 @@ class FlashcardController extends Controller
             return $this->handleForbidden();
         }
 
-        return fractal($flashcardResponse, new FlashcardTransformer())->respond();
+        return fractal($flashcardResponse, new UnattemptedQuestionTransformer)->respond();
     }
 
     /**
@@ -382,13 +406,18 @@ class FlashcardController extends Controller
      *     description="Attempt to answer the question and be judged accordingly",
      *     summary="Pass an answer or set of answers to the question",
      *     tags={"flashcard"},
+     *
      *     @OA\Parameter(name="flashcard", in="path", @OA\Schema(type="integer")),
+     *
      *     @OA\RequestBody(
      *         required=true,
+     *
      *         @OA\JsonContent(
+     *
      *             @OA\Property(property="answers", type="array", @OA\Items(type="integer"))
      *         )
      *     ),
+     *
      *     @OA\Response(response="200", description="Success"),
      *     @OA\Response(response="404", description="Model not found"),
      *     @OA\Response(response="403", description="Not permitted"),
@@ -405,15 +434,15 @@ class FlashcardController extends Controller
             return $this->handleForbidden();
         }
 
-        return fractal($scorecardResponse, new ScorecardTransformer())->respond();
+        return fractal($scorecardResponse, new ScorecardTransformer)->respond();
     }
-
 
     /**
      * @OA\Get(
      *     path="/api/flashcards/drafts",
      *     summary="Get all flashcards that are missing some data that stops them from being published",
      *     tags={"flashcard"},
+     *
      *     @OA\Response(response="200", description="Success"),
      *     @OA\Response(response="403", description="Not permitted"),
      *     security={{"bearerAuth":{}}}
@@ -427,7 +456,7 @@ class FlashcardController extends Controller
             return $this->handleForbidden();
         }
 
-        return fractal($flashcards, new FlashcardTransformer())->respond();
+        return fractal($flashcards, new UnattemptedQuestionTransformer)->respond();
     }
 
     /**
@@ -435,6 +464,7 @@ class FlashcardController extends Controller
      *     path="/api/flashcards/hidden",
      *     summary="Get all flashcards that have been hidden by the user",
      *     tags={"flashcard"},
+     *
      *     @OA\Response(response="200", description="Success"),
      *     @OA\Response(response="403", description="Not permitted"),
      *     security={{"bearerAuth":{}}}
@@ -448,7 +478,7 @@ class FlashcardController extends Controller
             return $this->handleForbidden();
         }
 
-        return fractal($flashcards, new FlashcardTransformer())->respond();
+        return fractal($flashcards, new UnattemptedQuestionTransformer)->respond();
     }
 
     /**
@@ -501,7 +531,9 @@ class FlashcardController extends Controller
      *     path="/api/flashcards/import",
      *     summary="Import flashcards",
      *     tags={"flashcard"},
+     *
      *     @OA\Parameter(name="topic", in="query", required=true, @OA\Schema(type="string")),
+     *
      *     @OA\Response(response="200", description="Success"),
      *     @OA\Response(response="401", description="Not authenticated"),
      *     @OA\Response(response="404", description="Import file not found"),
@@ -534,8 +566,8 @@ class FlashcardController extends Controller
                 'imported' => $importCount,
                 'remaining' => $request->user()->roles()->where('code', 'advanced_user')->exists()
                     ? null
-                    : config('flashcard.free_account_limit') - $request->user()->flashcards()->count()
-            ]
+                    : config('flashcard.free_account_limit') - $request->user()->flashcards()->count(),
+            ],
         ], 200);
     }
 }

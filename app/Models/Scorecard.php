@@ -12,8 +12,11 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 class Scorecard extends Attempt
 {
     use HasFactory;
+
     private int $totalScore;
+
     private Difficulty $newDifficulty;
+
     private Carbon $eligible_at;
 
     public function __construct(array $attributes = [])

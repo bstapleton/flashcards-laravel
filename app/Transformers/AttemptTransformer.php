@@ -31,10 +31,10 @@ class AttemptTransformer extends TransformerAbstract
                 return $keyword->name;
             }),
             'older_attempts' => $attempt->older_attempts ? $attempt->older_attempts->map(function (Attempt $olderAttempt) {
-                return (new HistoricAttemptTransformer())->transform($olderAttempt);
+                return (new HistoricAttemptTransformer)->transform($olderAttempt);
             }) : [],
             'newer_attempts' => $attempt->newer_attempts ? $attempt->newer_attempts->map(function (Attempt $newerAttempt) {
-                return (new HistoricAttemptTransformer())->transform($newerAttempt);
+                return (new HistoricAttemptTransformer)->transform($newerAttempt);
             }) : [],
         ];
     }

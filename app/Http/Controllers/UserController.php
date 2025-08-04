@@ -20,16 +20,20 @@ class UserController extends Controller
      *     path="/api/register",
      *     summary="Register a new user",
      *     tags={"auth"},
+     *
      *     @OA\RequestBody(
      *         required=true,
+     *
      *         @OA\JsonContent(
      *             required={"username", "password", "password_confirmation", "display_name"},
+     *
      *             @OA\Property(property="username", type="string"),
      *             @OA\Property(property="password", type="password"),
      *             @OA\Property(property="password_confirmation", type="password"),
      *             @OA\Property(property="display_name", type="string"),
      *         )
      *     ),
+     *
      *     @OA\Response(response="201", description="User registered successfully"),
      *     @OA\Response(response="422", description="Validation errors")
      * )
@@ -57,7 +61,9 @@ class UserController extends Controller
      *     path="/api/user/{user}",
      *     summary="Get logged-in user details",
      *     tags={"auth"},
+     *
      *     @OA\Parameter(name="user", in="path", @OA\Schema(type="integer")),
+     *
      *     @OA\Response(response="200", description="Success"),
      *     @OA\Response(response="401", description="Unauthorised"),
      *     security={{"bearerAuth":{}}}
@@ -65,7 +71,7 @@ class UserController extends Controller
      */
     public function show(Request $request): JsonResponse
     {
-        return fractal($request->user(), new UserTransformer())->respond();
+        return fractal($request->user(), new UserTransformer)->respond();
     }
 
     /**
@@ -73,6 +79,7 @@ class UserController extends Controller
      *     path="/api/user/count_questions",
      *     summary="Get the number of flashcards the user has made",
      *     tags={"auth"},
+     *
      *     @OA\Response(response="200", description="Success"),
      *     @OA\Response(response="401", description="Unauthorised"),
      *     security={{"bearerAuth":{}}}
@@ -85,8 +92,8 @@ class UserController extends Controller
                 'count' => $request->user()->flashcards()->count(),
                 'remaining' => $request->user()->roles()->where('code', 'advanced_user')->exists()
                     ? null
-                    : config('flashcard.free_account_limit') - $request->user()->flashcards()->count()
-            ]
+                    : config('flashcard.free_account_limit') - $request->user()->flashcards()->count(),
+            ],
         ]);
     }
 }

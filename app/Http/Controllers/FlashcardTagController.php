@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Services\FlashcardService;
-use App\Transformers\FlashcardTransformer;
+use App\Transformers\UnattemptedQuestionTransformer;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -24,8 +24,10 @@ class FlashcardTagController extends Controller
      *     summary="Attach a tag to a flashcard",
      *     description="Attach a tag",
      *     tags={"flashcard"},
+     *
      *     @OA\Parameter(name="flashcard", in="path", @OA\Schema(type="integer")),
      *     @OA\Parameter(name="tag", in="path", @OA\Schema(type="integer")),
+     *
      *     @OA\Response(response="200", description="Success"),
      *     @OA\Response(response="404", description="Model not found"),
      *     @OA\Response(response="403", description="Not permitted"),
@@ -42,7 +44,7 @@ class FlashcardTagController extends Controller
             return $this->handleForbidden();
         }
 
-        return fractal($flashcardResponse, new FlashcardTransformer())->respond();
+        return fractal($flashcardResponse, new UnattemptedQuestionTransformer)->respond();
     }
 
     /**
@@ -51,8 +53,10 @@ class FlashcardTagController extends Controller
      *     description="Detach a tag from a flashcard",
      *     summary="Detach a tag",
      *     tags={"flashcard"},
+     *
      *     @OA\Parameter(name="flashcard", in="path", @OA\Schema(type="integer")),
      *     @OA\Parameter(name="tag", in="path", @OA\Schema(type="integer")),
+     *
      *     @OA\Response(response="200", description="Success"),
      *     @OA\Response(response="404", description="Model not found"),
      *     @OA\Response(response="403", description="Not permitted"),
@@ -69,6 +73,6 @@ class FlashcardTagController extends Controller
             return $this->handleForbidden();
         }
 
-        return fractal($flashcardResponse, new FlashcardTransformer())->respond();
+        return fractal($flashcardResponse, new UnattemptedQuestionTransformer)->respond();
     }
 }

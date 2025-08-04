@@ -87,10 +87,6 @@ class FlashcardPolicy
 
     /**
      * Check if the request user is the owner of the model
-     *
-     * @param User $user
-     * @param Flashcard $flashcard
-     * @return Response
      */
     private function currentUser(User $user, Flashcard $flashcard): Response
     {

@@ -30,6 +30,7 @@ use Illuminate\Support\Collection;
 class Attempt extends Model
 {
     use HasFactory;
+
     public $timestamps = false;
 
     protected $fillable = [
@@ -64,17 +65,17 @@ class Attempt extends Model
 
         foreach ($answers as $key => $answer) {
             // Check for missing properties
-            if (!isset($answer['was_selected'], $answer['is_correct'], $answer['text'])) {
+            if (! isset($answer['was_selected'], $answer['is_correct'], $answer['text'])) {
                 throw new \RuntimeException('Missing answer properties');
             }
 
             // Check for malformed content
-            if (!is_bool($answer['was_selected']) || !is_bool($answer['is_correct']) || !is_string($answer['text'])) {
+            if (! is_bool($answer['was_selected']) || ! is_bool($answer['is_correct']) || ! is_string($answer['text'])) {
                 throw new \RuntimeException('Invalid answer format');
             }
 
             // Map to the correct model
-            $attemptAnswer = new AttemptAnswer();
+            $attemptAnswer = new AttemptAnswer;
             $attemptAnswer->setIsCorrect($answer['is_correct']);
             $attemptAnswer->setWasSelected($answer['was_selected']);
             $attemptAnswer->setText($answer['text']);

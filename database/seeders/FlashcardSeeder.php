@@ -29,11 +29,11 @@ class FlashcardSeeder extends Seeder
             // Create 1 correct answer
             Answer::factory()->correct()->create([
                 'flashcard_id' => $flashcard->id,
-                'text' => 'correct'
+                'text' => 'correct',
             ]);
 
             Tag::factory()->count(3)->create([
-                'user_id' => $flashcard->user_id
+                'user_id' => $flashcard->user_id,
             ]);
         });
 
@@ -55,7 +55,7 @@ class FlashcardSeeder extends Seeder
         // Create 2 correct answers
         Answer::factory()->correct()->count(2)->create([
             'flashcard_id' => $multiChoiceFlashcard->id,
-            'text' => 'correct'
+            'text' => 'correct',
         ]);
 
         // Generate some old flashcards that the user has seen before

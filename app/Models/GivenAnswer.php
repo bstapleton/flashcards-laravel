@@ -5,6 +5,7 @@ namespace App\Models;
 class GivenAnswer extends AttemptAnswer
 {
     private int $id;
+
     private ?string $explanation;
 
     public function getId(): int

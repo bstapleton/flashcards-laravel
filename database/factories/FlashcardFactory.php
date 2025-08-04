@@ -46,7 +46,7 @@ class FlashcardFactory extends Factory
     {
         return $this->state(function (array $attributes) {
             return [
-                'difficulty' => Difficulty::EASY
+                'difficulty' => Difficulty::EASY,
             ];
         });
     }
@@ -55,7 +55,7 @@ class FlashcardFactory extends Factory
     {
         return $this->state(function (array $attributes) {
             return [
-                'difficulty' => Difficulty::MEDIUM
+                'difficulty' => Difficulty::MEDIUM,
             ];
         });
     }
@@ -64,7 +64,7 @@ class FlashcardFactory extends Factory
     {
         return $this->state(function (array $attributes) {
             return [
-                'difficulty' => Difficulty::HARD
+                'difficulty' => Difficulty::HARD,
             ];
         });
     }
@@ -73,7 +73,7 @@ class FlashcardFactory extends Factory
     {
         return $this->state(function (array $attributes) {
             return [
-                'difficulty' => Difficulty::BURIED
+                'difficulty' => Difficulty::BURIED,
             ];
         });
     }
@@ -82,7 +82,7 @@ class FlashcardFactory extends Factory
     {
         return $this->state(function (array $attributes) {
             return [
-                'status' => Status::DRAFT
+                'status' => Status::DRAFT,
             ];
         });
     }
@@ -91,7 +91,7 @@ class FlashcardFactory extends Factory
     {
         return $this->state(function (array $attributes) {
             return [
-                'status' => Status::PUBLISHED
+                'status' => Status::PUBLISHED,
             ];
         });
     }
@@ -100,7 +100,7 @@ class FlashcardFactory extends Factory
     {
         return $this->state(function (array $attributes) {
             return [
-                'status' => Status::HIDDEN
+                'status' => Status::HIDDEN,
             ];
         });
     }

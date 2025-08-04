@@ -17,14 +17,19 @@ class AnswerController extends Controller
      *     path="/api/answers",
      *     summary="Create an answer",
      *     tags={"answer"},
+     *
      *     @OA\Parameter(name="flashcardId", in="query", required=true, @OA\Schema(type="integer")),
+     *
      *     @OA\RequestBody(
+     *
      *         @OA\JsonContent(
+     *
      *             @OA\Property(property="text", type="string"),
      *             @OA\Property(property="explanation", type="string"),
      *             @OA\Property(property="is_correct", type="boolean")
      *         )
      *     ),
+     *
      *     @OA\Response(response="200", description="Success"),
      *     @OA\Response(response="404", description="Flashcard not found"),
      *     security={{"bearerAuth":{}}}
@@ -33,7 +38,7 @@ class AnswerController extends Controller
     public function store(FormRequest $request)
     {
         $flashcard = Flashcard::find($request->get('flashcardId'));
-        if (!$flashcard) {
+        if (! $flashcard) {
             return response()->json(ModelNotFoundException::class, 404);
         }
 
@@ -44,7 +49,7 @@ class AnswerController extends Controller
         $answer->flashcard()->associate($flashcard);
         $answer->save();
 
-        return fractal($answer, new AnswerTransformer())->respond();
+        return fractal($answer, new AnswerTransformer)->respond();
     }
 
     /**
@@ -52,7 +57,9 @@ class AnswerController extends Controller
      *     path="/api/answers/{id}",
      *     summary="Get an answer",
      *     tags={"answer"},
+     *
      *     @OA\Parameter(name="id", in="path", @OA\Schema(type="integer")),
+     *
      *     @OA\Response(response="200", description="Success"),
      *     @OA\Response(response="404", description="Answer not found"),
      *     security={{"bearerAuth":{}}}
@@ -60,7 +67,7 @@ class AnswerController extends Controller
      */
     public function show(Answer $answer): JsonResponse
     {
-        return fractal($answer, new AnswerTransformer())->respond();
+        return fractal($answer, new AnswerTransformer)->respond();
     }
 
     /**
@@ -68,14 +75,19 @@ class AnswerController extends Controller
      *     path="/api/answers/{id}",
      *     summary="Update an answer",
      *     tags={"answer"},
+     *
      *     @OA\Parameter(name="id", in="path", @OA\Schema(type="integer")),
+     *
      *     @OA\RequestBody(
+     *
      *         @OA\JsonContent(
+     *
      *             @OA\Property(property="text", type="string"),
      *             @OA\Property(property="explanation", type="string"),
      *             @OA\Property(property="is_correct", type="boolean")
      *         )
      *     ),
+     *
      *     @OA\Response(response="200", description="Success"),
      *     security={{"bearerAuth":{}}}
      * )
@@ -84,7 +96,7 @@ class AnswerController extends Controller
     {
         $answer->update($request->all());
 
-        return fractal($answer, new AnswerTransformer())->respond();
+        return fractal($answer, new AnswerTransformer)->respond();
     }
 
     /**
@@ -92,7 +104,9 @@ class AnswerController extends Controller
      *     path="/api/answers/{id}",
      *     summary="Delete an answer",
      *     tags={"answer"},
+     *
      *     @OA\Parameter(name="id", in="path", @OA\Schema(type="integer")),
+     *
      *     @OA\Response(response="204", description="No content"),
      *     security={{"bearerAuth":{}}}
      * )
