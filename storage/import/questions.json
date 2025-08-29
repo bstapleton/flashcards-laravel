@@ -1384,7 +1384,8 @@
             },
             {
                 "text": "Sausages with mashed potatoes",
-                "explanation": "It is usually served with onion gravy, but alternatively can be served with fried onions and peas."
+                "explanation": "It is usually served with onion gravy, but alternatively can be served with fried onions and peas.",
+                "is_correct": true
             }
         ],
         "tags": [
@@ -1803,8 +1804,8 @@
     {
         "text": "Moolah, dosh, dough, and mufti are synonyms for money.",
         "type": "statement",
-        "is_true": false,
-        "explanation": "Moolah, dosh and dough are all words that mean money. Mufti is the odd one out, which means a non-uniform day in schools.",
+        "is_true": true,
+        "explanation": "Moolah, dosh and dough are all words that mean money.",
         "tags": [
             "language",
             "slang"
