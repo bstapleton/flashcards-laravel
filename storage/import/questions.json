@@ -1802,10 +1802,9 @@
         ]
     },
     {
-        "text": "Moolah, dosh, dough, and mufti are synonyms for money.",
+        "text": "Moolah, dosh, and dough are synonyms for money.",
         "type": "statement",
         "is_true": true,
-        "explanation": "Moolah, dosh and dough are all words that mean money.",
         "tags": [
             "language",
             "slang"
