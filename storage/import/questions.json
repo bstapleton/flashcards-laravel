@@ -1,5 +1,134 @@
 [
     {
+        "text": "What products and services carry a zero rate on VAT in the UK?",
+        "type": "multiple",
+        "explanation": "FYI: There are more zero-rated products and services than those that are listed as options here.",
+        "answers": [
+            {
+                "text": "Transportation",
+                "is_correct": true
+            },
+            {
+                "text": "Books",
+                "is+correct": true
+            },
+            {
+                "text": "Clothing",
+                "is_correct": true
+            },
+            {
+                "text": "Medication",
+                "is_correct": true
+            },
+            {
+                "text": "Accommodation",
+                "is_correct": false,
+                "explanation": "Building construction is subject to zero rated VAT, but accommodation is not."
+            }
+        ],
+        "tags": [
+            "finance"
+        ]
+    },
+    {
+        "text": "What products and services carry the reduced rate of VAT in the UK?",
+        "type": "multiple",
+        "explanation": "FYI: There are more reduced-rate products and services than those that are listed as options here.",
+        "answers": [
+            {
+                "text": "Mobility aids",
+                "is_correct": true
+            },
+            {
+                "text": "Domestic fuel and power",
+                "is_correct": true,
+                "explanation": "This covers electricity, gas, oil for heating, as well as solid fuels."
+            },
+            {
+                "text": "Residential conversions",
+                "is_correct": true,
+                "explanation": "Construction of building is zero-rated, but residential conversions of existing property is at a reduced VAT rate."
+            },
+            {
+                "text": "Sewerage services",
+                "is_correct": false
+            }
+        ],
+        "tags": [
+            "finance"
+        ]
+    },
+    {
+        "text": "In what year did the UK change its currency to the decimal system it currently uses today?",
+        "type": "single",
+        "answers": [
+            {
+                "text": "1971",
+                "is_correct": true,
+                "explanation": "The switch occurred on 15th February 1971, and was known as Decimal Day"
+            },
+            {
+                "text": "1969",
+                "is_correct": false
+            },
+            {
+                "text": "1972",
+                "is_correct": false
+            },
+            {
+                "text": "1899",
+                "is_correct": false
+            }
+        ],
+        "tags": [
+            "finance",
+            "history"
+        ]
+    },
+    {
+        "text": "What products and services carry the standard rate of VAT in the UK?",
+        "type": "multiple"
+    },
+    {
+        "text": "The UK has Value-added Tax (VAT) rules",
+        "type": "statement",
+        "is_true": true,
+        "explanation": "It has three rating bands for different products and services: Standard rate, reduced rate and zero rate. The standard and reduced rates don't OFTEN change, but take it with a grain of salt that at time of writing, the standard rate is 20% and the reduced rate is 5%.",
+        "tags": [
+            "politics",
+            "finance"
+        ]
+    },
+    {
+        "text": "Which of the following are traditional British snacks",
+        "type": "multiple",
+        "answers": [
+            {
+                "text": "Jelly babies",
+                "is_correct": true
+            },
+            {
+                "text": "Pontefract cakes",
+                "is_correct": true,
+                "explanation": "Also known as Pomfret cakes and Pomfrey cakes, these are coin-shaped liquorice originally from the town of Pontefract in West Yorkshire, and while the exact origins are uncertain, records date it back to as early as the 16th century!"
+            },
+            {
+                "text": "Jaffa cakes",
+                "is_correct": true,
+                "explanation": "McVitie's, didn't register the the name, so other brands are able to make 'jaffa cakes'. Famously involved in a lawsuit around taxation rules, where HM Customs argued it should be taxed as a chocolate-covered biscuit rather than a cake. In the end they were ruled as cakes and as such do not carry Value Added Tax (VAT)."
+            },
+            {
+                "text": "Hot dogs",
+                "is_correct": false,
+                "explanation": "Frankfurters from - you guessed it - Frankfurt in Germany"
+            }
+        ],
+        "tags": [
+            "culture",
+            "food"
+        ]
+    },
+    {
         "text": "What is the significance of Feb 14th in the UK?",
         "type": "single",
         "explanation": "This is kind of a sneaky question that can trip you up, but can actually come up in citizenship tests.",
