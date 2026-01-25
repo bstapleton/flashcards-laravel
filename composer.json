@@ -5,7 +5,7 @@
     "keywords": ["laravel", "framework"],
     "license": "MIT",
     "require": {
-        "php": "^8.3",
+        "php": "^8.5",
         "darkaonline/l5-swagger": "^8.6",
         "gemini-api-php/client": "^1.7",
         "laravel/framework": "^12.0",
@@ -13,7 +13,8 @@
         "laravel/tinker": "^2.9",
         "red-explosion/laravel-sqids": "^1.2",
         "spatie/laravel-fractal": "^6.2.0",
-        "tymon/jwt-auth": "^2.1"
+        "tymon/jwt-auth": "^2.1",
+        "ext-pdo": "*"
     },
     "require-dev": {
         "fakerphp/faker": "^1.23",
