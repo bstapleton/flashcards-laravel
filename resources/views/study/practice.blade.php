@@ -32,9 +32,9 @@
                                     <div class="space-y-3">
                                         @foreach($flashcard->answers as $index => $answer)
                                             <label class="flex items-center p-4 border border-gray-200 rounded-lg cursor-pointer hover:bg-gray-50 transition-colors">
-                                                <input type="checkbox" 
-                                                       name="answers[]" 
-                                                       value="{{ $answer->id }}" 
+                                                <input type="checkbox"
+                                                       name="answers[]"
+                                                       value="{{ $answer->id }}"
                                                        class="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded">
                                                 <div class="ml-3">
                                                     <p class="text-sm font-medium text-gray-900">
@@ -44,7 +44,7 @@
                                             </label>
                                         @endforeach
                                     </div>
-                                    
+
                                     <div class="mt-6">
                                         <button type="submit"
                                                 class="w-full flex justify-center py-3 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
@@ -58,9 +58,9 @@
                                     @csrf
                                     <div class="space-y-3">
                                         <label class="flex items-center p-4 border border-gray-200 rounded-lg cursor-pointer hover:bg-gray-50 transition-colors">
-                                            <input type="radio" 
-                                                   name="is_true" 
-                                                   value="1" 
+                                            <input type="radio"
+                                                   name="is_true"
+                                                   value="1"
                                                    class="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300">
                                             <div class="ml-3">
                                                 <p class="text-sm font-medium text-gray-900">
@@ -69,9 +69,9 @@
                                             </div>
                                         </label>
                                         <label class="flex items-center p-4 border border-gray-200 rounded-lg cursor-pointer hover:bg-gray-50 transition-colors">
-                                            <input type="radio" 
-                                                   name="is_true" 
-                                                   value="0" 
+                                            <input type="radio"
+                                                   name="is_true"
+                                                   value="0"
                                                    class="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300">
                                             <div class="ml-3">
                                                 <p class="text-sm font-medium text-gray-900">
@@ -80,7 +80,7 @@
                                             </div>
                                         </label>
                                     </div>
-                                    
+
                                     <div class="mt-6">
                                         <button type="submit"
                                                 class="w-full flex justify-center py-3 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
@@ -195,7 +195,7 @@ document.getElementById('answerForm').addEventListener('submit', function(e) {
     // For multiple choice, ensure at least one answer is selected
     const checkboxes = document.querySelectorAll('input[name="answers[]"]:checked');
     const radioButtons = document.querySelectorAll('input[name="is_true"]:checked');
-    
+
     if (checkboxes.length === 0 && radioButtons.length === 0) {
         e.preventDefault();
         alert('Please select an answer before submitting.');

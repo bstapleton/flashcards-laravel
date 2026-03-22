@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\web;
 
+use App\Exceptions\NoEligibleQuestionsException;
 use App\Http\Controllers\Controller;
 use App\Models\Flashcard;
 use App\Services\FlashcardService;
@@ -51,5 +52,48 @@ class StudyController extends Controller
         }
 
         return view('study.practice', compact('flashcard'));
+    }
+
+    public function easy()
+    {
+        if (!Auth::check()) {
+            return redirect()->route('login');
+        }
+
+        try {
+            $flashcard = $this->flashcardService->easy();
+            return view('study.practice', compact('flashcard'));
+        } catch (NoEligibleQuestionsException $e) {
+            return view('study')->with('error', 'No easy flashcards available');
+        }
+    }
+
+    public function medium()
+    {
+        if (!Auth::check()) {
+            return redirect()->route('login');
+        }
+
+        try {
+            $flashcard = $this->flashcardService->medium();
+
+            return view('study.practice', compact('flashcard'));
+        } catch (NoEligibleQuestionsException $e) {
+            return view('study')->with('error', 'No medium flashcards available');
+        }
+    }
+
+    public function hard()
+    {
+        if (!Auth::check()) {
+            return redirect()->route('login');
+        }
+
+        try {
+            $flashcard = $this->flashcardService->hard();
+            return view('study.practice', compact('flashcard'));
+        } catch (NoEligibleQuestionsException $e) {
+            return view('study')->with('error', 'No hard flashcards available');
+        }
     }
 }

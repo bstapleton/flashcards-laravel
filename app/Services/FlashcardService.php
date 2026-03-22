@@ -172,6 +172,73 @@ class FlashcardService
             ->orderBy('created_at', 'desc');
     }
 
+    /**
+     * @throws NoEligibleQuestionsException
+     */
+    public function easy()
+    {
+        if (! Gate::authorize('list', Flashcard::class)) {
+            throw new UnauthorizedException;
+        }
+
+        $eligible = Flashcard::currentUser()
+            ->published()
+            ->easy()
+            ->inRandomOrder()
+            ->get()
+            ->first();
+
+        if (! $eligible->count()) {
+            throw new NoEligibleQuestionsException;
+        }
+
+        return $eligible->first();
+    }
+
+    /**
+     * @throws NoEligibleQuestionsException
+     */
+    public function medium()
+    {
+        if (! Gate::authorize('list', Flashcard::class)) {
+            throw new UnauthorizedException;
+        }
+
+        $eligible = Flashcard::currentUser()
+            ->published()
+            ->medium()
+            ->inRandomOrder()
+            ->get();
+
+        if (! $eligible->count()) {
+            throw new NoEligibleQuestionsException;
+        }
+
+        return $eligible->first();
+    }
+
+    /**
+     * @throws NoEligibleQuestionsException
+     */
+    public function hard()
+    {
+        if (! Gate::authorize('list', Flashcard::class)) {
+            throw new UnauthorizedException;
+        }
+
+        $eligible = Flashcard::currentUser()
+            ->published()
+            ->hard()
+            ->inRandomOrder()
+            ->get();
+
+        if (! $eligible->count()) {
+            throw new NoEligibleQuestionsException;
+        }
+
+        return $eligible->first();
+    }
+
     public function draft()
     {
         if (! Gate::authorize('list', Flashcard::class)) {

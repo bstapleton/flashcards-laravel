@@ -63,6 +63,9 @@ class Flashcard extends Model
             'type' => QuestionType::class,
             'is_true' => 'boolean',
             'status' => Status::class,
+            'last_seen_at' => 'datetime',
+            'created_at' => 'datetime',
+            'updated_at' => 'datetime',
         ];
     }
 
@@ -134,6 +137,21 @@ class Flashcard extends Model
             Difficulty::HARD => Carbon::parse($this->last_seen_at)->addMinutes($user->hard_time),
             Difficulty::BURIED => Carbon::parse($this->last_seen_at)->addCenturies($user->easy_time),
         };
+    }
+
+    public function scopeEasy(Builder $query)
+    {
+        return $query->where('difficulty', Difficulty::EASY);
+    }
+
+    public function scopeMedium(Builder $query)
+    {
+        return $query->where('difficulty', Difficulty::MEDIUM);
+    }
+
+    public function scopeHard(Builder $query)
+    {
+        return $query->where('difficulty', Difficulty::HARD);
     }
 
     public function scopeCurrentUser(Builder $query)

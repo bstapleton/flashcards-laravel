@@ -22,6 +22,9 @@ Route::middleware(['auth'])->group(function () {
     // Study
     Route::get('/study', [StudyController::class, 'index'])->name('study');
     Route::get('/study/random', [StudyController::class, 'random'])->name('study.random');
+    Route::get('/study/easy', [StudyController::class, 'easy'])->name('study.easy');
+    Route::get('/study/medium', [StudyController::class, 'medium'])->name('study.medium');
+    Route::get('/study/hard', [StudyController::class, 'hard'])->name('study.hard');
     Route::get('/study/{flashcard}', [StudyController::class, 'practice'])->name('study.practice');
     
     // Revision

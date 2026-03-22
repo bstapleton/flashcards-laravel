@@ -113,18 +113,24 @@
                                     </div>
                                 </div>
                                 <div class="space-y-2">
-                                    <button onclick="practiceByDifficulty('easy')" 
-                                            class="w-full py-2 px-4 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
-                                        Easy
-                                    </button>
-                                    <button onclick="practiceByDifficulty('medium')" 
-                                            class="w-full py-2 px-4 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
-                                        Medium
-                                    </button>
-                                    <button onclick="practiceByDifficulty('hard')" 
-                                            class="w-full py-2 px-4 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
-                                        Hard
-                                    </button>
+                                    <form method="GET" action="{{ route('study.easy') }}">
+                                        <button type="submit" 
+                                                class="w-full py-2 px-4 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                                            Easy
+                                        </button>
+                                    </form>
+                                    <form method="GET" action="{{ route('study.medium') }}">
+                                        <button type="submit" 
+                                                class="w-full py-2 px-4 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                                            Medium
+                                        </button>
+                                    </form>
+                                    <form method="GET" action="{{ route('study.hard') }}">
+                                        <button type="submit" 
+                                                class="w-full py-2 px-4 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                                            Hard
+                                        </button>
+                                    </form>
                                 </div>
                             </div>
 
