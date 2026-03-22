@@ -1,15 +1,15 @@
 @extends('layouts.app')
 
-@section('title', 'Study')
+@section('title', 'Revision')
 
 @section('content')
 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
     <div class="py-6">
         <div class="px-4 py-6 sm:px-0">
             <div class="mb-8 text-center">
-                <h1 class="text-3xl font-bold text-gray-900">Study Mode</h1>
+                <h1 class="text-3xl font-bold text-gray-900">Revision Mode</h1>
                 <p class="mt-2 text-lg text-gray-600">
-                    Practice with your flashcards
+                    Review your flashcards with answers visible
                 </p>
             </div>
 
@@ -21,57 +21,32 @@
                 </div>
             @endif
 
-            <!-- Study Options -->
+            <!-- Revision Options -->
             <div class="max-w-4xl mx-auto">
                 <div class="bg-white shadow sm:rounded-lg">
                     <div class="px-6 py-4">
-                        <h2 class="text-lg font-medium text-gray-900 mb-4">Choose Study Mode</h2>
+                        <h2 class="text-lg font-medium text-gray-900 mb-4">Choose Revision Mode</h2>
                         
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                            <!-- Review Flashcards -->
-                            <div class="border border-gray-200 rounded-lg p-6 hover:shadow-md transition-shadow">
-                                <div class="flex items-center mb-4">
-                                    <div class="flex-shrink-0">
-                                        <div class="w-12 h-12 bg-purple-500 rounded-md flex items-center justify-center">
-                                            <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
-                                            </svg>
-                                        </div>
-                                    </div>
-                                    <div class="ml-4">
-                                        <h3 class="text-lg font-medium text-gray-900">Review Flashcards</h3>
-                                        <p class="text-sm text-gray-500">Review questions with answers visible</p>
-                                    </div>
-                                </div>
-                                <form method="GET" action="{{ route('revision.random') }}">
-                                    <button type="submit" 
-                                            class="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-purple-600 hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500">
-                                        Start Review
-                                    </button>
-                                </form>
-                            </div>
-
-                            <!-- Practice Mode -->
+                            <!-- Random Flashcard -->
                             <div class="border border-gray-200 rounded-lg p-6 hover:shadow-md transition-shadow">
                                 <div class="flex items-center mb-4">
                                     <div class="flex-shrink-0">
                                         <div class="w-12 h-12 bg-indigo-500 rounded-md flex items-center justify-center">
                                             <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"></path>
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path>
                                             </svg>
                                         </div>
                                     </div>
                                     <div class="ml-4">
-                                        <h3 class="text-lg font-medium text-gray-900">Practice Mode</h3>
-                                        <p class="text-sm text-gray-500">Test yourself without seeing answers</p>
+                                        <h3 class="text-lg font-medium text-gray-900">Random Flashcard</h3>
+                                        <p class="text-sm text-gray-500">Review a random question with answers visible</p>
                                     </div>
                                 </div>
-                                <form method="GET" action="{{ route('study.random') }}">
+                                <form method="GET" action="{{ route('revision.random') }}">
                                     <button type="submit" 
                                             class="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
-                                        Start Practice
+                                        Start Random Revision
                                     </button>
                                 </form>
                             </div>
@@ -87,13 +62,13 @@
                                         </div>
                                     </div>
                                     <div class="ml-4">
-                                        <h3 class="text-lg font-medium text-gray-900">Study All</h3>
+                                        <h3 class="text-lg font-medium text-gray-900">Review All</h3>
                                         <p class="text-sm text-gray-500">Go through all your active flashcards</p>
                                     </div>
                                 </div>
-                                <button onclick="startStudySession()" 
+                                <button onclick="startRevisionSession()" 
                                         class="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500">
-                                    Start Study Session
+                                    Start Revision Session
                                 </button>
                             </div>
 
@@ -108,20 +83,20 @@
                                         </div>
                                     </div>
                                     <div class="ml-4">
-                                        <h3 class="text-lg font-medium text-gray-900">Difficulty Practice</h3>
+                                        <h3 class="text-lg font-medium text-gray-900">Difficulty Review</h3>
                                         <p class="text-sm text-gray-500">Focus on specific difficulty levels</p>
                                     </div>
                                 </div>
                                 <div class="space-y-2">
-                                    <button onclick="practiceByDifficulty('easy')" 
+                                    <button onclick="reviewByDifficulty('easy')" 
                                             class="w-full py-2 px-4 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
                                         Easy
                                     </button>
-                                    <button onclick="practiceByDifficulty('medium')" 
+                                    <button onclick="reviewByDifficulty('medium')" 
                                             class="w-full py-2 px-4 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
                                         Medium
                                     </button>
-                                    <button onclick="practiceByDifficulty('hard')" 
+                                    <button onclick="reviewByDifficulty('hard')" 
                                             class="w-full py-2 px-4 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
                                         Hard
                                     </button>
@@ -160,14 +135,14 @@
 
 @push('scripts')
 <script>
-function startStudySession() {
-    // This would typically start a study session
-    alert('Study session feature coming soon! Try Random Flashcard for now.');
+function startRevisionSession() {
+    // This would typically start a revision session
+    alert('Revision session feature coming soon! Try Random Flashcard for now.');
 }
 
-function practiceByDifficulty(difficulty) {
+function reviewByDifficulty(difficulty) {
     // This would filter flashcards by difficulty
-    alert(`Practice by ${difficulty} difficulty coming soon! Try Random Flashcard for now.`);
+    alert(`Review by ${difficulty} difficulty coming soon! Try Random Flashcard for now.`);
 }
 </script>
 @endpush

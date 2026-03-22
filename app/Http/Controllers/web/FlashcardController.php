@@ -1,13 +1,13 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\web;
 
+use App\Http\Controllers\Controller;
 use App\Models\Flashcard;
 use App\Services\FlashcardService;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
-class WebController extends Controller
+class FlashcardController extends Controller
 {
     protected FlashcardService $flashcardService;
 
@@ -16,24 +16,7 @@ class WebController extends Controller
         $this->flashcardService = $flashcardService;
     }
 
-    public function dashboard()
-    {
-        if (!Auth::check()) {
-            return redirect()->route('login');
-        }
-
-        $user = Auth::user();
-        $stats = [
-            'total_flashcards' => $user->flashcards()->count(),
-            'active_flashcards' => $user->flashcards()->alive()->published()->count(),
-            'buried_flashcards' => $user->flashcards()->buried()->count(),
-            'hidden_flashcards' => $user->flashcards()->hidden()->count(),
-        ];
-
-        return view('dashboard', compact('stats'));
-    }
-
-    public function flashcards()
+    public function index()
     {
         if (!Auth::check()) {
             return redirect()->route('login');
@@ -44,7 +27,7 @@ class WebController extends Controller
         return view('flashcards.index', compact('flashcards'));
     }
 
-    public function createFlashcard()
+    public function create()
     {
         if (!Auth::check()) {
             return redirect()->route('login');
@@ -53,27 +36,18 @@ class WebController extends Controller
         return view('flashcards.create');
     }
 
-    public function study()
+    public function show(Flashcard $flashcard)
     {
         if (!Auth::check()) {
             return redirect()->route('login');
         }
 
-        return view('study');
-    }
-
-    public function randomFlashcard()
-    {
-        if (!Auth::check()) {
-            return redirect()->route('login');
+        // Verify user owns this flashcard
+        if ($flashcard->user_id !== Auth::id()) {
+            abort(403);
         }
 
-        try {
-            $flashcard = $this->flashcardService->random();
-            return view('flashcards.show', compact('flashcard'));
-        } catch (\Exception $e) {
-            return view('study')->with('error', 'No eligible flashcards available');
-        }
+        return view('flashcards.show', compact('flashcard'));
     }
 
     public function graveyard()

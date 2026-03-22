@@ -1,17 +1,17 @@
 @extends('layouts.app')
 
-@section('title', 'Flashcard Details')
+@section('title', 'Revision Flashcard')
 
 @section('content')
 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
     <div class="py-6">
         <div class="px-4 py-6 sm:px-0 max-w-2xl mx-auto">
             <div class="mb-8">
-                <a href="{{ route('flashcards.index') }}"
+                <a href="{{ route('revision') }}"
                    class="text-sm text-gray-500 hover:text-gray-700 mb-4 inline-block">
-                    ← Back to Flashcards
+                    ← Back to Revision
                 </a>
-                <h1 class="text-2xl font-bold text-gray-900">Flashcard Details</h1>
+                <h1 class="text-2xl font-bold text-gray-900">Revision Mode</h1>
             </div>
 
             @if($flashcard)
@@ -120,22 +120,28 @@
                     <!-- Actions -->
                     <div class="px-6 py-4 bg-gray-50 border-t border-gray-200 flex justify-between">
                         <div class="space-x-3">
-                            <form method="POST" action="{{ route('api.flashcards.answer', $flashcard) }}" class="inline">
-                                @csrf
-                                <button type="submit"
-                                        class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500">
-                                    <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"></path>
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                                    </svg>
-                                    Study This
-                                </button>
-                            </form>
+                            <a href="{{ route('study') }}/{{ $flashcard->id }}"
+                                    class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500">
+                                <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"></path>
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                </svg>
+                                Attempt This
+                            </a>
                         </div>
                         <div class="space-x-3">
-                            <a href="{{ route('flashcards.index') }}"
+                            <form method="GET" action="{{ route('revision.random') }}" class="inline">
+                                <button type="submit"
+                                        class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                                    <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path>
+                                    </svg>
+                                    Next Random
+                                </button>
+                            </form>
+                            <a href="{{ route('revision') }}"
                                class="px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
-                                Back to List
+                                Back to Revision
                             </a>
                         </div>
                     </div>
@@ -150,9 +156,9 @@
                         This flashcard doesn't exist or you don't have access to it.
                     </p>
                     <div class="mt-6">
-                        <a href="{{ route('flashcards.index') }}"
+                        <a href="{{ route('revision') }}"
                            class="inline-flex items-center px-4 py-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
-                            Back to Flashcards
+                            Back to Revision
                         </a>
                     </div>
                 </div>

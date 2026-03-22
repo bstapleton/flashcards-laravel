@@ -16,18 +16,18 @@
             <div class="bg-white shadow sm:rounded-lg">
                 <form action="{{ route('api.flashcards.store') }}" method="POST" class="space-y-6">
                     @csrf
-                    
+
                     <!-- Question Type Selection -->
                     <div class="px-6 py-4 border-b border-gray-200">
                         <label class="block text-sm font-medium text-gray-700 mb-3">Question Type</label>
                         <div class="flex space-x-4">
                             <label class="flex items-center">
-                                <input type="radio" name="question_type" value="true_false" checked 
+                                <input type="radio" name="question_type" value="true_false" checked
                                        class="mr-2" onchange="toggleQuestionType('true_false')">
                                 <span class="text-sm text-gray-700">True/False</span>
                             </label>
                             <label class="flex items-center">
-                                <input type="radio" name="question_type" value="multiple_choice" 
+                                <input type="radio" name="question_type" value="multiple_choice"
                                        class="mr-2" onchange="toggleQuestionType('multiple_choice')">
                                 <span class="text-sm text-gray-700">Multiple Choice</span>
                             </label>
@@ -83,22 +83,22 @@
                             <div class="space-y-2" id="answers_container">
                                 <div class="flex items-center space-x-2">
                                     <input type="checkbox" name="answers[0][is_correct]" class="mr-2">
-                                    <input type="text" name="answers[0][text]" placeholder="Answer option 1" 
+                                    <input type="text" name="answers[0][text]" placeholder="Answer option 1"
                                            class="flex-1 border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
                                 </div>
                                 <div class="flex items-center space-x-2">
                                     <input type="checkbox" name="answers[1][is_correct]" class="mr-2">
-                                    <input type="text" name="answers[1][text]" placeholder="Answer option 2" 
+                                    <input type="text" name="answers[1][text]" placeholder="Answer option 2"
                                            class="flex-1 border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
                                 </div>
                                 <div class="flex items-center space-x-2">
                                     <input type="checkbox" name="answers[2][is_correct]" class="mr-2">
-                                    <input type="text" name="answers[2][text]" placeholder="Answer option 3" 
+                                    <input type="text" name="answers[2][text]" placeholder="Answer option 3"
                                            class="flex-1 border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
                                 </div>
                                 <div class="flex items-center space-x-2">
                                     <input type="checkbox" name="answers[3][is_correct]" class="mr-2">
-                                    <input type="text" name="answers[3][text]" placeholder="Answer option 4" 
+                                    <input type="text" name="answers[3][text]" placeholder="Answer option 4"
                                            class="flex-1 border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
                                 </div>
                             </div>
@@ -110,11 +110,11 @@
 
                     <!-- Form Actions -->
                     <div class="px-6 py-4 bg-gray-50 border-t border-gray-200 flex justify-end space-x-3">
-                        <a href="{{ route('flashcards.index') }}" 
+                        <a href="{{ route('flashcards.index') }}"
                            class="px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
                             Cancel
                         </a>
-                        <button type="submit" 
+                        <button type="submit"
                                 class="px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
                             Create Flashcard
                         </button>
@@ -130,7 +130,7 @@
 function toggleQuestionType(type) {
     const trueFalseDiv = document.getElementById('true_false_answer');
     const multipleChoiceDiv = document.getElementById('multiple_choice_answers');
-    
+
     if (type === 'true_false') {
         trueFalseDiv.classList.remove('hidden');
         multipleChoiceDiv.classList.add('hidden');

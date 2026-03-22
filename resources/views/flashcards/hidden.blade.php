@@ -17,19 +17,19 @@
             <div class="mb-6">
                 <div class="border-b border-gray-200">
                     <nav class="-mb-px flex space-x-8">
-                        <a href="{{ route('flashcards.index') }}" 
+                        <a href="{{ route('flashcards.index') }}"
                            class="py-2 px-1 border-b-2 border-transparent font-medium text-sm text-gray-500 hover:text-gray-700 hover:border-gray-300">
                             Active
                         </a>
-                        <a href="{{ route('flashcards.hidden') }}" 
+                        <a href="{{ route('flashcards.hidden') }}"
                            class="py-2 px-1 border-b-2 border-indigo-500 font-medium text-sm text-indigo-600">
                             Hidden ({{ $flashcards->total() }})
                         </a>
-                        <a href="{{ route('flashcards.graveyard') }}" 
+                        <a href="{{ route('flashcards.graveyard') }}"
                            class="py-2 px-1 border-b-2 border-transparent font-medium text-sm text-gray-500 hover:text-gray-700 hover:border-gray-300">
                             Buried
                         </a>
-                        <a href="{{ route('flashcards.drafts') }}" 
+                        <a href="{{ route('flashcards.drafts') }}"
                            class="py-2 px-1 border-b-2 border-transparent font-medium text-sm text-gray-500 hover:text-gray-700 hover:border-gray-300">
                             Drafts
                         </a>
@@ -67,12 +67,12 @@
                                     <div class="flex items-center space-x-2">
                                         <form method="POST" action="{{ route('api.flashcards.unhide', $flashcard) }}" class="inline">
                                             @csrf
-                                            <button type="submit" 
+                                            <button type="submit"
                                                     class="text-green-600 hover:text-green-900 text-sm font-medium">
                                                 Unhide
                                             </button>
                                         </form>
-                                        <a href="{{ route('flashcards.show', $flashcard) }}" 
+                                        <a href="{{ route('flashcards.show', $flashcard) }}"
                                            class="text-indigo-600 hover:text-indigo-900 text-sm font-medium">
                                             View
                                         </a>
@@ -99,7 +99,7 @@
                         You haven't hidden any flashcards yet.
                     </p>
                     <div class="mt-6">
-                        <a href="{{ route('flashcards.index') }}" 
+                        <a href="{{ route('flashcards.index') }}"
                            class="inline-flex items-center px-4 py-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
                             View Active Flashcards
                         </a>
