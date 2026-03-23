@@ -4,6 +4,7 @@ namespace App\Http\Controllers\web;
 
 use App\Http\Controllers\Controller;
 use App\Models\Flashcard;
+use App\Models\Tag;
 use App\Services\FlashcardService;
 use Illuminate\Support\Facades\Auth;
 
@@ -22,8 +23,8 @@ class FlashcardController extends Controller
             return redirect()->route('login');
         }
 
-        $flashcards = $this->flashcardService->alive()->published()->paginate(10);
-        
+        $flashcards = $this->flashcardService->alive()->published()->paginate(20);
+
         return view('flashcards.index', compact('flashcards'));
     }
 
@@ -34,6 +35,28 @@ class FlashcardController extends Controller
         }
 
         return view('flashcards.create');
+    }
+
+    public function createStatement()
+    {
+        if (!Auth::check()) {
+            return redirect()->route('login');
+        }
+
+        $tags = Tag::all();
+
+        return view('flashcards.create-statement', compact('tags'));
+    }
+
+    public function createMultipleChoice()
+    {
+        if (!Auth::check()) {
+            return redirect()->route('login');
+        }
+
+        $tags = Tag::all();
+
+        return view('flashcards.create-multiple-choice', compact('tags'));
     }
 
     public function show(Flashcard $flashcard)
@@ -56,8 +79,8 @@ class FlashcardController extends Controller
             return redirect()->route('login');
         }
 
-        $flashcards = $this->flashcardService->buried()->paginate(10);
-        
+        $flashcards = $this->flashcardService->buried()->paginate(20);
+
         return view('flashcards.graveyard', compact('flashcards'));
     }
 
@@ -67,8 +90,8 @@ class FlashcardController extends Controller
             return redirect()->route('login');
         }
 
-        $flashcards = $this->flashcardService->draft()->paginate(10);
-        
+        $flashcards = $this->flashcardService->draft()->paginate(20);
+
         return view('flashcards.drafts', compact('flashcards'));
     }
 
@@ -78,8 +101,8 @@ class FlashcardController extends Controller
             return redirect()->route('login');
         }
 
-        $flashcards = $this->flashcardService->hidden()->paginate(10);
-        
+        $flashcards = $this->flashcardService->hidden()->paginate(20);
+
         return view('flashcards.hidden', compact('flashcards'));
     }
 }
