@@ -26,7 +26,8 @@ Route::controller(AnswerController::class)->prefix('answers')->middleware(['auth
 
 Route::controller(FlashcardController::class)->prefix('flashcards')->middleware(['auth:sanctum', CheckAuthed::class])->group(function () {
     Route::get('/', 'index')->name('api.flashcards.index');
-    Route::post('/', 'store')->name('api.flashcards.store');
+    Route::post('/statement', 'storeStatement')->name('api.flashcards.store-statement');
+    Route::post('/multiple-choice', 'storeMultipleChoice')->name('api.flashcards.store-multiple-choice');
     Route::get('/all', 'all')->name('api.flashcards.all');
     Route::get('/random', 'random')->name('api.flashcards.random');
     Route::get('/graveyard', 'graveyard')->name('api.flashcards.graveyard');

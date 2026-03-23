@@ -119,7 +119,6 @@ class FlashcardController extends Controller
      *             @OA\Property(property="text", type="string", example="What colour is the sky?"),
      *             @OA\Property(property="is_true", type="boolean"),
      *             @OA\Property(property="explanation", type="string"),
-     *             @OA\Property(property="answers", type="array", @OA\Items(ref="#/components/schemas/Answer")),
      *             @OA\Property(property="tags", type="array", @OA\Items(ref="#/components/schemas/Tag"))
      *         )
      *     ),
@@ -131,12 +130,13 @@ class FlashcardController extends Controller
      *     security={{"bearerAuth":{}}}
      * )
      */
-    public function store(Request $request): JsonResponse
+    public function storeStatement(Request $request): JsonResponse
     {
         $request->validate([
             'text' => 'required|max:1024',
-            'is_true' => 'nullable|required_without:answers',
-            'answers' => 'nullable|required_without:is_true',
+            'is_true' => 'required|boolean',
+            'tags' => 'nullable|array',
+            'tags.*' => 'exists:tags,id',
         ]);
 
         try {
@@ -149,12 +149,66 @@ class FlashcardController extends Controller
                 $e->getMessage(),
                 'free_account_limit'
             );
-        } catch (UndeterminedQuestionTypeException $e) {
+        } catch (LessThanOneCorrectAnswerException $e) {
             return ApiResponse::error(
-                'Undetermined question type',
+                'Less than one correct answer',
                 $e->getMessage(),
-                'undetermined_question_type',
+                'less_than_one_correct_answer',
                 422
+            );
+        }
+
+        return fractal($flashcardResponse, new QuestionTransformer)->respond();
+    }
+
+    /**
+     * @OA\Post(
+     *     path="/api/flashcards",
+     *     summary="Create flashcard",
+     *     tags={"flashcard"},
+     *
+     *     @OA\RequestBody(
+     *         required=true,
+     *
+     *         @OA\JsonContent(
+     *             required={"text"},
+     *
+     *             @OA\Property(property="text", type="string", example="What colour is the sky?"),
+     *             @OA\Property(property="explanation", type="string"),
+     *             @OA\Property(property="answers", type="array", @OA\Items(ref="#/components/schemas/Answer")),
+     *             @OA\Property(property="tags", type="array", @OA\Items(ref="#/components/schemas/Tag"))
+     *         )
+     *     ),
+     *
+     *     @OA\Response(response="200", description="Success"),
+     *     @OA\Response(response="400", description="Free account limitation reached"),
+     *     @OA\Response(response="403", description="Not permitted"),
+     *     @OA\Response(response="422", description="Validation error"),
+     *     security={{"bearerAuth":{}}}
+     * )
+     */
+    public function storeMultipleChoice(Request $request): JsonResponse
+    {
+        $request->validate([
+            'text' => 'required|max:1024',
+            'explanation' => 'nullable|max:1024',
+            'answers' => 'required|array',
+            'answers.*.text' => 'required|max:1024',
+            'answers.*.is_correct' => 'required|boolean',
+            'answers.*.explanation' => 'nullable|max:1024',
+            'tags' => 'nullable|array',
+            'tags.*' => 'exists:tags,id',
+        ]);
+
+        try {
+            $flashcardResponse = $this->service->store($request->all());
+        } catch (UnauthorizedException) {
+            return $this->handleForbidden();
+        } catch (FreeUserFlashcardLimitException $e) {
+            return ApiResponse::error(
+                'Free user account limitation',
+                $e->getMessage(),
+                'free_account_limit'
             );
         } catch (LessThanOneCorrectAnswerException $e) {
             return ApiResponse::error(

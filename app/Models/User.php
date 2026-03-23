@@ -12,6 +12,7 @@ use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
 use Laravel\Sanctum\HasApiTokens;
+use OpenApi\Annotations as OA;
 use RedExplosion\Sqids\Concerns\HasSqids;
 
 /**
