@@ -130,9 +130,18 @@
                                     </svg>
                                 </div>
                                 <div class="ml-4">
-                                    <a href="{{ route('flashcards.create') }}" class="text-sm font-medium text-indigo-600 hover:text-indigo-900">
+                                    <div class="text-sm font-medium text-indigo-600">
                                         Create New Flashcard
-                                    </a>
+                                    </div>
+                                    <div class="mt-1 space-x-4">
+                                        <a href="{{ route('flashcards.create-statement') }}" class="text-sm text-gray-600 hover:text-indigo-600">
+                                            True/False
+                                        </a>
+                                        <span class="text-gray-400">•</span>
+                                        <a href="{{ route('flashcards.create-multiple-choice') }}" class="text-sm text-gray-600 hover:text-indigo-600">
+                                            Multiple Choice
+                                        </a>
+                                    </div>
                                 </div>
                             </div>
                             <div class="flex items-center text-sm text-gray-500">

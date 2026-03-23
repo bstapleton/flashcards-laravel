@@ -35,6 +35,8 @@ Route::middleware(['auth'])->group(function () {
     Route::prefix('flashcards')->name('flashcards.')->group(function () {
         Route::get('/', [FlashcardController::class, 'index'])->name('index');
         Route::get('/create', [FlashcardController::class, 'create'])->name('create');
+        Route::get('/create/statement', [FlashcardController::class, 'createStatement'])->name('create-statement');
+        Route::get('/create/multiple-choice', [FlashcardController::class, 'createMultipleChoice'])->name('create-multiple-choice');
         Route::get('/graveyard', [FlashcardController::class, 'graveyard'])->name('graveyard');
         Route::get('/drafts', [FlashcardController::class, 'drafts'])->name('drafts');
         Route::get('/hidden', [FlashcardController::class, 'hidden'])->name('hidden');
