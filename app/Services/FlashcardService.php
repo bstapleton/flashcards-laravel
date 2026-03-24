@@ -44,10 +44,16 @@ class FlashcardService
             ->orderBy('created_at');
     }
 
-    public function show(Flashcard $flashcard)
+    public function show(Flashcard $flashcard, bool $forRevision = false): Flashcard
     {
         if (! Gate::authorize('show', $flashcard)) {
             throw new UnauthorizedException;
+        }
+
+        if ($forRevision) {
+            $flashcard->update([
+                'last_seen_at' => now(),
+            ]);
         }
 
         return $flashcard;
@@ -264,7 +270,7 @@ class FlashcardService
     /**
      * @throws NoEligibleQuestionsException
      */
-    public function random()
+    public function random(bool $forRevision = false)
     {
         if (! Gate::authorize('list', Flashcard::class)) {
             throw new UnauthorizedException;
@@ -299,7 +305,15 @@ class FlashcardService
             throw new NoEligibleQuestionsException($flashcard->eligible_at);
         }
 
-        return $eligibleQuestions->first();
+        $selectedQuestion = $eligibleQuestions->first();
+
+        if ($forRevision) {
+            $selectedQuestion->update([
+                'last_seen_at' => now(),
+            ]);
+        }
+
+        return $selectedQuestion;
     }
 
     public function revive(Flashcard $flashcard): Flashcard
@@ -348,6 +362,7 @@ class FlashcardService
         }
 
         $flashcard->last_seen_at = Carbon::now();
+        $flashcard->last_attempted_at = Carbon::now();
 
         $score = new Score;
         $pointsEarned = $score->getScore($flashcard->type, $correctness, $flashcard->difficulty, $user->lose_points);

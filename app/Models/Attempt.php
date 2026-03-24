@@ -14,6 +14,7 @@ use Illuminate\Support\Collection;
 /**
  * @property int id
  * @property int user_id
+ * @property int flashcard_id
  * @property string question
  * @property string answers
  * @property array formatted_answers
@@ -35,6 +36,7 @@ class Attempt extends Model
 
     protected $fillable = [
         'user_id',
+        'flashcard_id',
         'question',
         'question_type',
         'answers',
@@ -90,6 +92,11 @@ class Attempt extends Model
         return $this->belongsTo(User::class);
     }
 
+    public function flashcard(): BelongsTo
+    {
+        return $this->belongsTo(Flashcard::class);
+    }
+
     public function keywords(): HasMany
     {
         return $this->hasMany(Keyword::class);
@@ -98,7 +105,7 @@ class Attempt extends Model
     public function getOlderAttemptsAttribute(): Collection
     {
         return Attempt::where('user_id', $this->user_id)
-            ->where('question', $this->question)
+            ->where('flashcard_id', $this->flashcard_id)
             ->where('id', '<', $this->id)
             ->orderBy('answered_at', 'desc')
             ->get();
@@ -107,9 +114,17 @@ class Attempt extends Model
     public function getNewerAttemptsAttribute(): Collection
     {
         return Attempt::where('user_id', $this->user_id)
-            ->where('question', $this->question)
+            ->where('flashcard_id', $this->flashcard_id)
             ->where('id', '>', $this->id)
             ->orderBy('answered_at', 'asc')
             ->get();
+    }
+
+    /**
+     * Fetch attempts made before they were bindable to a specific question
+     */
+    public function scopeLegacy($query)
+    {
+        return $query->whereNull('flashcard_id');
     }
 }

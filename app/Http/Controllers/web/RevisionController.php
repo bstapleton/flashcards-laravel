@@ -4,7 +4,6 @@ namespace App\Http\Controllers\web;
 
 use App\Http\Controllers\Controller;
 use App\Services\FlashcardService;
-use App\Transformers\QuestionTransformer;
 use Illuminate\Support\Facades\Auth;
 
 class RevisionController extends Controller
@@ -32,7 +31,7 @@ class RevisionController extends Controller
         }
 
         try {
-            $flashcard = $this->flashcardService->random();
+            $flashcard = $this->flashcardService->random(true);
             return view('revision.show', compact('flashcard'));
         } catch (\Exception $e) {
             return view('revision')->with('error', 'No eligible flashcards available');

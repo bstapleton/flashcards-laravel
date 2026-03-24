@@ -70,6 +70,8 @@ class FlashcardController extends Controller
             abort(403);
         }
 
+        $flashcard = $this->flashcardService->show($flashcard);
+
         return view('flashcards.show', compact('flashcard'));
     }
 
