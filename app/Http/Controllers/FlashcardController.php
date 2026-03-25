@@ -6,13 +6,12 @@ use App\Exceptions\DraftQuestionsCannotChangeStatusException;
 use App\Exceptions\FreeUserFlashcardLimitException;
 use App\Exceptions\LessThanOneCorrectAnswerException;
 use App\Exceptions\NoEligibleQuestionsException;
-use App\Exceptions\UndeterminedQuestionTypeException;
 use App\Helpers\ApiResponse;
 use App\Models\Flashcard;
 use App\Services\FlashcardService;
 use App\Transformers\QuestionTransformer;
-use App\Transformers\UnattemptedQuestionTransformer;
 use App\Transformers\ScorecardTransformer;
+use App\Transformers\UnattemptedQuestionTransformer;
 use Illuminate\Contracts\Filesystem\FileNotFoundException;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\JsonResponse;
@@ -474,17 +473,29 @@ class FlashcardController extends Controller
      *     security={{"bearerAuth":{}}}
      * )
      */
-    public function answer(Request $request, Flashcard $flashcard): JsonResponse
+    public function answer(Request $request, $flashcardId): JsonResponse
     {
         try {
-            $scorecardResponse = $this->service->answer($flashcard, $request->input('answers'), $request->user());
-        } catch (ModelNotFoundException) {
-            return $this->handleNotFound();
-        } catch (UnauthorizedException) {
-            return $this->handleForbidden();
-        }
+            // Simple ownership check without Gates/Policies
+            $flashcard = Flashcard::find($flashcardId);
 
-        return fractal($scorecardResponse, new ScorecardTransformer)->respond();
+            if (! $flashcard) {
+                return $this->notFoundResponse('Flashcard not found');
+            }
+
+            if ($flashcard->user_id !== $request->user()->id) {
+                return $this->forbiddenResponse('You can only answer your own flashcards');
+            }
+
+            $scorecardResponse = $this->service->answer($flashcard, $request->input('answers'), $request->user());
+
+            return fractal($scorecardResponse, new ScorecardTransformer)->respond();
+
+        } catch (ModelNotFoundException $e) {
+            return $this->handleApiError($e, 'Model not found');
+        } catch (UnauthorizedException $e) {
+            return $this->handleApiError($e, 'Unauthorized');
+        }
     }
 
     /**

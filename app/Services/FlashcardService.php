@@ -21,9 +21,7 @@ use App\Models\User;
 use Illuminate\Contracts\Filesystem\FileNotFoundException;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Storage;
-use Illuminate\Validation\UnauthorizedException;
 
 class FlashcardService
 {
@@ -36,20 +34,12 @@ class FlashcardService
 
     public function all()
     {
-        if (! Gate::authorize('list', Flashcard::class)) {
-            throw new UnauthorizedException;
-        }
-
         return Flashcard::currentUser()
             ->orderBy('created_at');
     }
 
     public function show(Flashcard $flashcard, bool $forRevision = false): Flashcard
     {
-        if (! Gate::authorize('show', $flashcard)) {
-            throw new UnauthorizedException;
-        }
-
         if ($forRevision) {
             $flashcard->update([
                 'last_seen_at' => now(),
@@ -65,10 +55,6 @@ class FlashcardService
      */
     public function store(array $data)
     {
-        if (! Gate::authorize('store', Flashcard::class)) {
-            throw new UnauthorizedException;
-        }
-
         $role = Auth::user()->roles->where('code', 'advanced_user')->first();
 
         // Cannot create questions if you're a free user and already have 10 created
@@ -123,10 +109,6 @@ class FlashcardService
 
     public function update(array $data, Flashcard $flashcard): Flashcard
     {
-        if (! Gate::authorize('update', $flashcard)) {
-            throw new UnauthorizedException;
-        }
-
         // Only update the truthiness of a question if it's already set up as a statement type
         if (isset($flashcard->is_true) && isset($data['is_true'])) {
             $flashcard->is_true = $data['is_true'];
@@ -148,19 +130,11 @@ class FlashcardService
 
     public function destroy(Flashcard $flashcard): void
     {
-        if (! Gate::authorize('delete', $flashcard)) {
-            throw new UnauthorizedException;
-        }
-
         $flashcard->delete();
     }
 
     public function buried()
     {
-        if (! Gate::authorize('list', Flashcard::class)) {
-            throw new UnauthorizedException;
-        }
-
         return Flashcard::currentUser()
             ->buried()
             ->orderBy('last_seen_at', 'desc');
@@ -168,10 +142,6 @@ class FlashcardService
 
     public function alive()
     {
-        if (! Gate::authorize('list', Flashcard::class)) {
-            throw new UnauthorizedException;
-        }
-
         return Flashcard::currentUser()
             ->alive()
             ->orderBy('last_seen_at', 'desc')
@@ -183,10 +153,6 @@ class FlashcardService
      */
     public function easy()
     {
-        if (! Gate::authorize('list', Flashcard::class)) {
-            throw new UnauthorizedException;
-        }
-
         $eligible = Flashcard::currentUser()
             ->published()
             ->easy()
@@ -206,10 +172,6 @@ class FlashcardService
      */
     public function medium()
     {
-        if (! Gate::authorize('list', Flashcard::class)) {
-            throw new UnauthorizedException;
-        }
-
         $eligible = Flashcard::currentUser()
             ->published()
             ->medium()
@@ -228,10 +190,6 @@ class FlashcardService
      */
     public function hard()
     {
-        if (! Gate::authorize('list', Flashcard::class)) {
-            throw new UnauthorizedException;
-        }
-
         $eligible = Flashcard::currentUser()
             ->published()
             ->hard()
@@ -247,10 +205,6 @@ class FlashcardService
 
     public function draft()
     {
-        if (! Gate::authorize('list', Flashcard::class)) {
-            throw new UnauthorizedException;
-        }
-
         return Flashcard::currentUser()
             ->draft()
             ->orderBy('created_at', 'desc');
@@ -258,10 +212,6 @@ class FlashcardService
 
     public function hidden()
     {
-        if (! Gate::authorize('list', Flashcard::class)) {
-            throw new UnauthorizedException;
-        }
-
         return Flashcard::currentUser()
             ->hidden()
             ->orderBy('created_at', 'desc');
@@ -272,10 +222,6 @@ class FlashcardService
      */
     public function random(bool $forRevision = false)
     {
-        if (! Gate::authorize('list', Flashcard::class)) {
-            throw new UnauthorizedException;
-        }
-
         $eligibleQuestions = Flashcard::currentUser()
             ->published()
             ->alive()
@@ -318,10 +264,6 @@ class FlashcardService
 
     public function revive(Flashcard $flashcard): Flashcard
     {
-        if (! Gate::authorize('revive', $flashcard)) {
-            throw new UnauthorizedException;
-        }
-
         $flashcard->update([
             'difficulty' => Difficulty::EASY,
         ]);
@@ -337,10 +279,6 @@ class FlashcardService
 
     public function answer(Flashcard $flashcard, array $answers, User $user): Scorecard
     {
-        if (! Gate::authorize('answer', $flashcard)) {
-            throw new UnauthorizedException;
-        }
-
         if ($flashcard->type === QuestionType::STATEMENT) {
             $providedAnswer = last($answers);
             $correctness = $this->calculateCorrectness($flashcard, null, $providedAnswer);
@@ -368,6 +306,7 @@ class FlashcardService
         $pointsEarned = $score->getScore($flashcard->type, $correctness, $flashcard->difficulty, $user->lose_points);
 
         $attempt = $this->attemptService->store([
+            'flashcard_id' => $flashcard->id,
             'question' => $flashcard->text,
             'question_type' => $flashcard->type,
             'answers' => $givenAnswers ?? collect($flashcard->answers->map(function ($answer) use ($answers) {
@@ -422,10 +361,6 @@ class FlashcardService
 
     public function attachTag(Flashcard $flashcard, Tag $tag)
     {
-        if (! Gate::authorize('attachTag', Flashcard::class)) {
-            throw new UnauthorizedException;
-        }
-
         $flashcard->tags()->attach($tag);
 
         return $flashcard;
@@ -433,10 +368,6 @@ class FlashcardService
 
     public function detachTag(Flashcard $flashcard, Tag $tag)
     {
-        if (! Gate::authorize('detachTag', Flashcard::class)) {
-            throw new UnauthorizedException;
-        }
-
         $flashcard->tags()->detach($tag);
 
         return $flashcard;

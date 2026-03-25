@@ -54,6 +54,7 @@ class AttemptService
     public function store(array $data): Attempt
     {
         $attempt = Attempt::create([
+            'flashcard_id' => $data['flashcard_id'],
             'user_id' => Auth::id(),
             'question' => $data['question'],
             'correctness' => $data['correctness'],
