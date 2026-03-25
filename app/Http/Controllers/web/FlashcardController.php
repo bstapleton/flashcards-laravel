@@ -19,7 +19,7 @@ class FlashcardController extends Controller
 
     public function index()
     {
-        if (!Auth::check()) {
+        if (! Auth::check()) {
             return redirect()->route('login');
         }
 
@@ -30,7 +30,7 @@ class FlashcardController extends Controller
 
     public function create()
     {
-        if (!Auth::check()) {
+        if (! Auth::check()) {
             return redirect()->route('login');
         }
 
@@ -39,7 +39,7 @@ class FlashcardController extends Controller
 
     public function createStatement()
     {
-        if (!Auth::check()) {
+        if (! Auth::check()) {
             return redirect()->route('login');
         }
 
@@ -50,7 +50,7 @@ class FlashcardController extends Controller
 
     public function createMultipleChoice()
     {
-        if (!Auth::check()) {
+        if (! Auth::check()) {
             return redirect()->route('login');
         }
 
@@ -61,7 +61,7 @@ class FlashcardController extends Controller
 
     public function show(Flashcard $flashcard)
     {
-        if (!Auth::check()) {
+        if (! Auth::check()) {
             return redirect()->route('login');
         }
 
@@ -77,7 +77,7 @@ class FlashcardController extends Controller
 
     public function graveyard()
     {
-        if (!Auth::check()) {
+        if (! Auth::check()) {
             return redirect()->route('login');
         }
 
@@ -88,7 +88,7 @@ class FlashcardController extends Controller
 
     public function drafts()
     {
-        if (!Auth::check()) {
+        if (! Auth::check()) {
             return redirect()->route('login');
         }
 
@@ -99,7 +99,7 @@ class FlashcardController extends Controller
 
     public function hidden()
     {
-        if (!Auth::check()) {
+        if (! Auth::check()) {
             return redirect()->route('login');
         }
 

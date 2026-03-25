@@ -52,6 +52,7 @@ class FlashcardService
     /**
      * @throws UndeterminedQuestionTypeException
      * @throws LessThanOneCorrectAnswerException
+     * @throws FreeUserFlashcardLimitException
      */
     public function store(array $data)
     {
@@ -237,7 +238,7 @@ class FlashcardService
                 ->alive()
                 ->get()
                 ->filter(function ($flashcard) {
-                    return (bool) $flashcard->eligible_at->greaterThan(now());
+                    return $flashcard->eligible_at->greaterThan(now());
                 })
                 ->sortBy(function ($flashcard) {
                     return $flashcard->eligible_at;

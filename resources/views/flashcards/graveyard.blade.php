@@ -1,13 +1,13 @@
 @extends('layouts.app')
 
-@section('title', 'Buried Flashcards')
+@section('title', 'Completely mastered Flashcards')
 
 @section('content')
 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
     <div class="py-6">
         <div class="px-4 py-6 sm:px-0">
             <div class="mb-8">
-                <h1 class="text-2xl font-bold text-gray-900">Buried Flashcards</h1>
+                <h1 class="text-2xl font-bold text-gray-900">Completely mastered Flashcards</h1>
                 <p class="mt-1 text-sm text-gray-600">
                     Flashcards you've mastered (answered correctly on Hard difficulty)
                 </p>
@@ -27,7 +27,7 @@
                         </a>
                         <a href="{{ route('flashcards.graveyard') }}"
                            class="py-2 px-1 border-b-2 border-indigo-500 font-medium text-sm text-indigo-600">
-                            Buried ({{ $flashcards->total() }})
+                            Completely mastered ({{ $flashcards->total() }})
                         </a>
                         <a href="{{ route('flashcards.drafts') }}"
                            class="py-2 px-1 border-b-2 border-transparent font-medium text-sm text-gray-500 hover:text-gray-700 hover:border-gray-300">
@@ -56,7 +56,7 @@
                                                     {{ Str::limit($flashcard->text, 100) }}
                                                 </p>
                                                 <p class="text-sm text-gray-500">
-                                                    Buried flashcard
+                                                    Completely mastered flashcard
                                                     @if($flashcard->difficulty)
                                                         • {{ ucfirst($flashcard->difficulty->value) }} difficulty
                                                     @endif
@@ -94,7 +94,7 @@
                     <svg class="mx-auto h-12 w-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 12H4"></path>
                     </svg>
-                    <h3 class="mt-2 text-sm font-medium text-gray-900">No buried flashcards</h3>
+                    <h3 class="mt-2 text-sm font-medium text-gray-900">No completely mastered flashcards</h3>
                     <p class="mt-1 text-sm text-gray-500">
                         You haven't mastered any flashcards yet. Keep studying!
                     </p>

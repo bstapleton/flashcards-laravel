@@ -27,7 +27,7 @@
                         </a>
                         <a href="{{ route('flashcards.graveyard') }}"
                            class="py-2 px-1 border-b-2 border-transparent font-medium text-sm text-gray-500 hover:text-gray-700 hover:border-gray-300">
-                            Buried
+                            Completely mastered
                         </a>
                         <a href="{{ route('flashcards.drafts') }}"
                            class="py-2 px-1 border-b-2 border-transparent font-medium text-sm text-gray-500 hover:text-gray-700 hover:border-gray-300">

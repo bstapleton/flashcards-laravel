@@ -28,7 +28,7 @@
                             <div class="ml-5 w-0 flex-1">
                                 <dl>
                                     <dt class="text-sm font-medium text-gray-500 truncate">
-                                        Total Flashcards
+                                        Total questions
                                     </dt>
                                     <dd class="text-lg font-medium text-gray-900">
                                         {{ $stats['total_flashcards'] }}
@@ -52,7 +52,7 @@
                             <div class="ml-5 w-0 flex-1">
                                 <dl>
                                     <dt class="text-sm font-medium text-gray-500 truncate">
-                                        Active
+                                        Active rotation questions
                                     </dt>
                                     <dd class="text-lg font-medium text-gray-900">
                                         {{ $stats['active_flashcards'] }}
@@ -76,7 +76,7 @@
                             <div class="ml-5 w-0 flex-1">
                                 <dl>
                                     <dt class="text-sm font-medium text-gray-500 truncate">
-                                        Hidden
+                                        Questions you've hidden
                                     </dt>
                                     <dd class="text-lg font-medium text-gray-900">
                                         {{ $stats['hidden_flashcards'] }}
@@ -100,7 +100,7 @@
                             <div class="ml-5 w-0 flex-1">
                                 <dl>
                                     <dt class="text-sm font-medium text-gray-500 truncate">
-                                        Buried
+                                        Questions you've already mastered
                                     </dt>
                                     <dd class="text-lg font-medium text-gray-900">
                                         {{ $stats['buried_flashcards'] }}
@@ -165,7 +165,7 @@
                                 </div>
                             </div>
                             <div class="flex items-center text-sm text-gray-500">
-                                Practice with your flashcards
+                                Answer some of your questions
                             </div>
                         </div>
                     </li>

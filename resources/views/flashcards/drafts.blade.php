@@ -17,19 +17,19 @@
             <div class="mb-6">
                 <div class="border-b border-gray-200">
                     <nav class="-mb-px flex space-x-8">
-                        <a href="{{ route('flashcards.index') }}" 
+                        <a href="{{ route('flashcards.index') }}"
                            class="py-2 px-1 border-b-2 border-transparent font-medium text-sm text-gray-500 hover:text-gray-700 hover:border-gray-300">
                             Active
                         </a>
-                        <a href="{{ route('flashcards.hidden') }}" 
+                        <a href="{{ route('flashcards.hidden') }}"
                            class="py-2 px-1 border-b-2 border-transparent font-medium text-sm text-gray-500 hover:text-gray-700 hover:border-gray-300">
                             Hidden
                         </a>
-                        <a href="{{ route('flashcards.graveyard') }}" 
+                        <a href="{{ route('flashcards.graveyard') }}"
                            class="py-2 px-1 border-b-2 border-transparent font-medium text-sm text-gray-500 hover:text-gray-700 hover:border-gray-300">
-                            Buried
+                            Completely mastered
                         </a>
-                        <a href="{{ route('flashcards.drafts') }}" 
+                        <a href="{{ route('flashcards.drafts') }}"
                            class="py-2 px-1 border-b-2 border-indigo-500 font-medium text-sm text-indigo-600">
                             Drafts ({{ $flashcards->total() }})
                         </a>
@@ -63,7 +63,7 @@
                                         </div>
                                     </div>
                                     <div class="flex items-center space-x-2">
-                                        <a href="{{ route('flashcards.show', $flashcard) }}" 
+                                        <a href="{{ route('flashcards.show', $flashcard) }}"
                                            class="text-indigo-600 hover:text-indigo-900 text-sm font-medium">
                                             Complete
                                         </a>
@@ -90,14 +90,14 @@
                         All your flashcards are complete and ready to study.
                     </p>
                     <div class="mt-6 flex space-x-3">
-                        <a href="{{ route('flashcards.create-statement') }}" 
+                        <a href="{{ route('flashcards.create-statement') }}"
                            class="inline-flex items-center px-4 py-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500">
                             <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                             </svg>
                             Create True/False
                         </a>
-                        <a href="{{ route('flashcards.create-multiple-choice') }}" 
+                        <a href="{{ route('flashcards.create-multiple-choice') }}"
                            class="inline-flex items-center px-4 py-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
                             <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"></path>
