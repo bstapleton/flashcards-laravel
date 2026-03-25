@@ -6,6 +6,7 @@ use App\Enums\Difficulty;
 use App\Enums\QuestionType;
 use App\Enums\Status;
 use App\Events\FlashcardDeleting;
+use App\Helpers\DifficultyToMastery;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
@@ -96,6 +97,16 @@ class Flashcard extends Model
         return $this->belongsTo(User::class);
     }
 
+    public function getMasteryTextAttribute(): string
+    {
+        return (new DifficultyToMastery)->convert($this->difficulty);
+    }
+
+    public function getMasteryTitleAttribute(): string
+    {
+        return (new DifficultyToMastery)->convert($this->difficulty, true);
+    }
+
     public function getCorrectAnswerAttribute(): ?Answer
     {
         if ($this->type !== QuestionType::SINGLE) {
@@ -134,7 +145,6 @@ class Flashcard extends Model
         if (! $user) {
             $user = Auth::user();
         }
-
 
         if (! $this->last_attempted_at) {
             return Carbon::now();

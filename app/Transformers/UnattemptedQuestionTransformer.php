@@ -22,6 +22,10 @@ class UnattemptedQuestionTransformer extends TransformerAbstract
             'text' => $flashcard->text,
             'explanation' => $flashcard->explanation,
             'difficulty' => $flashcard->difficulty,
+            'mastery' => [
+                'title' => $flashcard->mastery_title,
+                'text' => $flashcard->mastery_text,
+            ],
             'eligible_at' => Carbon::parse($flashcard->eligible_at)->toIso8601String(),
             'tags' => $flashcard->tags->map(function (Tag $tag) {
                 return (new TagTransformer)->transform($tag);
