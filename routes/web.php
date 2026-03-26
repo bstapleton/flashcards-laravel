@@ -30,6 +30,7 @@ Route::middleware(['auth'])->group(function () {
     // Revision
     Route::get('/revision', [RevisionController::class, 'index'])->name('revision');
     Route::get('/revision/random', [RevisionController::class, 'random'])->name('revision.random');
+    Route::get('/revision/{flashcard}', [RevisionController::class, 'show'])->name('revision.show');
     
     // Flashcards
     Route::prefix('flashcards')->name('flashcards.')->group(function () {

@@ -46,13 +46,13 @@
                                 <div class="space-y-2">
                                     <ul class="pl-2">
                                         <li class="list-item mb-2">
-                                            <a href="javascript:reviewByDifficulty('easy')" class="underline">Fresh learning</a> - Questions you haven't seen before, or have yet to begin mastering.
+                                            <a href="javascript:reviewByDifficulty('easy')" class="underline text-indigo-600 hover:text-gray-600 hover:no-underline">Fresh learning</a> - Questions you haven't seen before, or have yet to begin mastering.
                                         </li>
                                         <li class="list-item mb-2">
-                                            <a href="javascript:reviewByDifficulty('medium')" class="underline">Intermediate mastery</a> - You've answered correctly before, so you're on your way to mastering these questions.
+                                            <a href="javascript:reviewByDifficulty('medium')" class="underline text-indigo-600 hover:text-gray-600 hover:no-underline">Intermediate mastery</a> - You've answered correctly before, so you're on your way to mastering these questions.
                                         </li>
                                         <li class="list-item mb-2">
-                                            <a href="javascript:reviewByDifficulty('hard')" class="underline">High mastery</a> - Answered multiple times correctly. You're close to mastering these questions.
+                                            <a href="javascript:reviewByDifficulty('hard')" class="underline text-indigo-600 hover:text-gray-600 hover:no-underline">High mastery</a> - Answered multiple times correctly. You're close to mastering these questions.
                                         </li>
                                     </ul>
                                 </div>

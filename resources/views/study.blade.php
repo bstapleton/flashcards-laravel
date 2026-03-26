@@ -66,13 +66,13 @@
                                 <div class="space-y-2">
                                     <ul class="pl-2">
                                         <li class="list-item mb-2">
-                                            <a href="{{ route('study.easy') }}" class="underline">Fresh learning</a> - Questions you haven't seen before, or have yet to begin mastering.
+                                            <a href="{{ route('study.easy') }}" class="underline text-indigo-600 hover:text-gray-600 hover:no-underline">Fresh learning</a> - Questions you haven't seen before, or have yet to begin mastering.
                                         </li>
                                         <li class="list-item mb-2">
-                                            <a href="{{ route('study.medium') }}" class="underline">Intermediate mastery</a> - You've answered correctly before, so you're on your way to mastering these questions.
+                                            <a href="{{ route('study.medium') }}" class="underline text-indigo-600 hover:text-gray-600 hover:no-underline">Intermediate mastery</a> - You've answered correctly before, so you're on your way to mastering these questions.
                                         </li>
                                         <li class="list-item mb-2">
-                                            <a href="{{ route('study.hard') }}" class="underline">High mastery</a> - Answered multiple times correctly. You're close to mastering these questions.
+                                            <a href="{{ route('study.hard') }}" class="underline text-indigo-600 hover:text-gray-600 hover:no-underline">High mastery</a> - Answered multiple times correctly. You're close to mastering these questions.
                                         </li>
                                     </ul>
                                 </div>

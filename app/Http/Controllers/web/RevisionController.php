@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\web;
 
 use App\Http\Controllers\Controller;
+use App\Models\Flashcard;
 use App\Services\FlashcardService;
 use Illuminate\Support\Facades\Auth;
 
@@ -35,6 +36,21 @@ class RevisionController extends Controller
             return view('revision.show', compact('flashcard'));
         } catch (\Exception $e) {
             return view('revision')->with('error', 'No eligible flashcards available');
+        }
+    }
+
+    public function show(Flashcard $flashcard)
+    {
+        if (! Auth::check()) {
+            return redirect()->route('login');
+        }
+
+        try {
+            $flashcard = $this->flashcardService->show($flashcard, true);
+
+            return view('revision.show', compact('flashcard'));
+        } catch (\Exception $e) {
+            return view('revision')->with('error', 'Flashcard not found');
         }
     }
 }

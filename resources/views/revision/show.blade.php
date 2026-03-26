@@ -76,15 +76,9 @@
                             <h3 class="text-lg font-medium text-gray-900 mb-2">Details</h3>
                             <dl class="grid grid-cols-1 gap-x-4 gap-y-3 sm:grid-cols-2">
                                 <div>
-                                    <dt class="text-sm font-medium text-gray-500">Type</dt>
+                                    <dt class="text-sm font-medium text-gray-500">Current mastery level</dt>
                                     <dd class="text-sm text-gray-900">
-                                        {{ $flashcard->answers->count() > 0 ? 'Multiple Choice' : 'True/False' }}
-                                    </dd>
-                                </div>
-                                <div>
-                                    <dt class="text-sm font-medium text-gray-500">Difficulty</dt>
-                                    <dd class="text-sm text-gray-900">
-                                        {{ $flashcard->difficulty ? ucfirst($flashcard->difficulty->value) : 'Easy' }}
+                                        {{ $flashcard->mastery_text }}
                                     </dd>
                                 </div>
                                 <div>
@@ -94,7 +88,13 @@
                                     </dd>
                                 </div>
                                 <div>
-                                    <dt class="text-sm font-medium text-gray-500">Last Attempted</dt>
+                                    <dt class="text-sm font-medium text-gray-500">Last attempted</dt>
+                                    <dd class="text-sm text-gray-900">
+                                        {{ $flashcard->last_attempted_at ? $flashcard->last_attempted_at->diffForHumans() : 'Never' }}
+                                    </dd>
+                                </div>
+                                <div>
+                                    <dt class="text-sm font-medium text-gray-500">Last revised</dt>
                                     <dd class="text-sm text-gray-900">
                                         {{ $flashcard->last_seen_at ? $flashcard->last_seen_at->diffForHumans() : 'Never' }}
                                     </dd>

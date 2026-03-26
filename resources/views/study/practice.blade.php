@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Practice Flashcard')
+@section('title', 'Test your knowledge')
 
 @section('content')
 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -11,7 +11,7 @@
                    class="text-sm text-gray-500 hover:text-gray-700 mb-4 inline-block">
                     ← Back to Study
                 </a>
-                <h1 class="text-2xl font-bold text-gray-900">Practice Mode</h1>
+                <h1 class="text-2xl font-bold text-gray-900">Test your knowledge</h1>
             </div>
 
             @if($flashcard)
@@ -19,7 +19,11 @@
                     <div class="px-6 py-4">
                         <!-- Question -->
                         <div class="mb-6">
-                            <h2 class="text-lg font-medium text-gray-900 mb-2">Question</h2>
+                            @if($flashcard->type->value === 'statement')
+                                <h2 class="text-lg font-medium text-gray-900 mb-2">Is the following true or false?</h2>
+                            @else
+                                <h2 class="text-lg font-medium text-gray-900 mb-2">Question</h2>
+                            @endif
                             <p class="text-gray-700">{{ $flashcard->text }}</p>
                         </div>
 
@@ -96,15 +100,9 @@
                             <h3 class="text-lg font-medium text-gray-900 mb-2">Details</h3>
                             <dl class="grid grid-cols-1 gap-x-4 gap-y-3 sm:grid-cols-2">
                                 <div>
-                                    <dt class="text-sm font-medium text-gray-500">Type</dt>
+                                    <dt class="text-sm font-medium text-gray-500">Current mastery level</dt>
                                     <dd class="text-sm text-gray-900">
-                                        {{ $flashcard->answers->count() > 0 ? 'Multiple Choice' : 'True/False' }}
-                                    </dd>
-                                </div>
-                                <div>
-                                    <dt class="text-sm font-medium text-gray-500">Difficulty</dt>
-                                    <dd class="text-sm text-gray-900">
-                                        {{ $flashcard->difficulty ? ucfirst($flashcard->difficulty->value) : 'Easy' }}
+                                        {{ $flashcard->mastery_text }}
                                     </dd>
                                 </div>
                                 <div>
@@ -114,9 +112,15 @@
                                     </dd>
                                 </div>
                                 <div>
-                                    <dt class="text-sm font-medium text-gray-500">Last Attempted</dt>
+                                    <dt class="text-sm font-medium text-gray-500">Last attempted</dt>
                                     <dd class="text-sm text-gray-900">
-                                        {{ $flashcard->last_seen_at ? $flashcard->last_seen_at->diffForHumans() : 'Never' }}
+                                        {{ $flashcard->last_attempted_at ? $flashcard->last_attempted_at->diffForHumans() : 'Never' }}
+                                    </dd>
+                                </div>
+                                <div>
+                                    <dt class="text-sm font-medium text-gray-500">Last revised</dt>
+                                    <dd class="text-sm text-gray-900">
+                                        {{ $flashcard->last_seen_at ? $flashcard->last_seen_at->diffForHumans() : 'Never' }} - <a class="underline text-indigo-600 hover:text-gray-600 hover:no-underline" href="{{ route('revision.show', $flashcard) }}">review now</a>
                                     </dd>
                                 </div>
                             </dl>
@@ -128,7 +132,7 @@
                                 <h3 class="text-lg font-medium text-gray-900 mb-2">Tags</h3>
                                 <div class="flex flex-wrap gap-2">
                                     @foreach($flashcard->tags as $tag)
-                                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-indigo-100 text-indigo-800">
+                                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-{{ strtolower($tag->colour->name) }}-100 text-{{ strtolower($tag->colour->name) }}-800">
                                             {{ $tag->name }}
                                         </span>
                                     @endforeach
