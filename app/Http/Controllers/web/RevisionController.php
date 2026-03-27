@@ -53,4 +53,50 @@ class RevisionController extends Controller
             return view('revision')->with('error', 'Flashcard not found');
         }
     }
+
+    public function easy()
+    {
+        if (! Auth::check()) {
+            return redirect()->route('login');
+        }
+
+        try {
+            $flashcard = $this->flashcardService->easy(true);
+            // TODO: pass value to change random button in view to next in this difficulty
+
+            return view('revision.show', compact('flashcard'));
+        } catch (\Exception $e) {
+            return view('revision')->with('error', 'No eligible flashcards available');
+        }
+    }
+
+    public function medium()
+    {
+        if (! Auth::check()) {
+            return redirect()->route('login');
+        }
+
+        try {
+            $flashcard = $this->flashcardService->medium(true);
+
+            return view('revision.show', compact('flashcard'));
+        } catch (\Exception $e) {
+            return view('revision')->with('error', 'No eligible flashcards available');
+        }
+    }
+
+    public function hard()
+    {
+        if (! Auth::check()) {
+            return redirect()->route('login');
+        }
+
+        try {
+            $flashcard = $this->flashcardService->hard(true);
+
+            return view('revision.show', compact('flashcard'));
+        } catch (\Exception $e) {
+            return view('revision')->with('error', 'No eligible flashcards available');
+        }
+    }
 }

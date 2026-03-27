@@ -18,7 +18,7 @@ Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 Route::middleware(['auth'])->group(function () {
     // Dashboard
     Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
-    
+
     // Study
     Route::get('/study', [StudyController::class, 'index'])->name('study');
     Route::get('/study/random', [StudyController::class, 'random'])->name('study.random');
@@ -26,12 +26,17 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/study/medium', [StudyController::class, 'medium'])->name('study.medium');
     Route::get('/study/hard', [StudyController::class, 'hard'])->name('study.hard');
     Route::get('/study/{flashcard}', [StudyController::class, 'practice'])->name('study.practice');
-    
+
     // Revision
-    Route::get('/revision', [RevisionController::class, 'index'])->name('revision');
-    Route::get('/revision/random', [RevisionController::class, 'random'])->name('revision.random');
-    Route::get('/revision/{flashcard}', [RevisionController::class, 'show'])->name('revision.show');
-    
+    Route::prefix('revision')->name('revision.')->group(function () {
+        Route::get('/', [RevisionController::class, 'index'])->name('index');
+        Route::get('/random', [RevisionController::class, 'random'])->name('random');
+        Route::get('/fresh-learning', [RevisionController::class, 'easy'])->name('fresh-learning');
+        Route::get('/intermediate-mastery', [RevisionController::class, 'medium'])->name('intermediate-mastery');
+        Route::get('/high-mastery', [RevisionController::class, 'hard'])->name('high-mastery');
+        Route::get('/{flashcard}', [RevisionController::class, 'show'])->name('show');
+    });
+
     // Flashcards
     Route::prefix('flashcards')->name('flashcards.')->group(function () {
         Route::get('/', [FlashcardController::class, 'index'])->name('index');
@@ -43,7 +48,7 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/hidden', [FlashcardController::class, 'hidden'])->name('hidden');
         Route::get('/{flashcard}', [FlashcardController::class, 'show'])->name('show');
     });
-    
+
     // Legacy random route (redirect to revision random)
     Route::get('/flashcards/random', function() {
         return redirect()->route('revision.random');

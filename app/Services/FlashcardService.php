@@ -41,9 +41,7 @@ class FlashcardService
     public function show(Flashcard $flashcard, bool $forRevision = false): Flashcard
     {
         if ($forRevision) {
-            $flashcard->update([
-                'last_seen_at' => now(),
-            ]);
+            self::updateLastSeenAt($flashcard);
         }
 
         return $flashcard;
@@ -152,26 +150,31 @@ class FlashcardService
     /**
      * @throws NoEligibleQuestionsException
      */
-    public function easy()
+    public function easy(bool $forRevision = false)
     {
         $eligible = Flashcard::currentUser()
             ->published()
             ->easy()
             ->inRandomOrder()
-            ->get()
-            ->first();
+            ->get();
 
         if (! $eligible->count()) {
             throw new NoEligibleQuestionsException;
         }
 
-        return $eligible->first();
+        $selected = $eligible->first();
+
+        if ($forRevision) {
+            self::updateLastSeenAt($selected);
+        }
+
+        return $selected;
     }
 
     /**
      * @throws NoEligibleQuestionsException
      */
-    public function medium()
+    public function medium(bool $forRevision = false)
     {
         $eligible = Flashcard::currentUser()
             ->published()
@@ -183,13 +186,19 @@ class FlashcardService
             throw new NoEligibleQuestionsException;
         }
 
-        return $eligible->first();
+        $selected = $eligible->first();
+
+        if ($forRevision) {
+            self::updateLastSeenAt($selected);
+        }
+
+        return $selected;
     }
 
     /**
      * @throws NoEligibleQuestionsException
      */
-    public function hard()
+    public function hard(bool $forRevision = false)
     {
         $eligible = Flashcard::currentUser()
             ->published()
@@ -201,7 +210,13 @@ class FlashcardService
             throw new NoEligibleQuestionsException;
         }
 
-        return $eligible->first();
+        $selected = $eligible->first();
+
+        if ($forRevision) {
+            self::updateLastSeenAt($selected);
+        }
+
+        return $selected;
     }
 
     public function draft()
@@ -255,9 +270,7 @@ class FlashcardService
         $selectedQuestion = $eligibleQuestions->first();
 
         if ($forRevision) {
-            $selectedQuestion->update([
-                'last_seen_at' => now(),
-            ]);
+            self::updateLastSeenAt($selectedQuestion);
         }
 
         return $selectedQuestion;
@@ -569,5 +582,12 @@ class FlashcardService
         }
 
         return $importCount;
+    }
+
+    private static function updateLastSeenAt(Flashcard $flashcard): void
+    {
+        $flashcard->update([
+            'last_seen_at' => now(),
+        ]);
     }
 }
