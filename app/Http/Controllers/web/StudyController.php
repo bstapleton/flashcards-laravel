@@ -23,7 +23,7 @@ class StudyController extends Controller
             return redirect()->route('login');
         }
 
-        return view('study');
+        return view('answer');
     }
 
     public function random()
@@ -36,7 +36,7 @@ class StudyController extends Controller
             $flashcard = $this->flashcardService->random();
             return view('study.practice', compact('flashcard'));
         } catch (\Exception $e) {
-            return view('study')->with('error', 'No eligible flashcards available');
+            return view('answer')->with('error', 'No eligible flashcards available');
         }
     }
 
@@ -62,9 +62,12 @@ class StudyController extends Controller
 
         try {
             $flashcard = $this->flashcardService->easy();
-            return view('study.practice', compact('flashcard'));
+            $isPooled = true;
+            $route = 'answer.'.$flashcard->mastery_route;
+
+            return view('study.practice', compact('flashcard', 'isPooled', 'route'));
         } catch (NoEligibleQuestionsException $e) {
-            return view('study')->with('error', 'No easy flashcards available');
+            return view('answer')->with('error', 'No easy flashcards available');
         }
     }
 
@@ -76,10 +79,12 @@ class StudyController extends Controller
 
         try {
             $flashcard = $this->flashcardService->medium();
+            $isPooled = true;
+            $route = 'answer.'.$flashcard->mastery_route;
 
-            return view('study.practice', compact('flashcard'));
+            return view('study.practice', compact('flashcard', 'isPooled', 'route'));
         } catch (NoEligibleQuestionsException $e) {
-            return view('study')->with('error', 'No medium flashcards available');
+            return view('answer')->with('error', 'No medium flashcards available');
         }
     }
 
@@ -91,9 +96,12 @@ class StudyController extends Controller
 
         try {
             $flashcard = $this->flashcardService->hard();
-            return view('study.practice', compact('flashcard'));
+            $isPooled = true;
+            $route = 'answer.'.$flashcard->mastery_route;
+
+            return view('study.practice', compact('flashcard', 'isPooled', 'route'));
         } catch (NoEligibleQuestionsException $e) {
-            return view('study')->with('error', 'No hard flashcards available');
+            return view('answer')->with('error', 'No hard flashcards available');
         }
     }
 }

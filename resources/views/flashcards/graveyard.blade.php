@@ -9,7 +9,7 @@
             <div class="mb-8">
                 <h1 class="text-2xl font-bold text-gray-900">Completely mastered Flashcards</h1>
                 <p class="mt-1 text-sm text-gray-600">
-                    Flashcards you've mastered (answered correctly on Hard difficulty)
+                    You've answered correctly enough times to have mastered these questions.
                 </p>
             </div>
 
@@ -72,9 +72,9 @@
                                                 Revive
                                             </button>
                                         </form>
-                                        <a href="{{ route('flashcards.show', $flashcard) }}"
+                                        <a href="{{ route('revision.show', $flashcard) }}"
                                            class="text-indigo-600 hover:text-indigo-900 text-sm font-medium">
-                                            View
+                                            Revise
                                         </a>
                                     </div>
                                 </div>
@@ -99,7 +99,7 @@
                         You haven't mastered any flashcards yet. Keep studying!
                     </p>
                     <div class="mt-6">
-                        <a href="{{ route('study') }}"
+                        <a href="{{ route('answer.index') }}"
                            class="inline-flex items-center px-4 py-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500">
                             Start Studying
                         </a>

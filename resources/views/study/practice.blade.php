@@ -7,7 +7,7 @@
     <div class="py-6">
         <div class="px-4 py-6 sm:px-0 max-w-2xl mx-auto">
             <div class="mb-8">
-                <a href="{{ route('study') }}"
+                <a href="{{ route('answer.index') }}"
                    class="text-sm text-gray-500 hover:text-gray-700 mb-4 inline-block">
                     ← Back to Study
                 </a>
@@ -156,19 +156,21 @@
                             </form>
                         </div>
                         <div class="space-x-3">
-                            <form method="GET" action="{{ route('study.random') }}" class="inline">
-                                <button type="submit"
-                                        class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                            @if (isset($isPooled) && $isPooled)
+                                <a href="{{ route($route) }}" class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
                                     <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path>
                                     </svg>
-                                    Next Question
-                                </button>
-                            </form>
-                            <a href="{{ route('study') }}"
-                               class="px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
-                                Back to Study
-                            </a>
+                                    Answer another {{ $flashcard->mastery_text }}
+                                </a>
+                            @else
+                                <a href="{{ route('revision.random') }}" class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                                    <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path>
+                                    </svg>
+                                    Answer random
+                                </a>
+                            @endif
                         </div>
                     </div>
                 </div>
@@ -182,7 +184,7 @@
                         This flashcard doesn't exist or you don't have access to it.
                     </p>
                     <div class="mt-6">
-                        <a href="{{ route('study') }}"
+                        <a href="{{ route('answer.index') }}"
                            class="inline-flex items-center px-4 py-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
                             Back to Study
                         </a>

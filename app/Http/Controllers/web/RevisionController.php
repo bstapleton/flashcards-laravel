@@ -62,9 +62,10 @@ class RevisionController extends Controller
 
         try {
             $flashcard = $this->flashcardService->easy(true);
-            // TODO: pass value to change random button in view to next in this difficulty
+            $isPooled = true;
+            $route = 'revision.'.$flashcard->mastery_route;
 
-            return view('revision.show', compact('flashcard'));
+            return view('revision.show', compact('flashcard', 'isPooled', 'route'));
         } catch (\Exception $e) {
             return view('revision')->with('error', 'No eligible flashcards available');
         }
@@ -78,8 +79,10 @@ class RevisionController extends Controller
 
         try {
             $flashcard = $this->flashcardService->medium(true);
+            $isPooled = true;
+            $route = 'revision.'.$flashcard->mastery_route;
 
-            return view('revision.show', compact('flashcard'));
+            return view('revision.show', compact('flashcard', 'isPooled', 'route'));
         } catch (\Exception $e) {
             return view('revision')->with('error', 'No eligible flashcards available');
         }
@@ -93,8 +96,10 @@ class RevisionController extends Controller
 
         try {
             $flashcard = $this->flashcardService->hard(true);
+            $isPooled = true;
+            $route = 'revision.'.$flashcard->mastery_route;
 
-            return view('revision.show', compact('flashcard'));
+            return view('revision.show', compact('flashcard', 'isPooled', 'route'));
         } catch (\Exception $e) {
             return view('revision')->with('error', 'No eligible flashcards available');
         }

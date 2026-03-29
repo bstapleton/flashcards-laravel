@@ -20,12 +20,14 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
 
     // Study
-    Route::get('/study', [StudyController::class, 'index'])->name('study');
-    Route::get('/study/random', [StudyController::class, 'random'])->name('study.random');
-    Route::get('/study/easy', [StudyController::class, 'easy'])->name('study.easy');
-    Route::get('/study/medium', [StudyController::class, 'medium'])->name('study.medium');
-    Route::get('/study/hard', [StudyController::class, 'hard'])->name('study.hard');
-    Route::get('/study/{flashcard}', [StudyController::class, 'practice'])->name('study.practice');
+    Route::prefix('answer')->name('answer.')->group(function () {
+        Route::get('/', [StudyController::class, 'index'])->name('index');
+        Route::get('/random', [StudyController::class, 'random'])->name('random');
+        Route::get('/easy', [StudyController::class, 'easy'])->name('fresh-learning');
+        Route::get('/medium', [StudyController::class, 'medium'])->name('intermediate-mastery');
+        Route::get('/hard', [StudyController::class, 'hard'])->name('high-mastery');
+        Route::get('/{flashcard}', [StudyController::class, 'practice'])->name('show');
+    });
 
     // Revision
     Route::prefix('revision')->name('revision.')->group(function () {

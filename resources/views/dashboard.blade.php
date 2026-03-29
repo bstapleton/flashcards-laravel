@@ -159,8 +159,8 @@
                                     </svg>
                                 </div>
                                 <div class="ml-4">
-                                    <a href="{{ route('study') }}" class="text-sm font-medium text-green-600 hover:text-green-900">
-                                        Start Studying
+                                    <a href="{{ route('answer.index') }}" class="text-sm font-medium text-green-600 hover:text-green-900">
+                                        Test your knowledge
                                     </a>
                                 </div>
                             </div>

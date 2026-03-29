@@ -34,11 +34,11 @@
                             <a href="{{ route('flashcards.index') }}" class="inline-flex items-center px-1 pt-1 border-b-2 {{ request()->routeIs('flashcards.*') ? 'border-indigo-500 text-gray-900' : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300' }} text-sm font-medium">
                                 My Flashcards
                             </a>
-                            <a href="{{ route('study') }}" class="inline-flex items-center px-1 pt-1 border-b-2 {{ request()->routeIs('study') ? 'border-indigo-500 text-gray-900' : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300' }} text-sm font-medium">
-                                Study
-                            </a>
                             <a href="{{ route('revision.index') }}" class="inline-flex items-center px-1 pt-1 border-b-2 {{ request()->routeIs('revision') ? 'border-indigo-500 text-gray-900' : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300' }} text-sm font-medium">
-                                Revision
+                                Revise
+                            </a>
+                            <a href="{{ route('answer.index') }}" class="inline-flex items-center px-1 pt-1 border-b-2 {{ request()->routeIs('answer') ? 'border-indigo-500 text-gray-900' : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300' }} text-sm font-medium">
+                                Answer
                             </a>
                         </div>
                     </div>

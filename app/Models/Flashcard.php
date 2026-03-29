@@ -107,6 +107,11 @@ class Flashcard extends Model
         return (new DifficultyToMastery)->convert($this->difficulty, true);
     }
 
+    public function getMasteryRouteAttribute(): string
+    {
+        return str_replace(' ', '-', (new DifficultyToMastery)->convert($this->difficulty));
+    }
+
     public function getCorrectAnswerAttribute(): ?Answer
     {
         if ($this->type !== QuestionType::SINGLE) {

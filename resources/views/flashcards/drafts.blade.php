@@ -9,7 +9,7 @@
             <div class="mb-8">
                 <h1 class="text-2xl font-bold text-gray-900">Draft Flashcards</h1>
                 <p class="mt-1 text-sm text-gray-600">
-                    Flashcards that need more information before they can be published
+                    Flashcards that you haven't published yet - these won't show up in the revision or answer pool.
                 </p>
             </div>
 

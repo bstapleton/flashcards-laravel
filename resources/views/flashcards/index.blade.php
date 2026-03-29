@@ -82,19 +82,14 @@
                                             </div>
                                         </div>
                                         <div class="flex items-center space-x-2">
-                                            <a href="{{ route('flashcards.show', $flashcard) }}"
+                                            <a href="{{ route('revision.show', $flashcard) }}"
                                                class="text-indigo-600 hover:text-indigo-900 text-sm font-medium">
-                                                View
+                                                Revise
                                             </a>
-                                            <form method="POST"
-                                                  action="{{ route('api.flashcards.answer', $flashcard) }}"
-                                                  class="inline">
-                                                @csrf
-                                                <button type="submit"
-                                                        class="text-green-600 hover:text-green-900 text-sm font-medium">
-                                                    Study
-                                                </button>
-                                            </form>
+                                            <a href="{{ route('answer.show', $flashcard) }}"
+                                               class="text-green-600 hover:text-green-900 text-sm font-medium">
+                                                Attempt
+                                            </a>
                                         </div>
                                     </div>
                                 </li>
