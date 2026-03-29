@@ -92,198 +92,36 @@
                 </ul>
             </div>
 
-            <!-- Stats Grid -->
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-                <div class="bg-white overflow-hidden shadow rounded-lg">
-                    <div class="p-5">
-                        <div class="flex items-center">
-                            <div class="flex-shrink-0">
-                                <div class="w-8 h-8 bg-indigo-500 rounded-md flex items-center justify-center">
-                                    <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path>
-                                    </svg>
-                                </div>
-                            </div>
-                            <div class="ml-5 w-0 flex-1">
-                                <dl>
-                                    <dt class="text-sm font-medium text-gray-500 truncate">
-                                        Total questions
-                                    </dt>
-                                    <dd class="text-lg font-medium text-gray-900">
-                                        {{ $stats['total_flashcards'] }}
-                                    </dd>
-                                </dl>
-                            </div>
-                        </div>
-                    </div>
+            <div class="bg-white shadow overflow-hidden sm:rounded-md mb-8">
+                <div class="px-4 py-5 sm:px-6">
+                    <h3 class="text-lg leading-6 font-medium text-gray-900">Stats for your library</h3>
+                    <p class="mt-1 max-w-2xl text-sm text-gray-500">
+                        Information about your learning library
+                    </p>
                 </div>
-
-                <div class="bg-white overflow-hidden shadow rounded-lg">
-                    <div class="p-5">
-                        <div class="flex items-center">
-                            <div class="flex-shrink-0">
-                                <div class="w-8 h-8 bg-green-500 rounded-md flex items-center justify-center">
-                                    <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                                    </svg>
-                                </div>
-                            </div>
-                            <div class="ml-5 w-0 flex-1">
-                                <dl>
-                                    <dt class="text-sm font-medium text-gray-500 truncate">
-                                        Active rotation questions
-                                    </dt>
-                                    <dd class="text-lg font-medium text-gray-900">
-                                        {{ $stats['active_flashcards'] }}
-                                    </dd>
-                                </dl>
-                            </div>
-                        </div>
-                    </div>
+                <div class="px-4 py-5 sm:px-6">
+                    <p class="mt-1 max-w-2xl text-gray-900">
+                        {{ $stats['total_flashcards'] }} total flashcards, of which {{ $stats['active_flashcards'] }} are <a href="{{ route('flashcards.index') }}">in active rotation</a>.
+                    </p>
+                    <p>
+                        You have {{ $stats['draft_flashcards'] }} that you <a href="{{ route('flashcards.drafts') }}">haven't published</a> to the learning pool yet, and {{ $stats['hidden_flashcards'] }} are hidden.
+                    </p>
+                    <p class="bold">By category:</p>
+                    <ul class="list-disc">
+                        <li class="ml-5">
+                            <a href="{{ route('flashcards.fresh-learning') }}" class="underline text-indigo-600 hover:text-gray-600 hover:no-underline">{{ $stats['fresh_learning'] }} Fresh learning</a>
+                        </li>
+                        <li class="ml-5">
+                            <a href="{{ route('flashcards.intermediate-mastery') }}" class="underline text-indigo-600 hover:text-gray-600 hover:no-underline">{{ $stats['intermediate_mastery'] }} Intermediate mastery</a>
+                        </li>
+                        <li class="ml-5">
+                            <a href="{{ route('flashcards.high-mastery') }}" class="underline text-indigo-600 hover:text-gray-600 hover:no-underline">{{ $stats['high_mastery'] }} High mastery</a>
+                        </li>
+                        <li class="ml-5">
+                            <a href="{{ route('flashcards.completely-mastered') }}" class="underline text-indigo-600 hover:text-gray-600 hover:no-underline">{{ $stats['buried_flashcards'] }} Completely mastered</a>
+                        </li>
+                    </ul>
                 </div>
-
-                <div class="bg-white overflow-hidden shadow rounded-lg">
-                    <div class="p-5">
-                        <div class="flex items-center">
-                            <div class="flex-shrink-0">
-                                <div class="w-8 h-8 bg-yellow-500 rounded-md flex items-center justify-center">
-                                    <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                                    </svg>
-                                </div>
-                            </div>
-                            <div class="ml-5 w-0 flex-1">
-                                <dl>
-                                    <dt class="text-sm font-medium text-gray-500 truncate">
-                                        Questions you've hidden
-                                    </dt>
-                                    <dd class="text-lg font-medium text-gray-900">
-                                        {{ $stats['hidden_flashcards'] }}
-                                    </dd>
-                                </dl>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="bg-white overflow-hidden shadow rounded-lg">
-                    <div class="p-5">
-                        <div class="flex items-center">
-                            <div class="flex-shrink-0">
-                                <div class="w-8 h-8 bg-blue-500 rounded-md flex items-center justify-center">
-                                    <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
-                                    </svg>
-                                </div>
-                            </div>
-                            <div class="ml-5 w-0 flex-1">
-                                <dl>
-                                    <dt class="text-sm font-medium text-gray-500 truncate">
-                                        Fresh learning
-                                    </dt>
-                                    <dd class="text-lg font-medium text-gray-900">
-                                        {{ $stats['fresh_learning'] }}
-                                    </dd>
-                                </dl>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="bg-white overflow-hidden shadow rounded-lg">
-                    <div class="p-5">
-                        <div class="flex items-center">
-                            <div class="flex-shrink-0">
-                                <div class="w-8 h-8 bg-orange-500 rounded-md flex items-center justify-center">
-                                    <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 2C6.48 2 2 6.48 2s4.48 0 8 0 8 4.48 0 8 0 0 4.48 8 0 0 4.48 8 0zm0 6.16A5.984 5.984 0 011 3.078 6.923 5.984 6.923 0 011.378 1.626 5.984 1.626 6.923 0 011.378 1.626 5.984 1.626 6.923 0 011.378 1.626 5.984 1.626 6.923 0 011.378 1.626 5.984 1.626 6.923 0z"></path>
-                                    </svg>
-                                </div>
-                            </div>
-                            <div class="ml-5 w-0 flex-1">
-                                <dl>
-                                    <dt class="text-sm font-medium text-gray-500 truncate">
-                                        Intermediate mastery
-                                    </dt>
-                                    <dd class="text-lg font-medium text-gray-900">
-                                        {{ $stats['intermediate_mastery'] }}
-                                    </dd>
-                                </dl>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="bg-white overflow-hidden shadow rounded-lg">
-                    <div class="p-5">
-                        <div class="flex items-center">
-                            <div class="flex-shrink-0">
-                                <div class="w-8 h-8 bg-red-500 rounded-md flex items-center justify-center">
-                                    <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                                    </svg>
-                                </div>
-                            </div>
-                            <div class="ml-5 w-0 flex-1">
-                                <dl>
-                                    <dt class="text-sm font-medium text-gray-500 truncate">
-                                        High mastery
-                                    </dt>
-                                    <dd class="text-lg font-medium text-gray-900">
-                                        {{ $stats['high_mastery'] }}
-                                    </dd>
-                                </dl>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="bg-white overflow-hidden shadow rounded-lg">
-                    <div class="p-5">
-                        <div class="flex items-center">
-                            <div class="flex-shrink-0">
-                                <div class="w-8 h-8 bg-gray-500 rounded-md flex items-center justify-center">
-                                    <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 12H4"></path>
-                                    </svg>
-                                </div>
-                            </div>
-                            <div class="ml-5 w-0 flex-1">
-                                <dl>
-                                    <dt class="text-sm font-medium text-gray-500 truncate">
-                                        Questions you've already mastered
-                                    </dt>
-                                    <dd class="text-lg font-medium text-gray-900">
-                                        {{ $stats['buried_flashcards'] }}
-                                    </dd>
-                                </dl>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="bg-white shadow overflow-hidden sm:rounded-md mb-8">
-            <div class="px-4 py-5 sm:px-6">
-                <h3 class="text-lg leading-6 font-medium text-gray-900">Stats for your library</h3>
-                <p class="mt-1 max-w-2xl text-sm text-gray-500">
-                    Get started with your flashcards
-                </p>
-            </div>
-            <div class="px-4 py-5 sm:px-6">
-                <p class="mt-1 max-w-2xl text-gray-900">
-                    {{ $stats['total_flashcards'] }} total flashcards, of which {{ $stats['active_flashcards'] }} are <a href="{{ route('flashcards.index') }}">in active rotation</a>.
-                </p>
-                <p>
-                    You have {{ $stats['draft_flashcards'] }} that you <a href="{{ route('flashcards.drafts') }}">haven't published</a> to the learning pool yet.
-                </p>
-                <p>By category:</p>
-                <ul>
-                    <li><a href="{{ route('flashcards.fresh-learning') }}">{{ $stats['fresh_learning'] }} Fresh learning</a></li>
-                    <li><a href="{{ route('flashcards.intermediate-mastery') }}">{{ $stats['intermediate_mastery'] }} Intermediate mastery</a></li>
-                    <li><a href="{{ route('flashcards.high-mastery') }}">{{ $stats['high_mastery'] }}</a> High mastery</li>
-                    <li><a href="{{ route('flashcards.completely-mastered') }}">{{ $stats['buried'] }} Completely mastered</a></li>
-                </ul>
             </div>
         </div>
     </div>
