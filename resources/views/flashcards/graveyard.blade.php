@@ -21,13 +21,25 @@
                            class="py-2 px-1 border-b-2 border-transparent font-medium text-sm text-gray-500 hover:text-gray-700 hover:border-gray-300">
                             Active
                         </a>
+                        <a href="{{ route('flashcards.fresh-learning') }}"
+                           class="py-2 px-1 border-b-2 border-transparent font-medium text-sm text-gray-500 hover:text-gray-700 hover:border-gray-300">
+                            Fresh learning
+                        </a>
+                        <a href="{{ route('flashcards.intermediate-mastery') }}"
+                           class="py-2 px-1 border-b-2 border-transparent font-medium text-sm text-gray-500 hover:text-gray-700 hover:border-gray-300">
+                            Intermediate mastery
+                        </a>
+                        <a href="{{ route('flashcards.high-mastery') }}"
+                           class="py-2 px-1 border-b-2 border-transparent font-medium text-sm text-gray-500 hover:text-gray-700 hover:border-gray-300">
+                            High mastery
+                        </a>
+                        <a href="{{ route('flashcards.completely-mastered') }}"
+                           class="py-2 px-1 border-b-2 border-indigo-500 font-medium text-sm text-indigo-600">
+                            Completely mastered ({{ $flashcards->total() }})
+                        </a>
                         <a href="{{ route('flashcards.hidden') }}"
                            class="py-2 px-1 border-b-2 border-transparent font-medium text-sm text-gray-500 hover:text-gray-700 hover:border-gray-300">
                             Hidden
-                        </a>
-                        <a href="{{ route('flashcards.graveyard') }}"
-                           class="py-2 px-1 border-b-2 border-indigo-500 font-medium text-sm text-indigo-600">
-                            Completely mastered ({{ $flashcards->total() }})
                         </a>
                         <a href="{{ route('flashcards.drafts') }}"
                            class="py-2 px-1 border-b-2 border-transparent font-medium text-sm text-gray-500 hover:text-gray-700 hover:border-gray-300">
@@ -54,12 +66,6 @@
                                             <div class="flex-1">
                                                 <p class="text-sm font-medium text-gray-900">
                                                     {{ Str::limit($flashcard->text, 100) }}
-                                                </p>
-                                                <p class="text-sm text-gray-500">
-                                                    Completely mastered flashcard
-                                                    @if($flashcard->difficulty)
-                                                        • {{ ucfirst($flashcard->difficulty->value) }} difficulty
-                                                    @endif
                                                 </p>
                                             </div>
                                         </div>

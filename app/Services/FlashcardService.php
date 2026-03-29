@@ -147,6 +147,15 @@ class FlashcardService
             ->orderBy('created_at', 'desc');
     }
 
+    public function category(Difficulty $difficulty)
+    {
+        return Flashcard::currentUser()
+            ->published()
+            ->where('difficulty', $difficulty->value)
+            ->orderBy('last_seen_at', 'desc')
+            ->orderBy('created_at', 'desc');
+    }
+
     /**
      * @throws NoEligibleQuestionsException
      */

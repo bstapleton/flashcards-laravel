@@ -9,7 +9,7 @@
             <div class="mb-8">
                 <a href="{{ route('answer.index') }}"
                    class="text-sm text-gray-500 hover:text-gray-700 mb-4 inline-block">
-                    ← Back to Study
+                    ← Back to Answer home page
                 </a>
                 <h1 class="text-2xl font-bold text-gray-900">Test your knowledge</h1>
             </div>
@@ -144,24 +144,12 @@
                     <!-- Actions -->
                     <div class="px-6 py-4 bg-gray-50 border-t border-gray-200 flex justify-between">
                         <div class="space-x-3">
-                            <form method="GET" action="{{ route('revision.random') }}" class="inline">
-                                <button type="submit"
-                                        class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-purple-600 hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500">
-                                    <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
-                                    </svg>
-                                    Review Answer
-                                </button>
-                            </form>
-                        </div>
-                        <div class="space-x-3">
                             @if (isset($isPooled) && $isPooled)
                                 <a href="{{ route($route) }}" class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
                                     <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path>
                                     </svg>
-                                    Answer another {{ $flashcard->mastery_text }}
+                                    Get a different {{ $flashcard->mastery_text }} question
                                 </a>
                             @else
                                 <a href="{{ route('revision.random') }}" class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
@@ -186,7 +174,7 @@
                     <div class="mt-6">
                         <a href="{{ route('answer.index') }}"
                            class="inline-flex items-center px-4 py-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
-                            Back to Study
+                            Back to Answer home page
                         </a>
                     </div>
                 </div>

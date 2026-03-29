@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\web;
 
+use App\Enums\Difficulty;
 use App\Http\Controllers\Controller;
 use App\Models\Flashcard;
 use App\Models\Tag;
@@ -61,6 +62,36 @@ class FlashcardController extends Controller
         $flashcards = $this->flashcardService->buried()->paginate(20);
 
         return view('flashcards.graveyard', compact('flashcards'));
+    }
+
+    public function easy()
+    {
+        $flashcards = $this->flashcardService->category(Difficulty::EASY)->paginate(20);
+        $title = 'Fresh learning';
+        $description = 'Questions that you haven\'t attempted yet, or those you have answered incorrectly before, causing them to be reset back to this category.';
+        $route = 'fresh-learning';
+
+        return view('flashcards.category', compact('flashcards', 'title', 'description', 'route'));
+    }
+
+    public function medium()
+    {
+        $flashcards = $this->flashcardService->category(Difficulty::MEDIUM)->paginate(20);
+        $title = 'Intermediate mastery';
+        $description = 'Questions you\'ve answered correctly at least once before.';
+        $route = 'intermediate-mastery';
+
+        return view('flashcards.category', compact('flashcards', 'title', 'description', 'route'));
+    }
+
+    public function hard()
+    {
+        $title = 'High mastery';
+        $description = 'Questions you\'ve answered correctly twice in a row.';
+        $route = 'high-mastery';
+        $flashcards = $this->flashcardService->category(Difficulty::HARD)->paginate(20);
+
+        return view('flashcards.category', compact('flashcards', 'title', 'description', 'route'));
     }
 
     public function drafts()

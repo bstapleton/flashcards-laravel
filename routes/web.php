@@ -23,9 +23,9 @@ Route::middleware(['auth'])->group(function () {
     Route::prefix('answer')->name('answer.')->group(function () {
         Route::get('/', [StudyController::class, 'index'])->name('index');
         Route::get('/random', [StudyController::class, 'random'])->name('random');
-        Route::get('/easy', [StudyController::class, 'easy'])->name('fresh-learning');
-        Route::get('/medium', [StudyController::class, 'medium'])->name('intermediate-mastery');
-        Route::get('/hard', [StudyController::class, 'hard'])->name('high-mastery');
+        Route::get('/fresh-learning', [StudyController::class, 'easy'])->name('fresh-learning');
+        Route::get('/intermediate-mastery', [StudyController::class, 'medium'])->name('intermediate-mastery');
+        Route::get('/high-mastery', [StudyController::class, 'hard'])->name('high-mastery');
         Route::get('/{flashcard}', [StudyController::class, 'practice'])->name('show');
     });
 
@@ -45,7 +45,10 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/create', [FlashcardController::class, 'create'])->name('create');
         Route::get('/create/statement', [FlashcardController::class, 'createStatement'])->name('create-statement');
         Route::get('/create/multiple-choice', [FlashcardController::class, 'createMultipleChoice'])->name('create-multiple-choice');
-        Route::get('/graveyard', [FlashcardController::class, 'graveyard'])->name('graveyard');
+        Route::get('/fresh-learning', [FlashcardController::class, 'easy'])->name('fresh-learning');
+        Route::get('/intermediate-mastery', [FlashcardController::class, 'medium'])->name('intermediate-mastery');
+        Route::get('/high-mastery', [FlashcardController::class, 'hard'])->name('high-mastery');
+        Route::get('/completely-mastered', [FlashcardController::class, 'graveyard'])->name('completely-mastered');
         Route::get('/drafts', [FlashcardController::class, 'drafts'])->name('drafts');
         Route::get('/hidden', [FlashcardController::class, 'hidden'])->name('hidden');
         Route::get('/{flashcard}', [FlashcardController::class, 'show'])->name('show');
