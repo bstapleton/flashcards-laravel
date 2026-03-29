@@ -14,23 +14,16 @@ class RevisionController extends Controller
     public function __construct(FlashcardService $flashcardService)
     {
         $this->flashcardService = $flashcardService;
+        $this->middleware('auth');
     }
 
     public function index()
     {
-        if (!Auth::check()) {
-            return redirect()->route('login');
-        }
-
         return view('revision');
     }
 
     public function random()
     {
-        if (!Auth::check()) {
-            return redirect()->route('login');
-        }
-
         try {
             $flashcard = $this->flashcardService->random(true);
             return view('revision.show', compact('flashcard'));
@@ -41,10 +34,6 @@ class RevisionController extends Controller
 
     public function show(Flashcard $flashcard)
     {
-        if (! Auth::check()) {
-            return redirect()->route('login');
-        }
-
         try {
             $flashcard = $this->flashcardService->show($flashcard, true);
 
@@ -56,10 +45,6 @@ class RevisionController extends Controller
 
     public function easy()
     {
-        if (! Auth::check()) {
-            return redirect()->route('login');
-        }
-
         try {
             $flashcard = $this->flashcardService->easy(true);
             $isPooled = true;
@@ -73,10 +58,6 @@ class RevisionController extends Controller
 
     public function medium()
     {
-        if (! Auth::check()) {
-            return redirect()->route('login');
-        }
-
         try {
             $flashcard = $this->flashcardService->medium(true);
             $isPooled = true;
@@ -90,10 +71,6 @@ class RevisionController extends Controller
 
     public function hard()
     {
-        if (! Auth::check()) {
-            return redirect()->route('login');
-        }
-
         try {
             $flashcard = $this->flashcardService->hard(true);
             $isPooled = true;

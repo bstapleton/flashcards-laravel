@@ -15,14 +15,11 @@ class FlashcardController extends Controller
     public function __construct(FlashcardService $flashcardService)
     {
         $this->flashcardService = $flashcardService;
+        $this->middleware('auth');
     }
 
     public function index()
     {
-        if (! Auth::check()) {
-            return redirect()->route('login');
-        }
-
         $flashcards = $this->flashcardService->alive()->published()->paginate(20);
 
         return view('flashcards.index', compact('flashcards'));
@@ -30,19 +27,11 @@ class FlashcardController extends Controller
 
     public function create()
     {
-        if (! Auth::check()) {
-            return redirect()->route('login');
-        }
-
         return view('flashcards.create');
     }
 
     public function createStatement()
     {
-        if (! Auth::check()) {
-            return redirect()->route('login');
-        }
-
         $tags = Tag::all();
 
         return view('flashcards.create-statement', compact('tags'));
@@ -50,10 +39,6 @@ class FlashcardController extends Controller
 
     public function createMultipleChoice()
     {
-        if (! Auth::check()) {
-            return redirect()->route('login');
-        }
-
         $tags = Tag::all();
 
         return view('flashcards.create-multiple-choice', compact('tags'));
@@ -61,10 +46,6 @@ class FlashcardController extends Controller
 
     public function show(Flashcard $flashcard)
     {
-        if (! Auth::check()) {
-            return redirect()->route('login');
-        }
-
         // Verify user owns this flashcard
         if ($flashcard->user_id !== Auth::id()) {
             abort(403);
@@ -77,10 +58,6 @@ class FlashcardController extends Controller
 
     public function graveyard()
     {
-        if (! Auth::check()) {
-            return redirect()->route('login');
-        }
-
         $flashcards = $this->flashcardService->buried()->paginate(20);
 
         return view('flashcards.graveyard', compact('flashcards'));
@@ -88,10 +65,6 @@ class FlashcardController extends Controller
 
     public function drafts()
     {
-        if (! Auth::check()) {
-            return redirect()->route('login');
-        }
-
         $flashcards = $this->flashcardService->draft()->paginate(20);
 
         return view('flashcards.drafts', compact('flashcards'));
@@ -99,10 +72,6 @@ class FlashcardController extends Controller
 
     public function hidden()
     {
-        if (! Auth::check()) {
-            return redirect()->route('login');
-        }
-
         $flashcards = $this->flashcardService->hidden()->paginate(20);
 
         return view('flashcards.hidden', compact('flashcards'));

@@ -7,12 +7,13 @@ use Illuminate\Support\Facades\Auth;
 
 class DashboardController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
+
     public function index()
     {
-        if (!Auth::check()) {
-            return redirect()->route('login');
-        }
-
         $user = Auth::user();
         $stats = [
             'total_flashcards' => $user->flashcards()->count(),

@@ -15,23 +15,16 @@ class StudyController extends Controller
     public function __construct(FlashcardService $flashcardService)
     {
         $this->flashcardService = $flashcardService;
+        $this->middleware('auth');
     }
 
     public function index()
     {
-        if (!Auth::check()) {
-            return redirect()->route('login');
-        }
-
         return view('answer');
     }
 
     public function random()
     {
-        if (!Auth::check()) {
-            return redirect()->route('login');
-        }
-
         try {
             $flashcard = $this->flashcardService->random();
             return view('study.practice', compact('flashcard'));
@@ -42,10 +35,6 @@ class StudyController extends Controller
 
     public function practice(Flashcard $flashcard)
     {
-        if (!Auth::check()) {
-            return redirect()->route('login');
-        }
-
         // Verify user owns this flashcard
         if ($flashcard->user_id !== Auth::id()) {
             abort(403, 'Unauthorized action.');
@@ -56,10 +45,6 @@ class StudyController extends Controller
 
     public function easy()
     {
-        if (!Auth::check()) {
-            return redirect()->route('login');
-        }
-
         try {
             $flashcard = $this->flashcardService->easy();
             $isPooled = true;
@@ -73,10 +58,6 @@ class StudyController extends Controller
 
     public function medium()
     {
-        if (!Auth::check()) {
-            return redirect()->route('login');
-        }
-
         try {
             $flashcard = $this->flashcardService->medium();
             $isPooled = true;
@@ -90,10 +71,6 @@ class StudyController extends Controller
 
     public function hard()
     {
-        if (!Auth::check()) {
-            return redirect()->route('login');
-        }
-
         try {
             $flashcard = $this->flashcardService->hard();
             $isPooled = true;
