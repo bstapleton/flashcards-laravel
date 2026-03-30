@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\Difficulty;
 use App\Exceptions\DraftQuestionsCannotChangeStatusException;
 use App\Exceptions\FreeUserFlashcardLimitException;
 use App\Exceptions\LessThanOneCorrectAnswerException;
@@ -18,6 +19,7 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Validation\Rule;
 use Illuminate\Validation\UnauthorizedException;
 use OpenApi\Annotations as OA;
 
@@ -354,7 +356,7 @@ class FlashcardController extends Controller
     /**
      * @OA\Post(
      *     path="/api/flashcards/{flashcard}/revive",
-     *     description="Revive a flashcard from the graveyard back to the easy difficulty. This will additionally remove it's hidden status if it had one.",
+     *     description="Revive a flashcard from the graveyard back to the easy difficulty.",
      *     summary="Resurrect a buried flashcard",
      *     tags={"flashcard"},
      *
@@ -377,6 +379,36 @@ class FlashcardController extends Controller
         }
 
         return fractal($flashcardResponse, new UnattemptedQuestionTransformer)->respond();
+    }
+
+    /**
+     * @OA\Post(
+     *     path="/api/flashcards/revive",
+     *     description="Revive all the flashcards of a specific difficulty, resetting them to easy. Will ignore operations if told to revive easy -> easy.",
+     *     summary="Reset a difficulty level of flashcards  back to easy",
+     *     tags={"flashcard"},
+     *
+     *     @OA\Parameter(name="difficulty", in="query", @OA\Schema(type="string", enum={"easy", "medium", "hard", "buried"})),
+     *
+     *     @OA\Response(response="204", description="Success"),
+     *     @OA\Response(response="403", description="Not permitted"),
+     *     @OA\Response(response="422", description="Invalid difficulty level"),
+     *     security={{"bearerAuth":{}}}
+     * )
+     */
+    public function reviveDifficulty(Request $request)
+    {
+        $request->validate(['difficulty' => ['required', Rule::enum(Difficulty::class)]]);
+
+        try {
+            $this->service->reviveDifficulty(Difficulty::tryFrom($request->input('difficulty')));
+        } catch (ModelNotFoundException) {
+            return $this->handleNotFound();
+        } catch (UnauthorizedException) {
+            return $this->handleForbidden();
+        }
+
+        return response()->noContent();
     }
 
     /**

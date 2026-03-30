@@ -291,13 +291,18 @@ class FlashcardService
             'difficulty' => Difficulty::EASY,
         ]);
 
-        // It can only be hidden if it was preciously published, and since we're adding it back to the pool, make sure
-        // it gets unhidden at the same time.
-        if ($flashcard->status === Status::HIDDEN) {
-            $this->setStatus($flashcard, Status::PUBLISHED);
-        }
-
         return $flashcard;
+    }
+
+    public function reviveDifficulty(Difficulty $difficulty): void
+    {
+        if ($difficulty !== Difficulty::EASY) {
+            // Skip updating easy since there's no point
+            Flashcard::whereDifficulty($difficulty)
+                ->update([
+                    'difficulty' => Difficulty::EASY,
+                ]);
+        }
     }
 
     public function answer(Flashcard $flashcard, array $answers, User $user): Scorecard

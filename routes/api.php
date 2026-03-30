@@ -34,6 +34,7 @@ Route::controller(FlashcardController::class)->prefix('flashcards')->middleware(
     Route::get('/drafts', 'draft')->name('api.flashcards.drafts');
     Route::get('/hidden', 'hidden')->name('api.flashcards.hidden');
     Route::post('/import', 'import')->name('api.flashcards.import');
+    Route::post('/revive', 'reviveDifficulty')->name('api.flashcards.revive-difficulty');
     Route::prefix('{flashcard}')->group(function () {
         Route::get('/', 'show')->name('api.flashcards.show');
         Route::post('/', 'answer')->name('api.flashcards.answer');
