@@ -2,10 +2,15 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\TagColour;
+use App\Helpers\ApiResponse;
 use App\Models\Tag;
 use App\Transformers\BaseTransformer;
+use App\Transformers\TagTransformer;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Http\Request;
+use Illuminate\Validation\Rules\Enum;
 use OpenApi\Annotations as OA;
 
 class TagController extends Controller
@@ -43,23 +48,36 @@ class TagController extends Controller
      *     ),
      *
      *     @OA\Response(response="200", description="Success"),
+     *     @OA\Response(response="400", description="Error"),
      *     security={{"bearerAuth":{}}}
      * )
      */
-    public function store(FormRequest $request)
+    public function store(Request $request)
     {
+        if ($request->user()->tags()->count() > config('flashcard.tag_limit')) {
+            return ApiResponse::error(
+                'Cannot create more tags',
+                'You can only have a maximum of '.config('flashcard.tag_limit').' tags per account.',
+                'unable_to_create_tag'
+            );
+        }
+
         $request->validate([
             'name' => 'required|max:255',
+            'colour' => ['required', new Enum(TagColour::class)],
         ]);
 
-        // Don't create duplicates
-        Tag::firstOrCreate($request->all());
+        $tag = Tag::firstOrCreate([
+            'user_id' => $request->user()->id,
+            'name' => $request->input('name'),
+            'colour' => $request->input('colour'),
+        ]);
 
-        return redirect()->route('tags.index')->with('success', 'Tag created');
+        return fractal($tag, new TagTransformer)->respond();
     }
 
     /**
-     * @OA\Put(
+     * @OA\Patch(
      *     path="/api/tags/{tag}",
      *     summary="Update a tag",
      *     tags={"tag"},
@@ -86,8 +104,17 @@ class TagController extends Controller
      */
     public function update(FormRequest $request, Tag $tag)
     {
+        if ($tag->user_id !== $request->user()->id) {
+            return ApiResponse::error(
+                'Unable to update tag',
+                'You do not have permission to update this tag',
+                'unable_to_update_tag'
+            );
+        }
+
         $request->validate([
             'name' => 'required|max:255',
+            'colour' => ['required', new Enum(TagColour::class)],
         ]);
 
         if (! $tag->exists()) {
@@ -96,7 +123,7 @@ class TagController extends Controller
 
         $tag->update($request->all());
 
-        return redirect()->route('tags.index')->with('success', 'Tag updated');
+        return fractal($tag, new TagTransformer)->respond();
     }
 
     /**

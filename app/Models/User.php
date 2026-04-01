@@ -112,6 +112,11 @@ class User extends Authenticatable
         return $this->belongsToMany(Role::class)->withPivot(['valid_until', 'auto_renew']);
     }
 
+    public function tags(): HasMany
+    {
+        return $this->hasMany(Tag::class);
+    }
+
     public function getIsTrialUserAttribute(): bool
     {
         if ($this->roles()->where('code', 'advanced_user')->exists()) {
