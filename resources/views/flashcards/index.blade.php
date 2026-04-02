@@ -43,15 +43,15 @@
                                 Active ({{ $flashcards->total() }})
                             </a>
                             <a href="{{ route('flashcards.fresh-learning') }}"
-                               class="py-2 px-1 border-b-2 border-transparent font-medium text-sm text-gray-500 hover:text-gray-700 hover:border-gray-300">
+                               class="hidden md:inline-block py-2 px-1 border-b-2 border-transparent font-medium text-sm text-gray-500 hover:text-gray-700 hover:border-gray-300">
                                 Fresh learning
                             </a>
                             <a href="{{ route('flashcards.intermediate-mastery') }}"
-                               class="py-2 px-1 border-b-2 border-transparent font-medium text-sm text-gray-500 hover:text-gray-700 hover:border-gray-300">
+                               class="hidden md:inline-block py-2 px-1 border-b-2 border-transparent font-medium text-sm text-gray-500 hover:text-gray-700 hover:border-gray-300">
                                 Intermediate mastery
                             </a>
                             <a href="{{ route('flashcards.high-mastery') }}"
-                               class="py-2 px-1 border-b-2 border-transparent font-medium text-sm text-gray-500 hover:text-gray-700 hover:border-gray-300">
+                               class="hidden md:inline-block py-2 px-1 border-b-2 border-transparent font-medium text-sm text-gray-500 hover:text-gray-700 hover:border-gray-300">
                                 High mastery
                             </a>
                             <a href="{{ route('flashcards.completely-mastered') }}"
