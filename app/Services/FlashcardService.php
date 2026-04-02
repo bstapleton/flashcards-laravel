@@ -228,6 +228,38 @@ class FlashcardService
         return $selected;
     }
 
+    public function subjects(array $tags)
+    {
+        $parsedTags = [];
+        foreach ($tags as $tag) {
+            if (str_contains($tag, ',')) {
+                $parsedTags = array_merge($parsedTags, explode(',', $tag));
+            } else {
+                $parsedTags[] = $tag;
+            }
+        }
+
+        $query = Flashcard::currentUser()
+            ->published()
+            ->whereHas('tags', function ($query) use ($parsedTags) {
+                $query->whereIn('name', $parsedTags);
+            })
+            ->with(['tags', 'answers'])
+            ->distinct();
+
+        return $query;
+    }
+
+    public function getCollection($query)
+    {
+        return $query->get();
+    }
+
+    public function pluckRandom($query)
+    {
+        return $query->inRandomOrder()->first();
+    }
+
     public function draft()
     {
         return Flashcard::currentUser()

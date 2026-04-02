@@ -354,6 +354,33 @@ class FlashcardController extends Controller
     }
 
     /**
+     * @OA\Get(
+     *     path="/api/flashcards/tags",
+     *     description="Get flashcards that have these tags assigned. Additive filter."
+     *     summary="Get flashcards by tags",
+     *     tags={"flashcard"},
+     *
+     *     @OA\Parameter(name="subjects", in="query", @OA\Schema(type="array", @OA\Items(type="string"))),
+     *
+     *     @OA\Response(response="200", description="Success"),
+     *     @OA\Response(response="403", description="Not permitted"),
+     *     security={{"bearerAuth":{}}}
+     * )
+     */
+    public function bySubjects(Request $request): JsonResponse
+    {
+        $request->validate(['subjects' => 'required|array']);
+
+        $tags = $request->input('subjects');
+
+        $flashcards = $this->service->subjects($tags);
+        $selected = $this->service->pluckRandom($flashcards);
+
+        return fractal($selected, new UnattemptedQuestionTransformer)
+            ->respond();
+    }
+
+    /**
      * @OA\Post(
      *     path="/api/flashcards/{flashcard}/revive",
      *     description="Revive a flashcard from the graveyard back to the easy difficulty.",
