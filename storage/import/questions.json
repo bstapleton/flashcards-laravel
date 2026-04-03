@@ -1,5 +1,58 @@
 [
     {
+        "text": "Londinium was the original name for London",
+        "type": "statement",
+        "explanation": "Londinium was was the Roman name for the city (i.e. Latin), though it may have roots even earlier still!",
+        "is_true": true,
+        "tags": [
+            "geography",
+            "history"
+        ]
+    },
+    {
+        "text": "Which of the following is the southern most point of the UK?",
+        "type": "single",
+        "answers": [
+            {
+                "text": "Lizard Point",
+                "is_correct": true,
+                "explanation": "Just down the road (and around the bay) from Land's End, which is the most western point of England."
+            },
+            {
+                "text": "Exeter",
+                "is_correct": false,
+                "explanation": "It's on the south coast of England, but it's not the most southern."
+            },
+            {
+                "text": "Southport",
+                "is_correct": false,
+                "explanation": "The seaside town of Southport is, perhaps ironically, in the north of England!"
+            },
+            {
+                "text": "Southampton",
+                "is_correct": false,
+                "explanation": "It's on the south coast of England, but it's not the most southern."
+            },
+            {
+                "text": "St. Catherine's Point",
+                "is_correct": false,
+                "explanation": "The most southern point of the Isle of Wight, but the UK is on a bit of a jaunty angle, so it's not the most south overall."
+            }
+        ],
+        "tags": [
+            "geography"
+        ]
+    },
+    {
+        "text": "Some bollards in London are made from repurposed cannons from the Battle of Trafalgar",
+        "type": "statement",
+        "explanation": "There's also examples of repurposed WWII stretchers being used as part of fences in London too!",
+        "is_true": true,
+        "tags": [
+            "history"
+        ]
+    },
+    {
         "text": "What products and services carry a zero rate on VAT in the UK?",
         "type": "multiple",
         "explanation": "FYI: There are more zero-rated products and services than those that are listed as options here.",
