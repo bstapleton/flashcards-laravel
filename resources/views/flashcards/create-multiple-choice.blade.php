@@ -28,7 +28,7 @@
                                 Question <span class="text-red-500">*</span>
                             </label>
                             <textarea id="text" name="text" rows="3" required
-                                      class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                                      class="mt-1 shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 border rounded-md p-2"
                                       placeholder="Enter your question here...">{{ old('text') }}</textarea>
                             @error('text')
                                 <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
@@ -41,7 +41,7 @@
                                 Explanation (Optional)
                             </label>
                             <textarea id="explanation" name="explanation" rows="2"
-                                      class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                                      class="mt-1 shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 border rounded-md p-2"
                                       placeholder="Provide an explanation for the correct answer...">{{ old('explanation') }}</textarea>
                         </div>
 
@@ -54,22 +54,22 @@
                                 <div class="flex items-center space-x-2">
                                     <input type="checkbox" name="answers[0][is_correct]" class="mr-2">
                                     <input type="text" name="answers[0][text]" placeholder="Answer option 1"
-                                           class="flex-1 border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                                           class="flex-1 shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm border-gray-300 border rounded-md p-2">
                                 </div>
                                 <div class="flex items-center space-x-2">
                                     <input type="checkbox" name="answers[1][is_correct]" class="mr-2">
                                     <input type="text" name="answers[1][text]" placeholder="Answer option 2"
-                                           class="flex-1 border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                                           class="flex-1 shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm border-gray-300 border rounded-md p-2">
                                 </div>
                                 <div class="flex items-center space-x-2">
                                     <input type="checkbox" name="answers[2][is_correct]" class="mr-2">
                                     <input type="text" name="answers[2][text]" placeholder="Answer option 3"
-                                           class="flex-1 border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                                           class="flex-1 shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm border-gray-300 border rounded-md p-2">
                                 </div>
                                 <div class="flex items-center space-x-2">
                                     <input type="checkbox" name="answers[3][is_correct]" class="mr-2">
                                     <input type="text" name="answers[3][text]" placeholder="Answer option 4"
-                                           class="flex-1 border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                                           class="flex-1 shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm border-gray-300 border rounded-md p-2">
                                 </div>
                             </div>
                             <div class="mt-3 flex justify-between items-center">
@@ -140,7 +140,7 @@ function addAnswerOption() {
     newOption.innerHTML = `
         <input type="checkbox" name="answers[${answerCount - 1}][is_correct]" class="mr-2">
         <input type="text" name="answers[${answerCount - 1}][text]" placeholder="Answer option ${answerCount}"
-               class="flex-1 border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+               class="flex-1 shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm border-gray-300 border rounded-md p-2">
     `;
     container.appendChild(newOption);
 }

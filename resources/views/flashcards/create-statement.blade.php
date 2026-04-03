@@ -28,7 +28,7 @@
                                 Statement <span class="text-red-500">*</span>
                             </label>
                             <textarea id="text" name="text" rows="3" required
-                                      class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                                      class="mt-1 shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 border rounded-md p-2"
                                       placeholder="Enter your statement here...">{{ old('text') }}</textarea>
                             @error('text')
                                 <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
@@ -41,7 +41,7 @@
                                 Explanation (Optional)
                             </label>
                             <textarea id="explanation" name="explanation" rows="2"
-                                      class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                                      class="mt-1 shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 border rounded-md p-2"
                                       placeholder="Provide additional details or background...">{{ old('explanation') }}</textarea>
                         </div>
 
