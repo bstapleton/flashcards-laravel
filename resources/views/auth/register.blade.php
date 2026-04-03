@@ -32,38 +32,50 @@
             <div class="space-y-4">
                 <div>
                     <label for="username" class="block text-sm font-medium text-gray-700">Username</label>
-                    <input id="username" name="username" type="text" required 
-                           class="mt-1 shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 border rounded-md p-2" 
-                           placeholder="Username" value="{{ old('username') }}">
+                    <x-forms.input 
+                        name="username" 
+                        placeholder="Username"
+                        :error="$errors->first('username')"
+                    />
                 </div>
                 
                 <div>
                     <label for="display_name" class="block text-sm font-medium text-gray-700">Display Name</label>
-                    <input id="display_name" name="display_name" type="text" required 
-                           class="mt-1 shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 border rounded-md p-2" 
-                           placeholder="Display Name" value="{{ old('display_name') }}">
+                    <x-forms.input 
+                        name="display_name" 
+                        placeholder="Display Name"
+                        required
+                        :error="$errors->first('display_name')"
+                    />
                 </div>
                 
                 <div>
                     <label for="password" class="block text-sm font-medium text-gray-700">Password</label>
-                    <input id="password" name="password" type="password" required 
-                           class="mt-1 shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 border rounded-md p-2" 
-                           placeholder="Password">
+                    <x-forms.input 
+                        type="password" 
+                        name="password" 
+                        placeholder="Password"
+                        required
+                        :error="$errors->first('password')"
+                    />
                 </div>
                 
                 <div>
                     <label for="password_confirmation" class="block text-sm font-medium text-gray-700">Confirm Password</label>
-                    <input id="password_confirmation" name="password_confirmation" type="password" required 
-                           class="mt-1 shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 border rounded-md p-2" 
-                           placeholder="Confirm Password">
+                    <x-forms.input 
+                        type="password" 
+                        name="password_confirmation" 
+                        placeholder="Confirm Password"
+                        required
+                        :error="$errors->first('password_confirmation')"
+                    />
                 </div>
             </div>
 
             <div>
-                <button type="submit" 
-                        class="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                <x-forms.button type="submit" class="w-full">
                     Register
-                </button>
+                </x-forms.button>
             </div>
         </form>
     </div>

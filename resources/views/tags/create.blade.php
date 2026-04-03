@@ -42,7 +42,12 @@
                         <div>
                             <label for="name" class="block text-sm font-medium text-gray-700">Tag Name</label>
                             <div class="mt-1">
-                                <input type="text" name="name" id="name" value="{{ old('name') }}" required class="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 border rounded-md p-2" placeholder="e.g., Mathematics, Science, History">
+                                <x-forms.input 
+                                    name="name" 
+                                    placeholder="e.g., Mathematics, Science, History"
+                                    required
+                                    :error="$errors->first('name')"
+                                />
                             </div>
                             <p class="mt-2 text-sm text-gray-500">Choose a descriptive name for your tag.</p>
                         </div>
@@ -113,9 +118,9 @@
                         <a href="{{ route('tags.index') }}" class="inline-flex justify-center py-2 px-4 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
                             Cancel
                         </a>
-                        <button type="submit" class="ml-3 inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                        <x-forms.button type="submit" class="ml-3">
                             Create Tag
-                        </button>
+                        </x-forms.button>
                     </div>
                 </form>
             </div>

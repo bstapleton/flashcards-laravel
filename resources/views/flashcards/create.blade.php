@@ -40,9 +40,13 @@
                             <label for="text" class="block text-sm font-medium text-gray-700">
                                 Question <span class="text-red-500">*</span>
                             </label>
-                            <textarea id="text" name="text" rows="3" required
-                                      class="mt-1 shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 border rounded-md p-2"
-                                      placeholder="Enter your question here...">{{ old('text') }}</textarea>
+                            <x-forms.textarea 
+                                name="text" 
+                                rows="3"
+                                placeholder="Enter your question here..."
+                                required
+                                :error="$errors->first('text')"
+                            />
                             @error('text')
                                 <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                             @enderror
@@ -53,9 +57,12 @@
                             <label for="explanation" class="block text-sm font-medium text-gray-700">
                                 Explanation (Optional)
                             </label>
-                            <textarea id="explanation" name="explanation" rows="2"
-                                      class="mt-1 shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 border rounded-md p-2"
-                                      placeholder="Provide an explanation for the correct answer...">{{ old('explanation') }}</textarea>
+                            <x-forms.textarea 
+                                name="explanation" 
+                                rows="2"
+                                placeholder="Provide an explanation for the correct answer..."
+                                :error="$errors->first('explanation')"
+                            />
                         </div>
 
                         <!-- True/False Answer -->
@@ -79,23 +86,35 @@
                             <div class="space-y-2" id="answers_container">
                                 <div class="flex items-center space-x-2">
                                     <input type="checkbox" name="answers[0][is_correct]" class="mr-2">
-                                    <input type="text" name="answers[0][text]" placeholder="Answer option 1"
-                                           class="flex-1 shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm border-gray-300 border rounded-md p-2">
+                                    <x-forms.input 
+                                        name="answers[0][text]" 
+                                        placeholder="Answer option 1"
+                                        class="flex-1"
+                                    />
                                 </div>
                                 <div class="flex items-center space-x-2">
                                     <input type="checkbox" name="answers[1][is_correct]" class="mr-2">
-                                    <input type="text" name="answers[1][text]" placeholder="Answer option 2"
-                                           class="flex-1 shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm border-gray-300 border rounded-md p-2">
+                                    <x-forms.input 
+                                        name="answers[1][text]" 
+                                        placeholder="Answer option 2"
+                                        class="flex-1"
+                                    />
                                 </div>
                                 <div class="flex items-center space-x-2">
                                     <input type="checkbox" name="answers[2][is_correct]" class="mr-2">
-                                    <input type="text" name="answers[2][text]" placeholder="Answer option 3"
-                                           class="flex-1 shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm border-gray-300 border rounded-md p-2">
+                                    <x-forms.input 
+                                        name="answers[2][text]" 
+                                        placeholder="Answer option 3"
+                                        class="flex-1"
+                                    />
                                 </div>
                                 <div class="flex items-center space-x-2">
                                     <input type="checkbox" name="answers[3][is_correct]" class="mr-2">
-                                    <input type="text" name="answers[3][text]" placeholder="Answer option 4"
-                                           class="flex-1 shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm border-gray-300 border rounded-md p-2">
+                                    <x-forms.input 
+                                        name="answers[3][text]" 
+                                        placeholder="Answer option 4"
+                                        class="flex-1"
+                                    />
                                 </div>
                             </div>
                             <p class="mt-2 text-sm text-gray-500">
@@ -106,14 +125,12 @@
 
                     <!-- Form Actions -->
                     <div class="px-6 py-4 bg-gray-50 border-t border-gray-200 flex justify-end space-x-3">
-                        <a href="{{ route('flashcards.index') }}"
-                           class="px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                        <x-forms.button variant="secondary">
                             Cancel
-                        </a>
-                        <button type="submit"
-                                class="px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                        </x-forms.button>
+                        <x-forms.button type="submit">
                             Create Flashcard
-                        </button>
+                        </x-forms.button>
                     </div>
                 </form>
             </div>

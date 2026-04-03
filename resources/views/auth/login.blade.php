@@ -31,15 +31,23 @@
             <div class="rounded-md shadow-sm -space-y-px">
                 <div>
                     <label for="username" class="sr-only">Username</label>
-                    <input id="username" name="username" type="text" required 
-                           class="appearance-none rounded-none relative block w-full shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm border-gray-300 border rounded-t-md p-2" 
-                           placeholder="Username" value="{{ old('username') }}">
+                    <x-forms.input 
+                        name="username" 
+                        placeholder="Username"
+                        :error="$errors->first('username')"
+                        class="rounded-t-md"
+                    />
                 </div>
                 <div>
                     <label for="password" class="sr-only">Password</label>
-                    <input id="password" name="password" type="password" required 
-                           class="appearance-none rounded-none relative block w-full shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm border-gray-300 border rounded-b-md p-2" 
-                           placeholder="Password">
+                    <x-forms.input 
+                        type="password" 
+                        name="password" 
+                        placeholder="Password"
+                        required
+                        :error="$errors->first('password')"
+                        class="rounded-b-md"
+                    />
                 </div>
             </div>
 
@@ -54,10 +62,9 @@
             </div>
 
             <div>
-                <button type="submit" 
-                        class="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                <x-forms.button type="submit" class="w-full">
                     Sign in
-                </button>
+                </x-forms.button>
             </div>
         </form>
     </div>
