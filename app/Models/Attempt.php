@@ -19,7 +19,7 @@ use Illuminate\Support\Collection;
  * @property string answers
  * @property array formatted_answers
  * @property QuestionType question_type
- * @property string tags
+ * @property string subjects
  * @property Correctness correctness
  * @property Difficulty difficulty
  * @property int points_earned

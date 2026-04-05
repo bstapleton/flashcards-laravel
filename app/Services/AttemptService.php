@@ -65,8 +65,8 @@ class AttemptService
             'answers' => $data['answers'],
         ]);
 
-        if ($data['tags']) {
-            $keywords = explode(',', $data['tags']);
+        if ($data['subjects']) {
+            $keywords = explode(',', $data['subjects']);
 
             foreach ($keywords as $keyword) {
                 $attempt->keywords()->save(new Keyword(['name' => $keyword]));

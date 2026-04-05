@@ -20,10 +20,10 @@ class FlashcardTagController extends Controller
 
     /**
      * @OA\Post(
-     *     path="/api/flashcards/{flashcard}/tags/{tag}",
+     *     path="/api/flashcards/{flashcard}/subjects/{tag}",
      *     summary="Attach a tag to a flashcard",
      *     description="Attach a tag",
-     *     tags={"flashcard"},
+     *     subjects={"flashcard"},
      *
      *     @OA\Parameter(name="flashcard", in="path", @OA\Schema(type="integer")),
      *     @OA\Parameter(name="tag", in="path", @OA\Schema(type="integer")),
@@ -49,10 +49,10 @@ class FlashcardTagController extends Controller
 
     /**
      * @OA\Delete(
-     *     path="/api/flashcards/{flashcard}/tags/{tag}",
+     *     path="/api/flashcards/{flashcard}/subjects/{tag}",
      *     description="Detach a tag from a flashcard",
      *     summary="Detach a tag",
-     *     tags={"flashcard"},
+     *     subjects={"flashcard"},
      *
      *     @OA\Parameter(name="flashcard", in="path", @OA\Schema(type="integer")),
      *     @OA\Parameter(name="tag", in="path", @OA\Schema(type="integer")),

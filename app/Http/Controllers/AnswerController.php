@@ -16,7 +16,7 @@ class AnswerController extends Controller
      * @OA\Post(
      *     path="/api/answers",
      *     summary="Create an answer",
-     *     tags={"answer"},
+     *     subjects={"answer"},
      *
      *     @OA\Parameter(name="flashcardId", in="query", required=true, @OA\Schema(type="integer")),
      *
@@ -56,7 +56,7 @@ class AnswerController extends Controller
      * @OA\Get(
      *     path="/api/answers/{id}",
      *     summary="Get an answer",
-     *     tags={"answer"},
+     *     subjects={"answer"},
      *
      *     @OA\Parameter(name="id", in="path", @OA\Schema(type="integer")),
      *
@@ -74,7 +74,7 @@ class AnswerController extends Controller
      * @OA\Patch(
      *     path="/api/answers/{id}",
      *     summary="Update an answer",
-     *     tags={"answer"},
+     *     subjects={"answer"},
      *
      *     @OA\Parameter(name="id", in="path", @OA\Schema(type="integer")),
      *
@@ -103,7 +103,7 @@ class AnswerController extends Controller
      * @OA\Delete(
      *     path="/api/answers/{id}",
      *     summary="Delete an answer",
-     *     tags={"answer"},
+     *     subjects={"answer"},
      *
      *     @OA\Parameter(name="id", in="path", @OA\Schema(type="integer")),
      *

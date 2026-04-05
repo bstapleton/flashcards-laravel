@@ -66,7 +66,7 @@ class FlashcardControllerTest extends TestCase
         $this->assertArrayHasKey('text', $questions[0]);
         $this->assertArrayHasKey('difficulty', $questions[0]);
         $this->assertArrayHasKey('eligible_at', $questions[0]);
-        $this->assertArrayHasKey('tags', $questions[0]);
+        $this->assertArrayHasKey('subjects', $questions[0]);
         $this->assertArrayHasKey('answers', $questions[0]);
 
         $this->assertTrue($this->newerQuestion->id === $questions[0]['id']);
@@ -80,7 +80,7 @@ class FlashcardControllerTest extends TestCase
                     'name' => $tag->name,
                     'colour' => strtolower($tag->colour->name),
                 ];
-            })->toArray() === $questions[0]['tags']);
+            })->toArray() === $questions[0]['subjects']);
         $this->assertTrue($this->newerQuestion->answers->map(
             function (Answer $answer) {
                 return [
@@ -187,7 +187,7 @@ class FlashcardControllerTest extends TestCase
                 ['text' => 'London'],
                 ['text' => 'Berlin'],
             ],
-            'tags' => ['history', 'geography'],
+            'subjects' => ['history', 'geography'],
         ]);
 
         $response->assertSuccessful();
@@ -207,7 +207,7 @@ class FlashcardControllerTest extends TestCase
                     'is_correct' => $answer->is_correct,
                 ];
             })->toArray());
-        $this->assertTrue($question['tags'] === Flashcard::find($question['id'])->tags->map(
+        $this->assertTrue($question['subjects'] === Flashcard::find($question['id'])->tags->map(
             function (Tag $tag) {
                 return [
                     'name' => $tag->name,
@@ -227,7 +227,7 @@ class FlashcardControllerTest extends TestCase
                 ['text' => 'Bread', 'is_correct' => true],
                 ['text' => 'Ice cream'],
             ],
-            'tags' => ['food'],
+            'subjects' => ['food'],
         ]);
 
         $response->assertSuccessful();
@@ -247,7 +247,7 @@ class FlashcardControllerTest extends TestCase
                     'is_correct' => $answer->is_correct,
                 ];
             })->toArray());
-        $this->assertTrue($question['tags'] === Flashcard::find($question['id'])->tags->map(
+        $this->assertTrue($question['subjects'] === Flashcard::find($question['id'])->tags->map(
             function (Tag $tag) {
                 return [
                     'name' => $tag->name,
@@ -263,7 +263,7 @@ class FlashcardControllerTest extends TestCase
         $response = $this->postJson('/api/flashcards', [
             'text' => 'Iceland is in the northern hemisphere',
             'is_true' => true,
-            'tags' => ['geography'],
+            'subjects' => ['geography'],
         ]);
 
         $response->assertSuccessful();
@@ -275,7 +275,7 @@ class FlashcardControllerTest extends TestCase
         $this->assertTrue($question['type'] === QuestionType::STATEMENT->value);
         $this->assertTrue($question['difficulty'] === Difficulty::EASY->value);
         $this->assertCount(0, $question['answers']);
-        $this->assertTrue($question['tags'] === Flashcard::find($question['id'])->tags->map(
+        $this->assertTrue($question['subjects'] === Flashcard::find($question['id'])->tags->map(
             function (Tag $tag) {
                 return [
                     'name' => $tag->name,
@@ -319,7 +319,7 @@ class FlashcardControllerTest extends TestCase
         $response = $this->postJson('/api/flashcards', [
             'text' => 'Iceland is in the northern hemisphere',
             'is_true' => true,
-            'tags' => ['geography'],
+            'subjects' => ['geography'],
         ]);
 
         $response->assertJsonFragment([
@@ -342,7 +342,7 @@ class FlashcardControllerTest extends TestCase
         $response = $this->postJson('/api/flashcards', [
             'text' => 'Iceland is in the northern hemisphere',
             'is_true' => true,
-            'tags' => ['geography'],
+            'subjects' => ['geography'],
         ]);
 
         $response->assertSuccessful();
@@ -353,7 +353,7 @@ class FlashcardControllerTest extends TestCase
         $response = $this->postJson('/api/flashcards', [
             'text' => 'Iceland is in the northern hemisphere',
             'is_true' => true,
-            'tags' => ['geography'],
+            'subjects' => ['geography'],
         ]);
 
         $response->assertJsonFragment([
@@ -369,7 +369,7 @@ class FlashcardControllerTest extends TestCase
 
         $response = $this->postJson('/api/flashcards', [
             'is_true' => true,
-            'tags' => ['geography'],
+            'subjects' => ['geography'],
         ]);
 
         $this->assertEquals(422, $response->getStatusCode());
@@ -391,7 +391,7 @@ class FlashcardControllerTest extends TestCase
                     'text' => 'Banana',
                 ],
             ],
-            'tags' => ['food'],
+            'subjects' => ['food'],
         ]);
 
         $response->assertJsonFragment([
@@ -415,7 +415,7 @@ class FlashcardControllerTest extends TestCase
                     'text' => 'Banana',
                 ],
             ],
-            'tags' => ['food'],
+            'subjects' => ['food'],
         ]);
 
         $response->assertJsonFragment([
@@ -1278,7 +1278,7 @@ class FlashcardControllerTest extends TestCase
         $response = $this->postJson('/api/flashcards', [
             'text' => 'Iceland is in the northern hemisphere',
             'is_true' => true,
-            'tags' => ['geography'],
+            'subjects' => ['geography'],
         ]);
 
         $response->assertUnauthorized();

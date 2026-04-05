@@ -76,7 +76,7 @@
                                         </div>
                                     </div>
                                     <div class="flex items-center space-x-2">
-                                        <a href="{{ route('flashcards.show', $flashcard) }}"
+                                        <a href="{{ route('flashcards.update', $flashcard) }}"
                                            class="text-indigo-600 hover:text-indigo-900 text-sm font-medium">
                                             Complete
                                         </a>

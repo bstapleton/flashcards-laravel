@@ -95,8 +95,8 @@ class FlashcardService
             $flashcard->answers()->createMany($answers);
         }
 
-        if (isset($data['tags'])) {
-            $flashcard->tags()->attach($data['tags']);
+        if (isset($data['subjects'])) {
+            $flashcard->tags()->attach($data['subjects']);
         }
 
         if ($flashcard->answers()->count() > 1 || $flashcard->is_true) {
@@ -378,7 +378,7 @@ class FlashcardService
                     $answer->explanation
                 );
             })),
-            'tags' => implode(',', $flashcard->tags->map(function (Tag $tag) {
+            'subjects' => implode(',', $flashcard->tags->map(function (Tag $tag) {
                 return $tag->name;
             })->toArray()),
             'difficulty' => $flashcard->difficulty,

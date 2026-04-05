@@ -22,9 +22,9 @@ class AttemptController extends Controller
      *     path="/api/attempt",
      *     summary="List attempts",
      *     description="Return all attempts for the current user, paginated",
-     *     tags={"attempt"},
+     *     subjects={"attempt"},
      *
-     *     @OA\Parameter(name="tags", in="query", @OA\Schema(type="string")),
+     *     @OA\Parameter(name="subjects", in="query", @OA\Schema(type="string")),
      *
      *     @OA\Response(response="200", description="Success"),
      *     @OA\Response(response="403", description="Not permitted"),
@@ -33,8 +33,8 @@ class AttemptController extends Controller
      */
     public function index(Request $request)
     {
-        if ($request->input('tags')) {
-            $tags = explode(',', $request->input('tags'));
+        if ($request->input('subjects')) {
+            $tags = explode(',', $request->input('subjects'));
         }
 
         try {
@@ -51,7 +51,7 @@ class AttemptController extends Controller
      *     path="/api/attempt/{attempt}",
      *     summary="Show an attempt",
      *     description="Return an attempt",
-     *     tags={"attempt"},
+     *     subjects={"attempt"},
      *
      *     @OA\Parameter(name="attempt", in="path", @OA\Schema(type="integer")),
      *

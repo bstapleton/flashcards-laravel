@@ -37,7 +37,7 @@ class FlashcardController extends Controller
      *     path="/api/flashcards",
      *     summary="List all active flashcards",
      *     description="Return all flashcards that are not in the graveyard, for the current user, paginated",
-     *     tags={"flashcard"},
+     *     subjects={"flashcard"},
      *
      *     @OA\Response(response="200", description="Success"),
      *     @OA\Response(response="403", description="Not permitted"),
@@ -60,7 +60,7 @@ class FlashcardController extends Controller
      *     path="/api/flashcards/all",
      *     summary="List all flashcards",
      *     description="Return all flashcards - alive or buried - for the current user, paginated",
-     *     tags={"flashcard"},
+     *     subjects={"flashcard"},
      *
      *     @OA\Response(response="200", description="Success"),
      *     @OA\Response(response="403", description="Not permitted"),
@@ -82,7 +82,7 @@ class FlashcardController extends Controller
      * @OA\Get(
      *     path="/api/flashcards/{flashcard}",
      *     summary="Show a flashcard",
-     *     tags={"flashcard"},
+     *     subjects={"flashcard"},
      *
      *     @OA\Parameter(name="flashcard", in="path", @OA\Schema(type="integer")),
      *
@@ -109,7 +109,7 @@ class FlashcardController extends Controller
      * @OA\Post(
      *     path="/api/flashcards",
      *     summary="Create flashcard",
-     *     tags={"flashcard"},
+     *     subjects={"flashcard"},
      *
      *     @OA\RequestBody(
      *         required=true,
@@ -120,7 +120,7 @@ class FlashcardController extends Controller
      *             @OA\Property(property="text", type="string", example="What colour is the sky?"),
      *             @OA\Property(property="is_true", type="boolean"),
      *             @OA\Property(property="explanation", type="string"),
-     *             @OA\Property(property="tags", type="array", @OA\Items(ref="#/components/schemas/Tag"))
+     *             @OA\Property(property="subjects", type="array", @OA\Items(ref="#/components/schemas/Tag"))
      *         )
      *     ),
      *
@@ -136,8 +136,8 @@ class FlashcardController extends Controller
         $request->validate([
             'text' => 'required|max:1024',
             'is_true' => 'required|boolean',
-            'tags' => 'nullable|array',
-            'tags.*' => 'exists:tags,id',
+            'subjects' => 'nullable|array',
+            'subjects.*' => 'exists:subjects,id',
         ]);
 
         try {
@@ -166,7 +166,7 @@ class FlashcardController extends Controller
      * @OA\Post(
      *     path="/api/flashcards",
      *     summary="Create flashcard",
-     *     tags={"flashcard"},
+     *     subjects={"flashcard"},
      *
      *     @OA\RequestBody(
      *         required=true,
@@ -177,7 +177,7 @@ class FlashcardController extends Controller
      *             @OA\Property(property="text", type="string", example="What colour is the sky?"),
      *             @OA\Property(property="explanation", type="string"),
      *             @OA\Property(property="answers", type="array", @OA\Items(ref="#/components/schemas/Answer")),
-     *             @OA\Property(property="tags", type="array", @OA\Items(ref="#/components/schemas/Tag"))
+     *             @OA\Property(property="subjects", type="array", @OA\Items(ref="#/components/schemas/Tag"))
      *         )
      *     ),
      *
@@ -197,8 +197,8 @@ class FlashcardController extends Controller
             'answers.*.text' => 'required|max:1024',
             'answers.*.is_correct' => 'required|boolean',
             'answers.*.explanation' => 'nullable|max:1024',
-            'tags' => 'nullable|array',
-            'tags.*' => 'exists:tags,id',
+            'subjects' => 'nullable|array',
+            'subjects.*' => 'exists:subjects,id',
         ]);
 
         try {
@@ -227,7 +227,7 @@ class FlashcardController extends Controller
      * @OA\Patch(
      *     path="/api/flashcards/{flashcard}",
      *     summary="Update flashcard",
-     *     tags={"flashcard"},
+     *     subjects={"flashcard"},
      *
      *     @OA\Parameter(name="flashcard", in="path", @OA\Schema(type="integer")),
      *
@@ -269,7 +269,7 @@ class FlashcardController extends Controller
      * @OA\Delete(
      *     path="/api/flashcards/{flashcard}",
      *     summary="Delete flashcard",
-     *     tags={"flashcard"},
+     *     subjects={"flashcard"},
      *
      *     @OA\Parameter(name="flashcard", in="path", @OA\Schema(type="integer")),
      *
@@ -297,7 +297,7 @@ class FlashcardController extends Controller
      *     path="/api/flashcards/graveyard",
      *     summary="Get all flashcards currently in the graveyard",
      *     description="'Buried' flashcards are those which have been anwered correctly on the Hard difficulty",
-     *     tags={"flashcard"},
+     *     subjects={"flashcard"},
      *
      *     @OA\Response(response="200", description="Success"),
      *     @OA\Response(response="403", description="Not permitted"),
@@ -318,9 +318,9 @@ class FlashcardController extends Controller
     /**
      * @OA\Get(
      *     path="/api/flashcards/random",
-     *     description="Gets a random flashcard, regardless of difficulty or tags",
+     *     description="Gets a random flashcard, regardless of difficulty or subjects",
      *     summary="Get a random flashcard",
-     *     tags={"flashcard"},
+     *     subjects={"flashcard"},
      *
      *     @OA\Response(response="200", description="Success"),
      *     @OA\Response(response="404", description="Model not found"),
@@ -355,10 +355,10 @@ class FlashcardController extends Controller
 
     /**
      * @OA\Get(
-     *     path="/api/flashcards/tags",
-     *     description="Get flashcards that have these tags assigned. Additive filter."
-     *     summary="Get flashcards by tags",
-     *     tags={"flashcard"},
+     *     path="/api/flashcards/subjects",
+     *     description="Get flashcards that have these subjects assigned. Additive filter."
+     *     summary="Get flashcards by subjects",
+     *     subjects={"flashcard"},
      *
      *     @OA\Parameter(name="subjects", in="query", @OA\Schema(type="array", @OA\Items(type="string"))),
      *
@@ -385,7 +385,7 @@ class FlashcardController extends Controller
      *     path="/api/flashcards/{flashcard}/revive",
      *     description="Revive a flashcard from the graveyard back to the easy difficulty.",
      *     summary="Resurrect a buried flashcard",
-     *     tags={"flashcard"},
+     *     subjects={"flashcard"},
      *
      *     @OA\Parameter(name="flashcard", in="path", @OA\Schema(type="integer")),
      *
@@ -413,7 +413,7 @@ class FlashcardController extends Controller
      *     path="/api/flashcards/revive",
      *     description="Revive all the flashcards of a specific difficulty, resetting them to easy. Will ignore operations if told to revive easy -> easy.",
      *     summary="Reset a difficulty level of flashcards  back to easy",
-     *     tags={"flashcard"},
+     *     subjects={"flashcard"},
      *
      *     @OA\Parameter(name="difficulty", in="query", @OA\Schema(type="string", enum={"easy", "medium", "hard", "buried"})),
      *
@@ -443,7 +443,7 @@ class FlashcardController extends Controller
      *     path="/api/flashcards/{flashcard}/hide",
      *     description="Hide a flashcard from the pool, even if it's eligible",
      *     summary="Stop a flashcard from showing up when drawing a random question to answer",
-     *     tags={"flashcard"},
+     *     subjects={"flashcard"},
      *
      *     @OA\Parameter(name="flashcard", in="path", @OA\Schema(type="integer")),
      *
@@ -478,7 +478,7 @@ class FlashcardController extends Controller
      *     path="/api/flashcards/{flashcard}/unhide",
      *     description="Re-enable a flashcard for eligibility to be drawn from the pool",
      *     summary="Allow the flashcard to be drawn again when drawing a random question to answer",
-     *     tags={"flashcard"},
+     *     subjects={"flashcard"},
      *
      *     @OA\Parameter(name="flashcard", in="path", @OA\Schema(type="integer")),
      *
@@ -513,7 +513,7 @@ class FlashcardController extends Controller
      *     path="/api/flashcards/{flashcard}",
      *     description="Attempt to answer the question and be judged accordingly",
      *     summary="Pass an answer or set of answers to the question",
-     *     tags={"flashcard"},
+     *     subjects={"flashcard"},
      *
      *     @OA\Parameter(name="flashcard", in="path", @OA\Schema(type="integer")),
      *
@@ -561,7 +561,7 @@ class FlashcardController extends Controller
      * @OA\Get(
      *     path="/api/flashcards/drafts",
      *     summary="Get all flashcards that are missing some data that stops them from being published",
-     *     tags={"flashcard"},
+     *     subjects={"flashcard"},
      *
      *     @OA\Response(response="200", description="Success"),
      *     @OA\Response(response="403", description="Not permitted"),
@@ -583,7 +583,7 @@ class FlashcardController extends Controller
      * @OA\Get(
      *     path="/api/flashcards/hidden",
      *     summary="Get all flashcards that have been hidden by the user",
-     *     tags={"flashcard"},
+     *     subjects={"flashcard"},
      *
      *     @OA\Response(response="200", description="Success"),
      *     @OA\Response(response="403", description="Not permitted"),
@@ -605,7 +605,7 @@ class FlashcardController extends Controller
      * @OA\Post(
      *     path="/api/flashcards/import",
      *     summary="Import flashcards",
-     *     tags={"flashcard"},
+     *     subjects={"flashcard"},
      *
      *     @OA\Parameter(name="topic", in="query", required=true, @OA\Schema(type="string")),
      *

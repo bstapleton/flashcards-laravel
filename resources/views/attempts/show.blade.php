@@ -117,15 +117,15 @@
                             </dl>
                         </div>
 
-                        <!-- Tags (if exists) -->
+                        <!-- Subjects (if exists) -->
                         @if($attempt->tags)
                             <div class="mb-6">
                                 <h3 class="text-lg font-medium text-gray-900 mb-2">Tags</h3>
                                 <div class="flex flex-wrap gap-2">
-                                    @foreach(explode(',', $attempt->tags) as $tag)
-                                        @if(trim($tag))
+                                    @foreach(explode(',', $attempt->tags) as $subject)
+                                        @if(trim($subject))
                                             <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-800">
-                                                {{ trim($tag) }}
+                                                {{ trim($subject) }}
                                             </span>
                                         @endif
                                     @endforeach

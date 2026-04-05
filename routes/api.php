@@ -35,9 +35,8 @@ Route::controller(FlashcardController::class)->prefix('flashcards')->middleware(
     Route::get('/hidden', 'hidden')->name('api.flashcards.hidden');
     Route::post('/import', 'import')->name('api.flashcards.import');
     Route::post('/revive', 'reviveDifficulty')->name('api.flashcards.revive-difficulty');
-    Route::get('/tags', 'bySubjects')->name('api.flashcards.by-subjects');
+    Route::get('/subjects', 'bySubjects')->name('api.flashcards.by-subjects');
     Route::prefix('{flashcard}')->group(function () {
-        Route::get('/', 'show')->name('api.flashcards.show');
         Route::post('/', 'answer')->name('api.flashcards.answer');
         Route::patch('/', 'update')->name('api.flashcards.update');
         Route::delete('/', 'destroy')->name('api.flashcards.destroy');
@@ -45,18 +44,18 @@ Route::controller(FlashcardController::class)->prefix('flashcards')->middleware(
         Route::post('/hide', 'hide')->name('api.flashcards.hide');
         Route::post('/unhide', 'unhide')->name('api.flashcards.unhide');
 
-        Route::controller(FlashcardTagController::class)->prefix('tags')->group(function () {
-            Route::post('/{tag}', 'attachTag')->name('api.flashcards.tags.attach');
-            Route::delete('/{tag}', 'detachTag')->name('api.flashcards.tags.detach');
+        Route::controller(FlashcardTagController::class)->prefix('subjects')->group(function () {
+            Route::post('/{tag}', 'attachTag')->name('api.flashcards.subjects.attach');
+            Route::delete('/{tag}', 'detachTag')->name('api.flashcards.subjects.detach');
         });
     });
 });
 
-Route::controller(TagController::class)->prefix('tags')->middleware(['auth:sanctum', CheckAuthed::class])->group(function () {
-    Route::get('/', 'index')->name('api.tags.index');
-    Route::post('/', 'store')->name('api.tags.store');
-    Route::put('/{tag}', 'update')->name('api.tags.update');
-    Route::delete('/{tag}', 'destroy')->name('api.tags.destroy');
+Route::controller(TagController::class)->prefix('subjects')->middleware(['auth:sanctum', CheckAuthed::class])->group(function () {
+    Route::get('/', 'index')->name('api.subjects.index');
+    Route::post('/', 'store')->name('api.subjects.store');
+    Route::put('/{tag}', 'update')->name('api.subjects.update');
+    Route::delete('/{tag}', 'destroy')->name('api.subjects.destroy');
 });
 
 Route::controller(AttemptController::class)->prefix('attempts')->middleware(['auth:sanctum', CheckAuthed::class])->group(function () {

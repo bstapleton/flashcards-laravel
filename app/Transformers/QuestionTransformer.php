@@ -30,7 +30,7 @@ class QuestionTransformer extends TransformerAbstract
                 'text' => $flashcard->mastery_text,
             ],
             'eligible_at' => Carbon::parse($flashcard->eligible_at)->toIso8601String(),
-            'tags' => $flashcard->tags->map(function (Tag $tag) {
+            'subjects' => $flashcard->tags->map(function (Tag $tag) {
                 return (new TagTransformer)->transform($tag);
             }),
             'answers' => $flashcard->answers->map(function (Answer $answer) {

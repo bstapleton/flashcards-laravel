@@ -7,8 +7,9 @@ use App\Http\Controllers\Controller;
 use App\Models\Tag;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Validation\Rules\Enum;
 
-class TagController extends Controller
+class SubjectController extends Controller
 {
     public function __construct()
     {
@@ -19,30 +20,31 @@ class TagController extends Controller
     {
         $tags = Auth::user()->tags()->withCount('flashcards')->get();
 
-        return view('tags.index', compact('tags'));
+        return view('subjects.index', compact('tags'));
     }
 
     public function create()
     {
         $colours = TagColour::cases();
 
-        return view('tags.create', compact('colours'));
+        return view('subjects.create', compact('colours'));
     }
 
     public function store(Request $request)
     {
         $request->validate([
             'name' => 'required|max:255',
-            'colour' => ['required', new \Illuminate\Validation\Rules\Enum(TagColour::class)],
+            'colour' => ['required', new Enum(TagColour::class)],
         ]);
 
-        $tag = Auth::user()->tags()->create([
+        $tag = Tag::create([
+            'user_id' => Auth::user()->id,
             'name' => $request->name,
-            'colour' => (int)$request->colour,
+            'colour' => (int) $request->colour,
         ]);
 
-        return redirect()->route('tags.show', $tag)
-            ->with('success', 'Tag created successfully!');
+        return redirect()->route('subjects.show', $tag)
+            ->with('success', 'Subject created successfully!');
     }
 
     public function show(Tag $tag)
@@ -54,7 +56,7 @@ class TagController extends Controller
 
         $tag->load('flashcards');
 
-        return view('tags.show', compact('tag'));
+        return view('subjects.show', compact('tag'));
     }
 
     public function destroy(Tag $tag)
@@ -65,12 +67,12 @@ class TagController extends Controller
         }
 
         $flashcardCount = $tag->flashcards()->count();
-        
+
         // Detach from all flashcards and delete the tag
         $tag->flashcards()->detach();
         $tag->delete();
 
-        return redirect()->route('tags.index')
-            ->with('success', "Tag deleted successfully. It was detached from {$flashcardCount} flashcard" . ($flashcardCount !== 1 ? 's' : '') . '.');
+        return redirect()->route('subjects.index')
+            ->with('success', "Subject deleted successfully. It was detached from {$flashcardCount} flashcard".($flashcardCount !== 1 ? 's' : '').'.');
     }
 }

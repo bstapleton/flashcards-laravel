@@ -15,19 +15,19 @@
                         </span>
                     </div>
                     <div class="flex space-x-2">
-                        <a href="{{ route('tags.index') }}" class="inline-flex items-center px-3 py-2 border border-gray-300 text-sm leading-4 font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
-                            Back to Tags
+                        <a href="{{ route('subjects.index') }}" class="inline-flex items-center px-3 py-2 border border-gray-300 text-sm leading-4 font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                            Back to Subjects
                         </a>
                         <button type="button" onclick="openDeleteModal()" class="inline-flex items-center px-3 py-2 border border-red-300 text-sm leading-4 font-medium rounded-md text-red-700 bg-white hover:bg-red-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500">
                             <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
                             </svg>
-                            Delete Tag
+                            Delete this Subject
                         </button>
                     </div>
                 </div>
                 <p class="mt-1 text-sm text-gray-600">
-                    {{ $tag->flashcards->count() }} flashcard{{ $tag->flashcards->count() != 1 ? 's' : '' }} in this tag
+                    {{ $tag->flashcards->count() }} flashcard{{ $tag->flashcards->count() != 1 ? 's' : '' }} have been assigned to this subject
                 </p>
             </div>
 
@@ -61,11 +61,11 @@
                                         </div>
                                     </div>
                                     <div class="flex items-center space-x-2">
-                                        <a href="{{ route('flashcards.show', $flashcard) }}" class="text-indigo-600 hover:text-indigo-900 text-sm font-medium">
-                                            View
+                                        <a href="{{ route('revision.show', $flashcard) }}" class="text-indigo-600 hover:text-indigo-900 text-sm font-medium">
+                                            Revise
                                         </a>
                                         <a href="{{ route('answer.show', $flashcard) }}" class="text-green-600 hover:text-green-900 text-sm font-medium">
-                                            Practice
+                                            Attempt
                                         </a>
                                     </div>
                                 </div>
@@ -123,7 +123,7 @@
                 </div>
             </div>
             <div class="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
-                <form action="{{ route('tags.destroy', $tag) }}" method="POST" onsubmit="this.submit(); return false;">
+                <form action="{{ route('subjects.destroy', $tag) }}" method="POST" onsubmit="this.submit(); return false;">
                     @csrf
                     @method('DELETE')
                     <button type="submit" class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-red-600 text-base font-medium text-white hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 sm:ml-3 sm:w-auto sm:text-sm">

@@ -11,7 +11,7 @@ class LoginController extends Controller
      * @OA\Post(
      *     path="/api/login",
      *     summary="Authenticate user and generate JWT token",
-     *     tags={"auth"},
+     *     subjects={"auth"},
      *     security={{"basicAuth":{}}},
      *
      *     @OA\Response(response="200", description="Login successful"),

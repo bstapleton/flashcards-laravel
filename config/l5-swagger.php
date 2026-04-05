@@ -258,9 +258,9 @@ return [
         'ui' => [
             'display' => [
                 /*
-                 * Controls the default expansion setting for the operations and tags. It can be :
-                 * 'list' (expands only the tags),
-                 * 'full' (expands the tags and operations),
+                 * Controls the default expansion setting for the operations and subjects. It can be :
+                 * 'list' (expands only the subjects),
+                 * 'full' (expands the subjects and operations),
                  * 'none' (expands nothing).
                  */
                 'doc_expansion' => env('L5_SWAGGER_UI_DOC_EXPANSION', 'none'),

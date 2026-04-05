@@ -19,7 +19,7 @@ class UserController extends Controller
      * @OA\Post(
      *     path="/api/register",
      *     summary="Register a new user",
-     *     tags={"auth"},
+     *     subjects={"auth"},
      *
      *     @OA\RequestBody(
      *         required=true,
@@ -60,7 +60,7 @@ class UserController extends Controller
      * @OA\Get(
      *     path="/api/user/{user}",
      *     summary="Get logged-in user details",
-     *     tags={"auth"},
+     *     subjects={"auth"},
      *
      *     @OA\Parameter(name="user", in="path", @OA\Schema(type="integer")),
      *
@@ -78,7 +78,7 @@ class UserController extends Controller
      * @OA\Get(
      *     path="/api/user/count_questions",
      *     summary="Get the number of flashcards the user has made",
-     *     tags={"auth"},
+     *     subjects={"auth"},
      *
      *     @OA\Response(response="200", description="Success"),
      *     @OA\Response(response="401", description="Unauthorised"),

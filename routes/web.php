@@ -6,7 +6,7 @@ use App\Http\Controllers\web\DashboardController;
 use App\Http\Controllers\web\FlashcardController;
 use App\Http\Controllers\web\RevisionController;
 use App\Http\Controllers\web\StudyController;
-use App\Http\Controllers\web\TagController;
+use App\Http\Controllers\web\SubjectController;
 use Illuminate\Support\Facades\Route;
 
 // Authentication Routes
@@ -63,17 +63,12 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/{flashcard}', [FlashcardController::class, 'show'])->name('show');
     });
 
-    // Tags
-    Route::prefix('tags')->name('tags.')->group(function () {
-        Route::get('/', [TagController::class, 'index'])->name('index');
-        Route::get('/create', [TagController::class, 'create'])->name('create');
-        Route::post('/', [TagController::class, 'store'])->name('store');
-        Route::get('/{tag}', [TagController::class, 'show'])->name('show');
-        Route::delete('/{tag}', [TagController::class, 'destroy'])->name('destroy');
-    });
-
-    // Legacy random route (redirect to revision random)
-    Route::get('/flashcards/random', function() {
-        return redirect()->route('revision.random');
+    // Subjects
+    Route::prefix('subjects')->name('subjects.')->group(function () {
+        Route::get('/', [SubjectController::class, 'index'])->name('index');
+        Route::get('/create', [SubjectController::class, 'create'])->name('create');
+        Route::post('/', [SubjectController::class, 'store'])->name('store');
+        Route::get('/{tag}', [SubjectController::class, 'show'])->name('show');
+        Route::delete('/{tag}', [SubjectController::class, 'destroy'])->name('destroy');
     });
 });

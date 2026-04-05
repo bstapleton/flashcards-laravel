@@ -100,7 +100,7 @@ class AttemptControllerTest extends TestCase
     {
         $this->actingAs($this->user);
 
-        $response = $this->getJson('/api/attempts?tags='.$this->word);
+        $response = $this->getJson('/api/attempts?subjects='.$this->word);
 
         $response->assertSuccessful();
 

@@ -102,14 +102,14 @@
                             </dl>
                         </div>
 
-                        <!-- Tags (if exists) -->
+                        <!-- Subjects (if exists) -->
                         @if($flashcard->tags->count() > 0)
                             <div class="mb-6">
-                                <h3 class="text-lg font-medium text-gray-900 mb-2">Tags</h3>
+                                <h3 class="text-lg font-medium text-gray-900 mb-2">Subjects Covered</h3>
                                 <div class="flex flex-wrap gap-2">
-                                    @foreach($flashcard->tags as $tag)
+                                    @foreach($flashcard->tags as $subject)
                                         <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-indigo-100 text-indigo-800">
-                                            {{ $tag->name }}
+                                            {{ $subject->name }}
                                         </span>
                                     @endforeach
                                 </div>

@@ -7,14 +7,14 @@
     <div class="py-6">
         <div class="px-4 py-6 sm:px-0 max-w-2xl mx-auto">
             <div class="mb-8">
-                <h1 class="text-2xl font-bold text-gray-900">Create Tag</h1>
+                <h1 class="text-2xl font-bold text-gray-900">Create a Subject</h1>
                 <p class="mt-1 text-sm text-gray-600">
-                    Tags help you categorize and organize your flashcards for better study sessions.
+                    Subjects help you categorize and organize your flashcards for better study sessions.
                 </p>
             </div>
 
             <div class="bg-white shadow sm:rounded-lg">
-                <form action="{{ route('tags.store') }}" method="POST">
+                <form action="{{ route('subjects.store') }}" method="POST">
                     @csrf
                     <div class="px-6 py-4 space-y-6">
                         @if ($errors->any())
@@ -40,16 +40,16 @@
                         @endif
 
                         <div>
-                            <label for="name" class="block text-sm font-medium text-gray-700">Tag Name</label>
+                            <label for="name" class="block text-sm font-medium text-gray-700">Subject Name</label>
                             <div class="mt-1">
-                                <x-forms.input 
-                                    name="name" 
+                                <x-forms.input
+                                    name="name"
                                     placeholder="e.g., Mathematics, Science, History"
                                     required
                                     :error="$errors->first('name')"
                                 />
                             </div>
-                            <p class="mt-2 text-sm text-gray-500">Choose a descriptive name for your tag.</p>
+                            <p class="mt-2 text-sm text-gray-500">Choose a descriptive name for your subject.</p>
                         </div>
 
                         <div>
@@ -111,15 +111,15 @@
                                     @endforeach
                                 </div>
                             </div>
-                            <p class="mt-2 text-sm text-gray-500">Choose a color to help visually distinguish your tags.</p>
+                            <p class="mt-2 text-sm text-gray-500">Choose a colour to help visually distinguish your subjects.</p>
                         </div>
                     </div>
                     <div class="px-6 py-4 bg-gray-50 border-t border-gray-200 text-right">
-                        <a href="{{ route('tags.index') }}" class="inline-flex justify-center py-2 px-4 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                        <a href="{{ route('subjects.index') }}" class="inline-flex justify-center py-2 px-4 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
                             Cancel
                         </a>
                         <x-forms.button type="submit" class="ml-3">
-                            Create Tag
+                            Create Subject
                         </x-forms.button>
                     </div>
                 </form>

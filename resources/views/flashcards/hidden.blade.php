@@ -78,9 +78,9 @@
                                                 Unhide
                                             </button>
                                         </form>
-                                        <a href="{{ route('flashcards.show', $flashcard) }}"
+                                        <a href="{{ route('revision.show', $flashcard) }}"
                                            class="text-indigo-600 hover:text-indigo-900 text-sm font-medium">
-                                            View
+                                            Revice
                                         </a>
                                     </div>
                                 </div>

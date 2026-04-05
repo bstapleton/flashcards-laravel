@@ -17,9 +17,9 @@ class TagController extends Controller
 {
     /**
      * @OA\Get(
-     *     path="/api/tags",
-     *     summary="List tags",
-     *     tags={"tag"},
+     *     path="/api/subjects",
+     *     summary="List subjects",
+     *     subjects={"tag"},
      *
      *     @OA\Response(response="200", description="Success"),
      *     security={{"bearerAuth":{}}}
@@ -32,9 +32,9 @@ class TagController extends Controller
 
     /**
      * @OA\Post(
-     *     path="/api/tags",
+     *     path="/api/subjects",
      *     summary="Create a tag",
-     *     tags={"tag"},
+     *     subjects={"tag"},
      *
      *     @OA\RequestBody(
      *         required=true,
@@ -56,8 +56,8 @@ class TagController extends Controller
     {
         if ($request->user()->tags()->count() > config('flashcard.tag_limit')) {
             return ApiResponse::error(
-                'Cannot create more tags',
-                'You can only have a maximum of '.config('flashcard.tag_limit').' tags per account.',
+                'Cannot create more subjects',
+                'You can only have a maximum of '.config('flashcard.tag_limit').' subjects per account.',
                 'unable_to_create_tag'
             );
         }
@@ -78,9 +78,9 @@ class TagController extends Controller
 
     /**
      * @OA\Patch(
-     *     path="/api/tags/{tag}",
+     *     path="/api/subjects/{tag}",
      *     summary="Update a tag",
-     *     tags={"tag"},
+     *     subjects={"tag"},
      *
      *     @OA\Parameter(name="tag", in="path", @OA\Schema(type="integer")),
      *
@@ -128,9 +128,9 @@ class TagController extends Controller
 
     /**
      * @OA\Delete(
-     *     path="/api/tags/{id}",
+     *     path="/api/subjects/{id}",
      *     summary="Delete a tag",
-     *     tags={"tag"},
+     *     subjects={"tag"},
      *
      *     @OA\Parameter(name="id", in="path", @OA\Schema(type="integer")),
      *

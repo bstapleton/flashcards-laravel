@@ -27,8 +27,8 @@
                             <label for="text" class="block text-sm font-medium text-gray-700">
                                 Question <span class="text-red-500">*</span>
                             </label>
-                            <x-forms.textarea 
-                                name="text" 
+                            <x-forms.textarea
+                                name="text"
                                 rows="3"
                                 placeholder="Enter your question here..."
                                 required
@@ -44,8 +44,8 @@
                             <label for="explanation" class="block text-sm font-medium text-gray-700">
                                 Explanation (Optional)
                             </label>
-                            <x-forms.textarea 
-                                name="explanation" 
+                            <x-forms.textarea
+                                name="explanation"
                                 rows="2"
                                 placeholder="Provide an explanation for the correct answer..."
                                 :error="$errors->first('explanation')"
@@ -60,32 +60,32 @@
                             <div class="space-y-2" id="answers_container">
                                 <div class="flex items-center space-x-2">
                                     <input type="checkbox" name="answers[0][is_correct]" class="mr-2">
-                                    <x-forms.input 
-                                        name="answers[0][text]" 
+                                    <x-forms.input
+                                        name="answers[0][text]"
                                         placeholder="Answer option 1"
                                         class="flex-1"
                                     />
                                 </div>
                                 <div class="flex items-center space-x-2">
                                     <input type="checkbox" name="answers[1][is_correct]" class="mr-2">
-                                    <x-forms.input 
-                                        name="answers[1][text]" 
+                                    <x-forms.input
+                                        name="answers[1][text]"
                                         placeholder="Answer option 2"
                                         class="flex-1"
                                     />
                                 </div>
                                 <div class="flex items-center space-x-2">
                                     <input type="checkbox" name="answers[2][is_correct]" class="mr-2">
-                                    <x-forms.input 
-                                        name="answers[2][text]" 
+                                    <x-forms.input
+                                        name="answers[2][text]"
                                         placeholder="Answer option 3"
                                         class="flex-1"
                                     />
                                 </div>
                                 <div class="flex items-center space-x-2">
                                     <input type="checkbox" name="answers[3][is_correct]" class="mr-2">
-                                    <x-forms.input 
-                                        name="answers[3][text]" 
+                                    <x-forms.input
+                                        name="answers[3][text]"
                                         placeholder="Answer option 4"
                                         class="flex-1"
                                     />
@@ -101,16 +101,16 @@
                             </div>
                         </div>
 
-                        <!-- Tags (Optional) -->
+                        <!-- Subjects (Optional) -->
                         <div class="mb-6">
                             <label class="block text-sm font-medium text-gray-700 mb-3">
-                                Tags (Optional)
+                                Subjects (Optional)
                             </label>
                             <div class="tag-cloud" id="tag-cloud">
                                 @if(count($tags) > 0)
                                     <div class="flex flex-wrap gap-2">
                                         @foreach($tags as $tag)
-                                            <button type="button" 
+                                            <button type="button"
                                                     class="tag-item inline-flex items-center px-3 py-1 rounded-full text-sm font-medium border-2 border-gray-300 text-gray-600 bg-gray-50 hover:border-gray-400 transition-colors duration-200"
                                                     data-tag-id="{{ $tag->id }}"
                                                     data-tag-classes="{{ $tag->getColorClasses() }}"
@@ -121,10 +121,10 @@
                                         @endforeach
                                     </div>
                                 @else
-                                    <p class="text-sm text-gray-500">No tags available. Create some tags to organize your flashcards.</p>
+                                    <p class="text-sm text-gray-500">No subjects available. <a href="{{ route('subjects.create') }}" class="underline text-indigo-600 hover:text-gray-600 hover:no-underline">Create some subjects</a> to organize your flashcards.</p>
                                 @endif
                             </div>
-                            <!-- Hidden input to store selected tag IDs -->
+                            <!-- Hidden input to store selected subject IDs -->
                             <input type="hidden" name="tags[]" id="selected-tags" value="">
                         </div>
                     </div>
@@ -169,12 +169,12 @@ function toggleTag(element) {
     const tagId = element.dataset.tagId;
     const tagClasses = element.dataset.tagClasses;
     const symbol = element.querySelector('.tag-symbol');
-    
+
     if (selectedTags.has(tagId)) {
         // Remove tag
         selectedTags.delete(tagId);
         symbol.textContent = '+';
-        
+
         // Remove colour classes and restore default grey classes
         tagClasses.split(' ').forEach(cls => element.classList.remove(cls));
         element.classList.add('border-gray-300', 'text-gray-600', 'bg-gray-50');
@@ -183,15 +183,15 @@ function toggleTag(element) {
         // Add tag
         selectedTags.add(tagId);
         symbol.textContent = '-';
-        
+
         // Remove default grey classes and apply colour classes
         element.classList.remove('border-gray-300', 'text-gray-600', 'bg-gray-50');
         tagClasses.split(' ').forEach(cls => element.classList.add(cls));
         element.classList.add('ring-2', 'ring-offset-2');
     }
-    
+
     // Update hidden input
-    document.getElementById('selected-tags').value = Array.from(selectedTags).join(',');
+    document.getElementById('selected-subjects').value = Array.from(selectedTags).join(',');
 }
 </script>
 @endpush
