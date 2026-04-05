@@ -13,6 +13,47 @@
                 </p>
             </div>
 
+            <!-- User Stats -->
+            <div class="bg-white shadow overflow-hidden sm:rounded-md mb-8">
+                <div class="px-4 py-5 sm:px-6">
+                    <h3 class="text-lg leading-6 font-medium text-gray-900">Your Performance Stats</h3>
+                    <p class="mt-1 max-w-2xl text-sm text-gray-500">
+                        Track your learning progress and achievements
+                    </p>
+                </div>
+                <div class="px-4 py-5 sm:px-6">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <!-- Weekly Comparison -->
+                        <div class="text-center">
+                            <div class="text-lg font-semibold text-gray-900">This Week vs Last Week</div>
+                            <div id="weekly-chart" class="mt-4"></div>
+                        </div>
+
+                        <!-- Monthly Comparison -->
+                        <div class="text-center">
+                            <div class="text-lg font-semibold text-gray-900">This Month vs Last Month</div>
+                            <div id="monthly-chart" class="mt-4"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="px-4 py-5 sm:px-6">
+                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-6">
+                        <div class="text-center">
+                            <div class="text-3xl font-bold text-indigo-600">{{ $userData['points'] }}</div>
+                            <div class="text-sm text-gray-600 mt-1">Total Points</div>
+                        </div>
+                        <div class="text-center">
+                            <div class="text-3xl font-bold text-indigo-600">{{ $userData['question_count'] }}</div>
+                            <div class="text-sm text-gray-600 mt-1">Total Flashcards</div>
+                        </div>
+                        <div class="text-center">
+                            <div class="text-3xl font-bold text-indigo-600">{{ $userData['attempt_count'] }}</div>
+                            <div class="text-sm text-gray-600 mt-1">Total Attempts Made</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
             <!-- Quick Actions -->
             <div class="bg-white shadow overflow-hidden sm:rounded-md mb-8">
                 <div class="px-4 py-5 sm:px-6">
@@ -110,39 +151,13 @@
                     </li>
                 </ul>
             </div>
-
-            <div class="bg-white shadow overflow-hidden sm:rounded-md mb-8">
-                <div class="px-4 py-5 sm:px-6">
-                    <h3 class="text-lg leading-6 font-medium text-gray-900">Stats for your library</h3>
-                    <p class="mt-1 max-w-2xl text-sm text-gray-500">
-                        Information about your learning library
-                    </p>
-                </div>
-                <div class="px-4 py-5 sm:px-6">
-                    <p class="mt-1 max-w-2xl text-gray-900">
-                        {{ $stats['total_flashcards'] }} total flashcards, of which {{ $stats['active_flashcards'] }} are <a href="{{ route('flashcards.index') }}">in active rotation</a>.
-                    </p>
-                    <p>
-                        You have {{ $stats['draft_flashcards'] }} that you <a href="{{ route('flashcards.drafts') }}">haven't published</a> to the learning pool yet, and {{ $stats['hidden_flashcards'] }} are hidden.
-                    </p>
-                    <p class="bold">By category:</p>
-                    <ul class="list-disc">
-                        <li class="ml-5">
-                            <a href="{{ route('flashcards.fresh-learning') }}" class="underline text-indigo-600 hover:text-gray-600 hover:no-underline">{{ $stats['fresh_learning'] }} Fresh learning</a>
-                        </li>
-                        <li class="ml-5">
-                            <a href="{{ route('flashcards.intermediate-mastery') }}" class="underline text-indigo-600 hover:text-gray-600 hover:no-underline">{{ $stats['intermediate_mastery'] }} Intermediate mastery</a>
-                        </li>
-                        <li class="ml-5">
-                            <a href="{{ route('flashcards.high-mastery') }}" class="underline text-indigo-600 hover:text-gray-600 hover:no-underline">{{ $stats['high_mastery'] }} High mastery</a>
-                        </li>
-                        <li class="ml-5">
-                            <a href="{{ route('flashcards.completely-mastered') }}" class="underline text-indigo-600 hover:text-gray-600 hover:no-underline">{{ $stats['buried_flashcards'] }} Completely mastered</a>
-                        </li>
-                    </ul>
-                </div>
-            </div>
         </div>
     </div>
 </div>
 @endsection
+
+@push('scripts')
+<script>
+    window.userData = @json($userData);
+</script>
+@endpush

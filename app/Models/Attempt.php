@@ -121,6 +121,53 @@ class Attempt extends Model
             ->get();
     }
 
+    public function scopeEasy($query)
+    {
+        return $query->where('difficulty', Difficulty::EASY);
+    }
+
+    public function scopeMedium($query)
+    {
+        return $query->where('difficulty', Difficulty::MEDIUM);
+    }
+
+    public function scopeHard($query)
+    {
+        return $query->where('difficulty', Difficulty::HARD);
+    }
+
+    public function scopeThisWeek($query)
+    {
+        return $query->whereBetween('answered_at', [
+            now()->startOfWeek(),
+            now()->endOfWeek(),
+        ]);
+    }
+
+    public function scopeLastWeek($query)
+    {
+        return $query->whereBetween('answered_at', [
+            now()->startOfWeek()->subWeek(),
+            now()->endOfWeek()->subWeek(),
+        ]);
+    }
+
+    public function scopeThisMonth($query)
+    {
+        return $query->whereBetween('answered_at', [
+            now()->startOfMonth(),
+            now()->endOfMonth(),
+        ]);
+    }
+
+    public function scopeLastMonth($query)
+    {
+        return $query->whereBetween('answered_at', [
+            now()->startOfMonth()->subMonth(),
+            now()->endOfMonth()->subMonth(),
+        ]);
+    }
+
     /**
      * Fetch attempts made before they were bindable to a specific question
      */

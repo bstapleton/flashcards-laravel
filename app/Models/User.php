@@ -31,6 +31,7 @@ use RedExplosion\Sqids\Concerns\HasSqids;
  * @property bool is_trial_expired
  * @property bool is_trial_user
  * @property int total_questions
+ * @property int total_attempts
  *
  * @OA\Schema(
  *     required={"username", "password", "display_name"},
@@ -41,6 +42,7 @@ use RedExplosion\Sqids\Concerns\HasSqids;
  *     @OA\Property(property="points", type="number"),
  *     @OA\Property(property="easy_time", type="number"),
  *     @OA\Property(property="medium_time", type="number"),
+ *     @OA\Property(property="hard_time", type="number"),
  *     @OA\Property(property="page_limit", type="number")
  * )
  */
@@ -144,6 +146,11 @@ class User extends Authenticatable
     public function getTotalQuestionsAttribute(): int
     {
         return $this->flashcards()->count();
+    }
+
+    public function getTotalAttemptsAttribute(): int
+    {
+        return $this->attempts()->count();
     }
 
     public function adjustPoints(int $score, $operation = 'add'): static
