@@ -23,14 +23,6 @@
                             <p class="text-gray-700">{{ $flashcard->text }}</p>
                         </div>
 
-                        <!-- Explanation (if exists) -->
-                        @if($flashcard->explanation)
-                            <div class="mb-6">
-                                <h3 class="text-lg font-medium text-gray-900 mb-2">Explanation</h3>
-                                <p class="text-gray-700">{{ $flashcard->explanation }}</p>
-                            </div>
-                        @endif
-
                         <!-- Answers -->
                         <div class="mb-6">
                             <h3 class="text-lg font-medium text-gray-900 mb-2">Answers</h3>
@@ -70,6 +62,14 @@
                                 </div>
                             @endif
                         </div>
+
+                        <!-- Explanation (if exists) -->
+                        @if($flashcard->explanation)
+                            <div class="mb-6">
+                                <h3 class="text-lg font-medium text-gray-900 mb-2">Explanation</h3>
+                                <p class="text-gray-700">{{ $flashcard->explanation }}</p>
+                            </div>
+                        @endif
 
                         <!-- Metadata -->
                         <div class="mb-6">
