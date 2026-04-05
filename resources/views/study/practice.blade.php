@@ -31,7 +31,7 @@
                         <div class="mb-6">
                             <h3 class="text-lg font-medium text-gray-900 mb-2">Choose Your Answer</h3>
                             @if($flashcard->answers->count() > 0)
-                                <form method="POST" action="{{ route('api.flashcards.answer', $flashcard) }}" id="answerForm">
+                                <form method="POST" action="{{ route('answer.submit', $flashcard) }}" id="answerForm">
                                     @csrf
                                     <div class="space-y-3">
                                         @foreach($flashcard->answers as $index => $answer)
@@ -58,7 +58,7 @@
                                 </form>
                             @else
                                 <!-- True/False Question -->
-                                <form method="POST" action="{{ route('api.flashcards.answer', $flashcard) }}" id="answerForm">
+                                <form method="POST" action="{{ route('answer.submit', $flashcard) }}" id="answerForm">
                                     @csrf
                                     <div class="space-y-3">
                                         <label class="flex items-center p-4 border border-gray-200 rounded-lg cursor-pointer hover:bg-gray-50 transition-colors">

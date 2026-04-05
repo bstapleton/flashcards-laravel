@@ -387,11 +387,22 @@ class FlashcardService
             'points_earned' => $pointsEarned,
         ]);
 
-        $scorecard = new Scorecard($attempt->toArray());
+        $attemptData = $attempt->toArray();
+        // Convert answers collection to proper JSON string
+        $answersArray = $attempt->answers->map(function ($answer) {
+            return [
+                'text' => $answer->getText(),
+                'is_correct' => $answer->getIsCorrect(),
+                'was_selected' => $answer->getWasSelected(),
+            ];
+        })->toArray();
+        $attemptData['answers'] = json_encode($answersArray);
+
+        $scorecard = new Scorecard($attemptData);
 
         // Don't create an attempt if it's already buried
         if ($flashcard->difficulty !== Difficulty::BURIED) {
-            $attempt->answers = $attempt->answers->map(function ($answer) {
+            $formattedAnswers = $attempt->answers->map(function ($answer) {
                 return [
                     'text' => $answer->getText(),
                     'is_correct' => $answer->getIsCorrect(),
@@ -399,6 +410,7 @@ class FlashcardService
                 ];
             });
 
+            $attempt->answers = json_encode($formattedAnswers);
             $attempt->save();
         }
 
@@ -456,12 +468,13 @@ class FlashcardService
     {
         switch ($flashcard->type) {
             case QuestionType::SINGLE:
-                return $flashcard->correct_answer->id === last($answers) && count($answers) === 1
+                return $flashcard->correct_answer->id === (int) last($answers) && count($answers) === 1
                     ? Correctness::COMPLETE
                     : Correctness::NONE;
             case QuestionType::MULTIPLE:
                 $correctAnswers = $flashcard->correct_answers;
-                $correctSuppliedAnswers = array_intersect($correctAnswers->pluck('id')->toArray(), $answers);
+                $castAnswers = array_map('intval', $answers);
+                $correctSuppliedAnswers = array_intersect($correctAnswers->pluck('id')->toArray(), $castAnswers);
 
                 if (count($correctSuppliedAnswers) && $correctAnswers->count() === count($correctSuppliedAnswers) && count($answers) === $correctAnswers->count()) {
                     return Correctness::COMPLETE;

@@ -28,6 +28,7 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/intermediate-mastery', [StudyController::class, 'medium'])->name('intermediate-mastery');
         Route::get('/high-mastery', [StudyController::class, 'hard'])->name('high-mastery');
         Route::get('/{flashcard}', [StudyController::class, 'practice'])->name('show');
+        Route::post('/{flashcard}', [StudyController::class, 'submit'])->name('submit');
     });
 
     // Revision
