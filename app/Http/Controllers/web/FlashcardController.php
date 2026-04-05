@@ -3,10 +3,12 @@
 namespace App\Http\Controllers\web;
 
 use App\Enums\Difficulty;
+use App\Enums\Status;
 use App\Http\Controllers\Controller;
 use App\Models\Flashcard;
 use App\Models\Tag;
 use App\Services\FlashcardService;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class FlashcardController extends Controller
@@ -106,5 +108,192 @@ class FlashcardController extends Controller
         $flashcards = $this->flashcardService->hidden()->paginate(20);
 
         return view('flashcards.hidden', compact('flashcards'));
+    }
+
+    public function storeMultipleChoice(Request $request)
+    {
+        $data = $request->validate([
+            'text' => 'required|string',
+            'answers' => 'required|array|min:2',
+            'answers.*.text' => 'required|string',
+            'answers.*.is_correct' => 'required|boolean',
+            'explanation' => 'nullable|string',
+            'subjects' => 'nullable|array',
+            'subjects.*' => 'exists:tags,id',
+        ]);
+
+        $flashcard = $this->flashcardService->store($data);
+        $this->flashcardService->setStatus($flashcard, Status::PUBLISHED);
+
+        return redirect()->route('revision.show', $flashcard)
+            ->with('success', 'Multiple choice flashcard created successfully!');
+    }
+
+    public function storeMultipleChoiceDraft(Request $request)
+    {
+        $data = $request->validate([
+            'text' => 'required|string',
+            'answers' => 'nullable|array',
+            'answers.*.text' => 'required|string',
+            'answers.*.is_correct' => 'required|boolean',
+            'explanation' => 'nullable|string',
+            'subjects' => 'nullable|array',
+            'subjects.*' => 'exists:tags,id',
+        ]);
+
+        $flashcard = $this->flashcardService->store($data);
+        $this->flashcardService->setStatus($flashcard, Status::DRAFT);
+
+        return redirect()->route('flashcards.drafts')
+            ->with('success', 'Multiple choice draft saved successfully!');
+    }
+
+    public function storeStatement(Request $request)
+    {
+        $data = $request->validate([
+            'text' => 'required|string',
+            'is_true' => 'required|boolean',
+            'explanation' => 'nullable|string',
+            'subjects' => 'nullable|array',
+            'subjects.*' => 'exists:tags,id',
+        ]);
+
+        $flashcard = $this->flashcardService->store($data);
+        $this->flashcardService->setStatus($flashcard, Status::PUBLISHED);
+
+        return redirect()->route('revision.show', $flashcard)
+            ->with('success', 'Statement flashcard created successfully!');
+    }
+
+    public function storeStatementDraft(Request $request)
+    {
+        $data = $request->validate([
+            'text' => 'required|string',
+            'is_true' => 'required|boolean',
+            'explanation' => 'nullable|string',
+            'subjects' => 'nullable|array',
+            'subjects.*' => 'exists:tags,id',
+        ]);
+
+        $flashcard = $this->flashcardService->store($data);
+        $this->flashcardService->setStatus($flashcard, Status::DRAFT);
+
+        return redirect()->route('flashcards.drafts')
+            ->with('success', 'Statement draft saved successfully!');
+    }
+
+    public function publish(Flashcard $flashcard)
+    {
+        // Verify user owns this flashcard
+        if ($flashcard->user_id !== Auth::id()) {
+            abort(403);
+        }
+
+        $this->flashcardService->setStatus($flashcard, Status::PUBLISHED);
+
+        return redirect()->route('flashcards.show', $flashcard)
+            ->with('success', 'Flashcard published successfully!');
+    }
+
+    public function editStatement(Flashcard $flashcard)
+    {
+        // Verify user owns this flashcard
+        if ($flashcard->user_id !== Auth::id()) {
+            abort(403);
+        }
+
+        $tags = Tag::all();
+
+        return view('flashcards.edit-statement', compact('flashcard', 'tags'));
+    }
+
+    public function editMultipleChoice(Flashcard $flashcard)
+    {
+        // Verify user owns this flashcard
+        if ($flashcard->user_id !== Auth::id()) {
+            abort(403);
+        }
+
+        $tags = Tag::all();
+
+        return view('flashcards.edit-multiple-choice', compact('flashcard', 'tags'));
+    }
+
+    public function updateStatement(Request $request, Flashcard $flashcard)
+    {
+        // Verify user owns this flashcard
+        if ($flashcard->user_id !== Auth::id()) {
+            abort(403);
+        }
+
+        $data = $request->validate([
+            'text' => 'required|string',
+            'is_true' => 'required|boolean',
+            'explanation' => 'nullable|string',
+            'subjects' => 'nullable|array',
+            'subjects.*' => 'exists:tags,id',
+        ]);
+
+        $flashcard = $this->flashcardService->update($data, $flashcard);
+
+        // Handle subjects
+        if (isset($data['subjects'])) {
+            $flashcard->tags()->sync($data['subjects']);
+        } else {
+            $flashcard->tags()->detach();
+        }
+
+        // Check if we should publish after update
+        if ($request->has('publish_after_update')) {
+            $this->flashcardService->setStatus($flashcard, Status::PUBLISHED);
+
+            return redirect()->route('revision.show', $flashcard)
+                ->with('success', 'Statement flashcard updated and published successfully!');
+        }
+
+        return redirect()->route('flashcards.drafts', $flashcard)
+            ->with('success', 'Statement flashcard updated successfully!');
+    }
+
+    public function updateMultipleChoice(Request $request, Flashcard $flashcard)
+    {
+        // Verify user owns this flashcard
+        if ($flashcard->user_id !== Auth::id()) {
+            abort(403);
+        }
+
+        $data = $request->validate([
+            'text' => 'required|string',
+            'answers' => 'required|array|min:2',
+            'answers.*.text' => 'required|string',
+            'answers.*.is_correct' => 'required|boolean',
+            'explanation' => 'nullable|string',
+            'subjects' => 'nullable|array',
+            'subjects.*' => 'exists:tags,id',
+        ]);
+
+        $flashcard = $this->flashcardService->update($data, $flashcard);
+
+        // Update answers
+        $flashcard->answers()->delete();
+        $flashcard->answers()->createMany($data['answers']);
+
+        // Handle subjects
+        if (isset($data['subjects'])) {
+            $flashcard->tags()->sync($data['subjects']);
+        } else {
+            $flashcard->tags()->detach();
+        }
+
+        // Check if we should publish after update
+        if ($request->has('publish_after_update')) {
+            $this->flashcardService->setStatus($flashcard, Status::PUBLISHED);
+
+            return redirect()->route('revision.show', $flashcard)
+                ->with('success', 'Multiple choice flashcard updated and published successfully!');
+        }
+
+        return redirect()->route('flashcards.drafts', $flashcard)
+            ->with('success', 'Multiple choice flashcard updated successfully!');
     }
 }

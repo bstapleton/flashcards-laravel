@@ -18,7 +18,7 @@
             </div>
 
             <div class="bg-white shadow sm:rounded-lg">
-                <form action="{{ route('api.flashcards.store-multiple-choice') }}" method="POST" class="space-y-6">
+                <form action="{{ route('flashcards.store-multiple-choice') }}" method="POST" class="space-y-6" id="flashcard-form">
                     @csrf
 
                     <div class="px-6 py-4">
@@ -27,13 +27,13 @@
                             <label for="text" class="block text-sm font-medium text-gray-700">
                                 Question <span class="text-red-500">*</span>
                             </label>
-                            <x-forms.textarea
+                            <textarea 
                                 name="text"
                                 rows="3"
                                 placeholder="Enter your question here..."
                                 required
-                                :error="$errors->first('text')"
-                            />
+                                class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                            >{{ old('text') }}</textarea>
                             @error('text')
                                 <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                             @enderror
@@ -44,12 +44,12 @@
                             <label for="explanation" class="block text-sm font-medium text-gray-700">
                                 Explanation (Optional)
                             </label>
-                            <x-forms.textarea
+                            <textarea 
                                 name="explanation"
                                 rows="2"
                                 placeholder="Provide an explanation for the correct answer..."
-                                :error="$errors->first('explanation')"
-                            />
+                                class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                            >{{ old('explanation') }}</textarea>
                         </div>
 
                         <!-- Multiple Choice Answers -->
@@ -60,44 +60,42 @@
                             <div class="space-y-2" id="answers_container">
                                 <div class="flex items-center space-x-2">
                                     <input type="checkbox" name="answers[0][is_correct]" class="mr-2">
-                                    <x-forms.input
-                                        name="answers[0][text]"
-                                        placeholder="Answer option 1"
-                                        class="flex-1"
-                                    />
+                                    <input type="text" 
+                                           name="answers[0][text]" 
+                                           placeholder="Answer option 1"
+                                           class="flex-1 px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
                                 </div>
                                 <div class="flex items-center space-x-2">
                                     <input type="checkbox" name="answers[1][is_correct]" class="mr-2">
-                                    <x-forms.input
-                                        name="answers[1][text]"
-                                        placeholder="Answer option 2"
-                                        class="flex-1"
-                                    />
+                                    <input type="text" 
+                                           name="answers[1][text]" 
+                                           placeholder="Answer option 2"
+                                           class="flex-1 px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
                                 </div>
                                 <div class="flex items-center space-x-2">
                                     <input type="checkbox" name="answers[2][is_correct]" class="mr-2">
-                                    <x-forms.input
-                                        name="answers[2][text]"
-                                        placeholder="Answer option 3"
-                                        class="flex-1"
-                                    />
+                                    <input type="text" 
+                                           name="answers[2][text]" 
+                                           placeholder="Answer option 3"
+                                           class="flex-1 px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
                                 </div>
                                 <div class="flex items-center space-x-2">
                                     <input type="checkbox" name="answers[3][is_correct]" class="mr-2">
-                                    <x-forms.input
-                                        name="answers[3][text]"
-                                        placeholder="Answer option 4"
-                                        class="flex-1"
-                                    />
+                                    <input type="text" 
+                                           name="answers[3][text]" 
+                                           placeholder="Answer option 4"
+                                           class="flex-1 px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
                                 </div>
                             </div>
                             <div class="mt-3 flex justify-between items-center">
                                 <p class="text-sm text-gray-500">
                                     Mark all correct answers. At least one option must be correct.
                                 </p>
-                                <x-forms.button variant="secondary" onclick="addAnswerOption()">
+                                <button type="button" 
+                                        class="px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                                        onclick="addAnswerOption()">
                                     + Add Option
-                                </x-forms.button>
+                                </button>
                             </div>
                         </div>
 
@@ -125,16 +123,24 @@
                                 @endif
                             </div>
                             <!-- Hidden input to store selected subject IDs -->
-                            <input type="hidden" name="tags[]" id="selected-tags" value="">
+                            <div id="selected-subjects-container"></div>
                         </div>
                     </div>
 
                     <!-- Form Actions -->
-                    <div class="px-6 py-4 bg-gray-50 border-t border-gray-200 flex justify-end space-x-3">
-                        <a href="{{ route('flashcards.index') }}"
-                           class="px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
-                            Cancel
-                        </a>
+                    <div class="px-6 py-4 bg-gray-50 border-t border-gray-200 flex justify-between">
+                        <div class="space-x-3">
+                            <button type="button" 
+                                    class="px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                                    onclick="submitDraft()">
+                                Save as Draft
+                            </button>
+                            <x-forms.button variant="secondary">
+                                <a href="{{ route('flashcards.index') }}" class="block w-full h-full text-inherit no-underline">
+                                    Cancel
+                                </a>
+                            </x-forms.button>
+                        </div>
                         <x-forms.button type="submit">
                             Create Multiple Choice Flashcard
                         </x-forms.button>
@@ -190,8 +196,31 @@ function toggleTag(element) {
         element.classList.add('ring-2', 'ring-offset-2');
     }
 
-    // Update hidden input
-    document.getElementById('selected-subjects').value = Array.from(selectedTags).join(',');
+    // Update hidden inputs
+    const container = document.getElementById('selected-subjects-container');
+    container.innerHTML = '';
+    
+    Array.from(selectedTags).forEach(tagId => {
+        const input = document.createElement('input');
+        input.type = 'hidden';
+        input.name = 'subjects[]';
+        input.value = tagId;
+        container.appendChild(input);
+    });
+}
+
+function submitDraft() {
+    const form = document.getElementById('flashcard-form');
+    const originalAction = form.action;
+    
+    // Change form action to draft route
+    form.action = '{{ route("flashcards.store-multiple-choice-draft") }}';
+    
+    // Submit the form
+    form.submit();
+    
+    // Restore original action (in case submission fails)
+    form.action = originalAction;
 }
 </script>
 @endpush

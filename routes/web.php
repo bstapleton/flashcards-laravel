@@ -54,6 +54,15 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/create', [FlashcardController::class, 'create'])->name('create');
         Route::get('/create/statement', [FlashcardController::class, 'createStatement'])->name('create-statement');
         Route::get('/create/multiple-choice', [FlashcardController::class, 'createMultipleChoice'])->name('create-multiple-choice');
+        Route::post('/store/multiple-choice', [FlashcardController::class, 'storeMultipleChoice'])->name('store-multiple-choice');
+        Route::post('/store/multiple-choice/draft', [FlashcardController::class, 'storeMultipleChoiceDraft'])->name('store-multiple-choice-draft');
+        Route::post('/store/statement', [FlashcardController::class, 'storeStatement'])->name('store-statement');
+        Route::post('/store/statement/draft', [FlashcardController::class, 'storeStatementDraft'])->name('store-statement-draft');
+        Route::patch('/{flashcard}/publish', [FlashcardController::class, 'publish'])->name('publish');
+        Route::get('/{flashcard}/edit/statement', [FlashcardController::class, 'editStatement'])->name('edit-statement');
+        Route::get('/{flashcard}/edit/multiple-choice', [FlashcardController::class, 'editMultipleChoice'])->name('edit-multiple-choice');
+        Route::patch('/{flashcard}/update/statement', [FlashcardController::class, 'updateStatement'])->name('update-statement');
+        Route::patch('/{flashcard}/update/multiple-choice', [FlashcardController::class, 'updateMultipleChoice'])->name('update-multiple-choice');
         Route::get('/fresh-learning', [FlashcardController::class, 'easy'])->name('fresh-learning');
         Route::get('/intermediate-mastery', [FlashcardController::class, 'medium'])->name('intermediate-mastery');
         Route::get('/high-mastery', [FlashcardController::class, 'hard'])->name('high-mastery');

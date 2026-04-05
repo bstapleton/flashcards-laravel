@@ -76,10 +76,17 @@
                                         </div>
                                     </div>
                                     <div class="flex items-center space-x-2">
-                                        <a href="{{ route('flashcards.update', $flashcard) }}"
-                                           class="text-indigo-600 hover:text-indigo-900 text-sm font-medium">
-                                            Complete
-                                        </a>
+                                        @if($flashcard->answers->count() > 0)
+                                            <a href="{{ route('flashcards.edit-multiple-choice', $flashcard) }}"
+                                               class="text-indigo-600 hover:text-indigo-900 text-sm font-medium">
+                                                Edit
+                                            </a>
+                                        @else
+                                            <a href="{{ route('flashcards.edit-statement', $flashcard) }}"
+                                               class="text-indigo-600 hover:text-indigo-900 text-sm font-medium">
+                                                Edit
+                                            </a>
+                                        @endif
                                     </div>
                                 </div>
                             </li>
