@@ -50,6 +50,7 @@ class Attempt extends Model
     protected $casts = [
         'correctness' => Correctness::class,
         'difficulty' => Difficulty::class,
+        'answered_at' => 'datetime',
     ];
 
     public function __construct(array $attributes = [])

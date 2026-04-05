@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\web\AttemptController;
 use App\Http\Controllers\web\AuthController;
 use App\Http\Controllers\web\DashboardController;
 use App\Http\Controllers\web\FlashcardController;
@@ -19,6 +20,12 @@ Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 Route::middleware(['auth'])->group(function () {
     // Dashboard
     Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
+
+    // Attempts
+    Route::prefix('attempts')->name('attempts.')->group(function () {
+        Route::get('/', [AttemptController::class, 'index'])->name('index');
+        Route::get('/{attempt}', [AttemptController::class, 'show'])->name('show');
+    });
 
     // Study
     Route::prefix('answer')->name('answer.')->group(function () {

@@ -1,25 +1,25 @@
 @extends('layouts.app')
 
-@section('title', 'Answer Results')
+@section('title', 'Attempt Details')
 
 @section('content')
 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
     <div class="py-6">
         <div class="px-4 py-6 sm:px-0 max-w-2xl mx-auto">
             <div class="mb-8">
-                <a href="{{ route('answer.index') }}"
+                <a href="{{ route('attempts.index') }}"
                    class="text-sm text-gray-500 hover:text-gray-700 mb-4 inline-block">
-                    ← Back to Answer home page
+                    ← Back to attempt history
                 </a>
-                <h1 class="text-2xl font-bold text-gray-900">Answer Results</h1>
+                <h1 class="text-2xl font-bold text-gray-900">Attempt Details</h1>
             </div>
 
-            @if($scorecard)
+            @if($attempt)
                 <div class="bg-white shadow sm:rounded-lg">
                     <div class="px-6 py-4">
                         <!-- Result Header -->
                         <div class="mb-6">
-                            @if($scorecard->correctness->value === 'complete')
+                            @if($attempt->correctness->value === 'complete')
                                 <div class="flex items-center">
                                     <svg class="h-8 w-8 text-green-500 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
@@ -39,14 +39,14 @@
                         <!-- Question -->
                         <div class="mb-6">
                             <h3 class="text-lg font-medium text-gray-900 mb-2">Question</h3>
-                            <p class="text-gray-700">{{ $scorecard->question }}</p>
+                            <p class="text-gray-700">{{ $attempt->question }}</p>
                         </div>
 
                         <!-- Answer Results -->
                         <div class="mb-6">
                             <h3 class="text-lg font-medium text-gray-900 mb-2">Your Answer(s)</h3>
                             <div class="space-y-3">
-                                @foreach($scorecard->formatted_answers as $answer)
+                                @foreach($attempt->formatted_answers as $answer)
                                     <div class="p-4 border rounded-lg @if($answer->getWasSelected()) @if($answer->getIsCorrect()) border-green-300 bg-green-50 @else border-red-300 bg-red-50 @endif @else border-gray-200 @endif">
                                         <div class="flex items-center">
                                             @if($answer->getWasSelected())
@@ -84,52 +84,54 @@
                             </div>
                         </div>
 
-                        <!-- Explanation (if available) -->
-                        @if($scorecard->getExplanation())
-                            <div class="mb-6">
-                                <h3 class="text-lg font-medium text-gray-900 mb-2">Explanation</h3>
-                                <div class="p-4 bg-blue-50 border border-blue-200 rounded-lg">
-                                    <p class="text-gray-700">{{ $scorecard->getExplanation() }}</p>
-                                </div>
-                            </div>
-                        @endif
-
-                        <!-- Score and Progress -->
+                        <!-- Metadata -->
                         <div class="mb-6">
-                            <h3 class="text-lg font-medium text-gray-900 mb-2">Score & Progress</h3>
+                            <h3 class="text-lg font-medium text-gray-900 mb-2">Attempt Details</h3>
                             <dl class="grid grid-cols-1 gap-x-4 gap-y-3 sm:grid-cols-2">
                                 <div>
                                     <dt class="text-sm font-medium text-gray-500">Points earned</dt>
                                     <dd class="text-sm text-gray-900">
-                                        @if($scorecard->points_earned > 0)
-                                            <span class="text-green-600 font-semibold">+{{ $scorecard->points_earned }}</span>
+                                        @if($attempt->points_earned > 0)
+                                            <span class="text-green-600 font-semibold">+{{ $attempt->points_earned }}</span>
                                         @else
-                                            <span class="text-red-600 font-semibold">{{ $scorecard->points_earned }}</span>
+                                            <span class="text-red-600 font-semibold">{{ $attempt->points_earned }}</span>
                                         @endif
                                     </dd>
                                 </div>
                                 <div>
-                                    <dt class="text-sm font-medium text-gray-500">Your total score</dt>
-                                    <dd class="text-sm text-gray-900 font-semibold">{{ $scorecard->getTotalScore() }}</dd>
+                                    <dt class="text-sm font-medium text-gray-500">Question type</dt>
+                                    <dd class="text-sm text-gray-900">{{ $attempt->question_type }}</dd>
                                 </div>
                                 <div>
-                                    <dt class="text-sm font-medium text-gray-500">Difficulty change</dt>
+                                    <dt class="text-sm font-medium text-gray-500">Difficulty (when attempted)</dt>
                                     <dd class="text-sm text-gray-900">
-                                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-{{ strtolower($scorecard->difficulty->name) }}-100 text-{{ strtolower($scorecard->difficulty->name) }}-800">
-                                            {{ $scorecard->difficulty->value }}
-                                        </span>
-                                        →
-                                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-{{ strtolower($scorecard->getNewDifficulty()->name) }}-100 text-{{ strtolower($scorecard->getNewDifficulty()->name) }}-800">
-                                            {{ $scorecard->getNewDifficulty()->value }}
+                                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-{{ strtolower($attempt->difficulty->name) }}-100 text-{{ strtolower($attempt->difficulty->name) }}-800">
+                                            {{ $attempt->difficulty->value }}
                                         </span>
                                     </dd>
                                 </div>
                                 <div>
-                                    <dt class="text-sm font-medium text-gray-500">Next available</dt>
-                                    <dd class="text-sm text-gray-900">{{ $scorecard->getEligibleAt() }}</dd>
+                                    <dt class="text-sm font-medium text-gray-500">Answered at</dt>
+                                    <dd class="text-sm text-gray-900">{{ $attempt->answered_at->format('M j, Y \a\t g:i A') }}</dd>
                                 </div>
                             </dl>
                         </div>
+
+                        <!-- Tags (if exists) -->
+                        @if($attempt->tags)
+                            <div class="mb-6">
+                                <h3 class="text-lg font-medium text-gray-900 mb-2">Tags</h3>
+                                <div class="flex flex-wrap gap-2">
+                                    @foreach(explode(',', $attempt->tags) as $tag)
+                                        @if(trim($tag))
+                                            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-800">
+                                                {{ trim($tag) }}
+                                            </span>
+                                        @endif
+                                    @endforeach
+                                </div>
+                            </div>
+                        @endif
                     </div>
 
                     <!-- Actions -->
@@ -142,22 +144,6 @@
                                     </svg>
                                     Answer another question
                                 </a>
-                                @if($scorecard->correctness->value !== 'complete')
-                                    <a href="{{ route('revision.show', $flashcard) }}" class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-orange-600 hover:bg-orange-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-orange-500">
-                                        <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
-                                        </svg>
-                                        Review this question
-                                    </a>
-                                @endif
-                            </div>
-                            <div class="space-x-3">
-                                <a href="{{ route('attempts.index') }}" class="inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
-                                    <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"></path>
-                                    </svg>
-                                    My attempt history
-                                </a>
                             </div>
                         </div>
                     </div>
@@ -167,14 +153,14 @@
                     <svg class="mx-auto h-12 w-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                     </svg>
-                    <h3 class="mt-2 text-sm font-medium text-gray-900">Scorecard not found</h3>
+                    <h3 class="mt-2 text-sm font-medium text-gray-900">Attempt not found</h3>
                     <p class="mt-1 text-sm text-gray-500">
-                        Unable to load the scorecard results.
+                        This attempt doesn't exist or you don't have access to it.
                     </p>
                     <div class="mt-6">
-                        <a href="{{ route('answer.index') }}"
+                        <a href="{{ route('attempts.index') }}"
                            class="inline-flex items-center px-4 py-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
-                            Back to Answer home page
+                            Back to attempt history
                         </a>
                     </div>
                 </div>
