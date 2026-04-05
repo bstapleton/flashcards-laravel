@@ -415,6 +415,8 @@ class FlashcardService
         $scorecard->setEligibleAt(Carbon::parse($flashcard->eligible_at));
         $scorecard->setTotalScore($user->points);
         $scorecard->setExplanation($flashcard->explanation);
+        $scorecard->setAttemptId($attempt->id);
+        $scorecard->setFlashcardId($flashcard->id);
 
         return $scorecard;
     }

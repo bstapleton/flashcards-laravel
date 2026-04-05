@@ -12,6 +12,8 @@ class ScorecardTransformer extends TransformerAbstract
     public function transform(Scorecard $scorecard): array
     {
         return [
+            'attempt_id' => $scorecard->getAttemptId(),
+            'flashcard_id' => $scorecard->getFlashcardId(),
             'question' => $scorecard->question,
             'type' => $scorecard->question_type->value,
             'correctness' => $scorecard->correctness->value,
