@@ -86,14 +86,25 @@
                                     @if(count($tags) > 0)
                                         <div class="flex flex-wrap gap-2">
                                             @foreach($tags as $tag)
-                                                <button type="button"
-                                                        class="tag-item inline-flex items-center px-3 py-1 rounded-full text-sm font-medium border-2 border-gray-300 text-gray-600 bg-gray-50 hover:border-gray-400 transition-colors duration-200"
-                                                        data-tag-id="{{ $tag->id }}"
-                                                        data-tag-classes="{{ $tag->getColorClasses() }}"
-                                                        onclick="toggleTag(this)">
-                                                    <span class="tag-symbol mr-1">+</span>
-                                                    <span class="tag-name">{{ $tag->name }}</span>
-                                                </button>
+                                                @if (in_array($tag->id, $selectedTags))
+                                                    <button type="button"
+                                                            class="tag-item inline-flex items-center px-3 py-1 rounded-full text-sm font-medium border-2 {{ $tag->getColorClasses() }} ring-2 ring-offset-2 hover:border-gray-400 transition-colors duration-200"
+                                                            data-tag-id="{{ $tag->id }}"
+                                                            data-tag-classes="{{ $tag->getColorClasses() }}"
+                                                            onclick="toggleTag(this)">
+                                                        <span class="tag-symbol mr-1">-</span>
+                                                        <span class="tag-name">{{ $tag->name }}</span>
+                                                    </button>
+                                                @else
+                                                    <button type="button"
+                                                            class="tag-item inline-flex items-center px-3 py-1 rounded-full text-sm font-medium border-2 border-gray-300 text-gray-600 bg-gray-50 hover:border-gray-400 transition-colors duration-200"
+                                                            data-tag-id="{{ $tag->id }}"
+                                                            data-tag-classes="{{ $tag->getColorClasses() }}"
+                                                            onclick="toggleTag(this)">
+                                                        <span class="tag-symbol mr-1">+</span>
+                                                        <span class="tag-name">{{ $tag->name }}</span>
+                                                    </button>
+                                                @endif
                                             @endforeach
                                         </div>
                                     @else
@@ -140,15 +151,8 @@
     @push('scripts')
         <script>
             // Tag cloud functionality
-            const selectedTags = new Set();
-
-            // Initialize selected tags from flashcard
-            @php
-                $selectedTagIds = $flashcard->tags->pluck('id')->toArray();
-            @endphp
-            @foreach($selectedTagIds as $tagId)
-            selectedTags.add({{ $tagId }});
-            @endforeach
+            // Initialize selected tags from flashcard - ensure all are strings for consistent comparison
+            const selectedTags = new Set(@json($selectedTags).map(id => String(id)));
 
             function toggleTag(element) {
                 const tagId = element.dataset.tagId;
@@ -179,7 +183,9 @@
                 const container = document.getElementById('selected-subjects-container');
                 container.innerHTML = '';
 
-                Array.from(selectedTags).forEach(tagId => {
+                const selectedTagsArray = Array.from(selectedTags);
+
+                selectedTagsArray.forEach(tagId => {
                     const input = document.createElement('input');
                     input.type = 'hidden';
                     input.name = 'subjects[]';
@@ -226,23 +232,8 @@
                 form.method = originalMethod;
             }
 
-            // Initialize tag colors on page load
+            // Initialize hidden inputs on page load
             document.addEventListener('DOMContentLoaded', function () {
-                const tagButtons = document.querySelectorAll('.tag-item');
-                tagButtons.forEach(button => {
-                    const tagId = button.dataset.tagId;
-                    if (selectedTags.has(tagId)) {
-                        const tagClasses = button.dataset.tagClasses;
-                        const symbol = button.querySelector('.tag-symbol');
-
-                        symbol.textContent = '-';
-                        button.classList.remove('border-gray-300', 'text-gray-600', 'bg-gray-50');
-                        tagClasses.split(' ').forEach(cls => button.classList.add(cls));
-                        button.classList.add('ring-2', 'ring-offset-2');
-                    }
-                });
-
-                // Initialize hidden inputs
                 const container = document.getElementById('selected-subjects-container');
                 Array.from(selectedTags).forEach(tagId => {
                     const input = document.createElement('input');

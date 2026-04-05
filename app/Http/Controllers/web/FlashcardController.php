@@ -202,9 +202,10 @@ class FlashcardController extends Controller
             abort(403);
         }
 
+        $selectedTags = $flashcard->tags->pluck('id')->toArray();
         $tags = Tag::all();
 
-        return view('flashcards.edit-statement', compact('flashcard', 'tags'));
+        return view('flashcards.edit-statement', compact('flashcard', 'tags', 'selectedTags'));
     }
 
     public function editMultipleChoice(Flashcard $flashcard)
@@ -214,9 +215,10 @@ class FlashcardController extends Controller
             abort(403);
         }
 
+        $selectedTags = $flashcard->tags->pluck('id')->toArray();
         $tags = Tag::all();
 
-        return view('flashcards.edit-multiple-choice', compact('flashcard', 'tags'));
+        return view('flashcards.edit-multiple-choice', compact('flashcard', 'tags', 'selectedTags'));
     }
 
     public function updateStatement(Request $request, Flashcard $flashcard)
@@ -237,7 +239,7 @@ class FlashcardController extends Controller
         $flashcard = $this->flashcardService->update($data, $flashcard);
 
         // Handle subjects
-        if (isset($data['subjects'])) {
+        if (! empty($data['subjects'])) {
             $flashcard->tags()->sync($data['subjects']);
         } else {
             $flashcard->tags()->detach();
@@ -279,7 +281,7 @@ class FlashcardController extends Controller
         $flashcard->answers()->createMany($data['answers']);
 
         // Handle subjects
-        if (isset($data['subjects'])) {
+        if (! empty($data['subjects'])) {
             $flashcard->tags()->sync($data['subjects']);
         } else {
             $flashcard->tags()->detach();
