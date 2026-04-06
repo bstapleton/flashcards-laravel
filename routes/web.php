@@ -61,6 +61,7 @@ Route::middleware(['auth'])->group(function () {
             Route::patch('/publish', [FlashcardController::class, 'publish'])->name('publish');
             Route::patch('/hide', [FlashcardController::class, 'hide'])->name('hide');
             Route::patch('/unhide', [FlashcardController::class, 'unhide'])->name('unhide');
+            Route::patch('/revive', [FlashcardController::class, 'revive'])->name('revive');
             Route::get('/edit/statement', [FlashcardController::class, 'editStatement'])->name('edit-statement');
             Route::get('/edit/multiple-choice', [FlashcardController::class, 'editMultipleChoice'])->name('edit-multiple-choice');
             Route::patch('/update/statement', [FlashcardController::class, 'updateStatement'])->name('update-statement');

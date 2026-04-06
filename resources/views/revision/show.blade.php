@@ -14,7 +14,22 @@
                     <h1 class="text-2xl font-bold text-gray-900">Revision Mode</h1>
                 </div>
 
-                @if($flashcard && $flashcard->status->value === 'hidden')
+                @if ($flashcard && $flashcard->difficulty->value === 'buried')
+                    <div class="mb-6 bg-yellow-50 border border-yellow-200 rounded-md p-4">
+                        <div class="flex">
+                            <div class="flex-shrink-0">
+                                <svg class="h-5 w-5 text-yellow-400" viewBox="0 0 20 20" fill="currentColor">
+                                    <path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clip-rule="evenodd" />
+                                </svg>
+                            </div>
+                            <div class="ml-3">
+                                <p class="text-sm text-yellow-800">
+                                    <strong>Mastered Flashcard:</strong> You have answered this question correctly three consecutive times, so it is considered completely mastered. You'll need to reset it back to 'fresh learning' in order for it to shart showing up again in regular study sessions.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                @elseif ($flashcard && $flashcard->status->value === 'hidden')
                     <div class="mb-6 bg-yellow-50 border border-yellow-200 rounded-md p-4">
                         <div class="flex">
                             <div class="flex-shrink-0">
@@ -153,31 +168,27 @@
                                     </svg>
                                     Attempt This
                                 </a>
-                                @if($flashcard->status->value === 'hidden')
-                                    <form action="{{ route('flashcards.unhide', $flashcard) }}" method="POST" class="inline">
+                                @if ($flashcard && $flashcard->difficulty->value === 'buried')
+                                    <form action="{{ route('flashcards.revive', $flashcard) }}" method="POST" class="inline-flex items-center">
                                         @csrf
                                         @method('PATCH')
-                                        <button type="submit"
-                                                class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
-                                            <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                                      d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                                      d="M2.458 12C2.458 8.64 4.343 5.5 5.5 5.5c1.943 0 3.542 1.14 4.242 3.042l1.708 5.914 3.042 4.242c1.9 1.102 3.099 3.042 4.242l-1.708 5.914c-1.9 1.102-3.099 3.042-4.242z"></path>
-                                            </svg>
+                                        <button type="submit" class="px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-yellow-600 hover:bg-yellow-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-yellow-500">
+                                            Reset difficulty
+                                        </button>
+                                    </form>
+                                @elseif ($flashcard->status->value === 'hidden')
+                                    <form action="{{ route('flashcards.unhide', $flashcard) }}" method="POST" class="inline-flex">
+                                        @csrf
+                                        @method('PATCH')
+                                        <button type="submit" class="px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
                                             Unhide
                                         </button>
                                     </form>
                                 @else
-                                    <form action="{{ route('flashcards.hide', $flashcard) }}" method="POST" class="inline">
+                                    <form action="{{ route('flashcards.hide', $flashcard) }}" method="POST" class="inline-flex">
                                         @csrf
                                         @method('PATCH')
-                                        <button type="submit"
-                                                class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-yellow-600 hover:bg-yellow-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-yellow-500">
-                                            <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                                      d="M18.364 5.636l-3.536 3.536m0 5.858l3.536 3.536M9 9v12m0-12l3.64 3.636M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                                            </svg>
+                                        <button type="submit" class="px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-yellow-600 hover:bg-yellow-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-yellow-500">
                                             Hide
                                         </button>
                                     </form>

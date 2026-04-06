@@ -146,7 +146,7 @@ class FlashcardController extends Controller
 
         $this->flashcardService->setStatus($flashcard, Status::PUBLISHED);
 
-        return redirect()->route('flashcards.show', $flashcard)
+        return redirect()->route('revision.show', $flashcard)
             ->with('success', 'Flashcard published successfully!');
     }
 
@@ -264,5 +264,18 @@ class FlashcardController extends Controller
 
         return redirect()->route('revision.show', $flashcard)
             ->with('success', 'Flashcard unhidden successfully!');
+    }
+
+    public function revive(Flashcard $flashcard)
+    {
+        // Verify user owns this flashcard
+        if ($flashcard->user_id !== Auth::id()) {
+            abort(403);
+        }
+
+        $this->flashcardService->revive($flashcard);
+
+        return redirect()->route('revision.show', $flashcard)
+            ->with('success', 'Flashcard revived successfully!');
     }
 }

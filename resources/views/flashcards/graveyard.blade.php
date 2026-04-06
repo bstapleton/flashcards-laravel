@@ -71,11 +71,11 @@
                                         </div>
                                     </div>
                                     <div class="flex items-center space-x-2">
-                                        <form method="POST" action="{{ route('api.flashcards.revive', $flashcard) }}" class="inline">
+                                        <form method="POST" action="{{ route('flashcards.revive', $flashcard) }}" class="inline">
                                             @csrf
                                             <button type="submit"
                                                     class="text-green-600 hover:text-green-900 text-sm font-medium">
-                                                Revive
+                                                Reset to fresh learning
                                             </button>
                                         </form>
                                         <a href="{{ route('revision.show', $flashcard) }}"
