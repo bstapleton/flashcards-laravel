@@ -8,7 +8,7 @@
         <div class="py-6">
             <div class="px-4 py-6 sm:px-0 max-w-2xl mx-auto">
                 <div class="mb-8">
-                    <a href="{{ route('flashcards.show', $flashcard) }}"
+                    <a href="{{ route('revision.show', $flashcard) }}"
                        class="text-sm text-gray-500 hover:text-gray-700 mb-4 inline-block">
                         ← Back to Flashcard
                     </a>

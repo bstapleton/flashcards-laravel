@@ -42,18 +42,6 @@ class FlashcardController extends Controller
         return view('flashcards.create-multiple-choice', compact('tags'));
     }
 
-    public function show(Flashcard $flashcard)
-    {
-        // Verify user owns this flashcard
-        if ($flashcard->user_id !== Auth::id()) {
-            abort(403);
-        }
-
-        $flashcard = $this->flashcardService->show($flashcard);
-
-        return view('flashcards.show', compact('flashcard'));
-    }
-
     public function graveyard()
     {
         $flashcards = $this->flashcardService->buried()->paginate(20);

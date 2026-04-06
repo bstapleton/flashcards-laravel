@@ -57,20 +57,21 @@ Route::middleware(['auth'])->group(function () {
         Route::post('/store/multiple-choice/draft', [FlashcardController::class, 'storeMultipleChoiceDraft'])->name('store-multiple-choice-draft');
         Route::post('/store/statement', [FlashcardController::class, 'storeStatement'])->name('store-statement');
         Route::post('/store/statement/draft', [FlashcardController::class, 'storeStatementDraft'])->name('store-statement-draft');
-        Route::patch('/{flashcard}/publish', [FlashcardController::class, 'publish'])->name('publish');
-        Route::patch('/{flashcard}/hide', [FlashcardController::class, 'hide'])->name('hide');
-        Route::patch('/{flashcard}/unhide', [FlashcardController::class, 'unhide'])->name('unhide');
-        Route::get('/{flashcard}/edit/statement', [FlashcardController::class, 'editStatement'])->name('edit-statement');
-        Route::get('/{flashcard}/edit/multiple-choice', [FlashcardController::class, 'editMultipleChoice'])->name('edit-multiple-choice');
-        Route::patch('/{flashcard}/update/statement', [FlashcardController::class, 'updateStatement'])->name('update-statement');
-        Route::patch('/{flashcard}/update/multiple-choice', [FlashcardController::class, 'updateMultipleChoice'])->name('update-multiple-choice');
+        Route::prefix('{flashcard}')->group(function () {
+            Route::patch('/publish', [FlashcardController::class, 'publish'])->name('publish');
+            Route::patch('/hide', [FlashcardController::class, 'hide'])->name('hide');
+            Route::patch('/unhide', [FlashcardController::class, 'unhide'])->name('unhide');
+            Route::get('/edit/statement', [FlashcardController::class, 'editStatement'])->name('edit-statement');
+            Route::get('/edit/multiple-choice', [FlashcardController::class, 'editMultipleChoice'])->name('edit-multiple-choice');
+            Route::patch('/update/statement', [FlashcardController::class, 'updateStatement'])->name('update-statement');
+            Route::patch('/update/multiple-choice', [FlashcardController::class, 'updateMultipleChoice'])->name('update-multiple-choice');
+        });
         Route::get('/fresh-learning', [FlashcardController::class, 'easy'])->name('fresh-learning');
         Route::get('/intermediate-mastery', [FlashcardController::class, 'medium'])->name('intermediate-mastery');
         Route::get('/high-mastery', [FlashcardController::class, 'hard'])->name('high-mastery');
         Route::get('/completely-mastered', [FlashcardController::class, 'graveyard'])->name('completely-mastered');
         Route::get('/drafts', [FlashcardController::class, 'drafts'])->name('drafts');
         Route::get('/hidden', [FlashcardController::class, 'hidden'])->name('hidden');
-        Route::get('/{flashcard}', [FlashcardController::class, 'show'])->name('show');
     });
 
     // Subjects
