@@ -112,7 +112,23 @@ class FlashcardController extends Controller
 
     public function storeMultipleChoice(Request $request)
     {
-        $data = $request->validate([
+        // Preprocess the request data
+        $data = $request->all();
+        
+        // Convert checkbox 'on' values to boolean true
+        if (isset($data['answers']) && is_array($data['answers'])) {
+            $data['answers'] = array_filter($data['answers'], function($answer) {
+                // Filter out answers with empty text
+                return !empty($answer['text']);
+            });
+            
+            // Convert 'on' to true for is_correct checkboxes
+            foreach ($data['answers'] as &$answer) {
+                $answer['is_correct'] = isset($answer['is_correct']) && $answer['is_correct'] === 'on';
+            }
+        }
+        
+        $validatedData = validator($data, [
             'text' => 'required|string',
             'answers' => 'required|array|min:2',
             'answers.*.text' => 'required|string',
@@ -120,9 +136,9 @@ class FlashcardController extends Controller
             'explanation' => 'nullable|string',
             'subjects' => 'nullable|array',
             'subjects.*' => 'exists:tags,id',
-        ]);
+        ])->validate();
 
-        $flashcard = $this->flashcardService->store($data);
+        $flashcard = $this->flashcardService->store($validatedData);
         $this->flashcardService->setStatus($flashcard, Status::PUBLISHED);
 
         return redirect()->route('revision.show', $flashcard)
@@ -131,17 +147,33 @@ class FlashcardController extends Controller
 
     public function storeMultipleChoiceDraft(Request $request)
     {
-        $data = $request->validate([
+        // Preprocess the request data
+        $data = $request->all();
+        
+        // Convert checkbox 'on' values to boolean true
+        if (isset($data['answers']) && is_array($data['answers'])) {
+            $data['answers'] = array_filter($data['answers'], function($answer) {
+                // Filter out answers with empty text
+                return !empty($answer['text']);
+            });
+            
+            // Convert 'on' to true for is_correct checkboxes
+            foreach ($data['answers'] as &$answer) {
+                $answer['is_correct'] = isset($answer['is_correct']) && $answer['is_correct'] === 'on';
+            }
+        }
+        
+        $validatedData = validator($data, [
             'text' => 'required|string',
             'answers' => 'nullable|array',
-            'answers.*.text' => 'required|string',
-            'answers.*.is_correct' => 'required|boolean',
+            'answers.*.text' => 'required_with:answers|string',
+            'answers.*.is_correct' => 'required_with:answers|boolean',
             'explanation' => 'nullable|string',
             'subjects' => 'nullable|array',
             'subjects.*' => 'exists:tags,id',
-        ]);
+        ])->validate();
 
-        $flashcard = $this->flashcardService->store($data);
+        $flashcard = $this->flashcardService->store($validatedData);
         $this->flashcardService->setStatus($flashcard, Status::DRAFT);
 
         return redirect()->route('flashcards.drafts')
@@ -264,7 +296,23 @@ class FlashcardController extends Controller
             abort(403);
         }
 
-        $data = $request->validate([
+        // Preprocess the request data
+        $data = $request->all();
+        
+        // Convert checkbox 'on' values to boolean true
+        if (isset($data['answers']) && is_array($data['answers'])) {
+            $data['answers'] = array_filter($data['answers'], function($answer) {
+                // Filter out answers with empty text
+                return !empty($answer['text']);
+            });
+            
+            // Convert 'on' to true for is_correct checkboxes
+            foreach ($data['answers'] as &$answer) {
+                $answer['is_correct'] = isset($answer['is_correct']) && $answer['is_correct'] === 'on';
+            }
+        }
+        
+        $validatedData = validator($data, [
             'text' => 'required|string',
             'answers' => 'required|array|min:2',
             'answers.*.text' => 'required|string',
@@ -272,17 +320,17 @@ class FlashcardController extends Controller
             'explanation' => 'nullable|string',
             'subjects' => 'nullable|array',
             'subjects.*' => 'exists:tags,id',
-        ]);
+        ])->validate();
 
-        $flashcard = $this->flashcardService->update($data, $flashcard);
+        $flashcard = $this->flashcardService->update($validatedData, $flashcard);
 
         // Update answers
         $flashcard->answers()->delete();
-        $flashcard->answers()->createMany($data['answers']);
+        $flashcard->answers()->createMany($validatedData['answers']);
 
         // Handle subjects
-        if (! empty($data['subjects'])) {
-            $flashcard->tags()->sync($data['subjects']);
+        if (! empty($validatedData['subjects'])) {
+            $flashcard->tags()->sync($validatedData['subjects']);
         } else {
             $flashcard->tags()->detach();
         }
