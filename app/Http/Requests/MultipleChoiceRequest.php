@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
 
 class MultipleChoiceRequest extends FormRequest
@@ -17,16 +18,16 @@ class MultipleChoiceRequest extends FormRequest
     /**
      * Get the validation rules that apply to the request.
      *
-     * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
+     * @return array<string, ValidationRule|array|string>
      */
     public function rules(): array
     {
         $isDraft = $this->isDraftRequest();
         $isUpdate = $this->isUpdateRequest();
-        
+
         return [
             'text' => 'required|string',
-            'answers' => $this->getAnswersRule($isDraft, $isUpdate),
+            'answers' => $this->getAnswersRule($isDraft),
             'answers.*.text' => $isDraft ? 'required_with:answers|string' : 'required|string',
             'answers.*.is_correct' => $isDraft ? 'required_with:answers|boolean' : 'required|boolean',
             'explanation' => 'nullable|string',
@@ -42,34 +43,30 @@ class MultipleChoiceRequest extends FormRequest
     protected function prepareForValidation(): void
     {
         $data = $this->all();
-        
+
         // Convert checkbox 'on' values to boolean true
         if (isset($data['answers']) && is_array($data['answers'])) {
-            $data['answers'] = array_filter($data['answers'], function($answer) {
+            $data['answers'] = array_filter($data['answers'], function ($answer) {
                 // Filter out answers with empty text
-                return !empty($answer['text']);
+                return ! empty($answer['text']);
             });
-            
+
             // Convert 'on' to true for is_correct checkboxes
             foreach ($data['answers'] as &$answer) {
                 $answer['is_correct'] = isset($answer['is_correct']) && $answer['is_correct'] === 'on';
             }
         }
-        
+
         $this->merge($data);
     }
 
     /**
      * Get the validation rule for answers based on request type.
      */
-    private function getAnswersRule(bool $isDraft, bool $isUpdate): string
+    private function getAnswersRule(bool $isDraft): string
     {
         if ($isDraft) {
             return 'nullable|array';
-        }
-        
-        if ($isUpdate) {
-            return 'required|array|min:2';
         }
         
         return 'required|array|min:2';

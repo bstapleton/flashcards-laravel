@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
 
 class StatementRequest extends FormRequest
@@ -17,12 +18,12 @@ class StatementRequest extends FormRequest
     /**
      * Get the validation rules that apply to the request.
      *
-     * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
+     * @return array<string, ValidationRule|array|string>
      */
     public function rules(): array
     {
         $isUpdate = $this->isUpdateRequest();
-        
+
         return [
             'text' => 'required|string',
             'is_true' => 'required|boolean',
@@ -39,12 +40,12 @@ class StatementRequest extends FormRequest
     protected function prepareForValidation(): void
     {
         $data = $this->all();
-        
+
         // Convert radio button values to boolean
         if (isset($data['is_true'])) {
             $data['is_true'] = (bool) $data['is_true'];
         }
-        
+
         $this->merge($data);
     }
 
