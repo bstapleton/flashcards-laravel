@@ -80,7 +80,7 @@
                                         </form>
                                         <a href="{{ route('revision.show', $flashcard) }}"
                                            class="text-indigo-600 hover:text-indigo-900 text-sm font-medium">
-                                            Revice
+                                            Revise
                                         </a>
                                     </div>
                                 </div>
