@@ -51,9 +51,8 @@ Route::middleware(['auth'])->group(function () {
     // Flashcards
     Route::prefix('flashcards')->name('flashcards.')->group(function () {
         Route::get('/', [FlashcardController::class, 'index'])->name('index');
-        Route::get('/create', [FlashcardController::class, 'create'])->name('create');
-        Route::get('/create/statement', [FlashcardController::class, 'createStatement'])->name('create-statement');
-        Route::get('/create/multiple-choice', [FlashcardController::class, 'createMultipleChoice'])->name('create-multiple-choice');
+        Route::get('/create/statement', [FlashcardController::class, 'statementForm'])->name('create-statement');
+        Route::get('/create/multiple-choice', [FlashcardController::class, 'multipleChoiceForm'])->name('create-multiple-choice');
         Route::post('/store/multiple-choice', [FlashcardController::class, 'storeMultipleChoice'])->name('store-multiple-choice');
         Route::post('/store/multiple-choice/draft', [FlashcardController::class, 'storeMultipleChoiceDraft'])->name('store-multiple-choice-draft');
         Route::post('/store/statement', [FlashcardController::class, 'storeStatement'])->name('store-statement');

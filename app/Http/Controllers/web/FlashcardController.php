@@ -5,10 +5,10 @@ namespace App\Http\Controllers\web;
 use App\Enums\Difficulty;
 use App\Enums\Status;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\MultipleChoiceRequest;
+use App\Http\Requests\StatementRequest;
 use App\Models\Flashcard;
-use App\Models\Tag;
 use App\Services\FlashcardService;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class FlashcardController extends Controller
@@ -28,21 +28,16 @@ class FlashcardController extends Controller
         return view('flashcards.index', compact('flashcards'));
     }
 
-    public function create()
+    public function statementForm()
     {
-        return view('flashcards.create');
-    }
-
-    public function createStatement()
-    {
-        $tags = Tag::all();
+        $tags = Auth::user()->tags()->get();
 
         return view('flashcards.create-statement', compact('tags'));
     }
 
-    public function createMultipleChoice()
+    public function multipleChoiceForm()
     {
-        $tags = Tag::all();
+        $tags = Auth::user()->tags()->get();
 
         return view('flashcards.create-multiple-choice', compact('tags'));
     }
@@ -110,33 +105,9 @@ class FlashcardController extends Controller
         return view('flashcards.hidden', compact('flashcards'));
     }
 
-    public function storeMultipleChoice(Request $request)
+    public function storeMultipleChoice(MultipleChoiceRequest $request)
     {
-        // Preprocess the request data
-        $data = $request->all();
-        
-        // Convert checkbox 'on' values to boolean true
-        if (isset($data['answers']) && is_array($data['answers'])) {
-            $data['answers'] = array_filter($data['answers'], function($answer) {
-                // Filter out answers with empty text
-                return !empty($answer['text']);
-            });
-            
-            // Convert 'on' to true for is_correct checkboxes
-            foreach ($data['answers'] as &$answer) {
-                $answer['is_correct'] = isset($answer['is_correct']) && $answer['is_correct'] === 'on';
-            }
-        }
-        
-        $validatedData = validator($data, [
-            'text' => 'required|string',
-            'answers' => 'required|array|min:2',
-            'answers.*.text' => 'required|string',
-            'answers.*.is_correct' => 'required|boolean',
-            'explanation' => 'nullable|string',
-            'subjects' => 'nullable|array',
-            'subjects.*' => 'exists:tags,id',
-        ])->validate();
+        $validatedData = $request->validated();
 
         $flashcard = $this->flashcardService->store($validatedData);
         $this->flashcardService->setStatus($flashcard, Status::PUBLISHED);
@@ -145,33 +116,9 @@ class FlashcardController extends Controller
             ->with('success', 'Multiple choice flashcard created successfully!');
     }
 
-    public function storeMultipleChoiceDraft(Request $request)
+    public function storeMultipleChoiceDraft(MultipleChoiceRequest $request)
     {
-        // Preprocess the request data
-        $data = $request->all();
-        
-        // Convert checkbox 'on' values to boolean true
-        if (isset($data['answers']) && is_array($data['answers'])) {
-            $data['answers'] = array_filter($data['answers'], function($answer) {
-                // Filter out answers with empty text
-                return !empty($answer['text']);
-            });
-            
-            // Convert 'on' to true for is_correct checkboxes
-            foreach ($data['answers'] as &$answer) {
-                $answer['is_correct'] = isset($answer['is_correct']) && $answer['is_correct'] === 'on';
-            }
-        }
-        
-        $validatedData = validator($data, [
-            'text' => 'required|string',
-            'answers' => 'nullable|array',
-            'answers.*.text' => 'required_with:answers|string',
-            'answers.*.is_correct' => 'required_with:answers|boolean',
-            'explanation' => 'nullable|string',
-            'subjects' => 'nullable|array',
-            'subjects.*' => 'exists:tags,id',
-        ])->validate();
+        $validatedData = $request->validated();
 
         $flashcard = $this->flashcardService->store($validatedData);
         $this->flashcardService->setStatus($flashcard, Status::DRAFT);
@@ -180,34 +127,22 @@ class FlashcardController extends Controller
             ->with('success', 'Multiple choice draft saved successfully!');
     }
 
-    public function storeStatement(Request $request)
+    public function storeStatement(StatementRequest $request)
     {
-        $data = $request->validate([
-            'text' => 'required|string',
-            'is_true' => 'required|boolean',
-            'explanation' => 'nullable|string',
-            'subjects' => 'nullable|array',
-            'subjects.*' => 'exists:tags,id',
-        ]);
+        $validatedData = $request->validated();
 
-        $flashcard = $this->flashcardService->store($data);
+        $flashcard = $this->flashcardService->store($validatedData);
         $this->flashcardService->setStatus($flashcard, Status::PUBLISHED);
 
         return redirect()->route('revision.show', $flashcard)
             ->with('success', 'Statement flashcard created successfully!');
     }
 
-    public function storeStatementDraft(Request $request)
+    public function storeStatementDraft(StatementRequest $request)
     {
-        $data = $request->validate([
-            'text' => 'required|string',
-            'is_true' => 'required|boolean',
-            'explanation' => 'nullable|string',
-            'subjects' => 'nullable|array',
-            'subjects.*' => 'exists:tags,id',
-        ]);
+        $validatedData = $request->validated();
 
-        $flashcard = $this->flashcardService->store($data);
+        $flashcard = $this->flashcardService->store($validatedData);
         $this->flashcardService->setStatus($flashcard, Status::DRAFT);
 
         return redirect()->route('flashcards.drafts')
@@ -235,7 +170,7 @@ class FlashcardController extends Controller
         }
 
         $selectedTags = $flashcard->tags->pluck('id')->toArray();
-        $tags = Tag::all();
+        $tags = Auth::user()->tags()->get();
 
         return view('flashcards.edit-statement', compact('flashcard', 'tags', 'selectedTags'));
     }
@@ -248,37 +183,31 @@ class FlashcardController extends Controller
         }
 
         $selectedTags = $flashcard->tags->pluck('id')->toArray();
-        $tags = Tag::all();
+        $tags = Auth::user()->tags()->get();
 
         return view('flashcards.edit-multiple-choice', compact('flashcard', 'tags', 'selectedTags'));
     }
 
-    public function updateStatement(Request $request, Flashcard $flashcard)
+    public function updateStatement(StatementRequest $request, Flashcard $flashcard)
     {
         // Verify user owns this flashcard
         if ($flashcard->user_id !== Auth::id()) {
             abort(403);
         }
 
-        $data = $request->validate([
-            'text' => 'required|string',
-            'is_true' => 'required|boolean',
-            'explanation' => 'nullable|string',
-            'subjects' => 'nullable|array',
-            'subjects.*' => 'exists:tags,id',
-        ]);
+        $validatedData = $request->validated();
 
-        $flashcard = $this->flashcardService->update($data, $flashcard);
+        $flashcard = $this->flashcardService->update($validatedData, $flashcard);
 
         // Handle subjects
-        if (! empty($data['subjects'])) {
-            $flashcard->tags()->sync($data['subjects']);
+        if (! empty($validatedData['subjects'])) {
+            $flashcard->tags()->sync($validatedData['subjects']);
         } else {
             $flashcard->tags()->detach();
         }
 
         // Check if we should publish after update
-        if ($request->has('publish_after_update')) {
+        if ($validatedData['publish_after_update'] ?? false) {
             $this->flashcardService->setStatus($flashcard, Status::PUBLISHED);
 
             return redirect()->route('revision.show', $flashcard)
@@ -289,38 +218,14 @@ class FlashcardController extends Controller
             ->with('success', 'Statement flashcard updated successfully!');
     }
 
-    public function updateMultipleChoice(Request $request, Flashcard $flashcard)
+    public function updateMultipleChoice(MultipleChoiceRequest $request, Flashcard $flashcard)
     {
         // Verify user owns this flashcard
         if ($flashcard->user_id !== Auth::id()) {
             abort(403);
         }
 
-        // Preprocess the request data
-        $data = $request->all();
-        
-        // Convert checkbox 'on' values to boolean true
-        if (isset($data['answers']) && is_array($data['answers'])) {
-            $data['answers'] = array_filter($data['answers'], function($answer) {
-                // Filter out answers with empty text
-                return !empty($answer['text']);
-            });
-            
-            // Convert 'on' to true for is_correct checkboxes
-            foreach ($data['answers'] as &$answer) {
-                $answer['is_correct'] = isset($answer['is_correct']) && $answer['is_correct'] === 'on';
-            }
-        }
-        
-        $validatedData = validator($data, [
-            'text' => 'required|string',
-            'answers' => 'required|array|min:2',
-            'answers.*.text' => 'required|string',
-            'answers.*.is_correct' => 'required|boolean',
-            'explanation' => 'nullable|string',
-            'subjects' => 'nullable|array',
-            'subjects.*' => 'exists:tags,id',
-        ])->validate();
+        $validatedData = $request->validated();
 
         $flashcard = $this->flashcardService->update($validatedData, $flashcard);
 
@@ -336,7 +241,7 @@ class FlashcardController extends Controller
         }
 
         // Check if we should publish after update
-        if ($request->has('publish_after_update')) {
+        if ($validatedData['publish_after_update'] ?? false) {
             $this->flashcardService->setStatus($flashcard, Status::PUBLISHED);
 
             return redirect()->route('revision.show', $flashcard)
