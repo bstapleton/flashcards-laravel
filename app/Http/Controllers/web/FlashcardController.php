@@ -251,4 +251,30 @@ class FlashcardController extends Controller
         return redirect()->route('flashcards.drafts', $flashcard)
             ->with('success', 'Multiple choice flashcard updated successfully!');
     }
+
+    public function hide(Flashcard $flashcard)
+    {
+        // Verify user owns this flashcard
+        if ($flashcard->user_id !== Auth::id()) {
+            abort(403);
+        }
+
+        $this->flashcardService->hide($flashcard);
+
+        return redirect()->route('revision.show', $flashcard)
+            ->with('success', 'Flashcard hidden successfully!');
+    }
+
+    public function unhide(Flashcard $flashcard)
+    {
+        // Verify user owns this flashcard
+        if ($flashcard->user_id !== Auth::id()) {
+            abort(403);
+        }
+
+        $this->flashcardService->unhide($flashcard);
+
+        return redirect()->route('revision.show', $flashcard)
+            ->with('success', 'Flashcard unhidden successfully!');
+    }
 }

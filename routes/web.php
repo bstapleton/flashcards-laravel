@@ -58,6 +58,8 @@ Route::middleware(['auth'])->group(function () {
         Route::post('/store/statement', [FlashcardController::class, 'storeStatement'])->name('store-statement');
         Route::post('/store/statement/draft', [FlashcardController::class, 'storeStatementDraft'])->name('store-statement-draft');
         Route::patch('/{flashcard}/publish', [FlashcardController::class, 'publish'])->name('publish');
+        Route::patch('/{flashcard}/hide', [FlashcardController::class, 'hide'])->name('hide');
+        Route::patch('/{flashcard}/unhide', [FlashcardController::class, 'unhide'])->name('unhide');
         Route::get('/{flashcard}/edit/statement', [FlashcardController::class, 'editStatement'])->name('edit-statement');
         Route::get('/{flashcard}/edit/multiple-choice', [FlashcardController::class, 'editMultipleChoice'])->name('edit-multiple-choice');
         Route::patch('/{flashcard}/update/statement', [FlashcardController::class, 'updateStatement'])->name('update-statement');
