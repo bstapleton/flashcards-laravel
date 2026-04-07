@@ -374,7 +374,7 @@ class FlashcardController extends Controller
         $tags = $request->input('subjects');
 
         $flashcards = $this->service->subjects($tags);
-        $selected = $this->service->pluckRandom($flashcards);
+        $selected = $this->service->getRandom($flashcards);
 
         return fractal($selected, new UnattemptedQuestionTransformer)
             ->respond();

@@ -255,7 +255,7 @@ class FlashcardService
         return $query->get();
     }
 
-    public function pluckRandom($query)
+    public function getRandom($query)
     {
         return $query->inRandomOrder()->first();
     }
