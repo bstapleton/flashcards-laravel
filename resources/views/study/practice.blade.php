@@ -144,29 +144,21 @@
                     <!-- Actions -->
                     <div class="px-6 py-4 bg-gray-50 border-t border-gray-200 flex justify-between">
                         <div class="space-x-3">
-                            @if (isset($isPooled) && $isPooled)
-                                <a href="{{ route($route) }}" class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
-                                    <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path>
-                                    </svg>
+                            <a href="{{ isset($isPooled) && $isPooled ? route($route) : route('answer.random') }}"
+                               class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                                <x-ui.icon variant="random" class="w-4 h-4 mr-2" />
+                                @if (isset($isPooled) && $isPooled)
                                     Get a different {{ $flashcard->mastery_text }} question
-                                </a>
-                            @else
-                                <a href="{{ route('answer.random') }}" class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
-                                    <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path>
-                                    </svg>
+                                @else
                                     Answer random
-                                </a>
-                            @endif
+                                @endif
+                            </a>
                         </div>
                     </div>
                 </div>
             @else
                 <div class="text-center py-12">
-                    <svg class="mx-auto h-12 w-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                    </svg>
+                    <x-ui.icon variant="sad" class="mx-auto h-12 w-12 text-gray-400" />
                     <h3 class="mt-2 text-sm font-medium text-gray-900">Flashcard not found</h3>
                     <p class="mt-1 text-sm text-gray-500">
                         This flashcard doesn't exist or you don't have access to it.

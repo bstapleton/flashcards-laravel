@@ -21,16 +21,12 @@
                         <div class="mb-6">
                             @if($attempt->correctness->value === 'complete')
                                 <div class="flex items-center">
-                                    <svg class="h-8 w-8 text-green-500 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                                    </svg>
+                                    <x-ui.icon variant="check" class="h-8 w-8 text-green-500 mr-3" />
                                     <h2 class="text-xl font-semibold text-green-600">Correct!</h2>
                                 </div>
                             @else
                                 <div class="flex items-center">
-                                    <svg class="h-8 w-8 text-red-500 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                                    </svg>
+                                    <x-ui.icon variant="times" class="h-8 w-8 text-red-500 mr-3" />
                                     <h2 class="text-xl font-semibold text-red-600">Incorrect</h2>
                                 </div>
                             @endif
@@ -51,26 +47,18 @@
                                         <div class="flex items-center">
                                             @if($answer->getWasSelected())
                                                 @if($answer->getIsCorrect())
-                                                    <svg class="h-5 w-5 text-green-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                                                    </svg>
+                                                    <x-ui.icon variant="check" class="h-5 w-5 text-green-500 mr-2" />
                                                     <span class="text-sm font-medium text-green-700">Your answer (Correct)</span>
                                                 @else
-                                                    <svg class="h-5 w-5 text-red-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                                                    </svg>
+                                                    <x-ui.icon variant="times" class="h-5 w-5 text-red-500 mr-2" />
                                                     <span class="text-sm font-medium text-red-700">Your answer (Incorrect)</span>
                                                 @endif
                                             @else
                                                 @if($answer->getIsCorrect())
-                                                    <svg class="h-5 w-5 text-green-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                                                    </svg>
+                                                    <x-ui.icon variant="check" class="h-5 w-5 text-green-500 mr-2" />
                                                     <span class="text-sm font-medium text-green-700">Correct answer (Not selected)</span>
                                                 @else
-                                                    <svg class="h-5 w-5 text-gray-400 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                                                    </svg>
+                                                    <x-ui.icon variant="check" class="h-5 w-5 text-gray-400 mr-2" />
                                                     <span class="text-sm font-medium text-gray-500">Incorrect answer (Not selected)</span>
                                                 @endif
                                             @endif
@@ -139,9 +127,7 @@
                         <div class="flex justify-between">
                             <div class="space-x-3">
                                 <a href="{{ route('answer.random') }}" class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
-                                    <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path>
-                                    </svg>
+                                    <x-ui.icon variant="random" class="w-4 h-4 mr-2" />
                                     Answer another question
                                 </a>
                             </div>
@@ -150,9 +136,7 @@
                 </div>
             @else
                 <div class="text-center py-12">
-                    <svg class="mx-auto h-12 w-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                    </svg>
+                    <x-ui.icon variant="sad" class="mx-auto h-12 w-12 text-gray-400" />
                     <h3 class="mt-2 text-sm font-medium text-gray-900">Attempt not found</h3>
                     <p class="mt-1 text-sm text-gray-500">
                         This attempt doesn't exist or you don't have access to it.

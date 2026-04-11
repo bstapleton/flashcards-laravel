@@ -26,13 +26,9 @@
                                             <div class="flex items-center">
                                                 <div class="flex-shrink-0">
                                                     @if($attempt->correctness->value === 'complete')
-                                                        <svg class="h-6 w-6 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                                                        </svg>
+                                                        <x-ui.icon variant="check" class="h-6 w-6 text-green-500" />
                                                     @else
-                                                        <svg class="h-6 w-6 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                                                        </svg>
+                                                        <x-ui.icon variant="times" class="h-6 w-6 text-red-500" />
                                                     @endif
                                                 </div>
                                                 <div class="ml-4 flex-1">
@@ -65,9 +61,7 @@
                 </div>
             @else
                 <div class="text-center py-12">
-                    <svg class="mx-auto h-12 w-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"></path>
-                    </svg>
+                    <x-ui.icon variant="sad" class="mx-auto h-12 w-12 text-gray-400" />
                     <h3 class="mt-2 text-sm font-medium text-gray-900">No attempts yet</h3>
                     <p class="mt-1 text-sm text-gray-500">
                         You haven't answered any questions yet. Start practicing to see your attempt history here.

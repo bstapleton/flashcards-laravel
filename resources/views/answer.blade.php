@@ -32,10 +32,7 @@
                                 <div class="flex items-center mb-4">
                                     <div class="flex-shrink-0">
                                         <div class="w-12 h-12 bg-indigo-500 rounded-md flex items-center justify-center">
-                                            <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"></path>
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                                            </svg>
+                                            <x-ui.icon variant="play" class="w-6 h-6 text-white" />
                                         </div>
                                     </div>
                                     <div class="ml-4">
@@ -53,9 +50,7 @@
                                 <div class="flex items-center mb-4">
                                     <div class="flex-shrink-0">
                                         <div class="w-12 h-12 bg-yellow-500 rounded-md flex items-center justify-center">
-                                            <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
-                                            </svg>
+                                            <x-ui.icon variant="lightning" class="w-6 h-6 text-white" />
                                         </div>
                                     </div>
                                     <div class="ml-4">

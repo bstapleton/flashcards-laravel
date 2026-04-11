@@ -18,9 +18,7 @@
                     <div class="mb-6 bg-yellow-50 border border-yellow-200 rounded-md p-4">
                         <div class="flex">
                             <div class="flex-shrink-0">
-                                <svg class="h-5 w-5 text-yellow-400" viewBox="0 0 20 20" fill="currentColor">
-                                    <path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clip-rule="evenodd" />
-                                </svg>
+                                <x-ui.icon variant="warning" class="h-5 w-5 text-yellow-400" />
                             </div>
                             <div class="ml-3">
                                 <p class="text-sm text-yellow-800">
@@ -33,9 +31,7 @@
                     <div class="mb-6 bg-yellow-50 border border-yellow-200 rounded-md p-4">
                         <div class="flex">
                             <div class="flex-shrink-0">
-                                <svg class="h-5 w-5 text-yellow-400" viewBox="0 0 20 20" fill="currentColor">
-                                    <path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clip-rule="evenodd" />
-                                </svg>
+                                <x-ui.icon variant="warning" class="h-5 w-5 text-yellow-400" />
                             </div>
                             <div class="ml-3">
                                 <p class="text-sm text-yellow-800">
@@ -65,17 +61,9 @@
                                                 class="flex items-center p-3 rounded-md {{ $answer->is_correct ? 'bg-green-50 border border-green-200' : 'bg-gray-50 border border-gray-200' }}">
                                                 <div class="flex-shrink-0">
                                                     @if($answer->is_correct)
-                                                        <svg class="h-5 w-5 text-green-600" fill="none"
-                                                             stroke="currentColor" viewBox="0 0 24 24">
-                                                            <path stroke-linecap="round" stroke-linejoin="round"
-                                                                  stroke-width="2" d="M5 13l4 4L19 7"></path>
-                                                        </svg>
+                                                        <x-ui.icon variant="check" class="h-5 w-5 text-green-600" />
                                                     @else
-                                                        <svg class="h-5 w-5 text-gray-400" fill="none"
-                                                             stroke="currentColor" viewBox="0 0 24 24">
-                                                            <path stroke-linecap="round" stroke-linejoin="round"
-                                                                  stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
-                                                        </svg>
+                                                        <x-ui.icon variant="times" class="h-5 w-5 text-gray-400" />
                                                     @endif
                                                 </div>
                                                 <div class="ml-3">
@@ -160,12 +148,7 @@
                             <div class="space-x-3">
                                 <a href="{{ route('answer.show', $flashcard->id) }}"
                                    class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500">
-                                    <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                              d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"></path>
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                              d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                                    </svg>
+                                    <x-ui.icon variant="play" class="w-4 h-4 mr-2" />
                                     Attempt This
                                 </a>
                                 @if ($flashcard && $flashcard->difficulty->value === 'buried')
@@ -195,35 +178,21 @@
                                 @endif
                             </div>
                             <div class="space-x-3">
-                                @if (isset($isPooled) && $isPooled)
-                                    <a href="{{ route($route) }}"
-                                       class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
-                                        <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                                  d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path>
-                                        </svg>
+                                <a href="{{ isset($isPooled) && $isPooled ? route($route) : route('revision.random') }}"
+                                   class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                                    <x-ui.icon variant="random" class="w-4 h-4 mr-2" />
+                                    @if (isset($isPooled) && $isPooled)
                                         Revise another {{ $flashcard->mastery_text }}
-                                    </a>
-                                @else
-                                    <a href="{{ route('revision.random') }}"
-                                       class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
-                                        <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                                  d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path>
-                                        </svg>
+                                    @else
                                         Revise random
-                                    </a>
-                                @endif
+                                    @endif
+                                </a>
                             </div>
                         </div>
                     </div>
                 @else
                     <div class="text-center py-12">
-                        <svg class="mx-auto h-12 w-12 text-gray-400" fill="none" stroke="currentColor"
-                             viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                  d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                        </svg>
+                        <x-ui.icon variant="sad" class="w-12 h-12 mx-auto text-gray-400" />
                         <h3 class="mt-2 text-sm font-medium text-gray-900">Flashcard not found</h3>
                         <p class="mt-1 text-sm text-gray-500">
                             This flashcard doesn't exist or you don't have access to it.

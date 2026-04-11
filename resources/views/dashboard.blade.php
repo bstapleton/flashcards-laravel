@@ -67,9 +67,7 @@
                         <div class="flex items-center justify-between">
                             <div class="flex items-center">
                                 <div class="flex-shrink-0">
-                                    <svg class="h-6 w-6 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
-                                    </svg>
+                                    <x-ui.icon variant="plus" class="h-6 w-6 text-indigo-600" />
                                 </div>
                                 <div class="ml-4">
                                     <div class="text-sm font-medium text-indigo-600">
@@ -95,10 +93,7 @@
                         <div class="flex items-center justify-between">
                             <div class="flex items-center">
                                 <div class="flex-shrink-0">
-                                    <svg class="h-6 w-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"></path>
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                                    </svg>
+                                    <x-ui.icon variant="play" class="h-6 w-6 text-green-600" />
                                 </div>
                                 <div class="ml-4">
                                     <a href="{{ route('answer.index') }}" class="text-sm font-medium text-green-600 hover:text-green-900">
@@ -115,9 +110,7 @@
                         <div class="flex items-center justify-between">
                             <div class="flex items-center">
                                 <div class="flex-shrink-0">
-                                    <svg class="h-6 w-6 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 7V12L14.5 13.5M21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3C16.9706 3 21 7.02944 21 12Z"></path>
-                                    </svg>
+                                    <x-ui.icon variant="clock" class="h-6 w-6 text-gray-600" />
                                 </div>
                                 <div class="ml-4">
                                     <a href="{{ route('attempts.index') }}" class="text-sm font-medium text-gray-600 hover:text-gray-900">
@@ -134,9 +127,7 @@
                         <div class="flex items-center justify-between">
                             <div class="flex items-center">
                                 <div class="flex-shrink-0">
-                                    <svg class="h-6 w-6 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path>
-                                    </svg>
+                                    <x-ui.icon variant="cards" class="h-6 w-6 text-gray-600" />
                                 </div>
                                 <div class="ml-4">
                                     <a href="{{ route('flashcards.index') }}" class="text-sm font-medium text-gray-600 hover:text-gray-900">

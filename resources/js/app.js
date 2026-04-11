@@ -1,5 +1,10 @@
 import './bootstrap';
 import ApexCharts from 'apexcharts';
+import Alpine from 'alpinejs';
+
+// Initialize Alpine.js
+window.Alpine = Alpine;
+Alpine.start();
 
 // Initialize dashboard charts when DOM is ready
 document.addEventListener('DOMContentLoaded', function() {
