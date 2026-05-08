@@ -16,7 +16,7 @@
                 </a>
             </p>
         </div>
-        
+
         @if ($errors->any())
             <div class="bg-red-50 border border-red-200 rounded-md p-4">
                 <div class="text-sm text-red-600">
@@ -31,8 +31,8 @@
             <div class="rounded-md shadow-sm -space-y-px">
                 <div>
                     <label for="username" class="sr-only">Username</label>
-                    <x-forms.input 
-                        name="username" 
+                    <x-forms.input
+                        name="username"
                         placeholder="Username"
                         :error="$errors->first('username')"
                         class="rounded-t-md"
@@ -40,9 +40,9 @@
                 </div>
                 <div>
                     <label for="password" class="sr-only">Password</label>
-                    <x-forms.input 
-                        type="password" 
-                        name="password" 
+                    <x-forms.input
+                        type="password"
+                        name="password"
                         placeholder="Password"
                         required
                         :error="$errors->first('password')"
@@ -53,7 +53,7 @@
 
             <div class="flex items-center justify-between">
                 <div class="flex items-center">
-                    <input id="remember-me" name="remember-me" type="checkbox" 
+                    <input id="remember-me" name="remember-me" type="checkbox"
                            class="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded">
                     <label for="remember-me" class="ml-2 block text-sm text-gray-900">
                         Remember me
@@ -62,9 +62,9 @@
             </div>
 
             <div>
-                <x-forms.button type="submit" class="w-full">
+                <x-ui.button type="submit" class="w-full">
                     Sign in
-                </x-forms.button>
+                </x-ui.button>
             </div>
         </form>
     </div>

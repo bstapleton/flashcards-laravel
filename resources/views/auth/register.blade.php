@@ -16,7 +16,7 @@
                 </a>
             </p>
         </div>
-        
+
         @if ($errors->any())
             <div class="bg-red-50 border border-red-200 rounded-md p-4">
                 <div class="text-sm text-red-600">
@@ -32,39 +32,39 @@
             <div class="space-y-4">
                 <div>
                     <label for="username" class="block text-sm font-medium text-gray-700">Username</label>
-                    <x-forms.input 
-                        name="username" 
+                    <x-forms.input
+                        name="username"
                         placeholder="Username"
                         :error="$errors->first('username')"
                     />
                 </div>
-                
+
                 <div>
                     <label for="display_name" class="block text-sm font-medium text-gray-700">Display Name</label>
-                    <x-forms.input 
-                        name="display_name" 
+                    <x-forms.input
+                        name="display_name"
                         placeholder="Display Name"
                         required
                         :error="$errors->first('display_name')"
                     />
                 </div>
-                
+
                 <div>
                     <label for="password" class="block text-sm font-medium text-gray-700">Password</label>
-                    <x-forms.input 
-                        type="password" 
-                        name="password" 
+                    <x-forms.input
+                        type="password"
+                        name="password"
                         placeholder="Password"
                         required
                         :error="$errors->first('password')"
                     />
                 </div>
-                
+
                 <div>
                     <label for="password_confirmation" class="block text-sm font-medium text-gray-700">Confirm Password</label>
-                    <x-forms.input 
-                        type="password" 
-                        name="password_confirmation" 
+                    <x-forms.input
+                        type="password"
+                        name="password_confirmation"
                         placeholder="Confirm Password"
                         required
                         :error="$errors->first('password_confirmation')"
@@ -73,9 +73,9 @@
             </div>
 
             <div>
-                <x-forms.button type="submit" class="w-full">
+                <x-ui.button type="submit" class="w-full">
                     Register
-                </x-forms.button>
+                </x-ui.button>
             </div>
         </form>
     </div>

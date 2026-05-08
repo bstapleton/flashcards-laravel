@@ -27,7 +27,7 @@
                             <label for="text" class="block text-sm font-medium text-gray-700">
                                 Statement <span class="text-red-500">*</span>
                             </label>
-                            <textarea 
+                            <textarea
                                 name="text"
                                 rows="3"
                                 placeholder="Enter your statement here..."
@@ -44,7 +44,7 @@
                             <label for="explanation" class="block text-sm font-medium text-gray-700">
                                 Explanation (Optional)
                             </label>
-                            <textarea 
+                            <textarea
                                 name="explanation"
                                 rows="2"
                                 placeholder="Provide additional details or background..."
@@ -103,20 +103,20 @@
                     <!-- Form Actions -->
                     <div class="px-6 py-4 bg-gray-50 border-t border-gray-200 flex justify-between">
                         <div class="space-x-3">
-                            <button type="button" 
+                            <button type="button"
                                     class="px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
                                     onclick="submitDraft()">
                                 Save as Draft
                             </button>
-                            <x-forms.button variant="secondary">
+                            <x-ui.button variant="secondary">
                                 <a href="{{ route('flashcards.index') }}" class="block w-full h-full text-inherit no-underline">
                                     Cancel
                                 </a>
-                            </x-forms.button>
+                            </x-ui.button>
                         </div>
-                        <x-forms.button type="submit">
+                        <x-ui.button type="submit">
                             Create True/False Flashcard
-                        </x-forms.button>
+                        </x-ui.button>
                     </div>
                 </form>
             </div>
@@ -157,7 +157,7 @@ function toggleTag(element) {
     // Update hidden inputs
     const container = document.getElementById('selected-subjects-container');
     container.innerHTML = '';
-    
+
     Array.from(selectedTags).forEach(tagId => {
         const input = document.createElement('input');
         input.type = 'hidden';
@@ -170,13 +170,13 @@ function toggleTag(element) {
 function submitDraft() {
     const form = document.getElementById('flashcard-form');
     const originalAction = form.action;
-    
+
     // Change form action to draft route
     form.action = '{{ route("flashcards.store-statement-draft") }}';
-    
+
     // Submit the form
     form.submit();
-    
+
     // Restore original action (in case submission fails)
     form.action = originalAction;
 }

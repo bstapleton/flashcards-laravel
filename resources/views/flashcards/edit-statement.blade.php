@@ -122,12 +122,12 @@
                         <!-- Form Actions -->
                         <div class="px-6 py-4 bg-gray-50 border-t border-gray-200 flex justify-between">
                             <div class="space-x-3">
-                                <x-forms.button variant="secondary">
+                                <x-ui.button variant="secondary">
                                     <a href="{{ $flashcard->status === Status::DRAFT ? route('flashcards.drafts') : route('revision.show', $flashcard) }}"
                                        class="block w-full h-full text-inherit no-underline">
                                         Cancel
                                     </a>
-                                </x-forms.button>
+                                </x-ui.button>
                             </div>
                             <div class="space-x-3">
                                 @if($flashcard->status === Status::DRAFT)
@@ -137,9 +137,9 @@
                                         Update & Publish
                                     </button>
                                 @endif
-                                <x-forms.button type="submit">
+                                <x-ui.button type="submit">
                                     Update Flashcard
-                                </x-forms.button>
+                                </x-ui.button>
                             </div>
                         </div>
                     </form>

@@ -56,6 +56,7 @@
                                 <input type="hidden" name="colour" id="colour" value="{{ old('colour') }}" required>
                                 <div class="grid grid-cols-5 gap-3">
                                     @foreach($colours as $colour)
+
                                         <button type="button"
                                                 onclick="selectColour({{ $colour->value }})"
                                                 id="colour-{{ $colour->value }}"
@@ -100,7 +101,7 @@
                                             </span>
                                             @if(old('colour') == $colour->value)
                                                 <span class="absolute top-1 right-1">
-                                                    <x-ui.icon variant="check" class="w-4 h-4 text-white" />
+                                                    <svg class="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path></svg>
                                                 </span>
                                             @endif
                                         </button>
@@ -114,9 +115,9 @@
                         <a href="{{ route('subjects.index') }}" class="inline-flex justify-center py-2 px-4 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
                             Cancel
                         </a>
-                        <x-forms.button type="submit" class="ml-3">
+                        <x-ui.button type="submit" class="ml-3">
                             Create Subject
-                        </x-forms.button>
+                        </x-ui.button>
                     </div>
                 </form>
             </div>

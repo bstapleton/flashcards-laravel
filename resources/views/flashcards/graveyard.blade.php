@@ -42,10 +42,9 @@
                                     <div class="flex items-center space-x-2">
                                         <form method="POST" action="{{ route('flashcards.revive', $flashcard) }}" class="inline">
                                             @csrf
-                                            <button type="submit"
-                                                    class="text-green-600 hover:text-green-900 text-sm font-medium">
+                                            <x-ui.button type="submit" variant="green">
                                                 Reset to fresh learning
-                                            </button>
+                                            </x-ui.button>
                                         </form>
                                         <a href="{{ route('revision.show', $flashcard) }}"
                                            class="text-indigo-600 hover:text-indigo-900 text-sm font-medium">

@@ -155,25 +155,25 @@
                                     <form action="{{ route('flashcards.revive', $flashcard) }}" method="POST" class="inline-flex items-center">
                                         @csrf
                                         @method('PATCH')
-                                        <button type="submit" class="px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-yellow-600 hover:bg-yellow-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-yellow-500">
+                                        <x-ui.button type="submit" variant="warning">
                                             Reset difficulty
-                                        </button>
+                                        </x-ui.button>
                                     </form>
                                 @elseif ($flashcard->status->value === 'hidden')
                                     <form action="{{ route('flashcards.unhide', $flashcard) }}" method="POST" class="inline-flex">
                                         @csrf
                                         @method('PATCH')
-                                        <button type="submit" class="px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+                                        <x-ui.button type="submit" variant="blue">
                                             Unhide
-                                        </button>
+                                        </x-ui.button>
                                     </form>
                                 @else
                                     <form action="{{ route('flashcards.hide', $flashcard) }}" method="POST" class="inline-flex">
                                         @csrf
                                         @method('PATCH')
-                                        <button type="submit" class="px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-yellow-600 hover:bg-yellow-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-yellow-500">
+                                        <x-ui.button type="submit" variant="warning">
                                             Hide
-                                        </button>
+                                        </x-ui.button>
                                     </form>
                                 @endif
                             </div>
