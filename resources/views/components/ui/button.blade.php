@@ -20,6 +20,8 @@
         'indigo' => 'bg-indigo-600 text-white hover:bg-indigo-700',
         'green' => 'bg-green-600 text-white hover:bg-green-700',
         'gray' => 'bg-gray-600 text-white hover:bg-gray-700',
+        'warning' => 'bg-yellow-600 text-white hover:bg-yellow-700',
+        'blue' => 'bg-blue-600 text-white hover:bg-blue-700',
     ];
 
     $sizes = [
@@ -33,12 +35,13 @@
     $sizeClass = $sizes[$size] ?? $sizes['default'];
     $finalClass = $baseClasses . ' ' . $variantClass . ' ' . $sizeClass . ' ' . $class;
 @endphp
-
+{{-- // TODO how to handle onClick events? --}}
 @if ($type === 'submit')
     <button type="submit" {{ $disabled ? 'disabled' : '' }} class="{{ $finalClass }}">
         {{ $slot }}
     </button>
 @elseif ($route)
+{{--  // TODO need to be changed to accept route model binding and/or param  --}}
     <a href="{{ route($route) }}" class="{{ $finalClass }}">
         {{ $slot }}
     </a>
