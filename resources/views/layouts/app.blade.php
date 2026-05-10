@@ -48,7 +48,7 @@
         @endauth
 
         <!-- Page Content -->
-        <main class="{{ Auth::check() ? 'py-6' : '' }}">
+        <main>
             @yield('content')
         </main>
     </div>

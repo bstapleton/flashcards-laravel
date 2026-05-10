@@ -93,8 +93,14 @@
                                 <div>
                                     <dt class="text-sm font-medium text-gray-500">Difficulty (when attempted)</dt>
                                     <dd class="text-sm text-gray-900">
-                                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-{{ strtolower($attempt->difficulty->name) }}-100 text-{{ strtolower($attempt->difficulty->name) }}-800">
-                                            {{ $attempt->difficulty->value }}
+                                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium {{ match($attempt->difficulty->name) {
+                                            'EASY' => 'bg-green-100 text-green-800',
+                                            'MEDIUM' => 'bg-yellow-100 text-yellow-800',
+                                            'HARD' => 'bg-red-100 text-red-800',
+                                            'BURIED' => 'bg-gray-100 text-gray-800',
+                                            default => 'bg-gray-100 text-gray-800'
+                                        } }}">
+                                            {{ ucfirst($attempt->difficulty->mastery()) }}
                                         </span>
                                     </dd>
                                 </div>
