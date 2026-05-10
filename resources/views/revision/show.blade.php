@@ -44,7 +44,7 @@
 
                 @if($flashcard)
                     <div class="bg-white shadow sm:rounded-lg">
-                        <div class="px-6 py-4">
+                        <div class="px-6 pt-4">
                             <!-- Question -->
                             <div class="mb-6">
                                 <h2 class="text-lg font-medium text-gray-900 mb-2">Question</h2>
