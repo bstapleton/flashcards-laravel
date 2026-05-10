@@ -21,7 +21,7 @@ class AttemptController extends Controller
     public function index(Request $request)
     {
         $user = Auth::user();
-        
+
         // Get attempts for the current user
         $attempts = Attempt::where('user_id', $user->id)
             ->with('flashcard')
@@ -38,8 +38,12 @@ class AttemptController extends Controller
             abort(403, 'Unauthorized action.');
         }
 
-        $attempt->load('flashcard');
-        
+        try {
+            $attempt->load('flashcard');
+        } catch (\Exception $e) {
+            return redirect()->route('attempts.index')->with('error', 'Flashcard not found');
+        }
+
         return view('attempts.show', compact('attempt'));
     }
 }

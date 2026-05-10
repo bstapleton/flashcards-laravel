@@ -61,31 +61,27 @@ class Attempt extends Model
     public function getFormattedAnswersAttribute(): Collection
     {
         $answers = json_decode($this->answers, true);
+        $formattedAnswers = [];
 
         if (count($answers) === 0) {
             return collect();
         }
 
         foreach ($answers as $key => $answer) {
-            // Check for missing properties
             if (! isset($answer['was_selected'], $answer['is_correct'], $answer['text'])) {
-                throw new \RuntimeException('Missing answer properties');
+                \Log::warning('Missing answer properties. Attempt ID: '.$this->id);
+            } elseif (! is_bool($answer['was_selected']) || ! is_bool($answer['is_correct']) || ! is_string($answer['text'])) {
+                \Log::error('Invalid answer format. Attempt ID: '.$this->id);
+            } else {
+                $attemptAnswer = new AttemptAnswer;
+                $attemptAnswer->setIsCorrect($answer['is_correct']);
+                $attemptAnswer->setWasSelected($answer['was_selected']);
+                $attemptAnswer->setText($answer['text']);
+                $formattedAnswers[$key] = $attemptAnswer;
             }
-
-            // Check for malformed content
-            if (! is_bool($answer['was_selected']) || ! is_bool($answer['is_correct']) || ! is_string($answer['text'])) {
-                throw new \RuntimeException('Invalid answer format');
-            }
-
-            // Map to the correct model
-            $attemptAnswer = new AttemptAnswer;
-            $attemptAnswer->setIsCorrect($answer['is_correct']);
-            $attemptAnswer->setWasSelected($answer['was_selected']);
-            $attemptAnswer->setText($answer['text']);
-            $answers[$key] = $attemptAnswer;
         }
 
-        return collect($answers);
+        return collect($formattedAnswers);
     }
 
     public function user(): BelongsTo

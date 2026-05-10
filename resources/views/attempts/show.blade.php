@@ -42,33 +42,48 @@
                         <div class="mb-6">
                             <h3 class="text-lg font-medium text-gray-900 mb-2">Your Answer(s)</h3>
                             <div class="space-y-3">
-                                @foreach($attempt->formatted_answers as $answer)
-                                    <div class="p-4 border rounded-lg @if($answer->getWasSelected()) @if($answer->getIsCorrect()) border-green-300 bg-green-50 @else border-red-300 bg-red-50 @endif @else border-gray-200 @endif">
-                                        <div class="flex items-center">
-                                            @if($answer->getWasSelected())
-                                                @if($answer->getIsCorrect())
-                                                    <x-ui.icon variant="check" class="h-5 w-5 text-green-500 mr-2" />
-                                                    <span class="text-sm font-medium text-green-700">Your answer (Correct)</span>
+                                @if ($attempt->formatted_answers->isNotEmpty())
+                                    @foreach($attempt->formatted_answers as $answer)
+                                        <div class="p-4 border rounded-lg @if($answer->getWasSelected()) @if($answer->getIsCorrect()) border-green-300 bg-green-50 @else border-red-300 bg-red-50 @endif @else border-gray-200 @endif">
+                                            <div class="flex items-center">
+                                                @if($answer->getWasSelected())
+                                                    @if($answer->getIsCorrect())
+                                                        <x-ui.icon variant="check" class="h-5 w-5 text-green-500 mr-2" />
+                                                        <span class="text-sm font-medium text-green-700">Your answer (Correct)</span>
+                                                    @else
+                                                        <x-ui.icon variant="times" class="h-5 w-5 text-red-500 mr-2" />
+                                                        <span class="text-sm font-medium text-red-700">Your answer (Incorrect)</span>
+                                                    @endif
                                                 @else
-                                                    <x-ui.icon variant="times" class="h-5 w-5 text-red-500 mr-2" />
-                                                    <span class="text-sm font-medium text-red-700">Your answer (Incorrect)</span>
+                                                    @if($answer->getIsCorrect())
+                                                        <x-ui.icon variant="check" class="h-5 w-5 text-green-500 mr-2" />
+                                                        <span class="text-sm font-medium text-green-700">Correct answer (Not selected)</span>
+                                                    @else
+                                                        <x-ui.icon variant="check" class="h-5 w-5 text-gray-400 mr-2" />
+                                                        <span class="text-sm font-medium text-gray-500">Incorrect answer (Not selected)</span>
+                                                    @endif
                                                 @endif
-                                            @else
-                                                @if($answer->getIsCorrect())
-                                                    <x-ui.icon variant="check" class="h-5 w-5 text-green-500 mr-2" />
-                                                    <span class="text-sm font-medium text-green-700">Correct answer (Not selected)</span>
-                                                @else
-                                                    <x-ui.icon variant="check" class="h-5 w-5 text-gray-400 mr-2" />
-                                                    <span class="text-sm font-medium text-gray-500">Incorrect answer (Not selected)</span>
-                                                @endif
+                                            </div>
+                                            <p class="mt-2 text-gray-700">{{ $answer->getText() }}</p>
+                                            @if(method_exists($answer, 'getExplanation') && $answer->getExplanation())
+                                                <p class="mt-2 text-sm text-gray-600">{{ $answer->getExplanation() }}</p>
                                             @endif
                                         </div>
-                                        <p class="mt-2 text-gray-700">{{ $answer->getText() }}</p>
-                                        @if(method_exists($answer, 'getExplanation') && $answer->getExplanation())
-                                            <p class="mt-2 text-sm text-gray-600">{{ $answer->getExplanation() }}</p>
-                                        @endif
+                                    @endforeach
+                                @else
+                                    <div class="mb-6 bg-yellow-50 border border-yellow-200 rounded-md p-4">
+                                        <div class="flex">
+                                            <div class="flex-shrink-0">
+                                                <x-ui.icon variant="sad" class="h-5 w-5 text-yellow-400" />
+                                            </div>
+                                            <div class="ml-3">
+                                                <p class="text-sm text-yellow-800">
+                                                    <strong>Missing data:</strong> When you made this attempt, the functionality to save this data was not available, so there's nothing to show here. On the plus side, the next time you try it, it should work!
+                                                </p>
+                                            </div>
+                                        </div>
                                     </div>
-                                @endforeach
+                                @endif
                             </div>
                         </div>
 
