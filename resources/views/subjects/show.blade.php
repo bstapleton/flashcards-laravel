@@ -106,13 +106,13 @@
                         <x-ui.icon variant="warning" class="h-6 w-6 text-red-600" />
                     </div>
                     <div class="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left">
-                        <h3 class="text-lg leading-6 font-medium text-gray-900">Delete Tag</h3>
+                        <h3 class="text-lg leading-6 font-medium text-gray-900">Delete Subject</h3>
                         <div class="mt-2">
                             <p class="text-sm text-gray-500">
-                                Are you sure you want to delete the tag "{{ $tag->name }}"? This action cannot be undone.
+                                Are you sure you want to delete the subject "{{ $tag->name }}"? This action cannot be undone.
                             </p>
                             <p class="text-sm text-gray-500 mt-2">
-                                The tag will be detached from <span class="font-semibold">{{ $tag->flashcards->count() }}</span> flashcard{{ $tag->flashcards->count() != 1 ? 's' : '' }} and then permanently deleted.
+                                The subject will be detached from <span class="font-semibold">{{ $tag->flashcards->count() }}</span> flashcard{{ $tag->flashcards->count() != 1 ? 's' : '' }} and then be permanently deleted. <strong>It will not delete the questions it was associated with, which will still be available to revise and test yourself against.</strong>
                             </p>
                         </div>
                     </div>
@@ -123,7 +123,7 @@
                     @csrf
                     @method('DELETE')
                     <x-ui.button type="submit" variant="destructive">
-                        Delete tag
+                        Delete subject
                     </x-ui.button>
                 </form>
                 <button type="button" onclick="closeDeleteModal()" class="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm">
