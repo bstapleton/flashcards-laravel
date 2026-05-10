@@ -108,7 +108,9 @@ class Flashcard extends Model
 
     public function getMasteryRouteAttribute(): string
     {
-        return str_replace(' ', '-', $this->difficulty->mastery());
+        return $this->difficulty->mastery()
+                |> strtolower(...)
+                |> (fn ($x) => str_replace(' ', '-', $x));
     }
 
     public function getCorrectAnswerAttribute(): ?Answer
