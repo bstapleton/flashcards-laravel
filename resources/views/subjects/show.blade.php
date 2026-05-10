@@ -45,7 +45,7 @@
                                                     'BURIED' => 'bg-gray-100 text-gray-800',
                                                     default => 'bg-gray-100 text-gray-800'
                                                 } }}">
-                                                    {{ ucfirst(strtolower($flashcard->difficulty->name)) }}
+                                                    {{ ucfirst($flashcard->difficulty->mastery()) }}
                                                 </span>
                                             </div>
                                             <div class="ml-4">
