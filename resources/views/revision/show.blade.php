@@ -70,6 +70,11 @@
                                                     <p class="text-sm font-medium {{ $answer->is_correct ? 'text-green-800' : 'text-gray-800' }}">
                                                         {{ $answer->text }}
                                                     </p>
+                                                    @if($answer->explanation)
+                                                        <p class="text-xs text-gray-600 mt-1">
+                                                            {{ $answer->explanation }}
+                                                        </p>
+                                                    @endif
                                                 </div>
                                             </div>
                                         @endforeach
