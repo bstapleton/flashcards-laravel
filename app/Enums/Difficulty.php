@@ -13,4 +13,14 @@ enum Difficulty: string
     {
         return array_column(self::cases(), 'value');
     }
+
+    public function mastery(): string
+    {
+        return match ($this) {
+            self::EASY => 'Fresh learning',
+            self::MEDIUM => 'Intermediate mastery',
+            self::HARD => 'High mastery',
+            self::BURIED => 'Completely mastered',
+        };
+    }
 }

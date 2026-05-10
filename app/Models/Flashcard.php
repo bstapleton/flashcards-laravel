@@ -6,7 +6,6 @@ use App\Enums\Difficulty;
 use App\Enums\QuestionType;
 use App\Enums\Status;
 use App\Events\FlashcardDeleting;
-use App\Helpers\DifficultyToMastery;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
@@ -99,17 +98,17 @@ class Flashcard extends Model
 
     public function getMasteryTextAttribute(): string
     {
-        return (new DifficultyToMastery)->convert($this->difficulty);
+        return $this->difficulty->mastery();
     }
 
     public function getMasteryTitleAttribute(): string
     {
-        return (new DifficultyToMastery)->convert($this->difficulty, true);
+        return ucwords($this->difficulty->mastery());
     }
 
     public function getMasteryRouteAttribute(): string
     {
-        return str_replace(' ', '-', (new DifficultyToMastery)->convert($this->difficulty));
+        return str_replace(' ', '-', $this->difficulty->mastery());
     }
 
     public function getCorrectAnswerAttribute(): ?Answer
