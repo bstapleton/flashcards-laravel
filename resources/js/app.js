@@ -136,12 +136,96 @@ function initializeDashboardCharts() {
         colors: ['#10b981', '#94a3b8']
     };
 
+    // Subject correctness stacked bar chart
+    const tagCorrectnessStackedOptions = {
+        series: [
+            {
+                name: 'Correct',
+                data: window.userData.tag_correctness_breakdown.map(tag => tag.correct_percentage)
+            },
+            {
+                name: 'Partially Correct',
+                data: window.userData.tag_correctness_breakdown.map(tag => tag.partial_percentage)
+            },
+            {
+                name: 'Incorrect',
+                data: window.userData.tag_correctness_breakdown.map(tag => tag.incorrect_percentage)
+            }
+        ],
+        chart: {
+            type: 'bar',
+            height: 350,
+            stacked: true,
+            stackType: '100%',
+            toolbar: {
+                show: false
+            }
+        },
+        plotOptions: {
+            bar: {
+                horizontal: true,
+                columnWidth: '90%',
+                endingShape: 'rounded'
+            },
+        },
+        dataLabels: {
+            enabled: false
+        },
+        stroke: {
+            show: true,
+            width: 1,
+            colors: ['#fff']
+        },
+        xaxis: {
+            categories: window.userData.tag_correctness_breakdown.map(tag => tag.tag),
+            labels: {
+                formatter: function (val) {
+                    return val + "%";
+                }
+            },
+            title: {
+                text: 'Percentage of Attempts'
+            }
+        },
+        yaxis: {
+            title: {
+                text: 'Subjects'
+            }
+        },
+        fill: {
+            opacity: 1
+        },
+        tooltip: {
+            y: {
+                formatter: function (val, { seriesIndex, dataPointIndex, w }) {
+                    const tag = window.userData.tag_correctness_breakdown[dataPointIndex];
+                    const labels = ['Correct', 'Partially Correct', 'Incorrect'];
+                    const counts = [
+                        tag.correct_count,
+                        tag.partial_count,
+                        tag.incorrect_count
+                    ];
+                    return `${labels[seriesIndex]}: ${val}% (${counts[seriesIndex]} attempts)`;
+                }
+            }
+        },
+        legend: {
+            position: 'top',
+            horizontalAlign: 'left'
+        },
+        colors: ['#3b82f6', '#fbbf24', '#6b7280']
+    };
+
     // Initialize charts if elements exist
     if (document.getElementById('weekly-chart')) {
         new ApexCharts(document.querySelector("#weekly-chart"), weeklyOptions).render();
     }
-    
+
     if (document.getElementById('monthly-chart')) {
         new ApexCharts(document.querySelector("#monthly-chart"), monthlyOptions).render();
+    }
+
+    if (document.getElementById('tag-correctness-stacked-chart')) {
+        new ApexCharts(document.querySelector("#tag-correctness-stacked-chart"), tagCorrectnessStackedOptions).render();
     }
 }

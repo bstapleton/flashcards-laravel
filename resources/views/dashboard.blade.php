@@ -52,6 +52,13 @@
                         </div>
                     </div>
                 </div>
+                <div class="px-4 py-5 sm:px-6">
+                    <div class="text-center">
+                        <div class="text-lg font-semibold text-gray-900">Correctness Breakdown by Subject</div>
+                        <p class="mt-1 text-sm text-gray-600">See how well you're performing in each subject area</p>
+                        <div id="tag-correctness-stacked-chart" class="mt-4"></div>
+                    </div>
+                </div>
             </div>
 
             <!-- Quick Actions -->

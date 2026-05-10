@@ -53,6 +53,50 @@ class UserTransformer extends TransformerAbstract
             'roles' => $user->roles->map(function (Role $role) {
                 return (new RoleTransformer)->transform($role);
             }),
+            'tag_correctness_breakdown' => $this->getTagCorrectnessBreakdown($user),
         ];
+    }
+
+    private function getTagCorrectnessBreakdown(User $user): array
+    {
+        $tagData = [];
+
+        $user->attempts()
+            ->with('keywords')
+            ->get()
+            ->flatMap(function ($attempt) {
+                return $attempt->keywords->map(function ($keyword) use ($attempt) {
+                    return [
+                        'tag' => $keyword->name,
+                        'correctness' => $attempt->correctness->value,
+                    ];
+                });
+            })
+            ->groupBy('tag')
+            ->each(function ($attempts, $tagName) use (&$tagData) {
+                $totalAttempts = $attempts->count();
+
+                $correctCount = $attempts->where('correctness', 'complete')->count();
+                $partialCount = $attempts->where('correctness', 'partial')->count();
+                $incorrectCount = $attempts->where('correctness', 'none')->count();
+
+                $tagData[] = [
+                    'tag' => $tagName,
+                    'total_attempts' => $totalAttempts,
+                    'correct_count' => $correctCount,
+                    'partial_count' => $partialCount,
+                    'incorrect_count' => $incorrectCount,
+                    'correct_percentage' => $totalAttempts > 0 ? round(($correctCount / $totalAttempts) * 100, 1) : 0,
+                    'partial_percentage' => $totalAttempts > 0 ? round(($partialCount / $totalAttempts) * 100, 1) : 0,
+                    'incorrect_percentage' => $totalAttempts > 0 ? round(($incorrectCount / $totalAttempts) * 100, 1) : 0,
+                ];
+            });
+
+        // Sort by total attempts (descending) to show most practiced subjects first
+        usort($tagData, function ($a, $b) {
+            return $b['total_attempts'] <=> $a['total_attempts'];
+        });
+
+        return $tagData;
     }
 }
