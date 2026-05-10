@@ -77,9 +77,13 @@
                     <h3 class="mt-2 text-sm font-medium text-gray-900">No flashcards</h3>
                     <p class="mt-1 text-sm text-gray-500">No flashcards have been assigned to this tag yet.</p>
                     <div class="mt-6">
-                        <a href="{{ route('flashcards.create') }}" class="inline-flex items-center px-4 py-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                        <a href="{{ route('flashcards.create-statement') }}" class="inline-flex items-center px-4 py-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
                             <x-ui.icon variant="plus" class="w-4 h-4 mr-2" />
-                            Create Flashcard
+                            Create True/False
+                        </a>
+                        <a href="{{ route('flashcards.create-multiple-choice') }}" class="inline-flex items-center px-4 py-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                            <x-ui.icon variant="plus" class="w-4 h-4 mr-2" />
+                            Create Multiple Choice
                         </a>
                     </div>
                 </div>
