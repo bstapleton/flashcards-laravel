@@ -30,6 +30,7 @@ class MultipleChoiceRequest extends FormRequest
             'answers' => $this->getAnswersRule($isDraft),
             'answers.*.text' => $isDraft ? 'required_with:answers|string' : 'required|string',
             'answers.*.is_correct' => $isDraft ? 'required_with:answers|boolean' : 'required|boolean',
+            'answers.*.explanation' => 'nullable|string',
             'explanation' => 'nullable|string',
             'subjects' => 'nullable|array',
             'subjects.*' => 'exists:tags,id',
@@ -51,9 +52,14 @@ class MultipleChoiceRequest extends FormRequest
                 return ! empty($answer['text']);
             });
 
-            // Convert 'on' to true for is_correct checkboxes
+            // Convert checkbox values to boolean for is_correct
             foreach ($data['answers'] as &$answer) {
-                $answer['is_correct'] = isset($answer['is_correct']) && $answer['is_correct'] === 'on';
+                $answer['is_correct'] = isset($answer['is_correct']) && (
+                    $answer['is_correct'] === 'on' ||
+                    $answer['is_correct'] === '1' ||
+                    $answer['is_correct'] === true ||
+                    $answer['is_correct'] === 'true'
+                );
             }
         }
 
@@ -68,7 +74,7 @@ class MultipleChoiceRequest extends FormRequest
         if ($isDraft) {
             return 'nullable|array';
         }
-        
+
         return 'required|array|min:2';
     }
 
