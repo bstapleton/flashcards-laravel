@@ -139,7 +139,7 @@
                                     <div class="flex flex-wrap gap-2">
                                         @foreach($flashcard->tags as $subject)
                                             <span
-                                                class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-indigo-100 text-indigo-800">
+                                                class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-{{ strtolower($subject->colour->name) }}-100 text-{{ strtolower($subject->colour->name) }}-800">
                                             {{ $subject->name }}
                                         </span>
                                         @endforeach
@@ -147,6 +147,54 @@
                                 </div>
                             @endif
                         </div>
+
+                        <!-- Attempts -->
+                        @if(isset($attempts) && $attempts->count() > 0)
+                            <div class="px-6 pb-4 mb-6">
+                                <h3 class="text-lg font-medium text-gray-900 mb-2">Attempt History</h3>
+                                <div class="space-y-2">
+                                    @foreach($attempts as $attempt)
+                                        <div class="bg-white border border-gray-200 rounded-lg p-4 shadow-sm">
+                                            <div class="flex items-center justify-between">
+                                                <div class="flex-1">
+                                                    <div class="flex items-center space-x-3">
+                                                        <span class="text-sm font-medium text-gray-900">
+                                                            <a href="{{ route('attempts.show', $attempt) }}" class="underline text-indigo-600 hover:text-gray-600 hover:no-underline">
+                                                                Attempt {{ $loop->iteration }}
+                                                            </a>
+                                                        </span>
+                                                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium {{ match($attempt->difficulty->name) {
+                                                            'EASY' => 'bg-green-100 text-green-800',
+                                                            'MEDIUM' => 'bg-yellow-100 text-yellow-800',
+                                                            'HARD' => 'bg-red-100 text-red-800',
+                                                            'BURIED' => 'bg-gray-100 text-gray-800',
+                                                            default => 'bg-gray-100 text-gray-800'
+                                                        } }}">
+                                                            {{ ucfirst($attempt->difficulty->mastery()) }}
+                                                        </span>
+                                                        <span class="text-sm text-gray-500">
+                                                            {{ $attempt->answered_at->format('M j, Y g:i A') }}
+                                                        </span>
+                                                    </div>
+                                                    <div class="text-sm text-gray-600 mt-1">
+                                                        Points earned: {{ $attempt->points_earned }}
+                                                    </div>
+                                                </div>
+                                                <div class="flex-shrink-0">
+                                                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium {{ match($attempt->correctness->name) {
+                                                        'NONE' => 'bg-red-100 text-red-800',
+                                                        'PARTIAL' => 'bg-yellow-100 text-yellow-800',
+                                                        'COMPLETE' => 'bg-green-100 text-green-800'
+                                                    } }}">
+                                                        {{ $attempt->correctness->descriptor() }}
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    @endforeach
+                                </div>
+                            </div>
+                        @endif
 
                         <!-- Actions -->
                         <div class="px-6 py-4 bg-gray-50 border-t border-gray-200 flex justify-between">

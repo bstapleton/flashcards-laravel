@@ -5,7 +5,6 @@ namespace App\Http\Controllers\web;
 use App\Http\Controllers\Controller;
 use App\Models\Flashcard;
 use App\Services\FlashcardService;
-use Illuminate\Support\Facades\Auth;
 
 class RevisionController extends Controller
 {
@@ -26,6 +25,7 @@ class RevisionController extends Controller
     {
         try {
             $flashcard = $this->flashcardService->random(true);
+
             return view('revision.show', compact('flashcard'));
         } catch (\Exception $e) {
             return view('revision')->with('error', 'No eligible flashcards available');
@@ -36,8 +36,9 @@ class RevisionController extends Controller
     {
         try {
             $flashcard = $this->flashcardService->show($flashcard, true);
+            $attempts = $flashcard->attempts()->orderBy('answered_at', 'asc')->get();
 
-            return view('revision.show', compact('flashcard'));
+            return view('revision.show', compact('flashcard', 'attempts'));
         } catch (\Exception $e) {
             return view('revision')->with('error', 'Flashcard not found');
         }
