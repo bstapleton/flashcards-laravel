@@ -30,7 +30,7 @@
                                     <div class="flex-1">
                                         <div class="flex items-center">
                                             <div class="flex-shrink-0 mr-3">
-                                                <x-ui.icon variant="hidden" class="h-5 w-5 text-gray-400" />
+                                                <x-ui.icon variant="hide" class="h-5 w-5 text-gray-400" />
                                             </div>
                                             <div class="flex-1">
                                                 <p class="text-sm font-medium text-gray-900">
@@ -65,7 +65,7 @@
                 @endif
             @else
                 <div class="text-center py-12">
-                    <x-ui.icon variant="hidden" class="mx-auto h-12 w-12 text-gray-400" />
+                    <x-ui.icon variant="hide" class="mx-auto h-12 w-12 text-gray-400" />
                     <h3 class="mt-2 text-sm font-medium text-gray-900">No hidden flashcards</h3>
                     <p class="mt-1 text-sm text-gray-500">
                         You haven't hidden any flashcards yet.

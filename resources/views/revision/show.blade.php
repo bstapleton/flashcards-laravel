@@ -151,13 +151,14 @@
                         <!-- Actions -->
                         <div class="px-6 py-4 bg-gray-50 border-t border-gray-200 flex justify-between">
                             <div class="space-x-3">
-                                <a href="{{ route('answer.show', $flashcard->id) }}"
-                                   class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500">
-                                    <x-ui.icon variant="play" class="w-4 h-4 mr-2" />
-                                    Attempt This
-                                </a>
+                                <form action="{{ route('answer.show', $flashcard->id) }}" method="GET" class="inline-flex">
+                                    <x-ui.button type="submit" variant="green" size="default">
+                                        <x-ui.icon variant="play" class="w-4 h-4 mr-2" />
+                                        Attempt This
+                                    </x-ui.button>
+                                </form>
                                 @if ($flashcard && $flashcard->difficulty->value === 'buried')
-                                    <form action="{{ route('flashcards.revive', $flashcard) }}" method="POST" class="inline-flex items-center">
+                                    <form action="{{ route('flashcards.revive', $flashcard) }}" method="POST" class="inline-flex">
                                         @csrf
                                         @method('PATCH')
                                         <x-ui.button type="submit" variant="warning">
@@ -169,6 +170,7 @@
                                         @csrf
                                         @method('PATCH')
                                         <x-ui.button type="submit" variant="blue">
+                                            <x-ui.icon variant="show" class="w-4 h-4 mr-2" />
                                             Unhide
                                         </x-ui.button>
                                     </form>
@@ -176,22 +178,24 @@
                                     <form action="{{ route('flashcards.hide', $flashcard) }}" method="POST" class="inline-flex">
                                         @csrf
                                         @method('PATCH')
-                                        <x-ui.button type="submit" variant="warning">
+                                        <x-ui.button type="submit" variant="warning" size="default">
+                                            <x-ui.icon variant="hide" class="w-4 h-4 mr-2" />
                                             Hide
                                         </x-ui.button>
                                     </form>
                                 @endif
                             </div>
                             <div class="space-x-3">
-                                <a href="{{ isset($isPooled) && $isPooled ? route($route) : route('revision.random') }}"
-                                   class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
-                                    <x-ui.icon variant="random" class="w-4 h-4 mr-2" />
-                                    @if (isset($isPooled) && $isPooled)
-                                        Revise another {{ $flashcard->mastery_text }}
-                                    @else
-                                        Revise random
-                                    @endif
-                                </a>
+                                <form method="GET" action="{{ isset($isPooled) && $isPooled ? route($route) : route('revision.random') }}" class="inline-flex items-center">
+                                    <x-ui.button type="submit" variant="indigo" size="default">
+                                        <x-ui.icon variant="random" class="w-4 h-4 mr-2" />
+                                        @if (isset($isPooled) && $isPooled)
+                                            Revise another {{ $flashcard->mastery_text }}
+                                        @else
+                                            Revise random
+                                        @endif
+                                    </x-ui.button>
+                                </form>
                             </div>
                         </div>
                     </div>
