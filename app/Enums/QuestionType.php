@@ -12,4 +12,13 @@ enum QuestionType: string
     {
         return array_column(self::cases(), 'value');
     }
+
+    public function longName(): string
+    {
+        return match ($this) {
+            self::STATEMENT => 'True/False statement',
+            self::SINGLE => 'Multiple choice (single correct answer)',
+            self::MULTIPLE => 'Multiple choice (two or more correct answers)',
+        };
+    }
 }

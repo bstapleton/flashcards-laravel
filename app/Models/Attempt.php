@@ -58,6 +58,11 @@ class Attempt extends Model
         parent::__construct($attributes);
     }
 
+    public function getQuestionTypeAttribute(): string
+    {
+        return QuestionType::from($this->attributes['question_type'])->longName();
+    }
+
     public function getFormattedAnswersAttribute(): Collection
     {
         $answers = json_decode($this->answers, true);
