@@ -58,7 +58,7 @@ class Attempt extends Model
         parent::__construct($attributes);
     }
 
-    public function getQuestionTypeAttribute(): string
+    public function getQuestionTypeLongNameAttribute(): string
     {
         return QuestionType::from($this->attributes['question_type'])->longName();
     }

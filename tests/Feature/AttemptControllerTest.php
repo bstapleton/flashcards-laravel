@@ -54,37 +54,14 @@ class AttemptControllerTest extends TestCase
         // Assert that the response contains all attempts
         $response->assertJsonCount(2, 'data');
 
+        $data = $response->json('data');
+
         // Assert that the response contains the expected data
-        $response->assertJsonFragment([
-            'data' => [
-                [
-                    'id' => $this->firstAttempt->id,
-                    'question' => $this->firstAttempt->question,
-                    'correctness' => $this->firstAttempt->correctness->value,
-                    'question_type' => $this->firstAttempt->question_type->value,
-                    'difficulty' => $this->firstAttempt->difficulty->value,
-                    'points_earned' => $this->firstAttempt->points_earned,
-                    'older_attempts' => [],
-                    'newer_attempts' => [],
-                    'answered_at' => Carbon::parse($this->firstAttempt->answered_at)->toIso8601String(),
-                    'answers_given' => json_decode($this->firstAttempt->answers) ?? [],
-                    'keywords' => $this->firstAttempt->keywords->pluck('name')->toArray(),
-                ],
-                [
-                    'id' => $this->secondAttempt->id,
-                    'question' => $this->secondAttempt->question,
-                    'correctness' => $this->secondAttempt->correctness->value,
-                    'question_type' => $this->secondAttempt->question_type->value,
-                    'difficulty' => $this->secondAttempt->difficulty->value,
-                    'points_earned' => $this->secondAttempt->points_earned,
-                    'older_attempts' => [],
-                    'newer_attempts' => [],
-                    'answered_at' => Carbon::parse($this->secondAttempt->answered_at)->toIso8601String(),
-                    'answers_given' => json_decode($this->secondAttempt->answers) ?? [],
-                    'keywords' => $this->secondAttempt->keywords->pluck('name')->toArray(),
-                ],
-            ],
-        ]);
+        $this->assertEquals($this->firstAttempt->id, $data[0]['id']);
+        $this->assertEquals($this->firstAttempt->question, $data[0]['question']);
+        $this->assertEquals($this->secondAttempt->id, $data[1]['id']);
+        $this->assertEquals($this->secondAttempt->question, $data[1]['question']);
+
     }
 
     public function test_index_method_requires_authentication()

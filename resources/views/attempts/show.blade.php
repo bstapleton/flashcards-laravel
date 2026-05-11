@@ -103,7 +103,7 @@
                                 </div>
                                 <div>
                                     <dt class="text-sm font-medium text-gray-500">Question type</dt>
-                                    <dd class="text-sm text-gray-900">{{ $attempt->question_type }}</dd>
+                                    <dd class="text-sm text-gray-900">{{ $attempt->question_type_long_name }}</dd>
                                 </div>
                                 <div>
                                     <dt class="text-sm font-medium text-gray-500">Difficulty (when attempted)</dt>
