@@ -23,7 +23,7 @@ class FlashcardTagController extends Controller
      *     path="/api/flashcards/{flashcard}/subjects/{tag}",
      *     summary="Attach a tag to a flashcard",
      *     description="Attach a tag",
-     *     subjects={"flashcard"},
+     *     tags={"flashcard"},
      *
      *     @OA\Parameter(name="flashcard", in="path", @OA\Schema(type="integer")),
      *     @OA\Parameter(name="tag", in="path", @OA\Schema(type="integer")),
@@ -52,7 +52,7 @@ class FlashcardTagController extends Controller
      *     path="/api/flashcards/{flashcard}/subjects/{tag}",
      *     description="Detach a tag from a flashcard",
      *     summary="Detach a tag",
-     *     subjects={"flashcard"},
+     *     tags={"flashcard"},
      *
      *     @OA\Parameter(name="flashcard", in="path", @OA\Schema(type="integer")),
      *     @OA\Parameter(name="tag", in="path", @OA\Schema(type="integer")),

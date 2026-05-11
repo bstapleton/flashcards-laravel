@@ -22,7 +22,7 @@ class AttemptController extends Controller
      *     path="/api/attempt",
      *     summary="List attempts",
      *     description="Return all attempts for the current user, paginated",
-     *     subjects={"attempt"},
+     *     tags={"attempt"},
      *
      *     @OA\Parameter(name="subjects", in="query", @OA\Schema(type="string")),
      *
@@ -51,7 +51,7 @@ class AttemptController extends Controller
      *     path="/api/attempt/{attempt}",
      *     summary="Show an attempt",
      *     description="Return an attempt",
-     *     subjects={"attempt"},
+     *     tags={"attempt"},
      *
      *     @OA\Parameter(name="attempt", in="path", @OA\Schema(type="integer")),
      *

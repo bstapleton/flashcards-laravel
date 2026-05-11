@@ -19,7 +19,7 @@ class TagController extends Controller
      * @OA\Get(
      *     path="/api/subjects",
      *     summary="List subjects",
-     *     subjects={"tag"},
+     *     tags={"tag"},
      *
      *     @OA\Response(response="200", description="Success"),
      *     security={{"bearerAuth":{}}}
@@ -34,7 +34,7 @@ class TagController extends Controller
      * @OA\Post(
      *     path="/api/subjects",
      *     summary="Create a tag",
-     *     subjects={"tag"},
+     *     tags={"tag"},
      *
      *     @OA\RequestBody(
      *         required=true,
@@ -80,7 +80,7 @@ class TagController extends Controller
      * @OA\Patch(
      *     path="/api/subjects/{tag}",
      *     summary="Update a tag",
-     *     subjects={"tag"},
+     *     tags={"tag"},
      *
      *     @OA\Parameter(name="tag", in="path", @OA\Schema(type="integer")),
      *
@@ -130,7 +130,7 @@ class TagController extends Controller
      * @OA\Delete(
      *     path="/api/subjects/{id}",
      *     summary="Delete a tag",
-     *     subjects={"tag"},
+     *     tags={"tag"},
      *
      *     @OA\Parameter(name="id", in="path", @OA\Schema(type="integer")),
      *
