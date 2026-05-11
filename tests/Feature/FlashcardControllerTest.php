@@ -120,8 +120,11 @@ class FlashcardControllerTest extends TestCase
 
         $response->assertSuccessful();
 
-        // Should return all flashcards (including buried) for the user
-        $response->assertJsonCount(Flashcard::where('user_id', $this->user->id)->get()->count(), 'data');
+        // Should return all flashcards (including buried) for the user, respecting pagination
+        $allFlashcards = Flashcard::where('user_id', $this->user->id)->get();
+        $pageLimit = $this->user->page_limit;
+        $expectedCount = min($allFlashcards->count(), $pageLimit);
+        $response->assertJsonCount($expectedCount, 'data');
     }
 
     // Store statement method tests
