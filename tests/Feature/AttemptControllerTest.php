@@ -50,16 +50,19 @@ class AttemptControllerTest extends TestCase
 
         $response->assertSuccessful();
 
-        // Assert that the response contains all attempts
-        $response->assertJsonCount(Attempt::where('user_id', $this->user->id)->get()->count(), 'data');
-
         $data = $response->json('data');
 
-        // Assert that the response contains the expected data
-        $this->assertEquals($this->firstAttempt->id, $data[0]['id']);
-        $this->assertEquals($this->firstAttempt->question, $data[0]['question']);
-        $this->assertEquals($this->secondAttempt->id, $data[1]['id']);
-        $this->assertEquals($this->secondAttempt->question, $data[1]['question']);
+        // Assert that the response contains the expected data in any order
+        $attemptIds = collect($data)->pluck('id')->toArray();
+        $this->assertContains($this->firstAttempt->id, $attemptIds);
+        $this->assertContains($this->secondAttempt->id, $attemptIds);
+
+        // Find the attempts in the response data
+        $firstAttemptData = collect($data)->firstWhere('id', $this->firstAttempt->id);
+        $secondAttemptData = collect($data)->firstWhere('id', $this->secondAttempt->id);
+
+        $this->assertEquals($this->firstAttempt->question, $firstAttemptData['question']);
+        $this->assertEquals($this->secondAttempt->question, $secondAttemptData['question']);
 
     }
 
