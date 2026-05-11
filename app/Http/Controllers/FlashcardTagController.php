@@ -20,7 +20,7 @@ class FlashcardTagController extends Controller
 
     /**
      * @OA\Post(
-     *     path="/api/flashcards/{flashcard}/tags/{tag}",
+     *     path="/api/flashcards/{flashcard}/subjects/{tag}",
      *     summary="Attach a tag to a flashcard",
      *     description="Attach a tag",
      *     tags={"flashcard"},
@@ -49,7 +49,7 @@ class FlashcardTagController extends Controller
 
     /**
      * @OA\Delete(
-     *     path="/api/flashcards/{flashcard}/tags/{tag}",
+     *     path="/api/flashcards/{flashcard}/subjects/{tag}",
      *     description="Detach a tag from a flashcard",
      *     summary="Detach a tag",
      *     tags={"flashcard"},

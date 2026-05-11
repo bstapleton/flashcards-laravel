@@ -12,4 +12,5 @@ return [
     ],
     'free_account_limit' => 20,
     'answer_per_question_limit' => 10,
+    'tag_limit' => 100,
 ];

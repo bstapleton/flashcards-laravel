@@ -37,7 +37,7 @@ class FlashcardSeeder extends Seeder
             ]);
         });
 
-        // Give the first flashcard some tags
+        // Give the first flashcard some subjects
         Flashcard::first()->tags()->sync([1, 3]);
 
         // Now do the same but for a multiple choice

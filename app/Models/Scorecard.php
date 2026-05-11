@@ -63,4 +63,24 @@ class Scorecard extends Attempt
     {
         $this->explanation = $explanation ?? null;
     }
+
+    public function getAttemptId(): int
+    {
+        return $this->attempt_id;
+    }
+
+    public function setAttemptId(int $attempt_id): void
+    {
+        $this->attempt_id = $attempt_id;
+    }
+
+    public function getFlashcardId(): int
+    {
+        return $this->flashcard_id;
+    }
+
+    public function setFlashcardId(int $flashcard_id): void
+    {
+        $this->flashcard_id = $flashcard_id;
+    }
 }

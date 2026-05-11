@@ -2,23 +2,24 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\Difficulty;
 use App\Exceptions\DraftQuestionsCannotChangeStatusException;
 use App\Exceptions\FreeUserFlashcardLimitException;
 use App\Exceptions\LessThanOneCorrectAnswerException;
 use App\Exceptions\NoEligibleQuestionsException;
-use App\Exceptions\UndeterminedQuestionTypeException;
 use App\Helpers\ApiResponse;
 use App\Models\Flashcard;
 use App\Services\FlashcardService;
 use App\Transformers\QuestionTransformer;
-use App\Transformers\UnattemptedQuestionTransformer;
 use App\Transformers\ScorecardTransformer;
+use App\Transformers\UnattemptedQuestionTransformer;
 use Illuminate\Contracts\Filesystem\FileNotFoundException;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Validation\Rule;
 use Illuminate\Validation\UnauthorizedException;
 use OpenApi\Annotations as OA;
 
@@ -119,8 +120,7 @@ class FlashcardController extends Controller
      *             @OA\Property(property="text", type="string", example="What colour is the sky?"),
      *             @OA\Property(property="is_true", type="boolean"),
      *             @OA\Property(property="explanation", type="string"),
-     *             @OA\Property(property="answers", type="array", @OA\Items(ref="#/components/schemas/Answer")),
-     *             @OA\Property(property="tags", type="array", @OA\Items(ref="#/components/schemas/Tag"))
+     *             @OA\Property(property="subjects", type="array", @OA\Items(ref="#/components/schemas/Tag"))
      *         )
      *     ),
      *
@@ -131,12 +131,13 @@ class FlashcardController extends Controller
      *     security={{"bearerAuth":{}}}
      * )
      */
-    public function store(Request $request): JsonResponse
+    public function storeStatement(Request $request): JsonResponse
     {
         $request->validate([
             'text' => 'required|max:1024',
-            'is_true' => 'nullable|required_without:answers',
-            'answers' => 'nullable|required_without:is_true',
+            'is_true' => 'required|boolean',
+            'subjects' => 'nullable|array',
+            'subjects.*' => 'exists:subjects,id',
         ]);
 
         try {
@@ -149,12 +150,66 @@ class FlashcardController extends Controller
                 $e->getMessage(),
                 'free_account_limit'
             );
-        } catch (UndeterminedQuestionTypeException $e) {
+        } catch (LessThanOneCorrectAnswerException $e) {
             return ApiResponse::error(
-                'Undetermined question type',
+                'Less than one correct answer',
                 $e->getMessage(),
-                'undetermined_question_type',
+                'less_than_one_correct_answer',
                 422
+            );
+        }
+
+        return fractal($flashcardResponse, new QuestionTransformer)->respond();
+    }
+
+    /**
+     * @OA\Post(
+     *     path="/api/flashcards",
+     *     summary="Create flashcard",
+     *     tags={"flashcard"},
+     *
+     *     @OA\RequestBody(
+     *         required=true,
+     *
+     *         @OA\JsonContent(
+     *             required={"text"},
+     *
+     *             @OA\Property(property="text", type="string", example="What colour is the sky?"),
+     *             @OA\Property(property="explanation", type="string"),
+     *             @OA\Property(property="answers", type="array", @OA\Items(ref="#/components/schemas/Answer")),
+     *             @OA\Property(property="subjects", type="array", @OA\Items(ref="#/components/schemas/Tag"))
+     *         )
+     *     ),
+     *
+     *     @OA\Response(response="200", description="Success"),
+     *     @OA\Response(response="400", description="Free account limitation reached"),
+     *     @OA\Response(response="403", description="Not permitted"),
+     *     @OA\Response(response="422", description="Validation error"),
+     *     security={{"bearerAuth":{}}}
+     * )
+     */
+    public function storeMultipleChoice(Request $request): JsonResponse
+    {
+        $request->validate([
+            'text' => 'required|max:1024',
+            'explanation' => 'nullable|max:1024',
+            'answers' => 'required|array',
+            'answers.*.text' => 'required|max:1024',
+            'answers.*.is_correct' => 'required|boolean',
+            'answers.*.explanation' => 'nullable|max:1024',
+            'subjects' => 'nullable|array',
+            'subjects.*' => 'exists:subjects,id',
+        ]);
+
+        try {
+            $flashcardResponse = $this->service->store($request->all());
+        } catch (UnauthorizedException) {
+            return $this->handleForbidden();
+        } catch (FreeUserFlashcardLimitException $e) {
+            return ApiResponse::error(
+                'Free user account limitation',
+                $e->getMessage(),
+                'free_account_limit'
             );
         } catch (LessThanOneCorrectAnswerException $e) {
             return ApiResponse::error(
@@ -191,8 +246,11 @@ class FlashcardController extends Controller
      *     security={{"bearerAuth":{}}}
      * )
      */
-    public function update(Request $request, Flashcard $flashcard): JsonResponse
+    public function update(Request $request, $flashcardId): JsonResponse
     {
+        // Explicitly retrieve the flashcard without currentUser scope
+        $flashcard = Flashcard::findOrFail($flashcardId);
+
         $request->validate([
             'text' => 'string|max:1024',
             'explanation' => 'string|max:1024',
@@ -200,6 +258,11 @@ class FlashcardController extends Controller
         ]);
 
         try {
+            // Ensure the flashcard belongs to the current user
+            if ($flashcard->user_id !== $request->user()->id) {
+                return $this->handleForbidden();
+            }
+
             $flashcardResponse = $this->service->update($request->all(), $flashcard);
         } catch (ModelNotFoundException) {
             return $this->handleNotFound();
@@ -224,9 +287,17 @@ class FlashcardController extends Controller
      *     security={{"bearerAuth":{}}}
      * )
      */
-    public function destroy(Request $request, Flashcard $flashcard): Response|JsonResponse
+    public function destroy(Request $request, $flashcardId): Response|JsonResponse
     {
         try {
+            // Explicitly retrieve the flashcard without currentUser scope
+            $flashcard = Flashcard::findOrFail($flashcardId);
+
+            // Ensure the flashcard belongs to the current user
+            if ($flashcard->user_id !== $request->user()->id) {
+                return $this->handleForbidden();
+            }
+
             $this->service->destroy($flashcard);
         } catch (ModelNotFoundException) {
             return $this->handleNotFound();
@@ -263,7 +334,7 @@ class FlashcardController extends Controller
     /**
      * @OA\Get(
      *     path="/api/flashcards/random",
-     *     description="Gets a random flashcard, regardless of difficulty or tags",
+     *     description="Gets a random flashcard, regardless of difficulty or subjects",
      *     summary="Get a random flashcard",
      *     tags={"flashcard"},
      *
@@ -299,9 +370,36 @@ class FlashcardController extends Controller
     }
 
     /**
+     * @OA\Get(
+     *     path="/api/flashcards/subjects",
+     *     description="Get flashcards that have these subjects assigned. Additive filter."
+     *     summary="Get flashcards by subjects",
+     *     tags={"flashcard"},
+     *
+     *     @OA\Parameter(name="subjects", in="query", @OA\Schema(type="array", @OA\Items(type="string"))),
+     *
+     *     @OA\Response(response="200", description="Success"),
+     *     @OA\Response(response="403", description="Not permitted"),
+     *     security={{"bearerAuth":{}}}
+     * )
+     */
+    public function bySubjects(Request $request): JsonResponse
+    {
+        $request->validate(['subjects' => 'required|array']);
+
+        $tags = $request->input('subjects');
+
+        $flashcards = $this->service->subjects($tags);
+        $selected = $this->service->getRandom($flashcards);
+
+        return fractal($selected, new UnattemptedQuestionTransformer)
+            ->respond();
+    }
+
+    /**
      * @OA\Post(
      *     path="/api/flashcards/{flashcard}/revive",
-     *     description="Revive a flashcard from the graveyard back to the easy difficulty. This will additionally remove it's hidden status if it had one.",
+     *     description="Revive a flashcard from the graveyard back to the easy difficulty.",
      *     summary="Resurrect a buried flashcard",
      *     tags={"flashcard"},
      *
@@ -313,9 +411,12 @@ class FlashcardController extends Controller
      *     security={{"bearerAuth":{}}}
      * )
      */
-    public function revive(Request $request, Flashcard $flashcard): JsonResponse
+    public function revive(Request $request, $flashcardId): JsonResponse
     {
         try {
+            // Explicitly retrieve the flashcard without currentUser scope
+            $flashcard = Flashcard::findOrFail($flashcardId);
+
             $flashcardResponse = $this->service->revive($flashcard);
         } catch (ModelNotFoundException) {
             return $this->handleNotFound();
@@ -324,6 +425,36 @@ class FlashcardController extends Controller
         }
 
         return fractal($flashcardResponse, new UnattemptedQuestionTransformer)->respond();
+    }
+
+    /**
+     * @OA\Post(
+     *     path="/api/flashcards/revive",
+     *     description="Revive all the flashcards of a specific difficulty, resetting them to easy. Will ignore operations if told to revive easy -> easy.",
+     *     summary="Reset a difficulty level of flashcards  back to easy",
+     *     tags={"flashcard"},
+     *
+     *     @OA\Parameter(name="difficulty", in="query", @OA\Schema(type="string", enum={"easy", "medium", "hard", "buried"})),
+     *
+     *     @OA\Response(response="204", description="Success"),
+     *     @OA\Response(response="403", description="Not permitted"),
+     *     @OA\Response(response="422", description="Invalid difficulty level"),
+     *     security={{"bearerAuth":{}}}
+     * )
+     */
+    public function reviveDifficulty(Request $request)
+    {
+        $request->validate(['difficulty' => ['required', Rule::enum(Difficulty::class)]]);
+
+        try {
+            $this->service->reviveDifficulty(Difficulty::tryFrom($request->input('difficulty')));
+        } catch (ModelNotFoundException) {
+            return $this->handleNotFound();
+        } catch (UnauthorizedException) {
+            return $this->handleForbidden();
+        }
+
+        return response()->noContent();
     }
 
     /**
@@ -342,9 +473,12 @@ class FlashcardController extends Controller
      *     security={{"bearerAuth":{}}}
      * )
      */
-    public function hide(Request $request, Flashcard $flashcard): JsonResponse
+    public function hide(Request $request, $flashcardId): JsonResponse
     {
         try {
+            // Explicitly retrieve the flashcard without currentUser scope
+            $flashcard = Flashcard::findOrFail($flashcardId);
+
             $flashcardResponse = $this->service->hide($flashcard);
         } catch (ModelNotFoundException) {
             return $this->handleNotFound();
@@ -377,9 +511,17 @@ class FlashcardController extends Controller
      *     security={{"bearerAuth":{}}}
      * )
      */
-    public function unhide(Request $request, Flashcard $flashcard): JsonResponse
+    public function unhide(Request $request, $flashcardId): JsonResponse
     {
         try {
+            // Explicitly retrieve the flashcard without currentUser scope
+            $flashcard = Flashcard::findOrFail($flashcardId);
+
+            // Ensure the flashcard belongs to the current user
+            if ($flashcard->user_id !== $request->user()->id) {
+                return $this->handleForbidden();
+            }
+
             $flashcardResponse = $this->service->unhide($flashcard);
         } catch (ModelNotFoundException) {
             return $this->handleNotFound();
@@ -420,17 +562,29 @@ class FlashcardController extends Controller
      *     security={{"bearerAuth":{}}}
      * )
      */
-    public function answer(Request $request, Flashcard $flashcard): JsonResponse
+    public function answer(Request $request, $flashcardId): JsonResponse
     {
         try {
+            // Simple ownership check without Gates/Policies
+            $flashcard = Flashcard::find($flashcardId);
+
+            if (! $flashcard) {
+                return $this->handleNotFound();
+            }
+
+            if ($flashcard->user_id !== $request->user()->id) {
+                return $this->handleForbidden();
+            }
+
             $scorecardResponse = $this->service->answer($flashcard, $request->input('answers'), $request->user());
-        } catch (ModelNotFoundException) {
+
+            return fractal($scorecardResponse, new ScorecardTransformer)->respond();
+
+        } catch (ModelNotFoundException $e) {
             return $this->handleNotFound();
-        } catch (UnauthorizedException) {
+        } catch (UnauthorizedException $e) {
             return $this->handleForbidden();
         }
-
-        return fractal($scorecardResponse, new ScorecardTransformer)->respond();
     }
 
     /**

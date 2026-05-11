@@ -25,6 +25,7 @@ use Illuminate\Support\Facades\Auth;
  * @property QuestionType type
  * @property bool is_true
  * @property Carbon last_seen_at
+ * @property Carbon last_attempted_at
  * @property Carbon eligible_at
  * @property Status status
  *
@@ -40,6 +41,7 @@ use Illuminate\Support\Facades\Auth;
  *     @OA\Property(property="type", type="string"),
  *     @OA\Property(property="eligible_at", type="string", format="date-time"),
  *     @OA\Property(property="last_seen_at", type="string", format="date-time"),
+ *     @OA\Property(property="last_attempted_at", type="string", format="date-time"),
  * )
  */
 class Flashcard extends Model
@@ -63,6 +65,10 @@ class Flashcard extends Model
             'type' => QuestionType::class,
             'is_true' => 'boolean',
             'status' => Status::class,
+            'last_seen_at' => 'datetime',
+            'last_attempted_at' => 'datetime',
+            'created_at' => 'datetime',
+            'updated_at' => 'datetime',
         ];
     }
 
@@ -75,6 +81,11 @@ class Flashcard extends Model
         return $this->hasMany(Answer::class);
     }
 
+    public function attempts(): HasMany
+    {
+        return $this->hasMany(Attempt::class);
+    }
+
     public function tags(): BelongsToMany
     {
         return $this->belongsToMany(Tag::class, 'flashcard_tag');
@@ -83,6 +94,23 @@ class Flashcard extends Model
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
+    }
+
+    public function getMasteryTextAttribute(): string
+    {
+        return $this->difficulty->mastery();
+    }
+
+    public function getMasteryTitleAttribute(): string
+    {
+        return ucwords($this->difficulty->mastery());
+    }
+
+    public function getMasteryRouteAttribute(): string
+    {
+        return $this->difficulty->mastery()
+                |> strtolower(...)
+                |> (fn ($x) => str_replace(' ', '-', $x));
     }
 
     public function getCorrectAnswerAttribute(): ?Answer
@@ -124,16 +152,31 @@ class Flashcard extends Model
             $user = Auth::user();
         }
 
-        if (! $this->last_seen_at) {
+        if (! $this->last_attempted_at) {
             return Carbon::now();
         }
 
         return match ($this->difficulty) {
-            Difficulty::EASY => Carbon::parse($this->last_seen_at)->addMinutes($user->easy_time),
-            Difficulty::MEDIUM => Carbon::parse($this->last_seen_at)->addMinutes($user->medium_time),
-            Difficulty::HARD => Carbon::parse($this->last_seen_at)->addMinutes($user->hard_time),
-            Difficulty::BURIED => Carbon::parse($this->last_seen_at)->addCenturies($user->easy_time),
+            Difficulty::EASY => Carbon::parse($this->last_attempted_at)->addMinutes($user->easy_time),
+            Difficulty::MEDIUM => Carbon::parse($this->last_attempted_at)->addMinutes($user->medium_time),
+            Difficulty::HARD => Carbon::parse($this->last_attempted_at)->addMinutes($user->hard_time),
+            Difficulty::BURIED => Carbon::parse($this->last_attempted_at)->addCenturies($user->easy_time),
         };
+    }
+
+    public function scopeEasy(Builder $query)
+    {
+        return $query->where('difficulty', Difficulty::EASY);
+    }
+
+    public function scopeMedium(Builder $query)
+    {
+        return $query->where('difficulty', Difficulty::MEDIUM);
+    }
+
+    public function scopeHard(Builder $query)
+    {
+        return $query->where('difficulty', Difficulty::HARD);
     }
 
     public function scopeCurrentUser(Builder $query)

@@ -21,9 +21,7 @@ use App\Models\User;
 use Illuminate\Contracts\Filesystem\FileNotFoundException;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Storage;
-use Illuminate\Validation\UnauthorizedException;
 
 class FlashcardService
 {
@@ -36,18 +34,14 @@ class FlashcardService
 
     public function all()
     {
-        if (! Gate::authorize('list', Flashcard::class)) {
-            throw new UnauthorizedException;
-        }
-
         return Flashcard::currentUser()
             ->orderBy('created_at');
     }
 
-    public function show(Flashcard $flashcard)
+    public function show(Flashcard $flashcard, bool $forRevision = false): Flashcard
     {
-        if (! Gate::authorize('show', $flashcard)) {
-            throw new UnauthorizedException;
+        if ($forRevision) {
+            self::updateLastSeenAt($flashcard);
         }
 
         return $flashcard;
@@ -56,13 +50,10 @@ class FlashcardService
     /**
      * @throws UndeterminedQuestionTypeException
      * @throws LessThanOneCorrectAnswerException
+     * @throws FreeUserFlashcardLimitException
      */
     public function store(array $data)
     {
-        if (! Gate::authorize('store', Flashcard::class)) {
-            throw new UnauthorizedException;
-        }
-
         $role = Auth::user()->roles->where('code', 'advanced_user')->first();
 
         // Cannot create questions if you're a free user and already have 10 created
@@ -104,8 +95,8 @@ class FlashcardService
             $flashcard->answers()->createMany($answers);
         }
 
-        if (isset($data['tags'])) {
-            $flashcard->tags()->attach($data['tags']);
+        if (isset($data['subjects'])) {
+            $flashcard->tags()->attach($data['subjects']);
         }
 
         if ($flashcard->answers()->count() > 1 || $flashcard->is_true) {
@@ -117,10 +108,6 @@ class FlashcardService
 
     public function update(array $data, Flashcard $flashcard): Flashcard
     {
-        if (! Gate::authorize('update', $flashcard)) {
-            throw new UnauthorizedException;
-        }
-
         // Only update the truthiness of a question if it's already set up as a statement type
         if (isset($flashcard->is_true) && isset($data['is_true'])) {
             $flashcard->is_true = $data['is_true'];
@@ -142,19 +129,11 @@ class FlashcardService
 
     public function destroy(Flashcard $flashcard): void
     {
-        if (! Gate::authorize('delete', $flashcard)) {
-            throw new UnauthorizedException;
-        }
-
         $flashcard->delete();
     }
 
     public function buried()
     {
-        if (! Gate::authorize('list', Flashcard::class)) {
-            throw new UnauthorizedException;
-        }
-
         return Flashcard::currentUser()
             ->buried()
             ->orderBy('last_seen_at', 'desc');
@@ -162,22 +141,127 @@ class FlashcardService
 
     public function alive()
     {
-        if (! Gate::authorize('list', Flashcard::class)) {
-            throw new UnauthorizedException;
-        }
-
         return Flashcard::currentUser()
             ->alive()
             ->orderBy('last_seen_at', 'desc')
             ->orderBy('created_at', 'desc');
     }
 
-    public function draft()
+    public function category(Difficulty $difficulty)
     {
-        if (! Gate::authorize('list', Flashcard::class)) {
-            throw new UnauthorizedException;
+        return Flashcard::currentUser()
+            ->published()
+            ->where('difficulty', $difficulty->value)
+            ->orderBy('last_seen_at', 'desc')
+            ->orderBy('created_at', 'desc');
+    }
+
+    /**
+     * @throws NoEligibleQuestionsException
+     */
+    public function easy(bool $forRevision = false)
+    {
+        $eligible = Flashcard::currentUser()
+            ->published()
+            ->easy()
+            ->inRandomOrder()
+            ->get();
+
+        if (! $eligible->count()) {
+            throw new NoEligibleQuestionsException;
         }
 
+        $selected = $eligible->first();
+
+        if ($forRevision) {
+            self::updateLastSeenAt($selected);
+        }
+
+        return $selected;
+    }
+
+    /**
+     * @throws NoEligibleQuestionsException
+     */
+    public function medium(bool $forRevision = false)
+    {
+        $eligible = Flashcard::currentUser()
+            ->published()
+            ->medium()
+            ->inRandomOrder()
+            ->get();
+
+        if (! $eligible->count()) {
+            throw new NoEligibleQuestionsException;
+        }
+
+        $selected = $eligible->first();
+
+        if ($forRevision) {
+            self::updateLastSeenAt($selected);
+        }
+
+        return $selected;
+    }
+
+    /**
+     * @throws NoEligibleQuestionsException
+     */
+    public function hard(bool $forRevision = false)
+    {
+        $eligible = Flashcard::currentUser()
+            ->published()
+            ->hard()
+            ->inRandomOrder()
+            ->get();
+
+        if (! $eligible->count()) {
+            throw new NoEligibleQuestionsException;
+        }
+
+        $selected = $eligible->first();
+
+        if ($forRevision) {
+            self::updateLastSeenAt($selected);
+        }
+
+        return $selected;
+    }
+
+    public function subjects(array $tags)
+    {
+        $parsedTags = [];
+        foreach ($tags as $tag) {
+            if (str_contains($tag, ',')) {
+                $parsedTags = array_merge($parsedTags, explode(',', $tag));
+            } else {
+                $parsedTags[] = $tag;
+            }
+        }
+
+        $query = Flashcard::currentUser()
+            ->published()
+            ->whereHas('tags', function ($query) use ($parsedTags) {
+                $query->whereIn('name', $parsedTags);
+            })
+            ->with(['tags', 'answers'])
+            ->distinct();
+
+        return $query;
+    }
+
+    public function getCollection($query)
+    {
+        return $query->get();
+    }
+
+    public function getRandom($query)
+    {
+        return $query->inRandomOrder()->first();
+    }
+
+    public function draft()
+    {
         return Flashcard::currentUser()
             ->draft()
             ->orderBy('created_at', 'desc');
@@ -185,10 +269,6 @@ class FlashcardService
 
     public function hidden()
     {
-        if (! Gate::authorize('list', Flashcard::class)) {
-            throw new UnauthorizedException;
-        }
-
         return Flashcard::currentUser()
             ->hidden()
             ->orderBy('created_at', 'desc');
@@ -197,12 +277,8 @@ class FlashcardService
     /**
      * @throws NoEligibleQuestionsException
      */
-    public function random()
+    public function random(bool $forRevision = false)
     {
-        if (! Gate::authorize('list', Flashcard::class)) {
-            throw new UnauthorizedException;
-        }
-
         $eligibleQuestions = Flashcard::currentUser()
             ->published()
             ->alive()
@@ -218,7 +294,7 @@ class FlashcardService
                 ->alive()
                 ->get()
                 ->filter(function ($flashcard) {
-                    return (bool) $flashcard->eligible_at->greaterThan(now());
+                    return $flashcard->eligible_at->greaterThan(now());
                 })
                 ->sortBy(function ($flashcard) {
                     return $flashcard->eligible_at;
@@ -232,34 +308,37 @@ class FlashcardService
             throw new NoEligibleQuestionsException($flashcard->eligible_at);
         }
 
-        return $eligibleQuestions->first();
+        $selectedQuestion = $eligibleQuestions->first();
+
+        if ($forRevision) {
+            self::updateLastSeenAt($selectedQuestion);
+        }
+
+        return $selectedQuestion;
     }
 
     public function revive(Flashcard $flashcard): Flashcard
     {
-        if (! Gate::authorize('revive', $flashcard)) {
-            throw new UnauthorizedException;
-        }
-
         $flashcard->update([
             'difficulty' => Difficulty::EASY,
         ]);
 
-        // It can only be hidden if it was preciously published, and since we're adding it back to the pool, make sure
-        // it gets unhidden at the same time.
-        if ($flashcard->status === Status::HIDDEN) {
-            $this->setStatus($flashcard, Status::PUBLISHED);
-        }
-
         return $flashcard;
+    }
+
+    public function reviveDifficulty(Difficulty $difficulty): void
+    {
+        if ($difficulty !== Difficulty::EASY) {
+            // Skip updating easy since there's no point
+            Flashcard::whereDifficulty($difficulty)
+                ->update([
+                    'difficulty' => Difficulty::EASY,
+                ]);
+        }
     }
 
     public function answer(Flashcard $flashcard, array $answers, User $user): Scorecard
     {
-        if (! Gate::authorize('answer', $flashcard)) {
-            throw new UnauthorizedException;
-        }
-
         if ($flashcard->type === QuestionType::STATEMENT) {
             $providedAnswer = last($answers);
             $correctness = $this->calculateCorrectness($flashcard, null, $providedAnswer);
@@ -281,11 +360,13 @@ class FlashcardService
         }
 
         $flashcard->last_seen_at = Carbon::now();
+        $flashcard->last_attempted_at = Carbon::now();
 
         $score = new Score;
         $pointsEarned = $score->getScore($flashcard->type, $correctness, $flashcard->difficulty, $user->lose_points);
 
         $attempt = $this->attemptService->store([
+            'flashcard_id' => $flashcard->id,
             'question' => $flashcard->text,
             'question_type' => $flashcard->type,
             'answers' => $givenAnswers ?? collect($flashcard->answers->map(function ($answer) use ($answers) {
@@ -297,7 +378,7 @@ class FlashcardService
                     $answer->explanation
                 );
             })),
-            'tags' => implode(',', $flashcard->tags->map(function (Tag $tag) {
+            'subjects' => implode(',', $flashcard->tags->map(function (Tag $tag) {
                 return $tag->name;
             })->toArray()),
             'difficulty' => $flashcard->difficulty,
@@ -306,11 +387,22 @@ class FlashcardService
             'points_earned' => $pointsEarned,
         ]);
 
-        $scorecard = new Scorecard($attempt->toArray());
+        $attemptData = $attempt->toArray();
+        // Convert answers collection to proper JSON string
+        $answersArray = $attempt->answers->map(function ($answer) {
+            return [
+                'text' => $answer->getText(),
+                'is_correct' => $answer->getIsCorrect(),
+                'was_selected' => $answer->getWasSelected(),
+            ];
+        })->toArray();
+        $attemptData['answers'] = json_encode($answersArray);
+
+        $scorecard = new Scorecard($attemptData);
 
         // Don't create an attempt if it's already buried
         if ($flashcard->difficulty !== Difficulty::BURIED) {
-            $attempt->answers = $attempt->answers->map(function ($answer) {
+            $formattedAnswers = $attempt->answers->map(function ($answer) {
                 return [
                     'text' => $answer->getText(),
                     'is_correct' => $answer->getIsCorrect(),
@@ -318,6 +410,7 @@ class FlashcardService
                 ];
             });
 
+            $attempt->answers = json_encode($formattedAnswers);
             $attempt->save();
         }
 
@@ -334,16 +427,14 @@ class FlashcardService
         $scorecard->setEligibleAt(Carbon::parse($flashcard->eligible_at));
         $scorecard->setTotalScore($user->points);
         $scorecard->setExplanation($flashcard->explanation);
+        $scorecard->setAttemptId($attempt->id);
+        $scorecard->setFlashcardId($flashcard->id);
 
         return $scorecard;
     }
 
     public function attachTag(Flashcard $flashcard, Tag $tag)
     {
-        if (! Gate::authorize('attachTag', Flashcard::class)) {
-            throw new UnauthorizedException;
-        }
-
         $flashcard->tags()->attach($tag);
 
         return $flashcard;
@@ -351,10 +442,6 @@ class FlashcardService
 
     public function detachTag(Flashcard $flashcard, Tag $tag)
     {
-        if (! Gate::authorize('detachTag', Flashcard::class)) {
-            throw new UnauthorizedException;
-        }
-
         $flashcard->tags()->detach($tag);
 
         return $flashcard;
@@ -381,12 +468,13 @@ class FlashcardService
     {
         switch ($flashcard->type) {
             case QuestionType::SINGLE:
-                return $flashcard->correct_answer->id === last($answers) && count($answers) === 1
+                return $flashcard->correct_answer->id === (int) last($answers) && count($answers) === 1
                     ? Correctness::COMPLETE
                     : Correctness::NONE;
             case QuestionType::MULTIPLE:
                 $correctAnswers = $flashcard->correct_answers;
-                $correctSuppliedAnswers = array_intersect($correctAnswers->pluck('id')->toArray(), $answers);
+                $castAnswers = array_map('intval', $answers);
+                $correctSuppliedAnswers = array_intersect($correctAnswers->pluck('id')->toArray(), $castAnswers);
 
                 if (count($correctSuppliedAnswers) && $correctAnswers->count() === count($correctSuppliedAnswers) && count($answers) === $correctAnswers->count()) {
                     return Correctness::COMPLETE;
@@ -555,5 +643,12 @@ class FlashcardService
         }
 
         return $importCount;
+    }
+
+    private static function updateLastSeenAt(Flashcard $flashcard): void
+    {
+        $flashcard->update([
+            'last_seen_at' => now(),
+        ]);
     }
 }

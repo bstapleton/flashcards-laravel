@@ -12,6 +12,7 @@ use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
 use Laravel\Sanctum\HasApiTokens;
+use OpenApi\Annotations as OA;
 use RedExplosion\Sqids\Concerns\HasSqids;
 
 /**
@@ -30,6 +31,7 @@ use RedExplosion\Sqids\Concerns\HasSqids;
  * @property bool is_trial_expired
  * @property bool is_trial_user
  * @property int total_questions
+ * @property int total_attempts
  *
  * @OA\Schema(
  *     required={"username", "password", "display_name"},
@@ -40,6 +42,7 @@ use RedExplosion\Sqids\Concerns\HasSqids;
  *     @OA\Property(property="points", type="number"),
  *     @OA\Property(property="easy_time", type="number"),
  *     @OA\Property(property="medium_time", type="number"),
+ *     @OA\Property(property="hard_time", type="number"),
  *     @OA\Property(property="page_limit", type="number")
  * )
  */
@@ -111,6 +114,11 @@ class User extends Authenticatable
         return $this->belongsToMany(Role::class)->withPivot(['valid_until', 'auto_renew']);
     }
 
+    public function tags(): HasMany
+    {
+        return $this->hasMany(Tag::class);
+    }
+
     public function getIsTrialUserAttribute(): bool
     {
         if ($this->roles()->where('code', 'advanced_user')->exists()) {
@@ -138,6 +146,11 @@ class User extends Authenticatable
     public function getTotalQuestionsAttribute(): int
     {
         return $this->flashcards()->count();
+    }
+
+    public function getTotalAttemptsAttribute(): int
+    {
+        return $this->attempts()->count();
     }
 
     public function adjustPoints(int $score, $operation = 'add'): static

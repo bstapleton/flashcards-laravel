@@ -19,14 +19,18 @@ class QuestionTransformer extends TransformerAbstract
     {
         return [
             'id' => $flashcard->id,
-            'type' => $flashcard->type->value,
-            'status' => $flashcard->status->value,
+            'type' => $flashcard->type?->value,
+            'status' => $flashcard->status?->value,
             'text' => $flashcard->text,
             'explanation' => $flashcard->explanation,
             'is_true' => $flashcard->is_true,
             'difficulty' => $flashcard->difficulty,
+            'mastery' => [
+                'title' => $flashcard->mastery_title,
+                'text' => $flashcard->mastery_text,
+            ],
             'eligible_at' => Carbon::parse($flashcard->eligible_at)->toIso8601String(),
-            'tags' => $flashcard->tags->map(function (Tag $tag) {
+            'subjects' => $flashcard->tags->map(function (Tag $tag) {
                 return (new TagTransformer)->transform($tag);
             }),
             'answers' => $flashcard->answers->map(function (Answer $answer) {

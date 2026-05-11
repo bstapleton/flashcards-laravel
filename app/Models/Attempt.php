@@ -14,11 +14,12 @@ use Illuminate\Support\Collection;
 /**
  * @property int id
  * @property int user_id
+ * @property int flashcard_id
  * @property string question
  * @property string answers
  * @property array formatted_answers
  * @property QuestionType question_type
- * @property string tags
+ * @property string subjects
  * @property Correctness correctness
  * @property Difficulty difficulty
  * @property int points_earned
@@ -35,6 +36,7 @@ class Attempt extends Model
 
     protected $fillable = [
         'user_id',
+        'flashcard_id',
         'question',
         'question_type',
         'answers',
@@ -48,6 +50,7 @@ class Attempt extends Model
     protected $casts = [
         'correctness' => Correctness::class,
         'difficulty' => Difficulty::class,
+        'answered_at' => 'datetime',
     ];
 
     public function __construct(array $attributes = [])
@@ -55,39 +58,45 @@ class Attempt extends Model
         parent::__construct($attributes);
     }
 
+    public function getQuestionTypeLongNameAttribute(): string
+    {
+        return QuestionType::from($this->attributes['question_type'])->longName();
+    }
+
     public function getFormattedAnswersAttribute(): Collection
     {
         $answers = json_decode($this->answers, true);
+        $formattedAnswers = [];
 
         if (count($answers) === 0) {
             return collect();
         }
 
         foreach ($answers as $key => $answer) {
-            // Check for missing properties
             if (! isset($answer['was_selected'], $answer['is_correct'], $answer['text'])) {
-                throw new \RuntimeException('Missing answer properties');
+                \Log::warning('Missing answer properties. Attempt ID: '.$this->id);
+            } elseif (! is_bool($answer['was_selected']) || ! is_bool($answer['is_correct']) || ! is_string($answer['text'])) {
+                \Log::error('Invalid answer format. Attempt ID: '.$this->id);
+            } else {
+                $attemptAnswer = new AttemptAnswer;
+                $attemptAnswer->setIsCorrect($answer['is_correct']);
+                $attemptAnswer->setWasSelected($answer['was_selected']);
+                $attemptAnswer->setText($answer['text']);
+                $formattedAnswers[$key] = $attemptAnswer;
             }
-
-            // Check for malformed content
-            if (! is_bool($answer['was_selected']) || ! is_bool($answer['is_correct']) || ! is_string($answer['text'])) {
-                throw new \RuntimeException('Invalid answer format');
-            }
-
-            // Map to the correct model
-            $attemptAnswer = new AttemptAnswer;
-            $attemptAnswer->setIsCorrect($answer['is_correct']);
-            $attemptAnswer->setWasSelected($answer['was_selected']);
-            $attemptAnswer->setText($answer['text']);
-            $answers[$key] = $attemptAnswer;
         }
 
-        return collect($answers);
+        return collect($formattedAnswers);
     }
 
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
+    }
+
+    public function flashcard(): BelongsTo
+    {
+        return $this->belongsTo(Flashcard::class);
     }
 
     public function keywords(): HasMany
@@ -98,7 +107,7 @@ class Attempt extends Model
     public function getOlderAttemptsAttribute(): Collection
     {
         return Attempt::where('user_id', $this->user_id)
-            ->where('question', $this->question)
+            ->where('flashcard_id', $this->flashcard_id)
             ->where('id', '<', $this->id)
             ->orderBy('answered_at', 'desc')
             ->get();
@@ -107,9 +116,64 @@ class Attempt extends Model
     public function getNewerAttemptsAttribute(): Collection
     {
         return Attempt::where('user_id', $this->user_id)
-            ->where('question', $this->question)
+            ->where('flashcard_id', $this->flashcard_id)
             ->where('id', '>', $this->id)
             ->orderBy('answered_at', 'asc')
             ->get();
+    }
+
+    public function scopeEasy($query)
+    {
+        return $query->where('difficulty', Difficulty::EASY);
+    }
+
+    public function scopeMedium($query)
+    {
+        return $query->where('difficulty', Difficulty::MEDIUM);
+    }
+
+    public function scopeHard($query)
+    {
+        return $query->where('difficulty', Difficulty::HARD);
+    }
+
+    public function scopeThisWeek($query)
+    {
+        return $query->whereBetween('answered_at', [
+            now()->startOfWeek(),
+            now()->endOfWeek(),
+        ]);
+    }
+
+    public function scopeLastWeek($query)
+    {
+        return $query->whereBetween('answered_at', [
+            now()->startOfWeek()->subWeek(),
+            now()->endOfWeek()->subWeek(),
+        ]);
+    }
+
+    public function scopeThisMonth($query)
+    {
+        return $query->whereBetween('answered_at', [
+            now()->startOfMonth(),
+            now()->endOfMonth(),
+        ]);
+    }
+
+    public function scopeLastMonth($query)
+    {
+        return $query->whereBetween('answered_at', [
+            now()->startOfMonth()->subMonth(),
+            now()->endOfMonth()->subMonth(),
+        ]);
+    }
+
+    /**
+     * Fetch attempts made before they were bindable to a specific question
+     */
+    public function scopeLegacy($query)
+    {
+        return $query->whereNull('flashcard_id');
     }
 }

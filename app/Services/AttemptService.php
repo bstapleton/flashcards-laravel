@@ -54,6 +54,7 @@ class AttemptService
     public function store(array $data): Attempt
     {
         $attempt = Attempt::create([
+            'flashcard_id' => $data['flashcard_id'],
             'user_id' => Auth::id(),
             'question' => $data['question'],
             'correctness' => $data['correctness'],
@@ -64,8 +65,8 @@ class AttemptService
             'answers' => $data['answers'],
         ]);
 
-        if ($data['tags']) {
-            $keywords = explode(',', $data['tags']);
+        if ($data['subjects']) {
+            $keywords = explode(',', $data['subjects']);
 
             foreach ($keywords as $keyword) {
                 $attempt->keywords()->save(new Keyword(['name' => $keyword]));
