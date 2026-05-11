@@ -19,8 +19,8 @@ class QuestionTransformer extends TransformerAbstract
     {
         return [
             'id' => $flashcard->id,
-            'type' => $flashcard->type->value,
-            'status' => $flashcard->status->value,
+            'type' => $flashcard->type?->value,
+            'status' => $flashcard->status?->value,
             'text' => $flashcard->text,
             'explanation' => $flashcard->explanation,
             'is_true' => $flashcard->is_true,

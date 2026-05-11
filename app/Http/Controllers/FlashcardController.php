@@ -246,8 +246,11 @@ class FlashcardController extends Controller
      *     security={{"bearerAuth":{}}}
      * )
      */
-    public function update(Request $request, Flashcard $flashcard): JsonResponse
+    public function update(Request $request, $flashcardId): JsonResponse
     {
+        // Explicitly retrieve the flashcard without currentUser scope
+        $flashcard = Flashcard::findOrFail($flashcardId);
+
         $request->validate([
             'text' => 'string|max:1024',
             'explanation' => 'string|max:1024',
@@ -255,6 +258,11 @@ class FlashcardController extends Controller
         ]);
 
         try {
+            // Ensure the flashcard belongs to the current user
+            if ($flashcard->user_id !== $request->user()->id) {
+                return $this->handleForbidden();
+            }
+
             $flashcardResponse = $this->service->update($request->all(), $flashcard);
         } catch (ModelNotFoundException) {
             return $this->handleNotFound();
@@ -279,9 +287,17 @@ class FlashcardController extends Controller
      *     security={{"bearerAuth":{}}}
      * )
      */
-    public function destroy(Request $request, Flashcard $flashcard): Response|JsonResponse
+    public function destroy(Request $request, $flashcardId): Response|JsonResponse
     {
         try {
+            // Explicitly retrieve the flashcard without currentUser scope
+            $flashcard = Flashcard::findOrFail($flashcardId);
+
+            // Ensure the flashcard belongs to the current user
+            if ($flashcard->user_id !== $request->user()->id) {
+                return $this->handleForbidden();
+            }
+
             $this->service->destroy($flashcard);
         } catch (ModelNotFoundException) {
             return $this->handleNotFound();
@@ -395,9 +411,12 @@ class FlashcardController extends Controller
      *     security={{"bearerAuth":{}}}
      * )
      */
-    public function revive(Request $request, Flashcard $flashcard): JsonResponse
+    public function revive(Request $request, $flashcardId): JsonResponse
     {
         try {
+            // Explicitly retrieve the flashcard without currentUser scope
+            $flashcard = Flashcard::findOrFail($flashcardId);
+
             $flashcardResponse = $this->service->revive($flashcard);
         } catch (ModelNotFoundException) {
             return $this->handleNotFound();
@@ -454,9 +473,12 @@ class FlashcardController extends Controller
      *     security={{"bearerAuth":{}}}
      * )
      */
-    public function hide(Request $request, Flashcard $flashcard): JsonResponse
+    public function hide(Request $request, $flashcardId): JsonResponse
     {
         try {
+            // Explicitly retrieve the flashcard without currentUser scope
+            $flashcard = Flashcard::findOrFail($flashcardId);
+
             $flashcardResponse = $this->service->hide($flashcard);
         } catch (ModelNotFoundException) {
             return $this->handleNotFound();
@@ -489,9 +511,17 @@ class FlashcardController extends Controller
      *     security={{"bearerAuth":{}}}
      * )
      */
-    public function unhide(Request $request, Flashcard $flashcard): JsonResponse
+    public function unhide(Request $request, $flashcardId): JsonResponse
     {
         try {
+            // Explicitly retrieve the flashcard without currentUser scope
+            $flashcard = Flashcard::findOrFail($flashcardId);
+
+            // Ensure the flashcard belongs to the current user
+            if ($flashcard->user_id !== $request->user()->id) {
+                return $this->handleForbidden();
+            }
+
             $flashcardResponse = $this->service->unhide($flashcard);
         } catch (ModelNotFoundException) {
             return $this->handleNotFound();
@@ -539,11 +569,11 @@ class FlashcardController extends Controller
             $flashcard = Flashcard::find($flashcardId);
 
             if (! $flashcard) {
-                return $this->notFoundResponse('Flashcard not found');
+                return $this->handleNotFound();
             }
 
             if ($flashcard->user_id !== $request->user()->id) {
-                return $this->forbiddenResponse('You can only answer your own flashcards');
+                return $this->handleForbidden();
             }
 
             $scorecardResponse = $this->service->answer($flashcard, $request->input('answers'), $request->user());
@@ -551,9 +581,9 @@ class FlashcardController extends Controller
             return fractal($scorecardResponse, new ScorecardTransformer)->respond();
 
         } catch (ModelNotFoundException $e) {
-            return $this->handleApiError($e, 'Model not found');
+            return $this->handleNotFound();
         } catch (UnauthorizedException $e) {
-            return $this->handleApiError($e, 'Unauthorized');
+            return $this->handleForbidden();
         }
     }
 
