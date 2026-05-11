@@ -98,7 +98,10 @@ class FlashcardControllerTest extends TestCase
         $response->assertSuccessful();
 
         // Should return only active (non-buried) flashcards for the user
-        $response->assertJsonCount(5, 'data');
+        $activeFlashcards = Flashcard::where('user_id', $this->user->id)
+            ->whereNot('difficulty', Difficulty::BURIED)
+            ->get();
+        $response->assertJsonCount($activeFlashcards->count(), 'data');
     }
 
     public function test_index_method_requires_authentication()
