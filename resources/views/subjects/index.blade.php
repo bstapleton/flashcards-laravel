@@ -27,12 +27,6 @@
                                 <li class="px-4 py-4 sm:px-6 hover:bg-gray-50">
                                     <div class="flex items-center justify-between">
                                         <div class="flex items-center">
-                                            <div class="flex-shrink-0">
-                                            <span
-                                                class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium {{ $subject->getColorClasses() }}">
-                                                {{ $subject->name }}
-                                            </span>
-                                            </div>
                                             <div class="ml-4">
                                                 <div
                                                     class="text-sm font-medium text-gray-900">{{ $subject->name }}</div>

@@ -43,7 +43,7 @@ class Tag extends Model
 
     public function getColorClasses(): string
     {
-        return match($this->colour) {
+        return match ($this->colour) {
             TagColour::ORANGE => 'border-orange-500 text-orange-700 bg-orange-50 ring-orange-500',
             TagColour::YELLOW => 'border-yellow-500 text-yellow-700 bg-yellow-50 ring-yellow-500',
             TagColour::GREEN => 'border-green-500 text-green-700 bg-green-50 ring-green-500',

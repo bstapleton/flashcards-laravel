@@ -10,9 +10,6 @@
                 <div class="flex items-center justify-between">
                     <div class="flex items-center space-x-4">
                         <h1 class="text-2xl font-bold text-gray-900">{{ $tag->name }}</h1>
-                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium {{ $tag->getColorClasses() }}">
-                            {{ $tag->name }}
-                        </span>
                     </div>
                     <div class="flex space-x-2">
                         <a href="{{ route('subjects.index') }}" class="inline-flex items-center px-3 py-2 border border-gray-300 text-sm leading-4 font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
