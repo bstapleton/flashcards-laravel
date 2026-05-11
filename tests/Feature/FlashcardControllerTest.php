@@ -118,7 +118,7 @@ class FlashcardControllerTest extends TestCase
         $response->assertSuccessful();
 
         // Should return all flashcards (including buried) for the user
-        $response->assertJsonCount(6, 'data');
+        $response->assertJsonCount(Flashcard::where('user_id', $this->user->id)->get()->count(), 'data');
     }
 
     // Store statement method tests

@@ -51,7 +51,7 @@ class AttemptControllerTest extends TestCase
         $response->assertSuccessful();
 
         // Assert that the response contains all attempts
-        $response->assertJsonCount(2, 'data');
+        $response->assertJsonCount(Attempt::where('user_id', $this->user->id)->get()->count(), 'data');
 
         $data = $response->json('data');
 
