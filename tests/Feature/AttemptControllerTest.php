@@ -5,7 +5,6 @@ namespace Tests\Feature;
 use App\Models\Attempt;
 use App\Models\Keyword;
 use App\Models\User;
-use Carbon\Carbon;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 

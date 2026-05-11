@@ -1,6 +1,9 @@
 <?php
 
+use App\Providers\AppServiceProvider;
+use App\Providers\ResponseMacroServiceProvider;
+
 return [
-    App\Providers\AppServiceProvider::class,
-    App\Providers\ResponseMacroServiceProvider::class,
+    AppServiceProvider::class,
+    ResponseMacroServiceProvider::class,
 ];

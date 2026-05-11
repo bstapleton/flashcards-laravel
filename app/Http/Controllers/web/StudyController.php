@@ -28,6 +28,7 @@ class StudyController extends Controller
     {
         try {
             $flashcard = $this->flashcardService->random();
+
             return view('study.practice', compact('flashcard'));
         } catch (\Exception $e) {
             return view('answer')->with('error', 'No eligible flashcards available');
