@@ -43,9 +43,6 @@
             "@php artisan package:discover --ansi"
         ],
         "post-update-cmd": [
-            "npm install --verbose",
-            "npm run build --verbose",
-            "ls -la public/build/ || echo 'Build directory missing'",
             "@php artisan vendor:publish --tag=laravel-assets --ansi --force"
         ],
         "post-root-package-install": [

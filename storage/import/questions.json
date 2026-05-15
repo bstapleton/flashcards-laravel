@@ -18,7 +18,7 @@
             },
             {
                 "text": "Prince Ferdinand",
-                "is_correct": false,
+                "is_correct": false
             }
         ],
         "tags": [
@@ -126,7 +126,7 @@
     {
         "text": "Some bollards in London are made from repurposed cannons from the Battle of Trafalgar",
         "type": "statement",
-        "explanation": "There's also examples of repurposed WWII stretchers being used as part of fences in London too!",
+        "explanation": "There's also examples of repurposed WWII medical stretchers being used as part of fences in London too!",
         "is_true": true,
         "tags": [
             "history"
@@ -143,7 +143,7 @@
             },
             {
                 "text": "Books",
-                "is+correct": true
+                "is_correct": true
             },
             {
                 "text": "Clothing",
@@ -217,10 +217,6 @@
             "finance",
             "history"
         ]
-    },
-    {
-        "text": "What products and services carry the standard rate of VAT in the UK?",
-        "type": "multiple"
     },
     {
         "text": "The UK has Value-added Tax (VAT) rules",

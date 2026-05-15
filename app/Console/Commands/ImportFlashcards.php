@@ -42,10 +42,17 @@ class ImportFlashcards extends Command
             $user->roles()->attach($role);
         }
 
-        $data = Storage::disk('import')->json('questions.json');
+        $file = Storage::disk('import');
+        if (! $file) {
+            $this->error('File invalid not found in expected location.');
+
+            return 1;
+        }
+
+        $data = $file->json('questions.json');
 
         if (! $data) {
-            $this->error('File invalid or not found in expected location.');
+            $this->error('File invalid JSON.');
 
             return 1;
         }
@@ -97,11 +104,11 @@ class ImportFlashcards extends Command
     private function createAnswer(Flashcard $flashcard, \stdClass $a): void
     {
         Answer::updateOrCreate([
-            'text', $a->text,
+            'flashcard_id' => $flashcard->id,
+            'text' => $a->text,
         ], [
             'explanation' => property_exists($a, 'explanation') ? $a->explanation : null,
             'is_correct' => $a->is_correct ?? false,
-            'flashcard_id' => $flashcard->id,
         ]);
     }
 
