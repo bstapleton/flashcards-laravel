@@ -13,6 +13,7 @@ use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
+use Symfony\Component\Console\Command\Command as CommandAlias;
 
 class ImportFlashcards extends Command
 {
@@ -46,7 +47,7 @@ class ImportFlashcards extends Command
         if (! $file) {
             $this->error('File invalid not found in expected location.');
 
-            return 1;
+            return CommandAlias::INVALID;
         }
 
         $data = $file->json('questions.json');
@@ -54,7 +55,7 @@ class ImportFlashcards extends Command
         if (! $data) {
             $this->error('File invalid JSON.');
 
-            return 1;
+            return CommandAlias::INVALID;
         }
 
         $json = json_decode(json_encode($data));
@@ -70,7 +71,7 @@ class ImportFlashcards extends Command
         $this->info('The command ran to completion. If you had any warnings relating to the question types, '.
             'correct them and rerun the command - duplicates will be skipped.');
 
-        return 1;
+        return CommandAlias::SUCCESS;
     }
 
     private function createStatementFlashcard(User $user, \stdClass $question): void
