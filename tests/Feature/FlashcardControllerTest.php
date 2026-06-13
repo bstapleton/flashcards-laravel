@@ -101,7 +101,8 @@ class FlashcardControllerTest extends TestCase
         $activeFlashcards = Flashcard::where('user_id', $this->user->id)
             ->whereNot('difficulty', Difficulty::BURIED)
             ->get();
-        $response->assertJsonCount($activeFlashcards->count(), 'data');
+        $expectedCount = min($activeFlashcards->count(), $this->user->page_limit);
+        $response->assertJsonCount($expectedCount, 'data');
     }
 
     public function test_index_method_requires_authentication()

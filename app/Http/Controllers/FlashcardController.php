@@ -137,7 +137,7 @@ class FlashcardController extends Controller
             'text' => 'required|max:1024',
             'is_true' => 'required|boolean',
             'subjects' => 'nullable|array',
-            'subjects.*' => 'exists:subjects,id',
+            'subjects.*' => 'exists:tags,id',
         ]);
 
         try {
@@ -198,7 +198,7 @@ class FlashcardController extends Controller
             'answers.*.is_correct' => 'required|boolean',
             'answers.*.explanation' => 'nullable|max:1024',
             'subjects' => 'nullable|array',
-            'subjects.*' => 'exists:subjects,id',
+            'subjects.*' => 'exists:tags,id',
         ]);
 
         try {
@@ -417,6 +417,11 @@ class FlashcardController extends Controller
             // Explicitly retrieve the flashcard without currentUser scope
             $flashcard = Flashcard::findOrFail($flashcardId);
 
+            // Ensure the flashcard belongs to the current user
+            if ($flashcard->user_id !== $request->user()->id) {
+                return $this->handleForbidden();
+            }
+
             $flashcardResponse = $this->service->revive($flashcard);
         } catch (ModelNotFoundException) {
             return $this->handleNotFound();
@@ -478,6 +483,11 @@ class FlashcardController extends Controller
         try {
             // Explicitly retrieve the flashcard without currentUser scope
             $flashcard = Flashcard::findOrFail($flashcardId);
+
+            // Ensure the flashcard belongs to the current user
+            if ($flashcard->user_id !== $request->user()->id) {
+                return $this->handleForbidden();
+            }
 
             $flashcardResponse = $this->service->hide($flashcard);
         } catch (ModelNotFoundException) {

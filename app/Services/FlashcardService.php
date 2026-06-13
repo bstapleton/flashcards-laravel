@@ -330,7 +330,8 @@ class FlashcardService
     {
         if ($difficulty !== Difficulty::EASY) {
             // Skip updating easy since there's no point
-            Flashcard::whereDifficulty($difficulty)
+            Flashcard::currentUser()
+                ->whereDifficulty($difficulty)
                 ->update([
                     'difficulty' => Difficulty::EASY,
                 ]);
